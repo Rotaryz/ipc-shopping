@@ -47,22 +47,36 @@ no-wrap()
 
 //  水平居中
 row-center()
-  left:50%
-  transform :translateX(-50%)
+  left: 50%
+  transform: translateX(-50%)
 
 //垂直居中
 col-center()
-  top:50%
-  transform :translateY(-50%)
+  top: 50%
+  transform: translateY(-50%)
 
 //  全居中
 all-center()
-  top:50%
-  left:50%
-  transform :translate(-50%,-50%)
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
 
 //布局
 layout($direction = column, $inline = block, $wrap = wrap)
   display: $inline == block ? flex:inline-flex
   flex-direction: $direction
   flex-wrap: $wrap
+
+// 常规按钮
+normal-button-default()
+  height: 45px
+  border-radius 3px
+  background-color: $color-assist-34
+  font-family:  $font-family-regular
+  font-size: $font-size-medium-x
+  color: $color-background
+  text-align: center
+  line-height: 45px
+  letter-spacing: 0.64px
+
+
