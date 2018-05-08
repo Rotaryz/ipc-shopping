@@ -3,7 +3,8 @@ module.exports = [
     path: '/pages/loading/loading', // loading
     name: 'Loading',
     config: {
-      navigationBarBackgroundColor: '#FFFFFF'
+      navigationBarBackgroundColor: '#FFFFFF',
+      navigationBarTextStyle: 'black'
     }
   },
   {

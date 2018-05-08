@@ -21,7 +21,7 @@ export default {
       backgroundColorTop: '#fff',
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTitleText: '',
-      navigationBarTextStyle: 'black'
+      navigationBarTextStyle: 'white'
     }
   }
 }
