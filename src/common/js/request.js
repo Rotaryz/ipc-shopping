@@ -1,4 +1,4 @@
-import wx from 'wx'
+// import wx from 'wx'
 import Fly from 'flyio'
 import {showLoading, hideLoading} from './wechat'
 // import {baseURL} from 'api/config'
