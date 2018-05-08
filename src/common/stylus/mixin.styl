@@ -68,6 +68,7 @@ layout($direction = column, $inline = block, $wrap = wrap)
   flex-wrap: $wrap
 
 // 常规按钮
+// $bg-c 背景色
 normal-button-default($bg-c = $color-assist-34)
   height: 45px
   border-radius 3px
@@ -80,6 +81,8 @@ normal-button-default($bg-c = $color-assist-34)
   letter-spacing: 0.64px
 
 // 功能按钮
+// $font-color 字体颜色 $border-color 边框颜色
+// $font-color 不是默认样色,$border-color 同字体颜色
 function-button($font-color = $color-assist-27, $border-color = $color-text-a4)
   display: inline-block
   padding: 4px 19.5px
@@ -90,7 +93,8 @@ function-button($font-color = $color-assist-27, $border-color = $color-text-a4)
   color: $font-color
 
 // 分割线-top
-cut-off-rule-top($line-color = $color-cut-line-ed, $line-left = 0,$line-right = 0)
+// $line-color 线的颜色, $line-left 距离父级元素左边的距离, $line-right 距离父级元素右边的距离
+cut-off-rule-top($line-left = 0, $line-right = 0, $line-color = $color-cut-line-ed)
   position: relative
   &:after
     content: ''
@@ -104,7 +108,8 @@ cut-off-rule-top($line-color = $color-cut-line-ed, $line-left = 0,$line-right = 
     right: $line-right
 
 // 分割线-bottom
-cut-off-rule-bottom($line-color = $color-cut-line-ed, $line-left = 0,$line-right = 0)
+// $line-color 线的颜色, $line-left 距离父级元素左边的距离, $line-right 距离父级元素右边的距离
+cut-off-rule-bottom($line-left = 0, $line-right = 0, $line-color = $color-cut-line-ed)
   position: relative
   &:after
     content: ''
