@@ -1,8 +1,9 @@
 <template>
+  <!--<scroll-view scroll-y bindscrolltolower="bindscrolltolowers">-->
     <div class="employee">
-      <Bgnull :imageUrl="imagesUrl" :text="texts" :showBgnull="awaitList.length <= 0"></Bgnull>
-      <div class="em-list" v-if="awaitList.length > 0">
-        <div class="em-list-await">
+      <Bgnull :imageUrl="imagesUrl" :text="texts" :showBgnull="awaitList.length <= 0 && acceptList.length <= 0"></Bgnull>
+      <div class="em-list">
+        <div class="em-list-await"  v-if="awaitList.length > 0">
           <div class="em-list-await-title"><span>待处理申请</span></div>
           <div class="await-list-item" v-for="item in awaitList" :key="index">
             <div class="await-list-left">
@@ -10,19 +11,19 @@
               <div class="left-name">{{item.name}}</div>
             </div>
             <div class="await-list-right">
-              <div class="right-refuse" @tap="refuse(item)">拒绝</div>
-              <div class="right-accept" @tap="accept(item)">接受</div>
+              <div class="right-refuse" @tap="refuse(item,index)">拒绝</div>
+              <div class="right-accept" @tap="accept(item,index)">接受</div>
             </div>
           </div>
         </div>
-        <div class="em-list-succeed">
-          <div class="await-list-item" v-for="item in awaitList" :key="index">
+        <div class="em-list-succeed"  v-if="acceptList.length > 0">
+          <div class="await-list-item" v-for="item in acceptList" :key="index">
             <div class="await-list-left">
               <img class="left-image" src="" />
               <div class="left-name">{{item.name}}</div>
             </div>
             <div class="await-list-right">
-              <div class="right-del" @tap="del(item)">删除</div>
+              <div class="right-del" @tap="del(item,index)">删除</div>
             </div>
           </div>
         </div>
@@ -32,6 +33,7 @@
       </div>
       <ConfirmMsg :show.sync="show" :title.sync="title" v-on:confirm="confirm" v-on:cancel="cancel"></ConfirmMsg>
     </div>
+  <!--</scroll-view>-->
 </template>
 
 <script type="text/ecmascript-6">
@@ -50,6 +52,10 @@
           {name: '刘佳2'},
           {name: '刘佳2'},
           {name: '刘佳2'},
+          {name: '刘佳2'}
+        ],
+        acceptList: [
+          {name: '刘佳1刘佳1刘佳1刘佳1刘佳1刘佳1'},
           {name: '刘佳2'},
           {name: '刘佳2'},
           {name: '刘佳2'},
@@ -57,32 +63,61 @@
         ],
         show: false,
         title: '',
-        dataTmp: {}
+        dataTmp: {},
+        dataIndex: '',
+        isAwait: ''
       }
     },
     components: {
       Bgnull,
       ConfirmMsg
     },
+    // 分页
+    onReachBottom () {
+      console.log('上拉刷新....')
+    },
     mounted () {},
     methods: {
-      refuse (obj) {
+      refuse (obj, index) {
         this.dataTmp = obj
+        this.dataIndex = index
+        this.isAwait = 'refuse'
         this.show = true
-        this.title = '是否确认拒绝'
+        this.title = '确认拒绝?'
       },
-      accept (obj) {
+      accept (obj, index) {
         this.dataTmp = obj
         this.show = true
-        this.title = '是否确认接受'
+        this.isAwait = 'accept'
+        this.dataIndex = index
+        this.title = '确认接受?'
       },
-      del (obj) {
+      del (obj, index) {
         this.dataTmp = obj
         this.show = true
-        this.title = '是否确认删除'
+        this.isAwait = 'del'
+        this.dataIndex = index
+        this.title = '确认删除?'
+      },
+      addEmployee () {
+        this.$router.push({
+          name: 'CodeAdd',
+          path: '/pages/code-add/code-add',
+          params: {id: 123}
+        })
       },
       confirm() {
         this.show = false
+        if (this.isAwait !== '') {
+          if (this.isAwait === 'refuse') {
+            this.awaitList.splice(this.dataIndex, 1)
+          } else if (this.isAwait === 'accept') {
+            this.awaitList.splice(this.dataIndex, 1)
+            this.acceptList.push(this.dataTmp)
+          } else {
+            this.acceptList.splice(this.dataIndex, 1)
+          }
+        }
       },
       cancel() {
         this.show = false
