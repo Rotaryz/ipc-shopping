@@ -15,8 +15,7 @@ module.exports = [
     path: '/pages/employee/employee', // 员工
     name: 'Employee',
     config: {
-      navigationBarTitleText: '员工管理',
-      backgroundColor: '#000000'
+      navigationBarTitleText: '员工管理'
     }
   },
   {

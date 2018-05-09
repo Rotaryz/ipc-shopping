@@ -36,11 +36,9 @@
     ],
     methods: {
       confirm () {
-        this.show = false
         this.$emit('confirm')
       },
       cancel () {
-        this.show = false
         this.$emit('cancel')
       }
     }
@@ -49,6 +47,7 @@
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import '../../common/stylus/variable'
+  @import '../../common/stylus/mixin'
   .confirm
     position: fixed
     top: 0
@@ -67,14 +66,14 @@
       min-height: 140px
       transform: translate(-50%, -50%)
       background-color: $color-background-ff
-      border-radius: 4px
+      border-radius: 3px
       .modal
         height: 140px
         .content-wrapper
           display: flex
           align-items: center
           justify-content: center
-          height: 99px
+          height: 94px
           .content
             text-align: center
             .danger-wrapper
@@ -88,17 +87,17 @@
               font-family: $font-family-light
               color: $color-assist-333
             .font.title
-              font-family: $font-family-meddle
+              font-family: $font-family-light
               font-size: $font-size-medium-x
               color: $color-error
               text-align: center
               margin-bottom: 7px
         .btn-group
           display: flex
-          height: 40px
+          height: 45px
           .btn-left, .btn-right
             flex: 1
-            line-height: 40px
+            line-height: 45px
             text-align: center
             font-size: $font-size-medium
             font-family: $font-family-light
@@ -106,4 +105,8 @@
           .btn-left
             font-family: $font-family-light
             color: $color-assist-27
+          .border-right-1px
+            cut-off-rule-right()
+        .border-top-1px
+          cut-off-rule-top()
 </style>

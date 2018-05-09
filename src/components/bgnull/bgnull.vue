@@ -2,7 +2,7 @@
   <div class="bgnull" v-if="showBgnull">
     <div class="center">
       <div class="images">
-        <img v-if="imageUrl" :src="imageUrl + '/defaults/ipc-shopping/home/pic-union_empty@2x.png'"/>
+        <img v-if="imageUrl" :src="imageUrl + '/defaults/ipc-shopping/employee/pic-@2x.png'"/>
       </div>
       <div class="text">
         <span>{{text}}</span>
