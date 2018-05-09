@@ -1,8 +1,8 @@
 <template>
   <!--<scroll-view scroll-y bindscrolltolower="bindscrolltolowers">-->
     <div class="employee">
-      <Bgnull :imageUrl="imagesUrl" :text="texts" :showBgnull="awaitList.length <= 0 && acceptList.length <= 0"></Bgnull>
-      <div class="em-list">
+      <Bgnull :showImagSta="1" :imageUrl="imagesUrl" :text="texts" :showBgnull="awaitList.length <= 0 && acceptList.length <= 0"></Bgnull>
+      <div class="em-list" v-if="awaitList.length > 0 || acceptList.length > 0">
         <div class="em-list-await"  v-if="awaitList.length > 0">
           <div class="em-list-await-title"><span>待处理申请</span></div>
           <div class="await-list-item" v-for="item in awaitList" :key="index">
@@ -47,19 +47,8 @@
         showBgnull: true,
         texts: '暂无员工',
         awaitList: [
-          {name: '刘佳1刘佳1刘佳1刘佳1刘佳1刘佳1'},
-          {name: '刘佳2'},
-          {name: '刘佳2'},
-          {name: '刘佳2'},
-          {name: '刘佳2'},
-          {name: '刘佳2'}
         ],
         acceptList: [
-          {name: '刘佳1刘佳1刘佳1刘佳1刘佳1刘佳1'},
-          {name: '刘佳2'},
-          {name: '刘佳2'},
-          {name: '刘佳2'},
-          {name: '刘佳2'}
         ],
         show: false,
         title: '',

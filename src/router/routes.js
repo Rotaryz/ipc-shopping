@@ -28,6 +28,14 @@ module.exports = [
     }
   },
   {
+    path: '/pages/asset/asset', // 收入 income
+    name: 'Asset',
+    config: {
+      navigationBarTitleText: '收入',
+      disableScroll: true
+    }
+  },
+  {
     path: '/pages/example/example',
     name: 'Example',
     config: {
