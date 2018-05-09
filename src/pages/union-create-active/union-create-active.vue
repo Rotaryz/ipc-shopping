@@ -62,6 +62,7 @@
           </dd>
         </article>
       </section>
+      <footer class="save-btn">保存</footer>
     </form>
   </article>
 </template>
@@ -102,6 +103,13 @@
   ]
 
   export default {
+    props: {
+      data: Object,
+      son: {
+        type: Array,
+        default: []
+      }
+    },
     data () {
       return {
         model: 0,
@@ -136,8 +144,9 @@
         padding-left: 15px
         background-color: $color-background-ff
         margin-bottom: 10px
-        &:last-child
-          margin-bottom: 45px
+        &.active-info
+          padding-right: 15px
+          margin-bottom: 0
         .b-i-item
           position: relative
           layout(row)
@@ -190,7 +199,13 @@
             height: 38px
             line-height: 38px
           .content
-            width: 100%
+            position: relative
             .c-item
+              font-family: $font-family-light
+              font-size: $font-size-medium
+              color: $color-text-2d
+              letter-spacing: 0
               line-height: 21px
+      .save-btn
+        normal-button-default()
 </style>
