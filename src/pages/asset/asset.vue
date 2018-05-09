@@ -15,7 +15,7 @@
           <div class="line"></div>
         </div>
         <div class="withdraw">
-          <div class="withdraw-btn">提现</div>
+          <div class="dis" v-bind:class="{'withdraw-btn':withdraw}">提现</div>
         </div>
       </div>
     </div>
@@ -43,6 +43,7 @@
         canUse: '0.00',
         total: '0.00',
         count: 0,
+        withdraw: false,
         redPackList: [],
         page: 1,
         texts: '暂无数据',
@@ -150,6 +151,8 @@
 
         .withdraw
           padding: 14.5px
+          .dis
+            normal-button-default($color-text-95)
           .withdraw-btn
             normal-button-default()
     .content

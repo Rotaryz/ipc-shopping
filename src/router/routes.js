@@ -36,6 +36,15 @@ module.exports = [
     }
   },
   {
+    path: '/pages/withdraw/withdraw', // 提现
+    name: 'Withdraw',
+    config: {
+      navigationBarTitleText: '提现',
+      disableScroll: true,
+      backgroundColor: '#F6F7FA'
+    }
+  },
+  {
     path: '/pages/example/example',
     name: 'Example',
     config: {

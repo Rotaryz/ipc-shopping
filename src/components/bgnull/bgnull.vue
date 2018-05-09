@@ -2,8 +2,9 @@
   <div class="bgnull" v-if="showBgnull">
     <div class="center">
       <div class="images">
-        <img v-if="showImagSta == 1 " :src="imageUrl + '/defaults/ipc-shopping/employee/pic-@2x.png'"/>
-        <img v-if="showImagSta == 2" :src="imageUrl + '/defaults/ipc-shopping/aliance/pic-union_empty@2x.png'"/>
+        <img v-if="showImagSta == 1 " :src="imagesUrl"/>
+        <!--<img v-if="showImagSta == 1 " :src="imageUrl + '/defaults/ipc-shopping/employee/pic-@2x.png'"/>-->
+        <!--<img v-if="showImagSta == 2" :src="imageUrl + '/defaults/ipc-shopping/page/pic-income_empty@2x.png'"/>-->
         </div>
       <div class="text">
         <span>{{text}}</span>
@@ -15,6 +16,8 @@
 
 <script type="text/ecmascript-6">
   import api from 'api'
+  const picEm = '/defaults/ipc-shopping/employee/pic-@2x.png'
+  const picInc = '/defaults/ipc-shopping/page/pic-income_empty@2x.png'
   export default {
     data () {
       return {
@@ -27,19 +30,7 @@
       'showBgnull',
       'showImagSta' // 跟据不同的状态显示不同的图片
     ],
-    methods: {
-      show (content) {
-        if (this.showBgnull) {
-          return
-        }
-        this.showBgnull = true
-        this.imagesUrl = content.imagesUrl
-        this.text = content.text
-      },
-      hide () {
-        this.showBgnull = false
-      }
-    }
+    methods: {}
   }
 </script>
 

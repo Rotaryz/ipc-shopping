@@ -1,7 +1,7 @@
 <template>
   <!--<scroll-view scroll-y bindscrolltolower="bindscrolltolowers">-->
     <div class="employee">
-      <Bgnull :showImagSta="1" :imageUrl="imagesUrl" :text="texts" :showBgnull="awaitList.length <= 0 && acceptList.length <= 0"></Bgnull>
+      <bgnull :showImagSta="1" :imagesUrl="imagesUrl" :text="texts" :showBgnull="awaitList.length <= 0 && acceptList.length <= 0"></bgnull>
       <div class="em-list" v-if="awaitList.length > 0 || acceptList.length > 0">
         <div class="em-list-await"  v-if="awaitList.length > 0">
           <div class="em-list-await-title"><span>待处理申请</span></div>
@@ -31,19 +31,20 @@
       <div class="floorAdd">
         <div class="addEmployee" @tap="addEmployee">邀请员工</div>
       </div>
-      <ConfirmMsg :show.sync="show" :title.sync="title" v-on:confirm="confirm" v-on:cancel="cancel"></ConfirmMsg>
+      <confirm-msg :show.sync="show" :title.sync="title" v-on:confirm="confirm" v-on:cancel="cancel"></confirm-msg>
     </div>
   <!--</scroll-view>-->
 </template>
 
 <script type="text/ecmascript-6">
-  // import api from 'api'
-  import Bgnull from '@/components/bgnull/bgnull'
-  import ConfirmMsg from '@/components/confirm-msg/confirm-msg'
+  import api from 'api'
+  import Bgnull from 'components/bgnull/bgnull'
+  import ConfirmMsg from 'components/confirm-msg/confirm-msg'
 
   export default {
     data () {
       return {
+        imagesUrl: api.image + '/defaults/ipc-shopping/employee/pic-@2x.png',
         showBgnull: true,
         texts: '暂无员工',
         awaitList: [
