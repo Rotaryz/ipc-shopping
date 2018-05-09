@@ -121,3 +121,18 @@ cut-off-rule-bottom($line-left = 0, $line-right = 0, $line-color = $color-cut-li
     bottom: -1px
     left: $line-left
     right: $line-right
+
+// 分割线-right
+// $line-color 线的颜色, $line-top  距离父级元素顶的距离, $line-bottom 距离父级元素底的距离
+cut-off-rule-right($line-top = 0, $line-bottom = 0, $line-color = $color-cut-line-ed)
+  position: relative
+  &:after
+    content: ''
+    display: block
+    position: absolute
+    widht: 1px
+    border-right: 0.5px solid $line-color
+    background-color: transparent
+    right: -1px
+    top: $line-top
+    bottom: $line-bottom
