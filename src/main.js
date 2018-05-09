@@ -19,9 +19,9 @@ export default {
       backgroundTextStyle: 'light',
       backgroundColor: '#F9F9F9',
       backgroundColorTop: '#fff',
-      navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: 'mpvue-model',
-      navigationBarTextStyle: 'black'
+      navigationBarBackgroundColor: '#1A1D3D',
+      navigationBarTitleText: '',
+      navigationBarTextStyle: 'white'
     }
   }
 }

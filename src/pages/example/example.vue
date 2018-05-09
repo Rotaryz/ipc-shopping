@@ -57,7 +57,6 @@
     .btn
       normal-button-default()
       cut-off-rule-bottom(#000)
-      color: $color-assist-2a
     .btn2
       function-button()
     .line
