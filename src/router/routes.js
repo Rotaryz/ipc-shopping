@@ -13,6 +13,19 @@ module.exports = [
     config: {}
   },
   {
+    path: '/pages/union-manage/union-manage', // 联盟管理
+    name: 'UnionManage',
+    config: {
+      navigationBarTitleText: '联盟管理'
+    }
+  },
+  {
+    path: '/pages/union-create-active/union-create-active', // 联盟新建编辑活动
+    name: 'UnionCA',
+    config: {
+    }
+  },
+  {
     path: '/pages/employee/employee', // 员工
     name: 'Employee',
     config: {

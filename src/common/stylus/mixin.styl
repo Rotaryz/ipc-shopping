@@ -70,14 +70,14 @@ layout($direction = column, $inline = block, $wrap = wrap)
 // 常规按钮
 // $bg-c 背景色
 normal-button-default($bg-c = $color-assist-34)
-  height: 90rpx
-  border-radius 6rpx
+  height: 45px
+  border-radius 3px
   background-color: $bg-c
   font-family: $font-family-regular
   font-size: $font-size-medium-x
   color: $color-background-ff
   text-align: center
-  line-height: 90rpx
+  line-height: 45px
   letter-spacing: 0.64px
 
 // 功能按钮
@@ -86,7 +86,7 @@ normal-button-default($bg-c = $color-assist-34)
 function-button($font-color = $color-assist-27, $border-color = $color-text-a4)
   display: inline-block
   padding: 4.5px 19.5px
-  border-radius: 6rpx
+  border-radius: 3px
   border: 0.5px solid $font-color == $color-assist-27 ? $border-color:$font-color
   font-family: $font-family-light
   font-size: $font-size-small
@@ -124,8 +124,22 @@ cut-off-rule-bottom($line-left = 0, $line-right = 0, $line-color = $color-cut-li
 
 // 填充容器
 fill-box()
-  position :absolute
-  top:0
-  right:0
-  bottom :0
-  left :0
+  position: absolute
+  top: 0
+  right: 0
+  bottom: 0
+  left: 0
+
+// 竖线
+vertical-line()
+  position: relative
+  &:before
+    content: ''
+    position: absolute
+    left: 0
+    height: 14px
+    width: 2px
+    box-sizing: border-box
+    background-color: $color-assist-34
+    top: 50%
+    transform: translateY(-50%)
