@@ -15,7 +15,7 @@
           <div class="line"></div>
         </div>
         <div class="withdraw">
-          <div class="dis" v-bind:class="{'withdraw-btn':withdraw}" @tap="withdrawFun">提现</div>
+          <div class="dis" v-bind:class="{'withdraw-btn':withdraw}" v-on:click="withdrawFun">提现</div>
         </div>
       </div>
     </div>
@@ -43,7 +43,7 @@
         canUse: '0.00',
         total: '0.00',
         count: 0,
-        withdraw: false,
+        withdraw: true,
         redPackList: [],
         page: 1,
         imagesUrl: ''
@@ -54,6 +54,9 @@
     },
     methods: {
       withdrawFun () {
+        if (!this.withdraw) {
+          return
+        }
         this.$router.push({
           name: 'Withdraw',
           path: '/pages/withdraw/withdraw',

@@ -35,7 +35,7 @@
       </div>
     </div>
     <div class="btn-wrapper">
-      <div :class="{disable: !checkForm}" class="btn" @tap="save">保存</div>
+      <div :class="{disable: !checkForm}" class="btn" v-on:click="save">保存</div>
     </div>
   </div>
 </template>

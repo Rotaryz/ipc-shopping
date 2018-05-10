@@ -2,7 +2,7 @@
   <div class="withdraw">
     <div class="top">
       <div class="left">银行卡</div>
-      <div class="right">
+      <div class="right" v-on:click="setBank">
         <img class="right-bank-icon" v-if="imageUrl && bankCard !==''" :src="imageUrl +'/defaults/b-image/page/Rectangle @2x.png'" alt="">
         {{bankCard !== '' ? bankCard : '绑定银行卡'}}
         <img class="right-img" v-if="imageUrl" :src="imageUrl +'/defaults/b-image/page/Rectangle @2x.png'" alt="">
@@ -22,14 +22,14 @@
         </div>
         <div class="foot" v-if="!withdrawFlag">
           <div class="left">提现到微信钱包</div>
-          <div class="right" @tap="allIn">全部提现</div>
+          <div class="right" v-on:click="allIn">全部提现</div>
         </div>
         <div class="foot" v-if="withdrawFlag">
           <div class="left">手续费¥{{poundage}}</div>
         </div>
       </div>
       <div class="content-withdraw">
-        <div class="dis" v-bind:class="{'withdraw-btn':withdrawFlag}" @tap="withDrawMoney">提现</div>
+        <div class="dis" v-bind:class="{'withdraw-btn':withdrawFlag}" v-on:click="withDrawMoney">提现</div>
       </div>
       <div class="withdraw-txt">微信按提现金额0.1%收取手续费，最低1元，最高10元。</div>
     </div>
@@ -50,6 +50,13 @@
       }
     },
     methods: {
+      setBank() {
+        this.$router.push({
+          name: 'BindCard',
+          path: '/pages/bind-card/bind-card',
+          params: {id: 123}
+        })
+      },
       moneyChange () {
         if (this.money * 1 > this.canUse * 1) {
           this.money = this.canUse * 1

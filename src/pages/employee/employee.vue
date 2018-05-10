@@ -10,8 +10,8 @@
               <div class="left-name">{{item.name}}</div>
             </div>
             <div class="await-list-right">
-              <div class="right-refuse" @tap="refuse(item,index)">拒绝</div>
-              <div class="right-accept" @tap="accept(item,index)">接受</div>
+              <div class="right-refuse" v-on:click="refuse(item,index)">拒绝</div>
+              <div class="right-accept" v-on:click="accept(item,index)">接受</div>
             </div>
           </div>
         </div>
@@ -22,13 +22,13 @@
               <div class="left-name">{{item.name}}</div>
             </div>
             <div class="await-list-right">
-              <div class="right-del" @tap="del(item,index)">删除</div>
+              <div class="right-del" v-on:click="del(item,index)">删除</div>
             </div>
           </div>
         </div>
       </div>
       <div class="floorAdd">
-        <div class="addEmployee" @tap="addEmployee">邀请员工</div>
+        <div class="addEmployee" v-on:click="addEmployee">邀请员工</div>
       </div>
       <confirm-msg :show.sync="show" :title.sync="title" v-on:confirm="confirm" v-on:cancel="cancel"></confirm-msg>
     </div>
