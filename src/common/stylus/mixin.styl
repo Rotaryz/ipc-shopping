@@ -71,7 +71,7 @@ layout($direction = column, $inline = block, $wrap = wrap)
 // $bg-c 背景色
 normal-button-default($bg-c = $color-assist-34)
   height: 45px
-  border-radius 6rpx
+  border-radius 3px
   background-color: $bg-c
   font-family: $font-family-regular
   font-size: $font-size-medium-x
@@ -86,7 +86,7 @@ normal-button-default($bg-c = $color-assist-34)
 function-button($font-color = $color-assist-27, $border-color = $color-text-a4)
   display: inline-block
   padding: 4.5px 19.5px
-  border-radius: 6rpx
+  border-radius: 3px
   border: 0.5px solid $font-color == $color-assist-27 ? $border-color:$font-color
   font-family: $font-family-light
   font-size: $font-size-small
@@ -94,14 +94,14 @@ function-button($font-color = $color-assist-27, $border-color = $color-text-a4)
 
 // 分割线-top
 // $line-color 线的颜色, $line-left 距离父级元素左边的距离, $line-right 距离父级元素右边的距离
-cut-off-rule-top($line-left = 0, $line-right = 0, $line-color = $color-cut-line-ed)
+cut-off-rule-top($line-left = 0, $line-right = 0, $line-color = $color-cut-line-ed, $line-height = 0.5px)
   position: relative
   &:after
     content: ''
     display: block
     position: absolute
     height: 1px
-    border-top: 0.5px solid $line-color
+    border-top: $line-height solid $line-color
     background-color: transparent
     top: 0
     left: $line-left
@@ -109,18 +109,40 @@ cut-off-rule-top($line-left = 0, $line-right = 0, $line-color = $color-cut-line-
 
 // 分割线-bottom
 // $line-color 线的颜色, $line-left 距离父级元素左边的距离, $line-right 距离父级元素右边的距离
-cut-off-rule-bottom($line-left = 0, $line-right = 0, $line-color = $color-cut-line-ed)
+cut-off-rule-bottom($line-left = 0, $line-right = 0, $line-color = $color-cut-line-ed, $line-height = 0.5px)
   position: relative
   &:after
     content: ''
     display: block
     position: absolute
     height: 1px
-    border-bottom: 0.5px solid $line-color
+    border-bottom: $line-height solid $line-color
     background-color: transparent
     bottom: -1px
     left: $line-left
     right: $line-right
+
+// 填充容器
+fill-box()
+  position: absolute
+  top: 0
+  right: 0
+  bottom: 0
+  left: 0
+
+// 竖线
+vertical-line()
+  position: relative
+  &:before
+    content: ''
+    position: absolute
+    left: 0
+    height: 14px
+    width: 2px
+    box-sizing: border-box
+    background-color: $color-assist-34
+    top: 50%
+    transform: translateY(-50%)
 
 // 分割线-right
 // $line-color 线的颜色, $line-top  距离父级元素顶的距离, $line-bottom 距离父级元素底的距离
