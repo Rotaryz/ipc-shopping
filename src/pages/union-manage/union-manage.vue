@@ -11,7 +11,7 @@
     </section>
     <section class="apply">
       <div class="test">
-        <union-card></union-card>
+        <union-card @editor="test"></union-card>
       </div>
     </section>
     <footer class="btn" @tap.stop="toCreateActive(0)">新建</footer>
@@ -24,7 +24,7 @@
   import UnionCard from 'components/union-card-item/union-card-item'
 
   export default {
-    data () {
+    data() {
       return {
         imageUri: api.image,
         tabFlag: 0,
@@ -32,10 +32,13 @@
       }
     },
     methods: {
-      changeTab (flag) {
+      test(obj) {
+        console.log(obj)
+      },
+      changeTab(flag) {
         this.tabFlag = flag
       },
-      toCreateActive () {
+      toCreateActive() {
         const url = `/pages/union-create-active/union-create-active`
         wx.navigateTo({url})
       }
@@ -102,6 +105,6 @@
     .apply
       position: relative
       .test
-        padding: 0
+        padding: 10px 15px
 
 </style>

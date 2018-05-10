@@ -93,6 +93,7 @@
 
 <script type="text/ecmascript-6">
   import api from 'api'
+  import source from 'common/source'
   import wx from 'wx'
 
   const num = 999999
@@ -146,7 +147,7 @@
     },
     computed: {
       arrowImg () {
-        return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-mhome_j@2x.png)` || ''
+        return source.imgArrowRight()
       },
       leaderImg () {
         return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-mhome_union@2x.png)` || ''
@@ -251,10 +252,10 @@
                   font-size: $font-size-medium-x
                   color: $color-background-ff
                 .look-over
-                  padding-right: 10px
                   font-family: $font-family-light
                   font-size: $font-size-small
                   color: $color-text-95
+                  padding-right: 10px
                   background-size: 14px
                   background-position: 48px center
                   background-repeat: no-repeat
