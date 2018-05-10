@@ -269,7 +269,9 @@
                   width: 50%
                   .number
                     font-family: $font-family-din
-                    font-size: $font-size-large-xx
+                    /*@formatter:off*/
+                    font-size: 48rpx
+                    /*@formatter:on*/
                     color: $color-background-ff
                     min-width: 60px
                     max-width: 100px

@@ -30,7 +30,7 @@
       changeTab (flag) {
         this.tabFlag = flag
       },
-      toCreateActive() {
+      toCreateActive () {
         const url = `/pages/union-create-active/union-create-active`
         wx.navigateTo({url})
       }
@@ -65,6 +65,7 @@
     left: 0
     right: 0
     normal-button-default()
+    border-radius: 3px 3px 0 0
 
   .union-manage
     position: relative
@@ -87,7 +88,7 @@
         transition: 0.3 all
         &.hit
           color: $color-background-ff
-          cut-off-rule-bottom(6px, 6px, $color-assist-34, 4px)
+          cut-off-rule-bottom(6px, 6px, $color-assist-34, 2px)
 
 
 </style>
