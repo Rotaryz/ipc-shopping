@@ -3,7 +3,7 @@
     <header class="active">
       <article class="swiper-box">
         <section class="s-b-box">
-          <swiper class="home-swiper" @change="swiperChange" :current="0">
+          <swiper class="home-swiper" @change="swiperChange" :current="swiperCurrent">
             <block v-for="(item, index) in activeList" :key="index+item.title">
               <swiper-item class="home-swiper-item">
                 <section class="progress-bar"></section>
@@ -39,9 +39,9 @@
       </ul>
     </header>
     <footer class="tab-leader" v-if="userId===0">
-      <nav class="t-l-nav" :style="leaderImg">联盟管理</nav>
+      <nav class="t-l-nav" :style="leaderImg" @tap.stop="toUnion">联盟管理</nav>
       <nav class="t-l-nav" :style="activeImg">活动管理</nav>
-      <nav class="t-l-nav" :style="employeeImg">员工管理</nav>
+      <nav class="t-l-nav" :style="employeeImg" @tap.stop="toEmployee">员工管理</nav>
       <nav class="t-l-nav" :style="incomeImg">收入/提现</nav>
     </footer>
     <footer class="tab-merchant" v-if="userId===1">
@@ -93,6 +93,7 @@
 
 <script type="text/ecmascript-6">
   import api from 'api'
+  import wx from 'wx'
 
   const num = 999999
   const object = {
@@ -122,6 +123,7 @@
         activeList: new Array(3).fill(object),
         employeeList: new Array(6).fill(0),
         dotCurrent: 0,
+        swiperCurrent: 0,
         userId: 0
       }
     },
@@ -131,7 +133,15 @@
         let index = e.mp.detail.current
         this.dotCurrent = index
         this.userId = index
-        // this.swiperCurrent = index
+        this.swiperCurrent = index
+      },
+      toUnion () {
+        const url = `/pages/union-manage/union-manage`
+        wx.navigateTo({url})
+      },
+      toEmployee () {
+        const url = `/pages/employee/employee`
+        wx.navigateTo({url})
       }
     },
     computed: {
