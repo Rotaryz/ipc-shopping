@@ -5,11 +5,14 @@
       <div :class="['t-item',tabFlag === 1 ? 'hit':'']" @tap.stop="changeTab(1)">已上架</div>
       <div :class="['t-item',tabFlag === 2 ? 'hit':'']" @tap.stop="changeTab(2)">已下架</div>
     </header>
-    <section class="empty">
+    <section :class="['empty',isEmpty?'':'display-none']">
       <img class="empty-pic" v-if="imageUri" :src="imageUri + '/defaults/ipc-shopping/aliance/pic-union_empty@2x.png'"/>
       <div class="empty-txt">暂无活动</div>
     </section>
     <section class="apply">
+      <div class="test">
+        <union-card></union-card>
+      </div>
     </section>
     <footer class="btn" @tap.stop="toCreateActive(0)">新建</footer>
   </article>
@@ -18,12 +21,14 @@
 <script type="text/ecmascript-6">
   import api from 'api'
   import wx from 'wx'
+  import UnionCard from 'components/union-card-item/union-card-item'
 
   export default {
     data () {
       return {
         imageUri: api.image,
-        tabFlag: 0
+        tabFlag: 0,
+        isEmpty: false
       }
     },
     methods: {
@@ -35,7 +40,10 @@
         wx.navigateTo({url})
       }
     },
-    computed: {}
+    computed: {},
+    components: {
+      UnionCard
+    }
   }
 </script>
 
@@ -49,6 +57,8 @@
     layout()
     top: 131.5px
     align-items: center
+    &.display-none
+      display: none
     .empty-pic
       width: 86px
       height: 75.5px
@@ -89,6 +99,9 @@
         &.hit
           color: $color-background-ff
           cut-off-rule-bottom(6px, 6px, $color-assist-34, 2px)
-
+    .apply
+      position: relative
+      .test
+        padding: 0
 
 </style>

@@ -11,13 +11,13 @@
         <article class="b-i-item">
           <div class="title">活动时间</div>
           <div class="content">
-            <picker class="content-picker-box" mode="date" :start="today" @change="bindDateChange(0)">
+            <picker class="content-picker-box" mode="date" :start="todayStartDate" @change="bindDateChange" id="start">
               <view class="picker">
-                {{today}}
+                {{todayStartDate}}
               </view>
             </picker>
             <div class="date-cut-off">至</div>
-            <picker class="content-picker-box" mode="date" :start="endStartDate" @change="bindDateChange(1)">
+            <picker class="content-picker-box" mode="date" :start="endStartDate" @change="bindDateChange" id="end">
               <view class="picker">
                 {{endStartDate}}
               </view>
@@ -114,18 +114,11 @@
 
   ]
   export default {
-    props: {
-      data: Object,
-      son: {
-        type: Array,
-        default: []
-      }
-    },
     data () {
       return {
         model: 0,
-        // today: util.formatTimeYMD(),
-        // endStartDate: util.formatTimeYMD(util.now + 1000 * 60 * 60 * 24 * 30 * 2),
+        startDate: null,
+        endDate: null,
         activePrizeList,
         activeInfoList
       }
@@ -139,18 +132,30 @@
     },
     methods: {
       bindDateChange (e) {
-        console.log(e)
+        const id = e.target.id
+        const value = e.mp.detail.value
+        switch (id) {
+          case 'start': {
+            this.startDate = value
+            break
+          }
+          case 'end': {
+            this.endDate = value
+            break
+          }
+        }
+        console.log(this.startDate, e.mp.detail.value, id)
       }
     },
     computed: {
       isNewModel () {
         return this.model === 0
       },
-      today () {
-        return util.formatTimeYMD()
+      todayStartDate () {
+        return this.startDate || util.formatTimeYMD()
       },
       endStartDate () {
-        return util.formatTimeYMD(util.now + 1000 * 60 * 60 * 24 * 30 * 2)
+        return this.endDate || util.formatTimeYMD(util.now + 1000 * 60 * 60 * 24 * 30 * 2)
       }
     }
   }

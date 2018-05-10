@@ -22,8 +22,7 @@ module.exports = [
   {
     path: '/pages/union-create-active/union-create-active', // 联盟新建编辑活动
     name: 'UnionCA',
-    config: {
-    }
+    config: {}
   },
   {
     path: '/pages/employee/employee', // 员工
@@ -32,14 +31,14 @@ module.exports = [
       navigationBarTitleText: '员工管理'
     }
   },
-  {
-    path: '/pages/example/example',
-    name: 'Example',
-    config: {
-      enablePullDownRefresh: true,
-      navigationBarTitleText: '示例'
-    }
-  },
+  // {
+  //   path: '/pages/example/example',
+  //   name: 'Example',
+  //   config: {
+  //     enablePullDownRefresh: true,
+  //     navigationBarTitleText: '示例'
+  //   }
+  // },
   {
     path: '/pages/merchant-data/merchant-data',
     name: 'MerchantData',
