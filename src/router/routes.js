@@ -45,6 +45,15 @@ module.exports = [
     }
   },
   {
+    path: '/pages/bind-card/bind-card', // 绑定银行卡
+    name: 'BindCard',
+    config: {
+      navigationBarTitleText: '绑定银行卡',
+      disableScroll: true,
+      backgroundColor: '#F6F7FA'
+    }
+  },
+  {
     path: '/pages/example/example',
     name: 'Example',
     config: {
