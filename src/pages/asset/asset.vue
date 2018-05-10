@@ -15,7 +15,7 @@
           <div class="line"></div>
         </div>
         <div class="withdraw">
-          <div class="dis" v-bind:class="{'withdraw-btn':withdraw}">提现</div>
+          <div class="dis" v-bind:class="{'withdraw-btn':withdraw}" @tap="withdrawFun">提现</div>
         </div>
       </div>
     </div>
@@ -29,7 +29,7 @@
           <div class="item-right"><text class="small">+</text>{{item.money}}</div>
         </div>
       </scroll-view>
-      <Bgnull :showImagSta="2" :imageUrl="imagesUrl" :text="texts" :showBgnull="redPackList.length <= 0"></Bgnull>
+      <Bgnull :showImagSta="1" :showBgnull="redPackList.length <= 0"></Bgnull>
     </div>
   </div>
 </template>
@@ -46,13 +46,22 @@
         withdraw: false,
         redPackList: [],
         page: 1,
-        texts: '暂无数据',
         imagesUrl: ''
       }
     },
     components: {
       Bgnull
+    },
+    methods: {
+      withdrawFun () {
+        this.$router.push({
+          name: 'Withdraw',
+          path: '/pages/withdraw/withdraw',
+          params: {id: 123}
+        })
+      }
     }
+
   }
 </script>
 

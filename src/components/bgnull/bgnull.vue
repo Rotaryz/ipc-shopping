@@ -2,9 +2,7 @@
   <div class="bgnull" v-if="showBgnull">
     <div class="center">
       <div class="images">
-        <img v-if="showImagSta == 1 " :src="imagesUrl"/>
-        <!--<img v-if="showImagSta == 1 " :src="imageUrl + '/defaults/ipc-shopping/employee/pic-@2x.png'"/>-->
-        <!--<img v-if="showImagSta == 2" :src="imageUrl + '/defaults/ipc-shopping/page/pic-income_empty@2x.png'"/>-->
+        <img :src="imagesUrl"/>
         </div>
       <div class="text">
         <span>{{text}}</span>
@@ -16,21 +14,29 @@
 
 <script type="text/ecmascript-6">
   import api from 'api'
-  const picEm = '/defaults/ipc-shopping/employee/pic-@2x.png'
-  const picInc = '/defaults/ipc-shopping/page/pic-income_empty@2x.png'
+  const PATHARRAY = [ // 添加无数据时默认页面所需要的路径图片
+    {title: '暂无员工', img: '/defaults/ipc-shopping/employee/pic-@2x.png'},
+    {title: '暂无数据', img: '/defaults/ipc-shopping/page/pic-income_empty@2x.png'}
+  ]
   export default {
     data () {
       return {
-        imageUrl: api.image
+        imageUrl: api.image,
+        imagesUrl: '',
+        text: ''
       }
     },
-    props: [
-      'imagesUrl',
-      'text',
-      'showBgnull',
-      'showImagSta' // 跟据不同的状态显示不同的图片
-    ],
-    methods: {}
+    props: {
+      showBgnull: {
+        type: Boolean,
+        default: false
+      },
+      showImagSta: String
+    },
+    mounted() {
+      this.imagesUrl = this.imageUrl + PATHARRAY[this.showImagSta].img
+      this.text = PATHARRAY[this.showImagSta].title
+    }
   }
 </script>
 
