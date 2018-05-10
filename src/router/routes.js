@@ -75,13 +75,30 @@ module.exports = [
   //   }
   // },
   {
-    path: '/pages/merchant-data/merchant-data',
+    path: '/pages/merchant-data/merchant-data', // 商家活动数据页面
     name: 'MerchantData',
     config: {
       navigationBarTitleText: '活动数据',
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTextStyle: 'white'
     }
-    // 商家活动数据页面
+  },
+  {
+    path: '/pages/staff-data/staff-data', // 员工活动数据页面
+    name: 'StaffData',
+    config: {
+      navigationBarTitleText: '活动数据',
+      navigationBarBackgroundColor: '#1A1D3D',
+      navigationBarTextStyle: 'white'
+    }
+  },
+  {
+    path: '/pages/leader-data/leader-data', // 盟主活动数据页面
+    name: 'LeaderData',
+    config: {
+      navigationBarTitleText: '活动数据',
+      navigationBarBackgroundColor: '#1A1D3D',
+      navigationBarTextStyle: 'white'
+    }
   }
 ]
