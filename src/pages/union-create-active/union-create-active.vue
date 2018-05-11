@@ -11,25 +11,36 @@
         <article class="b-i-item">
           <div class="title">活动时间</div>
           <div class="content">
-            <input class="c-input" type="text" placeholder="异业联盟活动" placeholder-class="content">
+            <picker class="content-picker-box" mode="date" :start="todayStartDate" @change="bindDateChange" id="start">
+              <view class="picker">
+                {{todayStartDate}}
+              </view>
+            </picker>
+            <div class="date-cut-off">至</div>
+            <picker class="content-picker-box" mode="date" :start="endStartDate" @change="bindDateChange" id="end">
+              <view class="picker">
+                {{endStartDate}}
+              </view>
+            </picker>
           </div>
         </article>
         <article class="b-i-item">
           <div class="title">活动地址</div>
           <div class="content">
-            <input class="c-input" type="text" placeholder="异业联盟活动" placeholder-class="content">
+            <input class="c-input" type="text" disabled placeholder="广州市白云区市桥商圈" placeholder-class="content">
           </div>
         </article>
         <article class="b-i-item">
           <div class="title">活动费用</div>
-          <div class="content">
-            <input class="c-input" type="text" placeholder="异业联盟活动" placeholder-class="content">
+          <em class="money">¥</em>
+          <div class="content ">
+            <input class="c-input" type="text" disabled placeholder="100" placeholder-class="content">
           </div>
         </article>
         <article class="b-i-item">
           <div class="title">卡券数量</div>
           <div class="content">
-            <input class="c-input" type="text" placeholder="异业联盟活动" placeholder-class="content">
+            <input class="c-input" type="text" disabled placeholder="1000" placeholder-class="content">
           </div>
         </article>
       </section>
@@ -62,12 +73,14 @@
           </dd>
         </article>
       </section>
+      <footer class="save-btn">保存</footer>
     </form>
   </article>
 </template>
 
 <script type="text/ecmascript-6">
   import wx from 'wx'
+  import util from 'common/js/format'
 
   const activePrizeList = [
     {
@@ -100,11 +113,12 @@
     ]
 
   ]
-
   export default {
     data () {
       return {
         model: 0,
+        startDate: null,
+        endDate: null,
         activePrizeList,
         activeInfoList
       }
@@ -113,9 +127,35 @@
       let title = `新建`
       this.isNewModel && wx.setNavigationBarTitle({title})
     },
+    mounted () {
+      // console.log(util, Date.now())
+    },
+    methods: {
+      bindDateChange (e) {
+        const id = e.target.id
+        const value = e.mp.detail.value
+        switch (id) {
+          case 'start': {
+            this.startDate = value
+            break
+          }
+          case 'end': {
+            this.endDate = value
+            break
+          }
+        }
+        console.log(this.startDate, e.mp.detail.value, id)
+      }
+    },
     computed: {
       isNewModel () {
         return this.model === 0
+      },
+      todayStartDate () {
+        return this.startDate || util.formatTimeYMD()
+      },
+      endStartDate () {
+        return this.endDate || util.formatTimeYMD(util.now + 1000 * 60 * 60 * 24 * 30 * 2)
       }
     }
   }
@@ -136,12 +176,12 @@
         padding-left: 15px
         background-color: $color-background-ff
         margin-bottom: 10px
-        &:last-child
-          margin-bottom: 45px
+        &.active-info
+          margin-bottom: 0
         .b-i-item
           position: relative
           layout(row)
-          align-items: center
+          align-items: flex-end
           height: $input-height
           line-height: $input-height
           box-sizing: border-box
@@ -155,15 +195,32 @@
             font-family: $font-family-light
             font-size: $font-size-medium
             color: $color-text-2d
+          .money
+            layout()
+            align-items: flex-end
+            font-family: $font-family-light
+            font-size: $font-size-small-ss
+            color: $color-text-a4
+            box-sizing: border-box
+            width: 5px
+            height: 21px
+            line-height: 0
           .content
             flex: 1
             height: 100%
             font-family: $font-family-light
             font-size: $font-size-medium
             color: $color-text-a4
+            .content-picker-box
+              display: inline-block
+              .picker
+                display: inline-block
+            .date-cut-off
+              display: inline-block
+              padding: 0 5px
             .c-input
-              height: 100%
               width: 100%
+              height: 100%
         .s-title
           height: 42px
           line-height: 42px
@@ -190,7 +247,15 @@
             height: 38px
             line-height: 38px
           .content
-            width: 100%
+            position: relative
+            padding-right: 15px
             .c-item
+              font-family: $font-family-light
+              font-size: $font-size-medium
+              color: $color-text-2d
+              letter-spacing: 0
               line-height: 21px
+      .save-btn
+        normal-button-default()
+        border-radius: 3px 3px 0 0
 </style>

@@ -22,8 +22,7 @@ module.exports = [
   {
     path: '/pages/union-create-active/union-create-active', // 联盟新建编辑活动
     name: 'UnionCA',
-    config: {
-    }
+    config: {}
   },
   {
     path: '/pages/employee/employee', // 员工
@@ -67,22 +66,39 @@ module.exports = [
       backgroundColor: '#F6F7FA'
     }
   },
+  // {
+  //   path: '/pages/example/example',
+  //   name: 'Example',
+  //   config: {
+  //     enablePullDownRefresh: true,
+  //     navigationBarTitleText: '示例'
+  //   }
+  // },
   {
-    path: '/pages/example/example',
-    name: 'Example',
-    config: {
-      enablePullDownRefresh: true,
-      navigationBarTitleText: '示例'
-    }
-  },
-  {
-    path: '/pages/merchant-data/merchant-data',
+    path: '/pages/merchant-data/merchant-data', // 商家活动数据页面
     name: 'MerchantData',
     config: {
       navigationBarTitleText: '活动数据',
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTextStyle: 'white'
     }
-    // 商家活动数据页面
+  },
+  {
+    path: '/pages/staff-data/staff-data', // 员工活动数据页面
+    name: 'StaffData',
+    config: {
+      navigationBarTitleText: '活动数据',
+      navigationBarBackgroundColor: '#1A1D3D',
+      navigationBarTextStyle: 'white'
+    }
+  },
+  {
+    path: '/pages/leader-data/leader-data', // 盟主活动数据页面
+    name: 'LeaderData',
+    config: {
+      navigationBarTitleText: '活动数据',
+      navigationBarBackgroundColor: '#1A1D3D',
+      navigationBarTextStyle: 'white'
+    }
   }
 ]
