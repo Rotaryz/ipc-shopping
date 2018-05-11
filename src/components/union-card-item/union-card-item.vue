@@ -1,6 +1,48 @@
 <template>
   <article class="union-card-item">
-    <section class="wrap">
+    <section class="wrap" v-if="useType === DEFAULT_USE_TYPE.union">
+      <div class="box" :style="backgroundImg">
+        <article class="b-top">
+          <div class="b-top-box">
+            <section class="icon">
+              <div class="icon-pic" :style="iconImg"></div>
+            </section>
+            <artilce class="info-box">
+              <section class="title">{{cardInfo.title}}</section>
+              <section class="date">{{cardInfo.endDate}}</section>
+              <section class="info">
+                <div class="i-item">销量 {{cardInfo.sales}}</div>
+                <div class="i-item">核销 {{cardInfo.chargeOff}}</div>
+              </section>
+            </artilce>
+            <section class="look-over">
+              <span class="txt" :style="arrowImg">预览</span>
+            </section>
+          </div>
+        </article>
+        <article class="b-bottom" v-if="cardInfo.statusCode === constObject.up">
+          <div class="title">{{cardInfo.statusStr}}</div>
+          <div class="btn delete" @tap="editorHandler(cardInfo)">编辑</div>
+          <div class="btn total" @tap="totalHandler(cardInfo)">统计</div>
+        </article>
+        <article class="b-bottom" v-if="cardInfo.statusCode === constObject.down">
+          <div class="title">{{cardInfo.statusStr}}</div>
+          <div class="btn delete" @tap="deleteHandler(cardInfo)">删除</div>
+          <div class="btn total" @tap="totalHandler(cardInfo)">统计</div>
+        </article>
+        <article class="b-bottom" v-if="cardInfo.statusCode === constObject.apply">
+          <div class="title">{{cardInfo.statusStr}}</div>
+          <div class="btn total" @tap="checkHandler(cardInfo)">审查</div>
+        </article>
+        <article class="b-bottom" v-if="cardInfo.statusCode === constObject.applying">
+          <section class="shop-list-item" v-for="(item,index) in cardInfo.shopList" :key="index">
+            <div class="shop-icon" :style="shopImg"></div>
+            <div class="shop-name">{{item}}</div>
+          </section>
+        </article>
+      </div>
+    </section>
+    <section class="wrap" v-if="useType === DEFAULT_USE_TYPE.unionApplying">
       <div class="box" :style="backgroundImg">
         <article class="b-top">
           <div class="b-top-box">
@@ -50,10 +92,17 @@
   import source from 'common/source'
 
   const DEFAULT_CONST_OBJECT = {
-    up: 0,
-    down: -1,
-    apply: 10,
-    applying: 100
+    up: 0, // 上线
+    down: -1, // 下线
+    apply: 10, // 报名
+    applying: 100 // 报名审核
+  }
+
+  const DEFAULT_USE_TYPE = {
+    union: 0, // 联盟管理
+    unionApplying: 1, // 联盟报名
+    shop: 10, // 活动管理
+    shopApplying: 11 // 活动2
   }
 
   const DEFAULT_CARD_INFO = {
@@ -77,42 +126,44 @@
         default: DEFAULT_CONST_OBJECT
       },
       useType: {
-        type: Number,
-        default: 0
+        type: Object,
+        default: DEFAULT_USE_TYPE
       }
     },
-    data() {
+    data () {
       return {
         imageUri: api.image,
-        bgImgType: this.useType // 背景图片类型
+        bgImgType: this.useType.unionApplying // 背景图片类型
       }
     },
-    beforeMount() {
+    beforeMount () {
       console.log(this.cardInfo)
     },
-    mounted() {
+    mounted () {
     },
     methods: {
-      editorHandler(cardInfo) {
+      editorHandler (cardInfo) {
         this.$emit('editorHandler', cardInfo)
       },
-      totalHandler(cardInfo) {
+      totalHandler (cardInfo) {
         this.$emit('totalHandler', cardInfo)
       },
-      deleteHandler(cardInfo) {
+      deleteHandler (cardInfo) {
         this.$emit('deleteHandler', cardInfo)
       },
-      checkHandler(cardInfo) {
+      checkHandler (cardInfo) {
         this.$emit('checkHandler', cardInfo)
       }
     },
     computed: {
-      backgroundImg() {
+      backgroundImg () {
         switch (this.bgImgType) {
-          case 0: {
+          case DEFAULT_USE_TYPE.unionApplying:
+          case DEFAULT_USE_TYPE.union: {
+            console.log(2)
             return `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/pic-union_b@2x.png?flag=1)` || ''
           }
-          case 1: {
+          case DEFAULT_USE_TYPE.shop: {
             return `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/pic-activity_cardp@2x.png)` || ''
           }
           default: {
@@ -120,9 +171,10 @@
           }
         }
       },
-      iconImg() {
+      iconImg () {
         switch (this.bgImgType) {
-          case 0: {
+          case DEFAULT_USE_TYPE.unionApplying:
+          case DEFAULT_USE_TYPE.union: {
             return `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/pic-union_b2@2x.png)` || ''
           }
           case 1: {
@@ -133,10 +185,10 @@
           }
         }
       },
-      arrowImg() {
+      arrowImg () {
         return source.imgArrowRight()
       },
-      shopImg() {
+      shopImg () {
         return source.imgShopIcon()
       }
     }
