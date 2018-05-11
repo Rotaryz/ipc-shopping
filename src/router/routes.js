@@ -21,7 +21,12 @@ module.exports = [
   },
   {
     path: '/pages/union-create-active/union-create-active', // 联盟新建编辑活动
-    name: 'UnionCA',
+    name: 'UnionCA', // 名字不能超过<17
+    config: {}
+  },
+  {
+    path: '/pages/union-check-list/union-check-list', // 联盟审核列表
+    name: 'UnionCheckList',
     config: {}
   },
   {
