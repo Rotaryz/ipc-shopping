@@ -6,7 +6,10 @@
           <swiper class="home-swiper" @change="swiperChange" :current="swiperCurrent">
             <block v-for="(item, index) in activeList" :key="index+item.title">
               <swiper-item class="home-swiper-item">
-                <section class="progress-bar"></section>
+                <section class="progress-bar">
+                  <!--<canvas class="c-p-canvas" canvas-id="c-progress"></canvas>-->
+                  <circle-progress></circle-progress>
+                </section>
                 <section class="top-bar">
                   <div class="title">{{item.title}}</div>
                   <div class="look-over" :style="arrowImg">查看统计</div>
@@ -94,6 +97,7 @@
 <script type="text/ecmascript-6">
   import api from 'api'
   import source from 'common/source'
+  import CircleProgress from 'components/circle-progress/circle-progress'
   import wx from 'wx'
 
   const num = 999999
@@ -197,6 +201,9 @@
           }
         }
       }
+    },
+    components: {
+      CircleProgress
     }
   }
 </script>
@@ -238,8 +245,6 @@
                 height: 37.3333333333vw
                 top: 29.251700680272%
                 row-center()
-                border-radius: 50%
-                border: 12px solid $color-main-1a
               .top-bar
                 height: 17.006802721088%
                 padding: 0 2.8985507246376% 0 4.3478260869565%
