@@ -46,7 +46,11 @@ module.exports = [
     config: {
       navigationBarTitleText: '活动数据',
       navigationBarBackgroundColor: '#1A1D3D',
-      navigationBarTextStyle: 'white'
+      navigationBarTextStyle: 'white',
+      // 这儿添加要用的小程序组件
+      usingComponents: {
+        'ec-canvas': '../../../static/ec-canvas/ec-canvas'
+      }
     }
   },
   {
@@ -55,7 +59,11 @@ module.exports = [
     config: {
       navigationBarTitleText: '活动数据',
       navigationBarBackgroundColor: '#1A1D3D',
-      navigationBarTextStyle: 'white'
+      navigationBarTextStyle: 'white',
+      // 这儿添加要用的小程序组件
+      usingComponents: {
+        'ec-canvas': '../../../static/ec-canvas/ec-canvas'
+      }
     }
   },
   {
@@ -64,7 +72,11 @@ module.exports = [
     config: {
       navigationBarTitleText: '活动数据',
       navigationBarBackgroundColor: '#1A1D3D',
-      navigationBarTextStyle: 'white'
+      navigationBarTextStyle: 'white',
+      // 这儿添加要用的小程序组件
+      usingComponents: {
+        'ec-canvas': '../../../static/ec-canvas/ec-canvas'
+      }
     }
   }
 ]

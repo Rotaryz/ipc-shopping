@@ -1,10 +1,10 @@
 <template>
   <div class="data-box">
     <div class="merchant-title">
-      <div class="merchant-title-tab active">国颐堂榜</div>
-      <div class="merchant-title-tab">总榜</div>
+      <div class="merchant-title-tab" :class="staffBtn === 'self' ? 'active' : '' " @tap="clickStaffTab('self')">国颐堂榜</div>
+      <div class="merchant-title-tab"  :class="staffBtn === 'all' ? 'active' : '' " @tap="clickStaffTab('all')">总榜</div>
     </div>
-    <div class="self-staff" hidden="true">
+    <div class="self-staff" v-if="staffBtn === 'self'">
       <div class="all-top">
         <div class="data-title">
           <div class="text">排名</div>
@@ -77,8 +77,31 @@
           </scroll-view>
         </div>
       </div>
+      <div class="data-bra">
+        <div class="bra-title">
+          <div class="text">核销统计图</div>
+        </div>
+        <div class="ecbra-box">
+          <div class="ecbra-text">
+            <div class="text">售卡数</div>
+            <div class="number">10</div>
+          </div>
+          <div class="ecbra-text">
+            <div class="text">本店核销数</div>
+            <div class="number">10</div>
+          </div>
+          <div class="ecbra-text">
+            <div class="text">异业核销数</div>
+            <div class="number">10</div>
+          </div>
+        </div>
+        <div class="ecbra-bottom">向左图表滑动查看更多数据</div>
+        <div class="ec-box">
+          <ec-canvas class="canvas" id="mychart-dom-bar" canvas-id="mychart-bar" :ec="ecBra"></ec-canvas>
+        </div>
+      </div>
     </div>
-    <div class="all-staff" >
+    <div class="all-staff" v-if="staffBtn === 'all'">
       <div class="all-staff-box">
         <div class="rank-list">
           <img v-if="image" :src="image + '/defaults/ipc-shopping/activitydata/bg-activity_lizi@2x.png'" class="rank-bg" mode="widthFix">
@@ -219,10 +242,96 @@
 
 <script type="text/ecmascript-6">
   import Api from 'api'
+
+  const Baroptions = {
+    color: ['#40A1AE'],
+    // tooltip: {
+    //   trigger: 'axis',
+    //   axisPointer: {
+    //     type: 'line'
+    //   }
+    // },
+    dataZoom: [{
+      type: 'inside',
+      throttle: '30',
+      minValueSpan: 5,
+      start: 0,
+      end: 32,
+      zoomLock: true
+    }],
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '15%',
+      containLabel: true
+    },
+    xAxis: [
+      {
+        type: 'category',
+        data: ['锋味粉', '海底捞', '自然醉鹅', '星巴克', '牛肉火锅', '太二酸菜鱼', '旋转寿司', '海底捞', '自然醉鹅', '星巴克', '牛肉火锅', '太二酸菜鱼', '旋转寿司', '海底捞', '自然醉鹅', '星巴克', '牛肉火锅', '太二酸菜鱼', '旋转寿司'],
+        axisTick: {
+          alignWithLabel: true
+        },
+        axisLine: {
+          lineStyle: {
+            color: '#ffffff'
+          }
+        },
+        axisLabel: {
+          interval: 0,
+          color: '#959DBD',
+          fontSize: 10,
+          rotate: 25
+        }
+      }
+    ],
+    yAxis: [
+      {
+        type: 'value',
+        axisLine: {
+          lineStyle: {
+            color: '#999'
+          }
+        },
+        axisLabel: {
+          color: '#959DBD',
+          fontSize: 10
+        },
+        splitLine: {
+          show: false
+        }
+      }
+    ],
+    series: [
+      {
+        name: '员工总榜数据',
+        type: 'bar',
+        label: {
+          normal: {
+            show: true,
+            fontSize: 10,
+            position: 'top'
+          }
+        },
+        barWidth: '15',
+        data: [20, 52, 20, 34, 39, 10, 52, 20, 334, 390, 10, 52, 20, 33, 30, 10, 52, 20, 34]
+      }
+    ]
+  }
   export default {
     data () {
       return {
-        image: Api.image
+        ecBra: {
+          // 传 options
+          options: Baroptions
+        },
+        image: Api.image,
+        staffBtn: 'self'
+      }
+    },
+    methods: {
+      clickStaffTab(value) {
+        this.staffBtn = value
       }
     }
   }
@@ -344,13 +453,76 @@
               .user-box
                 .number
                   color: #C9826B
+    .data-bra
+      background: $color-assist-27
+      box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.15)
+      border-radius: 3px
+      height: 247.5px
+      margin-top: 10px
+      position: relative
+      .bra-title
+        layout(row)
+        background: #333F6C
+        border-top-left-radius: 3px
+        border-top-right-radius: 3px
+        padding-left: 15px
+        color: $color-background-ff
+        height: 40px
+        line-height: 40px
+        font-family: $font-family-light
+        font-size: $font-size-medium
+        .icon
+          font-size: $font-size-small
+        .money
+          font-size: $font-size-medium-x
+          font-family: DINAlternate-Bold
+      .ecbra-box
+        layout(row)
+        position: absolute
+        z-index: 2
+        left: 0
+        top: 40px
+        height: 40px
+        line-height: 40px
+        width: 100%
+        .ecbra-text
+          layout(row)
+          align-items: center
+          flex: 1
+          &:first-child
+            position: relative
+            left: 15px
+          .text
+            margin-right: 5px
+            font-family: $font-family-light
+            font-size: $font-size-small
+            color: $color-text-95
+          .number
+            font-family:  DINAlternate-Bold
+            font-size: $font-size-medium
+            color: $color-background-ff
+      .ecbra-bottom
+        position: absolute
+        width: 100%
+        bottom: 10px
+        left: 0
+        text-align: center
+        font-family: $font-family-light
+        font-size: $font-size-small-s
+        color: $color-background-ff
+    .ec-box
+      height: 209px
+      ec-canvas
+        width: 400px
+        height: 179px
+
   .all-staff /* 员工总榜 */
     padding: 0 12px
     .all-staff-box
       background: $color-assist-27
       box-shadow: 0 2px 20px 0 rgba(0,0,0,0.15)
       border-radius: 3px
-      padding-bottom: 29.5px
+      padding-bottom: 24.5px
       position: relative
       .rank-list
         layout(row)
