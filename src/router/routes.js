@@ -42,7 +42,7 @@ module.exports = [
     }
   },
   {
-    path: '/pages/asset/asset', // 收入 income
+    path: '/pages/asset/asset', // 收入
     name: 'Asset',
     config: {
       navigationBarTitleText: '收入',

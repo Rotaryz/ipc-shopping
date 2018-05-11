@@ -56,6 +56,12 @@
         checkForm: false
       }
     },
+    mounted() {
+      console.log(this.$root.$mp)
+      console.log('>>>>')
+      console.log(this.$root.$mp.query)
+      // console.log(this.$route)
+    },
     methods: {
       changeBank (e) {
         const index = e.mp.detail.value
@@ -79,7 +85,7 @@
         if (!this.checkForm) {
           return
         }
-        console.log('...')
+        this.$router.go(-1)
       }
     },
     watch: {

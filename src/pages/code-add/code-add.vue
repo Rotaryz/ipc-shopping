@@ -7,7 +7,7 @@
         <img class="max-img" :src="maxImg" alt="">
         <img class="min-img" :src="maxImg" alt="">
       </div>
-      <div class="code-hint">扫码绑定加入国颐堂</div>
+      <div class="code-hint">扫码绑定加入国颐堂 {{this.$route.query.id}}</div>
     </div>
   </div>
 </template>
@@ -20,14 +20,20 @@
         minImg: ''
       }
     },
-    methods: {
-      getParams() {
-        let params = this.$route.params
-        console.log(params)
-      }
+    beforeMount() {
+      console.log(`--${this.compName}--beforeMount`)
     },
-    watch: {
-      '$route': 'getParams'
+    mounted() {
+      console.log(this.$route.query.key)
+      console.log(`--${this.compName}--mounted`)
+    },
+    beforeUpdate() {
+      console.log(`--${this.compName}--beforeUpdate`)
+    },
+    computed: {
+      ss() {
+        console.log('...')
+      }
     }
   }
 </script>

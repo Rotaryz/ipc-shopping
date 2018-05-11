@@ -17,8 +17,7 @@
         <div class="title">提现金额</div>
         <div class="input-box">
           <div class="txt">¥</div>
-          <input type="digit" class="moneyInput" v-on:blur="moneyChange"
-                 v-model="money" />
+          <input type="digit" class="moneyInput" v-on:blur="moneyChange" v-model="money" />
         </div>
         <div class="foot" v-if="!withdrawFlag">
           <div class="left">提现到微信钱包</div>
@@ -49,12 +48,18 @@
         poundage: ''
       }
     },
+    onUnload() {
+      console.log('...')
+    },
+    mounted() {
+      console.log('...')
+    },
     methods: {
       setBank() {
         this.$router.push({
           name: 'BindCard',
           path: '/pages/bind-card/bind-card',
-          params: {id: 123}
+          query: {key: 123}
         })
       },
       moneyChange () {
