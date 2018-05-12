@@ -241,8 +241,8 @@
               .progress-bar
                 position: absolute
                 box-sizing: border-box
-                width: 37.3333333333vw
-                height: 37.3333333333vw
+                width: 140px
+                height: 140px
                 top: 29.251700680272%
                 row-center()
               .top-bar

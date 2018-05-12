@@ -1,5 +1,7 @@
 import api from 'api'
 
+const baseUrl = `${api.image}/defaults/ipc-shopping`
+
 export default {
   /**
    * 向右箭头图片
@@ -9,7 +11,7 @@ export default {
   imgArrowRight(type = 'background') {
     switch (type) {
       case 'background': {
-        return `background-image:url(${api.image}/defaults/ipc-shopping/home/icon-mhome_j@2x.png)` || ''
+        return `background-image:url(${baseUrl}/home/icon-mhome_j@2x.png)` || ''
       }
       default :
         return ''
@@ -23,7 +25,7 @@ export default {
   imgShopIcon(type = 'background') {
     switch (type) {
       case 'background': {
-        return `background-image:url(${api.image}/defaults/ipc-shopping/aliance/icon-union_card@2x.png)` || ''
+        return `background-image:url(${baseUrl}/aliance/icon-union_card@2x.png)` || ''
       }
       default :
         return ''
