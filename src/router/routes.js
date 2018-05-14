@@ -117,5 +117,23 @@ module.exports = [
         'ec-canvas': '../../../static/ec-canvas/ec-canvas'
       }
     }
+  },
+  {
+    path: '/pages/activity-manage/activity-manage', // 商家活动管理页面
+    name: 'ActivityManage',
+    config: {
+      navigationBarTitleText: '活动管理',
+      navigationBarBackgroundColor: '#1A1D3D',
+      navigationBarTextStyle: 'white'
+    }
+  },
+  {
+    path: '/pages/merchant-activity/merchant-activity', // 商家活动页面
+    name: 'MerchantActivity',
+    config: {
+      navigationBarTitleText: '活动管理',
+      navigationBarBackgroundColor: '#1A1D3D',
+      navigationBarTextStyle: 'white'
+    }
   }
 ]

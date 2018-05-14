@@ -14,7 +14,7 @@
         <union-card :useType="0" :cardInfo="cardInfoList[0]" @checkHandler="test"></union-card>
       </div>
       <div class="test">
-        <active-card :useType="1" @previewHandler="test"></active-card>
+        <active-card :useType="0" @previewHandler="test"></active-card>
       </div>
       <div class="test2">
         <coupon  @previewHandler="test"></coupon>
