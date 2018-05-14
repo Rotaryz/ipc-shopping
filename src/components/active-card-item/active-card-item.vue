@@ -1,69 +1,8 @@
 <template>
-  <article class="union-card-item">
-    <section class="wrap" v-if="useType === constUseType.union">
-      <div class="box" :style="backgroundImg">
-        <article class="b-top">
-          <div class="b-top-box">
-            <section class="icon">
-              <div class="icon-pic" :style="iconImg"></div>
-            </section>
-            <artilce class="info-box">
-              <section class="title">{{cardInfo.title}}</section>
-              <section class="date">{{cardInfo.endDate}}</section>
-              <section class="info">
-                <div class="i-item">销量 {{cardInfo.sales}}</div>
-                <div class="i-item">核销 {{cardInfo.chargeOff}}</div>
-              </section>
-            </artilce>
-            <section class="look-over">
-              <span class="txt" :style="arrowImg" @tap="previewHandler(cardInfo)">预览</span>
-            </section>
-          </div>
-        </article>
-        <article class="b-bottom" v-if="cardInfo.statusCode === constStatus.up">
-          <div class="title">{{cardInfo.statusStr}}</div>
-          <div class="btn delete" @tap="editorHandler(cardInfo)">编辑</div>
-          <div class="btn total" @tap="totalHandler(cardInfo)">统计</div>
-        </article>
-        <article class="b-bottom" v-if="cardInfo.statusCode === constStatus.down">
-          <div class="title">{{cardInfo.statusStr}}</div>
-          <div class="btn delete" @tap="deleteHandler(cardInfo)">删除</div>
-          <div class="btn total" @tap="totalHandler(cardInfo)">统计</div>
-        </article>
-        <article class="b-bottom" v-if="cardInfo.statusCode === constStatus.apply">
-          <div class="title">{{cardInfo.statusStr}}</div>
-          <div class="btn total" @tap="checkHandler(cardInfo)">审查</div>
-        </article>
-      </div>
-    </section>
-    <section class="wrap" v-if="useType === constUseType.unionApplying">
-      <div class="box" :style="backgroundImg">
-        <article class="b-top">
-          <div class="b-top-box">
-            <section class="icon">
-              <div class="icon-pic" :style="iconImg"></div>
-            </section>
-            <artilce class="info-box applying">
-              <section class="title">{{cardInfo.title}}</section>
-              <section class="info applying">
-                <div class="money"><em class="m-symbol">¥</em>{{cardInfo.money}}</div>
-                <div class="i-item">共{{cardInfo.cardNum}}张券</div>
-              </section>
-            </artilce>
-          </div>
-        </article>
-        <article class="b-bottom">
-          <section class="shop-list-item" v-for="(item,index) in cardInfo.shopList" :key="index">
-            <div class="shop-icon" :style="shopImg"></div>
-            <div class="shop-name">{{item}}</div>
-          </section>
-        </article>
-      </div>
-    </section>
-    <!--活动管理-->
+  <article class="active-card-item">
     <section class="wrap" v-if="useType === constUseType.shop">
       <div class="box" :style="backgroundImg">
-        <article class="b-top">
+        <article :class="['b-top',downStyle?'down-status':'']">
           <div class="b-top-box">
             <section class="icon">
               <div class="icon-pic" :style="iconImg"></div>
@@ -81,19 +20,49 @@
             </section>
           </div>
         </article>
+        <article class="b-bottom" v-if="cardInfo.statusCode === constStatus.addCoupon">
+          <div class="title">{{cardInfo.statusStr}}</div>
+          <div class="btn last" @tap="addHandler(cardInfo)">添加优惠券</div>
+        </article>
+        <article class="b-bottom" v-if="cardInfo.statusCode === constStatus.changeCoupon">
+          <div class="title">{{cardInfo.statusStr}}</div>
+          <div class="btn last" @tap="changeHandler(cardInfo)">修改优惠券</div>
+        </article>
+        <article class="b-bottom" v-if="cardInfo.statusCode === constStatus.lookOver">
+          <div class="title">{{cardInfo.statusStr}}</div>
+          <div class="btn last" @tap="lookHandler(cardInfo)">查看</div>
+        </article>
         <article class="b-bottom" v-if="cardInfo.statusCode === constStatus.up">
           <div class="title">{{cardInfo.statusStr}}</div>
-          <div class="btn delete" @tap="editorHandler(cardInfo)">编辑</div>
-          <div class="btn total" @tap="totalHandler(cardInfo)">统计</div>
+          <div class="btn delete" @tap="buyHandler(cardInfo)">复购</div>
+          <div class="btn delete" @tap="allocHandler(cardInfo)">分配</div>
+          <div class="btn last" @tap="totalHandler(cardInfo)">统计</div>
         </article>
         <article class="b-bottom" v-if="cardInfo.statusCode === constStatus.down">
           <div class="title">{{cardInfo.statusStr}}</div>
           <div class="btn delete" @tap="deleteHandler(cardInfo)">删除</div>
-          <div class="btn total" @tap="totalHandler(cardInfo)">统计</div>
+          <div class="btn last" @tap="totalHandler(cardInfo)">统计</div>
         </article>
-        <article class="b-bottom" v-if="cardInfo.statusCode === constStatus.apply">
-          <div class="title">{{cardInfo.statusStr}}</div>
-          <div class="btn total" @tap="checkHandler(cardInfo)">审查</div>
+      </div>
+    </section>
+    <section class="wrap alloc-status" v-if="isAlloct">
+      <div class="box" :style="backgroundImg">
+        <article class="b-top">
+          <div class="b-top-box">
+            <section class="icon">
+              <div class="icon-pic" :style="iconImg"></div>
+            </section>
+            <artilce class="info-box">
+              <section class="title">{{cardInfo.title}}</section>
+              <section class="date">{{cardInfo.endDate}}</section>
+              <section class="info">
+                <div class="i-item">可用库存 {{cardInfo.store}}</div>
+              </section>
+            </artilce>
+            <section class="look-over">
+              <span class="txt" :style="arrowImg" @tap="previewHandler(cardInfo)">预览</span>
+            </section>
+          </div>
         </article>
       </div>
     </section>
@@ -106,42 +75,41 @@
 
   // 状态常量默认值
   const DEFAULT_CONST_STATUS = {
-    apply: 0, // 报名,
-    up: 1, // 上线
-    down: 2 // 下线
+    addCoupon: 0, // 添加优惠券,
+    changeCoupon: 1, // 修改优惠券
+    lookOver: 2, // 查看(审核中-报名成功-报名失败)
+    up: 10, // 上架
+    down: 11 // 下架
   }
 
   // 使用场景默认值
   const DEFAULT_USE_TYPE = {
-    union: 0, // 联盟管理
-    unionApplying: 1, // 联盟报名
-    shop: 10, // 活动管理
-    shopApplying: 11 // 活动2
+    shop: 0, // 活动管理
+    shopAllot: 1 // 活动分配
   }
 
   // 卡券信息的默认值-盟主管理
   const DEFAULT_CARD_INFO_UNION = {
-    title: '异业联盟卡',
+    title: '异业联盟免费卡',
     endDate: '2018-01-17到期',
     sales: '100', // 销量
     chargeOff: '60', // 核销
-    statusCode: DEFAULT_CONST_STATUS.applying,
+    statusCode: DEFAULT_CONST_STATUS.down,
     statusStr: '已上架'
   }
 
   // 卡券信息的默认值-盟主审核
-  const DEFAULT_CARD_INFO_APPLYING = {
-    title: '20家异业联盟卡',
-    money: '100',
-    cardNum: '4',
-    shopList: new Array(4).fill('国颐堂国颐堂')
+  const DEFAULT_CARD_INFO_ALLOT = {
+    title: '异业联盟免费卡',
+    endDate: '2018-01-17到期',
+    store: '100'
   }
 
   export default {
     props: {
       cardInfo: {
         type: Object,
-        default: DEFAULT_CARD_INFO_APPLYING || DEFAULT_CARD_INFO_UNION
+        default: DEFAULT_CARD_INFO_UNION || DEFAULT_CARD_INFO_ALLOT
       },
       constStatus: {
         type: Object,
@@ -149,7 +117,7 @@
       },
       useType: {
         type: Number,
-        default: DEFAULT_USE_TYPE.unionApplying
+        default: DEFAULT_USE_TYPE.shop
       },
       constUseType: {
         type: Object,
@@ -158,15 +126,14 @@
     },
     data () {
       return {
-        imageUri: api.image,
-        bgImgType: this.useType // 背景图片类型
+        imageUri: api.image
       }
     },
     beforeMount () {
-      console.log(this.cardInfo)
+      // console.log(this.cardInfo)
     },
     mounted () {
-      console.log(this.useType)
+      // console.log(this.useType)
     },
     methods: {
       previewHandler (cardInfo) {
@@ -181,38 +148,33 @@
       deleteHandler (cardInfo) {
         this.$emit('deleteHandler', cardInfo)
       },
-      checkHandler (cardInfo) {
-        this.$emit('checkHandler', cardInfo)
+      changeHandler (cardInfo) {
+        this.$emit('changeHandler', cardInfo)
+      },
+      lookHandler (cardInfo) {
+        this.$emit('lookHandler', cardInfo)
+      },
+      buyHandler (cardInfo) {
+        this.$emit('buyHandler', cardInfo)
+      },
+      allocHandler (cardInfo) {
+        this.$emit('allocHandler', cardInfo)
       }
     },
     computed: {
+      downStyle () {
+        return this.cardInfo.statusCode === this.constStatus.down
+      },
+      isAlloct () {
+        return this.useType === this.constUseType.shopAllot
+      },
       backgroundImg () {
-        switch (this.bgImgType) {
-          case DEFAULT_USE_TYPE.unionApplying:
-          case DEFAULT_USE_TYPE.union: {
-            return `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/pic-union_b@2x.png)` || ''
-          }
-          case DEFAULT_USE_TYPE.shop: {
-            return `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/pic-activity_cardp@2x.png)` || ''
-          }
-          default: {
-            return ''
-          }
-        }
+        return (
+          this.isAlloct ? `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/bg-staff_card@2x.png)` : `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/pic-activity_cardp@2x.png)`
+        )
       },
       iconImg () {
-        switch (this.bgImgType) {
-          case DEFAULT_USE_TYPE.unionApplying:
-          case DEFAULT_USE_TYPE.union: {
-            return `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/pic-union_b2@2x.png)` || ''
-          }
-          case 1: {
-            return `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/pic-activity_cardp2@2x.png)` || ''
-          }
-          default: {
-            return ''
-          }
-        }
+        return `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/pic-activity_cardp2@2x.png)` || ''
       },
       arrowImg () {
         return source.imgArrowRight()
@@ -228,7 +190,7 @@
   @import "../../common/stylus/variable.styl"
   @import "../../common/stylus/mixin.styl"
 
-  .union-card-item
+  .active-card-item
     position: relative
     background-color: $color-background-ff
     box-shadow: 1px 8px 21px 0 rgba(179, 187, 218, 0.23)
@@ -238,6 +200,8 @@
       position: relative
       height: 0
       padding-top: 39.855072463768%
+      &.alloc-status
+        padding-top: 27.246376811594%
       .box
         layout()
         fill-box()
@@ -248,6 +212,9 @@
           position: relative
           height: 0
           padding-top: 27.391304347826%
+          &.down-status
+            content: ''
+            background-color: rgba(255, 255, 255, .6)
           .b-top-box
             fill-box()
             layout(row)
@@ -340,10 +307,9 @@
             color: $color-text-2d
           .btn
             margin-left: 10px
-          .delete, .editor
             function-button()
-          .total, .check
-            function-button($color-assist-47)
+            &:last-child
+              function-button($color-assist-6d)
           .shop-list-item
             layout(row, block, no-wrap)
             align-items: center

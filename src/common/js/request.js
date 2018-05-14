@@ -1,13 +1,21 @@
-// import wx from 'wx'
+import wx from 'wx'
 import Fly from 'flyio'
-import {showLoading, hideLoading} from './wechat'
+import { showLoading, hideLoading } from './wechat'
 // import {baseURL} from 'api/config'
 
+const token = wx.getStorageSync('token')
+
+const COMMON_HEADER = Object.assign(
+  {},
+  {'X-Requested-With': 'XMLHttpRequest'},
+  {'Current-merchant': wx.getStorageSync('merchantId')},
+  {token}
+)
 const TIME_OUT = 10000
-const COMMON_HEADER = {}
 const ERR_OK = 0
 const ERR_NO = -404
-
+const TOKEN_OUT = 10000 // token 失效
+console.log(COMMON_HEADER)
 const fly = new Fly()
 
 fly.interceptors.request.use((request) => {
@@ -23,7 +31,7 @@ fly.interceptors.response.use((response) => {
 // 配置请求基地址
 // fly.config.baseURL = baseURL.api
 
-function checkStatus(response) {
+function checkStatus (response) {
   // loading
   // 如果http状态码正常，则直接返回数据
   if (response && (response.status === 200 || response.status === 304 || response.status === 422)) {
@@ -42,7 +50,7 @@ function checkStatus(response) {
  * @param res
  * @returns {string|Object[]|CanvasPixelArray}
  */
-function checkCode(res) {
+function checkCode (res) {
   // 如果code异常(这里已经包括网络错误，服务器错误，后端抛出的错误)，可以弹出一个错误提示，告诉用户
   if (res.status === ERR_NO) {
     console.warn(res.msg)
@@ -61,7 +69,7 @@ function checkCode(res) {
  * @param res
  * @returns {{}}
  */
-function requestException(res) {
+function requestException (res) {
   hideLoading()
   const error = {}
   error.statusCode = res.status
@@ -76,7 +84,9 @@ function requestException(res) {
 }
 
 export default {
-  post(url, data, loading = true) {
+  ERR_OK,
+  TOKEN_OUT,
+  post (url, data, loading = true) {
     if (loading) {
       showLoading()
     }
@@ -89,7 +99,7 @@ export default {
       return checkCode(res)
     })
   },
-  get(url, params, loading = true) {
+  get (url, params, loading = true) {
     if (loading) {
       showLoading()
     }
@@ -102,7 +112,7 @@ export default {
       return checkCode(res)
     })
   },
-  put(url, data, loading = true) {
+  put (url, data, loading = true) {
     if (loading) {
       showLoading()
     }
@@ -115,7 +125,7 @@ export default {
       return checkCode(res)
     })
   },
-  delete(url, data, loading = true) {
+  delete (url, data, loading = true) {
     if (loading) {
       showLoading()
     }

@@ -11,7 +11,22 @@
     </section>
     <section class="apply">
       <div class="test">
-        <union-card @editor="test"></union-card>
+        <union-card :useType="0" :cardInfo="cardInfoList[0]" @checkHandler="test"></union-card>
+      </div>
+      <div class="test">
+        <active-card :useType="0" @previewHandler="test"></active-card>
+      </div>
+      <div class="test2">
+        <coupon @previewHandler="test"></coupon>
+      </div>
+      <div style="width:345px;margin: 10px auto">
+        <coupon @previewHandler="test" :useType="1" :useModel="1"></coupon>
+      </div>
+      <div class="test" style="width:345px ">
+        <coupon @previewHandler="test" :useType="0" :useModel="0"></coupon>
+      </div>
+      <div class="test" style="width:316px ">
+        <coupon @previewHandler="test" :useModel="0"></coupon>
       </div>
     </section>
     <footer class="btn" @tap.stop="toCreateActive(0)">新建</footer>
@@ -20,32 +35,68 @@
 
 <script type="text/ecmascript-6">
   import api from 'api'
-  import wx from 'wx'
   import UnionCard from 'components/union-card-item/union-card-item'
+  import ActiveCard from 'components/active-card-item/active-card-item'
+  import Coupon from 'components/coupon-item/coupon-item'
+  // 状态常量默认值
+  // const DEFAULT_CONST_STATUS = {
+  //   apply: 0, // 报名,
+  //   up: 1, // 上线
+  //   down: 2 // 下线
+  // }
+  // const DEFAULT_USE_TYPE = {
+  //   union: 0, // 联盟管理
+  //   unionApplying: 1, // 联盟报名
+  //   shop: 10, // 活动管理
+  //   shopApplying: 11 // 活动2
+  // }
+
+  // 卡券信息的默认值-盟主管理
+  const DEFAULT_CARD_INFO_UNION = {
+    title: '异业联盟卡',
+    endDate: '2018-01-17到期',
+    sales: '100', // 销量
+    chargeOff: '60', // 核销
+    statusCode: 1,
+    statusStr: '已上架'
+  }
 
   export default {
-    data() {
+    data () {
       return {
         imageUri: api.image,
-        tabFlag: 0,
-        isEmpty: false
+        tabFlag: 1,
+        isEmpty: false,
+        cardInfoList: [DEFAULT_CARD_INFO_UNION]
       }
     },
     methods: {
-      test(obj) {
-        console.log(obj)
+      test (obj) {
+        // console.log(obj)
+        // console.log(111)
+        const url = `/pages/union-check-list/union-check-list`
+        this.$router.push(url)
       },
-      changeTab(flag) {
+      changeTab (flag) {
         this.tabFlag = flag
+        DEFAULT_CARD_INFO_UNION.statusCode = flag
+        this.cardInfoList = [DEFAULT_CARD_INFO_UNION]
       },
-      toCreateActive() {
+      toCreateActive () {
         const url = `/pages/union-create-active/union-create-active`
-        wx.navigateTo({url})
+        this.$router.push(url)
+      }
+    },
+    watch: {
+      checkHandler () {
+        console.log(22)
       }
     },
     computed: {},
     components: {
-      UnionCard
+      UnionCard,
+      ActiveCard,
+      Coupon
     }
   }
 </script>
@@ -104,7 +155,13 @@
           cut-off-rule-bottom(6px, 6px, $color-assist-34, 2px)
     .apply
       position: relative
+      margin-bottom: 100px
       .test
+        margin: 10px auto
         padding: 10px 15px
+        &:last-child
+          margin-bottom: 16px
+      .test2
+        padding: 10px 30px
 
 </style>

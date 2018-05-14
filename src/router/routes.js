@@ -3,8 +3,12 @@ module.exports = [
     path: '/pages/loading/loading', // loading
     name: 'Loading',
     config: {
-      navigationBarBackgroundColor: '#FFFFFF',
-      navigationBarTextStyle: 'black'
+      // navigationBarBackgroundColor: '#FFFFFF',
+      // navigationBarTextStyle: 'black'
+      navigationBarTitleText: '登录',
+      backgroundTextStyle: 'light',
+      navigationBarBackgroundColor: '#1A1D3D',
+      disableScroll: true
     }
   },
   {
@@ -21,7 +25,12 @@ module.exports = [
   },
   {
     path: '/pages/union-create-active/union-create-active', // 联盟新建编辑活动
-    name: 'UnionCA',
+    name: 'UnionCA', // 名字不能超过<17
+    config: {}
+  },
+  {
+    path: '/pages/union-check-list/union-check-list', // 联盟审核列表
+    name: 'UnionCheckList',
     config: {}
   },
   {
@@ -80,7 +89,11 @@ module.exports = [
     config: {
       navigationBarTitleText: '活动数据',
       navigationBarBackgroundColor: '#1A1D3D',
-      navigationBarTextStyle: 'white'
+      navigationBarTextStyle: 'white',
+      // 这儿添加要用的小程序组件
+      usingComponents: {
+        'ec-canvas': '../../../static/ec-canvas/ec-canvas'
+      }
     }
   },
   {
@@ -89,7 +102,11 @@ module.exports = [
     config: {
       navigationBarTitleText: '活动数据',
       navigationBarBackgroundColor: '#1A1D3D',
-      navigationBarTextStyle: 'white'
+      navigationBarTextStyle: 'white',
+      // 这儿添加要用的小程序组件
+      usingComponents: {
+        'ec-canvas': '../../../static/ec-canvas/ec-canvas'
+      }
     }
   },
   {
@@ -97,6 +114,28 @@ module.exports = [
     name: 'LeaderData',
     config: {
       navigationBarTitleText: '活动数据',
+      navigationBarBackgroundColor: '#1A1D3D',
+      navigationBarTextStyle: 'white',
+      // 这儿添加要用的小程序组件
+      usingComponents: {
+        'ec-canvas': '../../../static/ec-canvas/ec-canvas'
+      }
+    }
+  },
+  {
+    path: '/pages/activity-manage/activity-manage', // 商家活动管理页面
+    name: 'ActivityManage',
+    config: {
+      navigationBarTitleText: '活动管理',
+      navigationBarBackgroundColor: '#1A1D3D',
+      navigationBarTextStyle: 'white'
+    }
+  },
+  {
+    path: '/pages/merchant-activity/merchant-activity', // 商家活动页面
+    name: 'MerchantActivity',
+    config: {
+      navigationBarTitleText: '活动管理',
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTextStyle: 'white'
     }
