@@ -1,7 +1,7 @@
 <template>
   <div class="my-wellet">
     <div class="top">
-      <img class="top-BC" v-if="imageUrl" v-bind:src="imageUrl + '/defaults/ipc-shopping/aliance/bg-income_01@2x.png'" />
+      <img class="top-BC" v-if="imageUrl" v-bind:src="imageUrl + '/defaults/ipc-shopping/aliance/bg-income_01@2x.png'"/>
       <div class="container">
         <div class="top-foot">
           <div class="item">
@@ -26,7 +26,10 @@
             <div class="title">{{item.title}}</div>
             <div class="time">{{item.time}}</div>
           </div>
-          <div class="item-right"><text class="small">+</text>{{item.money}}</div>
+          <div class="item-right">
+            <text class="small">+</text>
+            {{item.money}}
+          </div>
         </div>
       </scroll-view>
       <Bgnull :showImagSta="1" :showBgnull="redPackList.length <= 0"></Bgnull>
@@ -35,11 +38,12 @@
 </template>
 <script type="text/ecmascript-6">
   import Bgnull from '@/components/bgnull/bgnull'
-  import api from 'api'
+  import { baseURL } from 'api/config'
+
   export default {
     data () {
       return {
-        imageUrl: api.image,
+        imageUrl: baseURL.image,
         canUse: '0.00',
         total: '0.00',
         count: 0,
@@ -156,7 +160,7 @@
             position: absolute
             width: 1px
             height: 28.5px
-            background:  #3F4661
+            background: #3F4661
             left: 50%
             top: 50%
             transform: translate(-50%, -50%)

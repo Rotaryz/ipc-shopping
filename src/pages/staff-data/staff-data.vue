@@ -2,7 +2,7 @@
   <div class="data-box">
     <div class="merchant-title">
       <div class="merchant-title-tab" :class="staffBtn === 'self' ? 'active' : '' " @tap="clickStaffTab('self')">国颐堂榜</div>
-      <div class="merchant-title-tab"  :class="staffBtn === 'all' ? 'active' : '' " @tap="clickStaffTab('all')">总榜</div>
+      <div class="merchant-title-tab" :class="staffBtn === 'all' ? 'active' : '' " @tap="clickStaffTab('all')">总榜</div>
     </div>
     <div class="self-staff" v-if="staffBtn === 'self'">
       <div class="all-top">
@@ -241,7 +241,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import Api from 'api'
+  import { baseURL } from 'api/config'
 
   const Baroptions = {
     color: ['#40A1AE'],
@@ -325,12 +325,12 @@
           // 传 options
           options: Baroptions
         },
-        image: Api.image,
+        image: baseURL.image,
         staffBtn: 'self'
       }
     },
     methods: {
-      clickStaffTab(value) {
+      clickStaffTab (value) {
         this.staffBtn = value
       }
     }
@@ -343,6 +343,7 @@
   .data-box
     padding-top: 25.5px
     padding-bottom: 30px
+
   .page-bg
     position: fixed
     left: 0
@@ -351,6 +352,7 @@
     height: 100%
     z-index: -1
     background: #1A1D3D
+
   .merchant-title
     layout(row)
     justify-content: center
@@ -367,11 +369,12 @@
     .active
       color: $color-background-ff
       cut-off-rule-bottom(60px, 60px, $color-assist-34, 2px)
+
   .self-staff /* 店铺员工 */
     padding: 0 12px
     .all-top
       background: $color-assist-27
-      box-shadow: 0 2px 20px 0 rgba(0,0,0,0.15)
+      box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.15)
       border-radius: 3px
       height: 219px
       .data-title
@@ -401,7 +404,7 @@
             color: $color-text-95
             height: 40px
             line-height: 40px
-            cut-off-rule-bottom(0, 0, rgba(255,255,255,0.16), 0.5px)
+            cut-off-rule-bottom(0, 0, rgba(255, 255, 255, 0.16), 0.5px)
             .self-staff-list-box
               flex: 1
               &:nth-of-type(2)
@@ -498,7 +501,7 @@
             font-size: $font-size-small
             color: $color-text-95
           .number
-            font-family:  DINAlternate-Bold
+            font-family: DINAlternate-Bold
             font-size: $font-size-medium
             color: $color-background-ff
       .ecbra-bottom
@@ -520,14 +523,14 @@
     padding: 0 12px
     .all-staff-box
       background: $color-assist-27
-      box-shadow: 0 2px 20px 0 rgba(0,0,0,0.15)
+      box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.15)
       border-radius: 3px
       padding-bottom: 24.5px
       position: relative
       .rank-list
         layout(row)
         padding: 0 20px
-        cut-off-rule-bottom(0, 0, rgba(255,255,255,0.16), 0.5px)
+        cut-off-rule-bottom(0, 0, rgba(255, 255, 255, 0.16), 0.5px)
         height: 172px
         .rank-box
           flex: 1
@@ -612,7 +615,7 @@
           color: $color-text-95
           height: 40px
           line-height: 40px
-          cut-off-rule-bottom(0, 0, rgba(255,255,255,0.16), 0.5px)
+          cut-off-rule-bottom(0, 0, rgba(255, 255, 255, 0.16), 0.5px)
           .self-staff-list-box
             flex: 1
             &:nth-of-type(2)

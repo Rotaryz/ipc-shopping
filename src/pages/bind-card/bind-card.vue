@@ -16,9 +16,9 @@
         <picker class="picker" mode="selector" :key="index"
                 @change="changeBank" :range="banks" range-key="name">
           <view class="picker-item">
-            <div class="label" >开户银行</div>
+            <div class="label">开户银行</div>
             <div class="picker-input" :class="{checks: depositBank}">{{depositBank !=='' ? depositBank : '选择开户银行'}}</div>
-            <div>{{bank}}<img v-if="imageUrl" class="full-image" :src="imageUrl + '/defaults/b-image/page/Rectangle @2x.png'" />
+            <div>{{bank}}<img v-if="imageUrl" class="full-image" :src="imageUrl + '/defaults/b-image/page/Rectangle @2x.png'"/>
             </div>
           </view>
         </picker>
@@ -40,11 +40,12 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
-  import api from 'api'
+  import { baseURL } from 'api/config'
+
   export default {
     data () {
       return {
-        imageUrl: api.image,
+        imageUrl: baseURL.image,
         depositBank: '',
         banks: [
           {id: 1, name: '11'},
@@ -61,7 +62,7 @@
         const index = e.mp.detail.value
         this.depositBank = this.banks[index].name
       },
-      changeCard() {
+      changeCard () {
         let value = this.withdrawal_card
         if (/\S{5}/.test(value)) {
           value = value.replace(/\s/g, '').replace(/(.{4})/g, '$1 ')
@@ -83,10 +84,10 @@
       }
     },
     watch: {
-      name() {
+      name () {
         this.checkFormFun()
       },
-      withdrawal_card() {
+      withdrawal_card () {
         this.checkFormFun()
       },
       depositBank () {
@@ -150,7 +151,7 @@
             .full-image
               width: 8px
               height: 8px
-              vertical-align:middle
+              vertical-align: middle
     .btn-wrapper
       margin-top: 20px
       padding: 0 12px

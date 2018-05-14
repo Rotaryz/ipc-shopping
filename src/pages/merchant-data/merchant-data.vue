@@ -2,12 +2,12 @@
   <div class="data-box">
     <div class="data-tab">
       <div class="tab-merchant " :class="bigBtn === 'merchant' ? 'active' : '' " @tap="clickTab('merchant')">商家版</div>
-      <div class="tab-merchant"  :class="bigBtn === 'staff' ? 'active' : '' " @tap="clickTab('staff')">员工榜</div>
+      <div class="tab-merchant" :class="bigBtn === 'staff' ? 'active' : '' " @tap="clickTab('staff')">员工榜</div>
     </div>
     <div class="tab-merchant-box" v-if="bigBtn === 'merchant'">
       <div class="merchant-title">
-        <div class="merchant-title-tab"  :class="merchantBtn === 'self' ? 'active' : '' " @tap="clickMerchantTab('self')">国颐堂榜</div>
-        <div class="merchant-title-tab"  :class="merchantBtn === 'all' ? 'active' : '' " @tap="clickMerchantTab('all')">总榜</div>
+        <div class="merchant-title-tab" :class="merchantBtn === 'self' ? 'active' : '' " @tap="clickMerchantTab('self')">国颐堂榜</div>
+        <div class="merchant-title-tab" :class="merchantBtn === 'all' ? 'active' : '' " @tap="clickMerchantTab('all')">总榜</div>
       </div>
       <div class="self-merchant" v-if="merchantBtn === 'self'">
         <div class="self-top">
@@ -75,7 +75,7 @@
           </div>
         </div>
       </div>
-      <div class="all-merchant"  v-if="merchantBtn === 'all'">
+      <div class="all-merchant" v-if="merchantBtn === 'all'">
         <div class="all-top">
           <div class="data-title">
             <div class="text">门店</div>
@@ -386,7 +386,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import Api from 'api'
+  import { baseURL } from 'api/config'
 
   const options = {
     // color: ['#8941AF', '#A740AE', '#AE4077', '#B16544', '#B44343', '#5EAD83', '#40A1AE', '#4778C0', '#2843C3', '#57876E', '#128787', '#728AEC', '#1B6FBD', '#8941AF', '#A740AE', '#AE4077', '#B16544', '#B44343', '#5EAD83', '#40A1AE', '#4778C0', '#2843C3', '#57876E', '#128787', '#728AEC', '#1B6FBD'],
@@ -518,7 +518,7 @@
     ]
   }
   export default {
-    data() {
+    data () {
       return {
         ec: {
           // 传 options
@@ -528,23 +528,23 @@
           // 传 options
           options: Baroptions
         },
-        image: Api.image,
+        image: baseURL.image,
         bigBtn: 'merchant',
         merchantBtn: 'self',
         staffBtn: 'self'
       }
     },
     methods: {
-      test22() {
+      test22 () {
         console.log(22)
       },
-      clickTab(value) {
+      clickTab (value) {
         this.bigBtn = value
       },
-      clickMerchantTab(value) {
+      clickMerchantTab (value) {
         this.merchantBtn = value
       },
-      clickStaffTab(value) {
+      clickStaffTab (value) {
         this.staffBtn = value
       }
     }
@@ -901,7 +901,7 @@
             font-size: $font-size-small
             color: $color-text-95
           .number
-            font-family:  DINAlternate-Bold
+            font-family: DINAlternate-Bold
             font-size: $font-size-medium
             color: $color-background-ff
       .ecbra-bottom

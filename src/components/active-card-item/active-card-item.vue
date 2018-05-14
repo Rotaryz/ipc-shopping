@@ -70,7 +70,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import api from 'api'
+  import { baseURL } from 'api/config'
   import source from 'common/source'
 
   // 状态常量默认值
@@ -126,7 +126,7 @@
     },
     data () {
       return {
-        imageUri: api.image
+        imageUri: baseURL.image
       }
     },
     beforeMount () {

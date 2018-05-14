@@ -34,7 +34,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import api from 'api'
+  import { baseURL } from 'api/config'
   import UnionCard from 'components/union-card-item/union-card-item'
   import ActiveCard from 'components/active-card-item/active-card-item'
   import Coupon from 'components/coupon-item/coupon-item'
@@ -64,7 +64,7 @@
   export default {
     data () {
       return {
-        imageUri: api.image,
+        imageUri: baseURL.image,
         tabFlag: 1,
         isEmpty: false,
         cardInfoList: [DEFAULT_CARD_INFO_UNION]

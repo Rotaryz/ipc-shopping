@@ -27,7 +27,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-  // import api from 'api'
   import source from 'common/source'
 
   export default {
