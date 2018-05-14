@@ -42,7 +42,11 @@
     data () {
       return {
         showBgnull: true,
-        awaitList: [],
+        awaitList: [
+          {name: '123'},
+          {name: '123'},
+          {name: '123'}
+        ],
         acceptList: [],
         show: false,
         title: '',
@@ -59,7 +63,12 @@
     onReachBottom () {
       console.log('上拉刷新....')
     },
-    mounted () {},
+    beforeMount() {
+      console.log(`--${this.compName}--beforeMount`)
+    },
+    mounted() {
+      console.log(`--${this.compName}--mounted`)
+    },
     methods: {
       refuse (obj, index) {
         this.dataTmp = obj
@@ -86,7 +95,7 @@
         this.$router.push({
           name: 'CodeAdd',
           path: '/pages/code-add/code-add',
-          params: {id: 123}
+          query: {key: 123}
         })
       },
       confirm() {

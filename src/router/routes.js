@@ -50,7 +50,7 @@ module.exports = [
     }
   },
   {
-    path: '/pages/asset/asset', // 收入 income
+    path: '/pages/asset/asset', // 收入
     name: 'Asset',
     config: {
       navigationBarTitleText: '收入',
@@ -138,6 +138,20 @@ module.exports = [
       navigationBarTitleText: '活动管理',
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTextStyle: 'white'
+    }
+  },
+  {
+    path: '/pages/error/error', // 异常
+    name: 'Error',
+    config: {
+      disableScroll: true
+    }
+  },
+  {
+    path: '/pages/audit/audit', // 盟主审核
+    name: 'Audit',
+    config: {
+      navigationBarTitleText: '审核'
     }
   },
   {
