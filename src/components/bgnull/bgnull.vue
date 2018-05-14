@@ -13,7 +13,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import api from 'api'
+  import {baseURL} from 'api/config'
   const PATHARRAY = [ // 添加无数据时默认页面所需要的路径图片
     {title: '暂无员工', img: '/defaults/ipc-shopping/employee/pic-@2x.png'},
     {title: '暂无数据', img: '/defaults/ipc-shopping/page/pic-income_empty@2x.png'}
@@ -21,7 +21,7 @@
   export default {
     data () {
       return {
-        imageUrl: api.image,
+        imageUrl: baseURL.image,
         imagesUrl: '',
         text: ''
       }

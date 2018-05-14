@@ -53,21 +53,19 @@
       </div>
       <div class="em-list-succeed"  v-if="awaitList.length > 0">
         <div class="em-list-await-title">优惠券信息</div>
-        <div class="await-list-item info">
-          <div class="info-item">
-            <div class="item-left"></div>
-            <div class="item-right">
-              <p class="title">满100减69元</p>
-              <p class="msg">限真功夫(天河店)使用</p>
-              <p class="msg">有效期:2018.01.01至2018.08.01</p>
-              <div class="flex-right">查看</div>
-            </div>
-          </div>
+        <div class="await-list-items info">
+          <coupon :useModel="0" ></coupon>
         </div>
       </div>
     </div>
     <div class="floorAdd">
-      <div class="addEmployee" v-on:click="addEmployee">邀请员工</div>
+      <div class="addEmployee">
+        <div class="change">
+          <img class="img" :src="imageUrl + '/defaults/ipc-shopping/common/icon-union_yhj@2x.png'" alt="">
+          更换优惠券</div>
+        <div class="refuse">拒绝</div>
+        <div class="pass">通过</div>
+      </div>
     </div>
     <confirm-msg :show.sync="show" :title.sync="title" v-on:confirm="confirm" v-on:cancel="cancel"></confirm-msg>
   </div>
@@ -76,10 +74,13 @@
 <script type="text/ecmascript-6">
   import Bgnull from 'components/bgnull/bgnull'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
+  import Coupon from 'components/coupon-item/coupon-item'
+  import {baseURL} from 'api/config'
 
   export default {
     data () {
       return {
+        imageUrl: baseURL.image,
         showBgnull: true,
         awaitList: [
           {name: '123'},
@@ -96,7 +97,8 @@
     },
     components: {
       Bgnull,
-      ConfirmMsg
+      ConfirmMsg,
+      Coupon
     },
     // 分页
     onReachBottom () {
@@ -218,46 +220,9 @@
           font-size: $font-size-small-s
           margin-top: 4px
           margin-right: 2px
-    .await-list-item.info
-      height: 100px
-      border: 0.5px solid $color-cut-line-ed
-      margin-right: 15px
-      .info-item
-        margin: auto 15px
-        height: 70px
-        width: 100%
-        display: flex
-        flex-direction: row
-        .item-left
-          width: 75px
-          border: 0.5px solid $color-cut-line-ed
-          margin-right: 15px
-        .item-right
-          flex: 1
-          position: relative
-          .title
-            font-family: $font-family-regular
-            font-size: $font-size-medium
-            color: $color-text-2d
-            margin-bottom: 22.5px
-            line-height: 18px
-          .msg
-            font-family: $font-family-light
-            font-size: $font-size-small-s
-            color: $color-text-2d
-            line-height: 16px
-          .flex-right
-            position: absolute
-            top: 0px
-            bottom: 0px
-            right: 0px
-            margin: auto
-            width: 50px
-            height: 20px
-            line-height: 20px
-            font-family: $font-family-light
-            font-size: $font-size-small-s
-            color: $color-text-a4
+    .await-list-items.info
+      margin-left: -15px
+      padding :0 15px
     .em-list-succeed
       padding-left: 15px
       margin-top: 10px
@@ -268,7 +233,44 @@
     z-index: 1
     bottom: 0px
     width: 100vw
+    height: 45px
     .addEmployee
-      normal-button-default()
-      border-radius: 0px
+      display: flex
+      flex-direction: row
+      // justify-content: space-between
+      .change
+        width: 78px
+        cut-off-rule-top()
+        font-family: $font-family-light
+        font-size: $font-size-small-s
+        color: $color-text-2d
+        height: 45px
+        line-height: 45px
+        text-align: center
+        display: flex
+        flex-direction: column
+        .img
+          border: .5px solid red
+          width: 17.5px
+          height: 12.5px
+      .refuse
+        text-align center
+        flex: 1
+        line-height: 45px
+        font-family: $font-family-regular
+        font-size: $font-size-medium-x
+        color: $color-background-ff
+        letter-spacing: 0.64px
+        background-color: $color-assist-27
+      .pass
+        text-align center
+        flex: 1
+        line-height: 45px
+        font-family: $font-family-regular
+        font-size: $font-size-medium-x
+        color: $color-background-ff
+        letter-spacing: 0.64px
+        background-color: $color-assist-34
+
+
 </style>
