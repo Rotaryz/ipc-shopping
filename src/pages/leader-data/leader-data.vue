@@ -211,7 +211,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import Api from 'api'
+  import {baseURL} from 'api/config'
   const options = {
     // color: ['#8941AF', '#A740AE', '#AE4077', '#B16544', '#B44343', '#5EAD83', '#40A1AE', '#4778C0', '#2843C3', '#57876E', '#128787', '#728AEC', '#1B6FBD', '#8941AF', '#A740AE', '#AE4077', '#B16544', '#B44343', '#5EAD83', '#40A1AE', '#4778C0', '#2843C3', '#57876E', '#128787', '#728AEC', '#1B6FBD'],
     color: ['#6D42E6', '#4778C0', '#47AFC0', '#40A1AE', '#8941AF', '#4644DF'],
@@ -273,7 +273,7 @@
           // 传 options
           options: options
         },
-        image: Api.image,
+        image: baseURL.image,
         bigBtn: 'merchant'
       }
     },

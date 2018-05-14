@@ -1,6 +1,6 @@
-import api from 'api'
+import { baseURL } from 'api/config'
 
-const baseUrl = `${api.image}/defaults/ipc-shopping`
+const baseUrl = `${baseURL.image}/defaults/ipc-shopping`
 
 export default {
   /**
@@ -8,7 +8,7 @@ export default {
    * @param type 类型：默认背景图
    * @returns {*}
    */
-  imgArrowRight(type = 'background') {
+  imgArrowRight (type = 'background') {
     switch (type) {
       case 'background': {
         return `background-image:url(${baseUrl}/home/icon-mhome_j@2x.png)` || ''
@@ -22,7 +22,7 @@ export default {
    * @param type
    * @returns {*}
    */
-  imgArrowRightA4(type = 'background') {
+  imgArrowRightA4 (type = 'background') {
     const img = `icon-union_jt2@2x.png`
     switch (type) {
       case 'background': {
@@ -40,7 +40,7 @@ export default {
    * @param type
    * @returns {*}
    */
-  imgShopIcon(type = 'background') {
+  imgShopIcon (type = 'background') {
     switch (type) {
       case 'background': {
         return `background-image:url(${baseUrl}/aliance/icon-union_card@2x.png)` || ''
@@ -54,7 +54,7 @@ export default {
    * @param type
    * @returns {*}
    */
-  imgMapIcon(type = 'background') {
+  imgMapIcon (type = 'background') {
     const img = `icon-union_map@2x.png`
     switch (type) {
       case 'background': {

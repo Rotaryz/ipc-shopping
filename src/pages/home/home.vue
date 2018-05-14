@@ -18,13 +18,13 @@
         <li :class="['dot',dotCurrent===index?'dot-hit':'']" v-for="(item,index) in activeList" :key="index+item.title"></li>
       </ul>
     </header>
-    <footer class="tab-leader" v-if="userId===api.UNION_ID">
+    <footer class="tab-leader" v-if="userId===ROLE.UNION_ID">
       <nav class="t-l-nav" :style="leaderImg" @tap.stop="toUnion">联盟管理</nav>
       <nav class="t-l-nav" :style="activeImg">活动管理</nav>
       <nav class="t-l-nav" :style="employeeImg" @tap.stop="toEmployee">员工管理</nav>
       <nav class="t-l-nav" :style="incomeImg">收入/提现</nav>
     </footer>
-    <footer class="tab-merchant" v-if="userId===api.SHOP_ID">
+    <footer class="tab-merchant" v-if="userId===ROLE.SHOP_ID">
       <section class="t-m-ad">
         <div class="title">公告</div>
         <div class="content">异业联盟卡活动正在等你报名正在等你…</div>
@@ -34,7 +34,7 @@
       <nav class="t-l-nav" :style="employeeImg">员工管理</nav>
       <nav class="t-l-nav" :style="incomeImg">收入/提现</nav>
     </footer>
-    <footer class="tab-employee" v-if="userId===api.STAFF_ID">
+    <footer class="tab-employee" v-if="userId===ROLE.STAFF_ID">
       <section class="t-e-sales">
         <div class="title">销卡对比</div>
         <article class="content-box">
@@ -72,7 +72,8 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import api from 'api'
+  import { baseURL } from 'api/config'
+  import { ROLE } from 'common/js/contants'
   import HSliderItem from 'components/hSlider-item/hSlider-item'
 
   const num = 999999
@@ -139,8 +140,8 @@
   export default {
     data () {
       return {
-        api,
-        imageUri: api.image,
+        ROLE,
+        imageUri: baseURL.image,
         activeList: [object, object2, object3],
         employeeList: new Array(6).fill(0),
         dotCurrent: 0,
@@ -150,7 +151,7 @@
     },
     created () {
     },
-    beforeMount() {
+    beforeMount () {
     },
     methods: {
       swiperChange (e) {

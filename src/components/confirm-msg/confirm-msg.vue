@@ -5,8 +5,8 @@
         <div class="content-wrapper">
           <div class="content">
             <div class="danger-wrapper" v-if="imgFlag">
-            <!--<img v-if="imageUrlHead" src="{{imageUrlHead + '/defaults/c-image/square/pic-airship@2x.png'}}" class="full-image" />-->
-          </div>
+              <!--<img v-if="imageUrlHead" src="{{imageUrlHead + '/defaults/c-image/square/pic-airship@2x.png'}}" class="full-image" />-->
+            </div>
             <div class="font title" v-if="title">{{title}}</div>
             <div class="font" v-if="msg">{{msg}}</div>
           </div>
@@ -21,11 +21,12 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import api from 'api'
+  import { baseURL } from 'api/config'
+
   export default {
     data () {
       return {
-        imageUrlHead: api.image,
+        imageUrlHead: baseURL.image,
         imgFlag: false
       }
     },

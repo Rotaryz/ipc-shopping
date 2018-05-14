@@ -1,4 +1,4 @@
-import API from 'api'
+import request from 'common/js/request'
 
 export default {
   /**
@@ -7,7 +7,7 @@ export default {
    * @returns {Promise.<*>}
    */
   userAuthorise(data) {
-    const url = `${API.api}/api/info/authorise`
-    return API.post(url, data, true)
+    const url = `/api/info/authorise`
+    return request.post(url, data, true)
   }
 }

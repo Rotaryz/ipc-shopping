@@ -12,13 +12,15 @@
       <div class="padding-left">
         <div class="top">
           <div class="left">账户余额</div>
-          <div class="right">{{canUse}}<text class="small">元</text></div>
+          <div class="right">{{canUse}}
+            <text class="small">元</text>
+          </div>
         </div>
         <div class="title">提现金额</div>
         <div class="input-box">
           <div class="txt">¥</div>
           <input type="digit" class="moneyInput" v-on:blur="moneyChange"
-                 v-model="money" />
+                 v-model="money"/>
         </div>
         <div class="foot" v-if="!withdrawFlag">
           <div class="left">提现到微信钱包</div>
@@ -37,11 +39,12 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import api from 'api'
+  import { baseURL } from 'api/config'
+
   export default {
     data () {
       return {
-        imageUrl: api.image,
+        imageUrl: baseURL.image,
         canUse: '50000.00',
         money: '',
         bankCard: '',
@@ -50,7 +53,7 @@
       }
     },
     methods: {
-      setBank() {
+      setBank () {
         this.$router.push({
           name: 'BindCard',
           path: '/pages/bind-card/bind-card',
@@ -70,11 +73,11 @@
           console.log('ok')
         }
       },
-      checkMoney() {
+      checkMoney () {
         let reg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/
         return reg.test(this.money) && this.money * 1 <= this.canUse * 1
       },
-      _caculate() {
+      _caculate () {
         const money = this.money
         if (money / 1000 < 1) {
           this.poundage = 1
@@ -111,7 +114,7 @@
     display: flex
     flex-direction: column
     background-color: $color-background-f6
-    >.top
+    > .top
       background: $color-background-ff
       height: 45px
       display: flex
@@ -119,11 +122,11 @@
       align-items: center
       padding: 0 15px
       .left
-        font-family:$font-family-light
+        font-family: $font-family-light
         font-size: $font-size-medium
         color: $color-text-2d
       .right
-        font-family:$font-family-light
+        font-family: $font-family-light
         font-size: $font-size-small
         color: $color-text-a4
         .right-bank-icon
@@ -147,16 +150,16 @@
           padding: 0 15px 0px 0px
           cut-off-rule-bottom()
           .left
-            font-family:$font-family-light
+            font-family: $font-family-light
             font-size: $font-size-small
             color: $color-text-2d
             margin-right: 5px
           .right
-            font-family:$font-family-din
+            font-family: $font-family-din
             font-size: $font-size-medium-x
             color: $color-text-a4
             .small
-              font-family:$font-family-light
+              font-family: $font-family-light
               font-size: $font-size-medium
               color: $color-text-a4
         .title
@@ -194,7 +197,7 @@
             margin-right: 5px
           .right
             font-size: $font-size-small
-            color:$color-assist-34
+            color: $color-assist-34
 
       .content-withdraw
         padding: 22.5px 14.5px 10px 14.5px

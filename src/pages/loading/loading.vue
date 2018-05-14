@@ -21,10 +21,11 @@
 
 <script type="text/ecmascript-6">
   import api from 'api'
+  import { baseURL, ERR_OK } from 'api/config'
   import * as wechat from 'common/js/wechat'
   import wx from 'wx'
 
-  console.info(api.jumpVersion)
+  console.info(baseURL.jumpVersion)
 
   export default {
     created () {
@@ -49,7 +50,6 @@
       // 微信获取用户信息btn
       wxGetUserInfo (event) {
         const e = event.mp
-        console.log(222)
         if (e.detail.errMsg !== 'getUserInfo:ok') {
           return
         }
@@ -76,7 +76,7 @@
         api.userAuthorise(data)
           .then(Json => {
             wechat.hideLoading()
-            if (Json.error !== api.ERR_OK) {
+            if (Json.error !== ERR_OK) {
               return ''
             }
             const res = Json.data
