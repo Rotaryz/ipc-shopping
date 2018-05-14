@@ -22,3 +22,5 @@ const PROD = {
 }
 
 export const baseURL = env === 'production' ? PROD : env === 'test' ? TEST : DEV
+
+export const ERR_OK = 0

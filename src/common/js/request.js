@@ -1,7 +1,7 @@
 import wx from 'wx'
 import Fly from 'flyio'
 import { showLoading, hideLoading } from './wechat'
-// import {baseURL} from 'api/config'
+import { baseURL } from 'api/config'
 
 const token = wx.getStorageSync('token')
 
@@ -14,8 +14,8 @@ const COMMON_HEADER = Object.assign(
 const TIME_OUT = 10000
 const ERR_OK = 0
 const ERR_NO = -404
-const TOKEN_OUT = 10000 // token 失效
-console.log(COMMON_HEADER)
+// const TOKEN_OUT = 10000 // token 失效:带调整
+
 const fly = new Fly()
 
 fly.interceptors.request.use((request) => {
@@ -29,7 +29,7 @@ fly.interceptors.response.use((response) => {
 })
 
 // 配置请求基地址
-// fly.config.baseURL = baseURL.api
+fly.config.baseURL = baseURL.api
 
 function checkStatus (response) {
   // loading
@@ -84,8 +84,6 @@ function requestException (res) {
 }
 
 export default {
-  ERR_OK,
-  TOKEN_OUT,
   post (url, data, loading = true) {
     if (loading) {
       showLoading()

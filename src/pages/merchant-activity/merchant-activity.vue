@@ -26,7 +26,10 @@
             </div>
             <div class="cavas-list">
               <div class="left">活动费用</div>
-              <div class="right"><div class="icon">¥</div><div class="number">100</div></div>
+              <div class="right">
+                <div class="icon">¥</div>
+                <div class="number">100</div>
+              </div>
             </div>
             <div class="cavas-list">
               <div class="left">活动地址</div>
@@ -50,12 +53,12 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import api from 'api'
+  import { baseURL } from 'api/config'
 
   export default {
-    data() {
+    data () {
       return {
-        image: api.image
+        image: baseURL.image
       }
     }
   }
@@ -66,6 +69,7 @@
   @import "../../common/stylus/mixin.styl"
   .activity-content
     background: #F6F7FA
+
   .activity-detail
     position: relative
     padding-bottom: 27%
@@ -123,7 +127,7 @@
             line-height: 45px
             height: 45px
             padding-right: 8px
-            cut-off-rule-bottom(0, 0, rgba(255,255,255,0.16), 0.5px)
+            cut-off-rule-bottom(0, 0, rgba(255, 255, 255, 0.16), 0.5px)
             .tilte-left
               font-family: $font-family-regular
               font-size: $font-size-medium-x
@@ -148,7 +152,7 @@
               margin-right: 14px
               font-family: $font-family-light
               font-size: $font-size-medium
-              color: rgba(255,255,255,0.60)
+              color: rgba(255, 255, 255, 0.60)
             .right
               layout(row)
               font-family: $font-family-light
@@ -159,6 +163,7 @@
                 font-size: 9px
               .number
                 line-height: 1
+
   .activity-box
     padding: 0 15px
     .add-number
