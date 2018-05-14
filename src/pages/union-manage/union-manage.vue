@@ -26,7 +26,7 @@
         <coupon @previewHandler="test" :useType="0" :useModel="0"></coupon>
       </div>
       <div class="test" style="width:316px ">
-        <coupon style="width:316px" @previewHandler="test" :useModel="0"></coupon>
+        <coupon @previewHandler="test" :useModel="0"></coupon>
       </div>
     </section>
     <footer class="btn" @tap.stop="toCreateActive(0)">新建</footer>

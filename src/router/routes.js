@@ -135,5 +135,14 @@ module.exports = [
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTextStyle: 'white'
     }
+  },
+  {
+    path: '/pages/upload-coupon/upload-coupon', // 上传优惠卷
+    name: 'UploadCoupon',
+    config: {
+      navigationBarTitleText: '上传优惠劵',
+      navigationBarBackgroundColor: '#1A1D3D',
+      navigationBarTextStyle: 'white'
+    }
   }
 ]
