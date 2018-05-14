@@ -107,5 +107,12 @@ module.exports = [
     config: {
       disableScroll: true
     }
+  },
+  {
+    path: '/pages/audit/audit', // 盟主审核
+    name: 'Audit',
+    config: {
+      navigationBarTitleText: '审核'
+    }
   }
 ]
