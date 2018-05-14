@@ -3,8 +3,12 @@ module.exports = [
     path: '/pages/loading/loading', // loading
     name: 'Loading',
     config: {
-      navigationBarBackgroundColor: '#FFFFFF',
-      navigationBarTextStyle: 'black'
+      // navigationBarBackgroundColor: '#FFFFFF',
+      // navigationBarTextStyle: 'black'
+      navigationBarTitleText: '登录',
+      backgroundTextStyle: 'light',
+      navigationBarBackgroundColor: '#1A1D3D',
+      disableScroll: true
     }
   },
   {
