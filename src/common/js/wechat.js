@@ -48,3 +48,9 @@ export function hideLoading() {
     wx.hideNavigationBarLoading()
   }
 }
+export function setNavigationBarTitle(data) {
+  console.log(data)
+  return new Promise((resolve, reject) => {
+    wx.getLocation(data)
+  })
+}

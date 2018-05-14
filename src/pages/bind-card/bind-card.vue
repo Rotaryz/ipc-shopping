@@ -31,7 +31,7 @@
                v-model="withdrawal_card"
                placeholder-style="color: #a4a4a4; font-family: PingFangSC-Light;font-size: 14px"
                v-on:blur="changeCard"
-               maxlength="23"/>
+               maxlength="23" />
       </div>
     </div>
     <div class="btn-wrapper">
@@ -57,7 +57,7 @@
       }
     },
     mounted() {
-      console.log(this.$root.$mp)
+      console.log(this)
       console.log('>>>>')
       console.log(this.$root.$mp.query)
       // console.log(this.$route)

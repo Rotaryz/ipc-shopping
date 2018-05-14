@@ -100,5 +100,12 @@ module.exports = [
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTextStyle: 'white'
     }
+  },
+  {
+    path: '/pages/error/error', // 异常
+    name: 'Error',
+    config: {
+      disableScroll: true
+    }
   }
 ]

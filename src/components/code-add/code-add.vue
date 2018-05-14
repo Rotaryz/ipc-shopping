@@ -1,0 +1,97 @@
+<template>
+  <div class="code-add">
+    <div class="code-center">
+      <div class="code-title">欢迎你加入“异业联盟卡活动”</div>
+      <div class="code-msg">享受“一次努力，赚两份钱！”</div>
+      <div class="code-img">
+        <img class="max-img" :src="maxImg" alt="">
+        <img class="min-img" :src="maxImg" alt="">
+      </div>
+      <div class="code-hint">扫码绑定加入国颐堂</div>
+    </div>
+  </div>
+</template>
+
+<script type="text/ecmascript-6">
+  export default {
+    data () {
+      return {
+        maxImg: '',
+        minImg: ''
+      }
+    },
+    beforeMount() {
+      console.log(`--${this.compName}--beforeMount`)
+    },
+    mounted() {
+      console.log(this.$route.query.key)
+      console.log(`--${this.compName}--mounted`)
+    },
+    beforeUpdate() {
+      console.log(`--${this.compName}--beforeUpdate`)
+    },
+    computed: {
+      ss() {
+        console.log('...')
+      }
+    }
+  }
+</script>
+
+<style scoped lang="stylus" rel="stylesheet/stylus">
+  @import '../../common/stylus/variable'
+  @import '../../common/stylus/mixin'
+  .code-add
+    height: 100vh
+    width: 100vw
+    background-color: $color-main-1a
+    /*padding-top: 35px*/
+    display: flex
+    flex-direction: column
+    .code-center
+      background-color: $color-background-ff
+      height: 428px
+      margin: 35px 22px
+      border-radius: 3px
+      text-align: center
+      display: flex
+      flex-direction: column
+      .code-title
+        font-family: $font-family-light
+        font-size: $font-size-medium
+        color: $color-text-2d
+        line-height: 28px
+        margin-top: 50px
+      .code-msg
+        font-family: $font-family-meddle
+        font-size: $font-size-large
+        color: $color-text-2d
+        line-height: 32px
+      .code-img
+        width: 230px
+        height: 230px
+        margin: 20px auto
+        border: 1px solid $color-text-a4
+        position: relative
+        .max-img
+          position: absolute
+          top: 0px
+          left: 0px
+          width: 100%
+          height: 100%
+        .min-img
+          position: absolute
+          top: 0px
+          left: 0px
+          right: 0px
+          bottom: 0px
+          margin: auto
+          width: 47px
+          height: 47px
+
+      .code-hint
+        font-family: $font-family-light
+        font-size: $font-size-medium
+        color: $color-text-a4
+        line-height: 28px
+</style>
