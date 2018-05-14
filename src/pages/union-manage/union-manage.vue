@@ -17,7 +17,16 @@
         <active-card :useType="0" @previewHandler="test"></active-card>
       </div>
       <div class="test2">
-        <coupon  @previewHandler="test"></coupon>
+        <coupon @previewHandler="test"></coupon>
+      </div>
+      <div style="width:345px;margin: 10px auto">
+        <coupon @previewHandler="test" :useType="1" :useModel="1"></coupon>
+      </div>
+      <div class="test" style="width:345px ">
+        <coupon @previewHandler="test" :useType="0" :useModel="0"></coupon>
+      </div>
+      <div class="test" style="width:316px ">
+        <coupon style="width:316px" @previewHandler="test" :useModel="0"></coupon>
       </div>
     </section>
     <footer class="btn" @tap.stop="toCreateActive(0)">新建</footer>
@@ -146,9 +155,13 @@
           cut-off-rule-bottom(6px, 6px, $color-assist-34, 2px)
     .apply
       position: relative
+      margin-bottom: 100px
       .test
+        margin: 10px auto
         padding: 10px 15px
+        &:last-child
+          margin-bottom: 16px
       .test2
-        padding :10px 32.5px
+        padding: 10px 30px
 
 </style>
