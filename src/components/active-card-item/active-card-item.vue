@@ -109,7 +109,7 @@
     props: {
       cardInfo: {
         type: Object,
-        default: DEFAULT_CARD_INFO_ALLOT || DEFAULT_CARD_INFO_UNION
+        default: DEFAULT_CARD_INFO_UNION || DEFAULT_CARD_INFO_ALLOT
       },
       constStatus: {
         type: Object,

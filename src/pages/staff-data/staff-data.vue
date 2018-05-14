@@ -281,7 +281,7 @@
           interval: 0,
           color: '#959DBD',
           fontSize: 10,
-          rotate: 25
+          rotate: 20
         }
       }
     ],
