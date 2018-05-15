@@ -39,7 +39,7 @@
   import Bgnull from 'components/bgnull/bgnull'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
   import AuditMsg from 'components/audit-msg/audit-msg'
-
+  import api from 'api'
   export default {
     data () {
       return {
@@ -70,10 +70,22 @@
       console.log(`--${this.compName}--beforeMount`)
     },
     mounted() {
+      this.getInfo()
       this.$refs.audit.show(1)
       console.log(`--${this.compName}--mounted`)
     },
     methods: {
+      async getInfo () {
+        await this._getEmployee()
+      },
+      _getEmployee() {
+        let data = {}
+        api.empGetEmployeeList(data).then(res => { // 获取待处理员工
+          console.log(res)
+        }).catch(err => {
+          console.info(err)
+        })
+      },
       refuse (obj, index) {
         this.dataTmp = obj
         this.dataIndex = index
