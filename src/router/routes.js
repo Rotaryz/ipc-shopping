@@ -148,5 +148,32 @@ module.exports = [
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTextStyle: 'white'
     }
+  },
+  {
+    path: '/pages/staff-activity/staff-activity', // 员工活动列表
+    name: 'StaffActivity',
+    config: {
+      navigationBarTitleText: '活动管理',
+      navigationBarBackgroundColor: '#1A1D3D',
+      navigationBarTextStyle: 'white'
+    }
+  },
+  {
+    path: '/pages/staff-code/staff-code', // 员工活动二维码
+    name: 'StaffCode',
+    config: {
+      navigationBarTitleText: '活动管理',
+      navigationBarBackgroundColor: '#1A1D3D',
+      navigationBarTextStyle: 'white'
+    }
+  },
+  {
+    path: '/pages/allocation-card/allocation-card', // 商家分配销卡
+    name: 'AllocationCard',
+    config: {
+      navigationBarTitleText: '分配销卡数',
+      navigationBarBackgroundColor: '#1A1D3D',
+      navigationBarTextStyle: 'white'
+    }
   }
 ]
