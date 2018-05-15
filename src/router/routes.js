@@ -31,7 +31,9 @@ module.exports = [
   {
     path: '/pages/union-check-list/union-check-list', // 联盟审核列表
     name: 'UnionCheckList',
-    config: {}
+    config: {
+      navigationBarTitleText: '审核列表'
+    }
   },
   {
     path: '/pages/employee/employee', // 员工
