@@ -27,7 +27,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {baseURL} from 'api/config'
+  import { baseURL } from 'api/config'
   import source from 'common/source'
 
   const OBJ = {
@@ -56,13 +56,13 @@
         default: CHECK_CONST_OBJ
       }
     },
-    data() {
+    data () {
       return {
         imageUri: baseURL.image
       }
     },
     methods: {
-      lookOverHandler() {
+      lookOverHandler () {
         this.shopItem.statusCode--
         if (this.shopItem.statusCode < 0) {
           this.shopItem.statusCode = this.constObj.REFUSE
@@ -71,7 +71,7 @@
       }
     },
     computed: {
-      statusMsg() {
+      statusMsg () {
         switch (this.shopItem.statusCode) {
           case this.constObj.APPLYING :
             return `待添加优惠券`
@@ -83,14 +83,14 @@
             return `已退款` || `排队中`
         }
       },
-      shopImg() {
+      shopImg () {
         const img = `https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1526310402&di=f1710bff86bdb94c00c976283ad87a65&src=http://pic17.photophoto.cn/20101010/0036036893991891_b.jpg`
         return `background-image:url(${img})`
       },
-      arrowRightImg() {
+      arrowRightImg () {
         return source.imgArrowRightA4()
       },
-      backgroundMapImg() {
+      backgroundMapImg () {
         return source.imgMapIcon()
       }
     }
@@ -145,7 +145,7 @@
             padding-left: 11px
             background-size: 7.5px 10px
             background-repeat: no-repeat
-            background-position: left center
+            background-position: left bottom
             no-wrap()
           .expense-box
             font-family: $font-family-light

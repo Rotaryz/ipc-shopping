@@ -17,7 +17,10 @@
       </article>
       <scroll-view class="scroll" scroll-y v-if="!isEmpty">
         <dl class="box">
-          <dt class="ad-box">hello</dt>
+          <dt class="ad-box" v-if="showAd">
+            <div class="txt">商家已成功支付，且已经添加优惠券</div>
+            <div class="close-icon" :style="closeIcon" @tap="closeAd"></div>
+          </dt>
           <dd class="box-item" v-for="(item, index) in cardInfoList" :key="index">
             <union-check @previewHandler="test"></union-check>
           </dd>
@@ -34,26 +37,33 @@
   import UnionCheck from 'components/union-check-item/union-check-item'
 
   export default {
-    data() {
+    data () {
       return {
         navList: ['申请中', '待审核', '已通过', '已拒绝'],
         tabFlag: 1,
         isEmpty: false,
-        cardInfoList: new Array(6)
+        cardInfoList: new Array(6),
+        showAd: true
       }
     },
     methods: {
-      changeTab(flag) {
+      changeTab (flag) {
         this.isEmpty = !this.isEmpty
         this.tabFlag = flag
         // console.log(this.cardInfoList)
         // DEFAULT_CARD_INFO_UNION.statusCode = flag
         // this.cardInfoList = [DEFAULT_CARD_INFO_UNION]
+      },
+      closeAd () {
+        this.showAd = false
       }
     },
     computed: {
-      emptyImg() {
+      emptyImg () {
         return source.imgEmptyActive()
+      },
+      closeIcon () {
+        return source.imgCloseIcon()
       }
     },
     components: {
@@ -121,8 +131,30 @@
         background: $color-background-f6
         .box
           box-sizing: border-box
+          .ad-box
+            height: 34px
+            box-sizing: border-box
+            layout(row, block, no-wrap)
+            justify-content: space-between
+            align-items: center
+            background: rgba(52, 96, 236, 0.06)
+            .txt
+              flex: 1
+              box-sizing: border-box
+              padding: 0 15px
+              font-family: $font-family-light
+              font-size: $font-size-small
+              color: $color-assist-34
+              no-wrap()
+            .close-icon
+              height: 34px
+              width: 34px
+              padding-left: 50px
+              background-repeat: no-repeat
+              background-position: center
+              background-size: 12px
           .box-item
-            padding: 10px 0
+            padding-bottom: 10px
             &:last-child
               padding-bottom: 20px
 

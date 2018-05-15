@@ -65,12 +65,27 @@ export default {
     }
   },
   /**
-   * map-icon图标
+   * empty空页面图片
    * @param type
    * @returns {*}
    */
   imgEmptyActive (type = 'background') {
     const img = `pic-union_empty@2x.png`
+    switch (type) {
+      case 'background': {
+        return `background-image:url(${baseUrl}/common/${img}` || ''
+      }
+      default :
+        return ''
+    }
+  },
+  /**
+   * close-icon
+   * @param type
+   * @returns {*}
+   */
+  imgCloseIcon (type = 'background') {
+    const img = `icon-union_close@2x.png`
     switch (type) {
       case 'background': {
         return `background-image:url(${baseUrl}/common/${img}` || ''
