@@ -160,7 +160,9 @@ module.exports = [
     path: '/pages/audit/audit', // 盟主审核
     name: 'Audit',
     config: {
-      navigationBarTitleText: '审核'
+      navigationBarTitleText: '审核', // #f6f7fa
+      backgroundColor: 'f6f7fa',
+      disableScroll: true
     }
   },
   {
