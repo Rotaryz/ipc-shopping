@@ -18,13 +18,13 @@
         <li :class="['dot',dotCurrent===index?'dot-hit':'']" v-for="(item,index) in activeList" :key="index+item.title"></li>
       </ul>
     </header>
-    <footer class="tab-leader" v-if="userId===ROLE.UNION_ID">
+    <footer class="tab-leader" v-if="currentRole===ROLE.UNION_ID">
       <nav class="t-l-nav" :style="leaderImg" @tap.stop="toUnion">联盟管理</nav>
       <nav class="t-l-nav" :style="activeImg">活动管理</nav>
       <nav class="t-l-nav" :style="employeeImg" @tap.stop="toEmployee">员工管理</nav>
       <nav class="t-l-nav" :style="incomeImg">收入/提现</nav>
     </footer>
-    <footer class="tab-merchant" v-if="userId===ROLE.SHOP_ID">
+    <footer class="tab-merchant" v-if="currentRole===ROLE.SHOP_ID">
       <section class="t-m-ad">
         <div class="title">公告</div>
         <div class="content">异业联盟卡活动正在等你报名正在等你…</div>
@@ -34,7 +34,7 @@
       <nav class="t-l-nav" :style="employeeImg">员工管理</nav>
       <nav class="t-l-nav" :style="incomeImg">收入/提现</nav>
     </footer>
-    <footer class="tab-employee" v-if="userId===ROLE.STAFF_ID">
+    <footer class="tab-employee" v-if="currentRole===ROLE.STAFF_ID">
       <section class="t-e-sales">
         <div class="title">销卡对比</div>
         <article class="content-box">
@@ -142,6 +142,7 @@
     data () {
       return {
         ROLE,
+        currentRole: null,
         imageUri: baseURL.image,
         activeList: [object, object2, object3],
         employeeList: new Array(6).fill(0),
@@ -153,15 +154,20 @@
     created () {
     },
     beforeMount () {
+      // let role = this.role()
+      // this.role = role
+      // console.log(role, '身份')
+    },
+    mounted () {
       let role = this.role()
-      console.log(role, '身份')
+      this.currentRole = role
     },
     methods: {
       ...mapGetters(['role']),
       swiperChange (e) {
         let index = e.mp.detail.current
         this.dotCurrent = index
-        this.userId = index
+        // this.userId = index
         this.sliderCurrent = index
       },
       toUnion () {
