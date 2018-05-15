@@ -31,6 +31,8 @@
         </div>
       </section>
     </article>
+    <article class="union-sort" :style="backgroundSortDownImg" v-if="sortDownStyle" @tap="sortDownHandler(couponInfo)"></article>
+    <article class="union-sort" :style="backgroundSortUpImg" v-if="sortUpStyle" @tap="sortUpHandler(couponInfo)"></article>
   </div>
 </template>
 
@@ -42,15 +44,19 @@
   const DEFAULT_USE_TYPE = {
     normal: 0, // 默认样式
     check: 1, // 选择样式
+    shop: 1, // 商家模式,
     union: 0, // 盟主模式
-    shop: 1 // 商家模式
+    sort: 1, // 排序
+    sortUp: 10, // 升
+    sortDown: 11 // 降
   }
 
   const DEFAULT_INFO = {
     type: '代金券',
     name: '100元代金券',
     scope: '限国颐堂(天河店)使用',
-    useLife: '有效期:2018-01-01至2018-08-01'
+    useLife: '有效期:2018-01-01至2018-08-01',
+    sortType: 0
   }
 
   export default {
@@ -85,16 +91,29 @@
     methods: {
       checkHandler (couponInfo) {
         this.isCheck = !this.isCheck
-        this.$emit(couponInfo)
+        this.$emit('checkHandler', couponInfo)
       },
       lookOverHandler (couponInfo) {
-        this.$emit(couponInfo)
+        this.$emit('lookOverHandler', couponInfo)
+      },
+      sortDownHandler (couponInfo, sortType) {
+        this.$emit('sortDownHandler', couponInfo, sortType)
+      },
+      sortUpHandler (couponInfo, sortType) {
+        this.$emit('sortUpHandler', couponInfo, sortType)
       }
     },
     created () {
       // console.log(this.useType, this.constUseType.normal)
     },
     computed: {
+      sortUpStyle () {
+        console.log(this.couponInfo.sortType)
+        return (this.useType === this.constUseType.sort && this.couponInfo.sortType === this.constUseType.sortUp)
+      },
+      sortDownStyle () {
+        return (this.useType === this.constUseType.sort && this.couponInfo.sortType === this.constUseType.sortDown)
+      },
       isNormal () {
         return this.useType === this.constUseType.normal
       },
@@ -109,6 +128,14 @@
       backgroundLookOverImg () {
         const img = `icon-union_jt@2x.png`
         return `background-image:url(${this.imageUri}/defaults/ipc-shopping/common/${img})`
+      },
+      backgroundSortDownImg () {
+        const img = `icon-union_down1@2x.png`
+        return `background-image:url(${this.imageUri}/defaults/ipc-shopping/common/${img})`
+      },
+      backgroundSortUpImg () {
+        const img = `icon-union_up1@2x.png`
+        return `background-image:url(${this.imageUri}/defaults/ipc-shopping/common/${img})`
       }
     }
   }
@@ -118,9 +145,19 @@
   @import "../../common/stylus/variable.styl"
   @import "../../common/stylus/mixin.styl"
 
+  .union-sort
+    position: relative
+    height: 100px
+    width: 46px
+    background-repeat: no-repeat
+    background-size: 16px
+    background-position: center
+
   .coupon-item
     position: relative
+    layout(row, block, nowrap)
     .wrap
+      flex: 1
       position: relative
       height: 100px
       border-radius: 3px

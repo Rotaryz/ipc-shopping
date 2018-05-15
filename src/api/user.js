@@ -7,7 +7,7 @@ export default {
    * @returns {Promise.<*>}
    */
   userAuthorise(data) {
-    const url = `/api/info/authorise`
+    const url = `/api/authorise`
     return request.post(url, data, true)
   }
 }

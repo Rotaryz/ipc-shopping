@@ -1,5 +1,6 @@
 const state = {
-  test: {}
+  // test: {},
+  role: null
 }
 
 export default state

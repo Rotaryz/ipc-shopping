@@ -31,7 +31,16 @@ module.exports = [
   {
     path: '/pages/union-check-list/union-check-list', // 联盟审核列表
     name: 'UnionCheckList',
-    config: {}
+    config: {
+      navigationBarTitleText: '审核列表'
+    }
+  },
+  {
+    path: '/pages/union-sort/union-sort', // 联盟-排序
+    name: 'UnionSort',
+    config: {
+      navigationBarTitleText: '排序'
+    }
   },
   {
     path: '/pages/employee/employee', // 员工
@@ -75,14 +84,14 @@ module.exports = [
       backgroundColor: '#F6F7FA'
     }
   },
-  // {
-  //   path: '/pages/example/example',
-  //   name: 'Example',
-  //   config: {
-  //     enablePullDownRefresh: true,
-  //     navigationBarTitleText: '示例'
-  //   }
-  // },
+  {
+    path: '/pages/example/example',
+    name: 'Example',
+    config: {
+      enablePullDownRefresh: true,
+      navigationBarTitleText: '示例'
+    }
+  },
   {
     path: '/pages/merchant-data/merchant-data', // 商家活动数据页面
     name: 'MerchantData',

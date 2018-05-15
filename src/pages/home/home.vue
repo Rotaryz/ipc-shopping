@@ -73,6 +73,7 @@
 
 <script type="text/ecmascript-6">
   import { baseURL } from 'api/config'
+  import { mapGetters } from 'vuex'
   import { ROLE } from 'common/js/contants'
   import HSliderItem from 'components/hSlider-item/hSlider-item'
 
@@ -152,8 +153,11 @@
     created () {
     },
     beforeMount () {
+      let role = this.role()
+      console.log(role, '身份')
     },
     methods: {
+      ...mapGetters(['role']),
       swiperChange (e) {
         let index = e.mp.detail.current
         this.dotCurrent = index
