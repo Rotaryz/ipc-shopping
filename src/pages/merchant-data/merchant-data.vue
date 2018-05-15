@@ -403,34 +403,34 @@
       radius: ['25%', '60%'],
       data: [{
         value: 55,
-        name: '锋味粉'
+        name: '锋味粉-55'
       }, {
         value: 20,
-        name: '海底捞'
+        name: '海底捞-20'
       }, {
         value: 10,
-        name: '自然醉鹅'
+        name: '自然醉鹅-10'
       }, {
         value: 20,
-        name: '星巴克'
+        name: '星巴克-20'
       }, {
         value: 38,
-        name: '牛肉火锅'
+        name: '牛肉火锅-38'
       }, {
         value: 58,
-        name: '太二酸菜鱼'
+        name: '太二酸菜鱼-58'
       }, {
         value: 28,
-        name: '旋转寿司'
+        name: '旋转寿司-28'
       }, {
         value: 38,
-        name: '味千拉面'
+        name: '味千拉面-38'
       }, {
         value: 38,
-        name: '澄海烧鹅'
+        name: '澄海烧鹅-38'
       }, {
         value: 38,
-        name: '鸡公煲'
+        name: '鸡公煲-38'
       }
       ],
       itemStyle: {
