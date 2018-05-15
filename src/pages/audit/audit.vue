@@ -1,28 +1,27 @@
 <template>
   <div class="employee">
-    <!--<bgnull :showImagSta="0" :showBgnull="awaitList.length <= 0 && acceptList.length <= 0"></bgnull>-->
     <div class="em-list">
-      <div class="em-list-await"  v-if="awaitList.length > 0">
+      <div class="em-list-await">
         <div class="em-list-await-title">待处理申请</div>
         <div class="await-list-item">
           <div class="await-list-left">
             <div class="left-name">商家名称</div>
           </div>
-          <div class="await-list-right">国颐堂
+          <div class="await-list-right">{{awaitList.shop_name}}
           </div>
         </div>
         <div class="await-list-item">
           <div class="await-list-left">
             <div class="left-name">行业类型</div>
           </div>
-          <div class="await-list-right">美业
+          <div class="await-list-right">{{awaitList.shop_type}}
           </div>
         </div>
         <div class="await-list-item">
           <div class="await-list-left">
             <div class="left-name">地址</div>
           </div>
-          <div class="await-list-right">广州市白云区黄石路国际单位黄石路国际单位国际单位2期
+          <div class="await-list-right">{{awaitList.address}}
           </div>
         </div>
       </div>
@@ -32,14 +31,14 @@
           <div class="await-list-left">
             <div class="left-name">单价</div>
           </div>
-          <div class="await-list-right">10元/个
+          <div class="await-list-right">{{awaitList.price}}元/个
           </div>
         </div>
         <div class="await-list-item">
           <div class="await-list-left">
             <div class="left-name">购买数量</div>
           </div>
-          <div class="await-list-right">100个
+          <div class="await-list-right">{{awaitList.count}}个
           </div>
         </div>
         <div class="await-list-item">
@@ -47,58 +46,65 @@
             <div class="left-name">实付金额</div>
           </div>
           <div class="await-list-right moneys">
-            <span class="money">¥</span>1000
+            <span class="money">¥</span>{{awaitList.money}}
           </div>
         </div>
       </div>
-      <div class="em-list-succeed"  v-if="awaitList.length > 0">
+      <div class="em-list-succeed"  v-if="btnSta !== 3">
         <div class="em-list-await-title">优惠券信息</div>
         <div class="await-list-items info">
           <coupon :useModel="0" ></coupon>
         </div>
       </div>
     </div>
-    <div class="floorAdd">
+    <div class="floorAdd" v-if="btnSta === 0 || btnSta === 1 ">
       <div class="addEmployee">
-        <div class="change">
-          <img class="img" :src="imageUrl + '/defaults/ipc-shopping/common/icon-union_yhj@2x.png'" alt="">
-          更换优惠券</div>
-        <div class="refuse">拒绝</div>
-        <div class="pass">通过</div>
+        <div class="change" v-if="btnSta === 0" @tap="remind">
+          <img class="img" v-if="imageUrl" :src="imageUrl+'/defaults/ipc-shopping/common/icon-union_yhj@2x.png'" alt="">更换优惠券
+        </div>
+        <div class="refuse" @tap="refuse">拒绝</div>
+        <div class="pass" v-if="btnSta === 0" @tap="accept">通过</div>
+        <div class="pass" v-else-if="btnSta === 1" @tap="remind">提醒(添加优惠券)</div>
       </div>
     </div>
     <confirm-msg :show.sync="show" :title.sync="title" v-on:confirm="confirm" v-on:cancel="cancel"></confirm-msg>
+    <toast ref="toast"></toast>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import Bgnull from 'components/bgnull/bgnull'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
   import Coupon from 'components/coupon-item/coupon-item'
   import {baseURL} from 'api/config'
-
+  import Toast from '@/components/toast/toast'
+  import wx from 'wx'
+  const BTN = ['待审核', '审核中', '已审核', '已拒绝']
   export default {
     data () {
       return {
         imageUrl: baseURL.image,
         showBgnull: true,
-        awaitList: [
-          {name: '123'},
-          {name: '123'},
-          {name: '123'}
-        ],
+        awaitList: {
+          shop_name: '国颐堂',
+          shop_type: '美发',
+          address: '广州市白云区黄石路国际单位黄石路国际单位国际单位2期',
+          price: '10',
+          count: 10,
+          money: 1000
+        },
         acceptList: [],
         show: false,
         title: '',
         dataTmp: {},
         dataIndex: '',
-        isAwait: ''
+        isAwait: '',
+        btnSta: 0
       }
     },
     components: {
-      Bgnull,
       ConfirmMsg,
-      Coupon
+      Coupon,
+      Toast
     },
     // 分页
     onReachBottom () {
@@ -108,52 +114,19 @@
       console.log(`--${this.compName}--beforeMount`)
     },
     mounted() {
+      wx.setNavigationBarTitle({title: BTN[this.btnSta]})
+      console.log('imageUrl' + this.imageUrl)
       console.log(`--${this.compName}--mounted`)
     },
     methods: {
-      refuse (obj, index) {
-        this.dataTmp = obj
-        this.dataIndex = index
-        this.isAwait = 'refuse'
-        this.show = true
-        this.title = '确认拒绝?'
+      refuse () {
+        this.$refs.toast.show('已拒绝')
       },
-      accept (obj, index) {
-        this.dataTmp = obj
-        this.show = true
-        this.isAwait = 'accept'
-        this.dataIndex = index
-        this.title = '确认接受?'
+      accept () {
+        this.$refs.toast.show('已接受')
       },
-      del (obj, index) {
-        this.dataTmp = obj
-        this.show = true
-        this.isAwait = 'del'
-        this.dataIndex = index
-        this.title = '确认删除?'
-      },
-      addEmployee () {
-        this.$router.push({
-          name: 'CodeAdd',
-          path: '/pages/code-add/code-add',
-          query: {key: 123}
-        })
-      },
-      confirm() {
-        this.show = false
-        if (this.isAwait !== '') {
-          if (this.isAwait === 'refuse') {
-            this.awaitList.splice(this.dataIndex, 1)
-          } else if (this.isAwait === 'accept') {
-            this.awaitList.splice(this.dataIndex, 1)
-            this.acceptList.push(this.dataTmp)
-          } else {
-            this.acceptList.splice(this.dataIndex, 1)
-          }
-        }
-      },
-      cancel() {
-        this.show = false
+      remind () {
+        this.$refs.toast.show('已提醒')
       }
     }
   }
@@ -162,8 +135,11 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import '../../common/stylus/variable'
   @import '../../common/stylus/mixin'
+
   .employee
     background-color: $color-background-f6
+    height: 100vh
+    overflow-y: auto
   .em-list
     padding-bottom: 65px
     .em-list-await
@@ -223,10 +199,10 @@
     .await-list-items.info
       margin-left: -15px
       padding :0 15px
+      padding-bottom: 15px
     .em-list-succeed
       padding-left: 15px
       margin-top: 10px
-      padding-bottom: 15px
       background-color: $color-background-ff
   .floorAdd
     position: fixed
@@ -234,6 +210,7 @@
     bottom: 0px
     width: 100vw
     height: 45px
+    background-color: $color-background-ff
     .addEmployee
       display: flex
       flex-direction: row
@@ -244,15 +221,14 @@
         font-family: $font-family-light
         font-size: $font-size-small-s
         color: $color-text-2d
-        height: 45px
-        line-height: 45px
-        text-align: center
-        display: flex
-        flex-direction: column
+        display:flex
+        flex-direction:column
+        align-items:center
+        justify-content:center
         .img
-          border: .5px solid red
           width: 17.5px
           height: 12.5px
+          margin-bottom: 5px
       .refuse
         text-align center
         flex: 1
