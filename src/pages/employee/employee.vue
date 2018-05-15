@@ -31,12 +31,14 @@
         <div class="addEmployee" v-on:click="addEmployee">邀请员工</div>
       </div>
       <confirm-msg :show.sync="show" :title.sync="title" v-on:confirm="confirm" v-on:cancel="cancel"></confirm-msg>
+      <audit-msg ref="audit"></audit-msg>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
   import Bgnull from 'components/bgnull/bgnull'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
+  import AuditMsg from 'components/audit-msg/audit-msg'
 
   export default {
     data () {
@@ -57,7 +59,8 @@
     },
     components: {
       Bgnull,
-      ConfirmMsg
+      ConfirmMsg,
+      AuditMsg
     },
     // 分页
     onReachBottom () {
@@ -67,6 +70,7 @@
       console.log(`--${this.compName}--beforeMount`)
     },
     mounted() {
+      this.$refs.audit.show(1)
       console.log(`--${this.compName}--mounted`)
     },
     methods: {
