@@ -16,15 +16,15 @@
         <div class="empty-txt">暂无活动</div>
       </article>
       <scroll-view class="scroll" scroll-y v-if="!isEmpty">
-        <dl class="box">
-          <dt class="ad-box" v-if="showAd">
-            <div class="txt">商家已成功支付，且已经添加优惠券</div>
-            <div class="close-icon" :style="closeIcon" @tap="closeAd"></div>
-          </dt>
-          <dd class="box-item" v-for="(item, index) in cardInfoList" :key="index">
-            <union-check @previewHandler="test"></union-check>
-          </dd>
-        </dl>
+        <div class="ad-box" v-if="showAd">
+          <div class="txt">商家已成功支付，且已经添加优惠券</div>
+          <div class="close-icon" :style="closeIcon" @tap="closeAd"></div>
+        </div>
+        <ul class="box">
+          <li :class="['box-item',showAd?'show-ad':'']" v-for="(item, index) in cardInfoList" :key="index">
+            <union-check @tap="test"></union-check>
+          </li>
+        </ul>
       </scroll-view>
     </section>
   </article>
@@ -50,12 +50,15 @@
       changeTab (flag) {
         this.isEmpty = !this.isEmpty
         this.tabFlag = flag
+        this.showAd = true
         // console.log(this.cardInfoList)
         // DEFAULT_CARD_INFO_UNION.statusCode = flag
         // this.cardInfoList = [DEFAULT_CARD_INFO_UNION]
       },
       closeAd () {
         this.showAd = false
+      },
+      test () {
       }
     },
     computed: {
@@ -129,33 +132,44 @@
       .scroll
         height: 100%
         background: $color-background-f6
+        .ad-box
+          z-index: 9
+          position: fixed
+          top: $nav-height
+          left: 0
+          right: 0
+          height: 34px
+          box-sizing: border-box
+          padding-right: 15px
+          layout(row, block, no-wrap)
+          justify-content: space-between
+          align-items: center
+          background: $color-background-e9
+          .txt
+            flex: 1
+            box-sizing: border-box
+            padding: 0 15px
+            font-family: $font-family-light
+            font-size: $font-size-small
+            color: $color-assist-34
+            no-wrap()
+          .close-icon
+            height: 34px
+            width: 34px
+            padding: 0 15px
+            background-repeat: no-repeat
+            background-position: right center
+            background-size: 12px
         .box
           box-sizing: border-box
-          .ad-box
-            height: 34px
-            box-sizing: border-box
-            layout(row, block, no-wrap)
-            justify-content: space-between
-            align-items: center
-            background: rgba(52, 96, 236, 0.06)
-            .txt
-              flex: 1
-              box-sizing: border-box
-              padding: 0 15px
-              font-family: $font-family-light
-              font-size: $font-size-small
-              color: $color-assist-34
-              no-wrap()
-            .close-icon
-              height: 34px
-              width: 34px
-              padding-left: 50px
-              background-repeat: no-repeat
-              background-position: center
-              background-size: 12px
           .box-item
             padding-bottom: 10px
+            &:first-child
+              padding-top: 10px
             &:last-child
               padding-bottom: 20px
+          .show-ad:first-child
+            padding-top: 34px
+
 
 </style>

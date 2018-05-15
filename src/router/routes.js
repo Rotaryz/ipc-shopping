@@ -36,6 +36,13 @@ module.exports = [
     }
   },
   {
+    path: '/pages/union-sort/union-sort', // 联盟-排序
+    name: 'UnionSort',
+    config: {
+      navigationBarTitleText: '排序'
+    }
+  },
+  {
     path: '/pages/employee/employee', // 员工
     name: 'Employee',
     config: {
