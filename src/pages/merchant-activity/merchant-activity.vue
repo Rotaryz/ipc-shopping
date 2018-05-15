@@ -113,13 +113,13 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import api from 'api'
+  import { baseURL } from 'api/config'
   import Coupon from 'components/coupon-item/coupon-item'
 
   export default {
     data() {
       return {
-        image: api.image,
+        image: baseURL.image,
         showRule: false,
         btnText: '添加优惠券'
       }
