@@ -7,7 +7,7 @@
         <img class="max-img" :src="maxImg" alt="">
         <img class="min-img" :src="maxImg" alt="">
       </div>
-      <div class="code-hint">扫码绑定加入国颐堂 {{this.$route.query.id}}</div>
+      <div class="code-hint">扫码绑定加入国颐堂</div>
     </div>
   </div>
 </template>

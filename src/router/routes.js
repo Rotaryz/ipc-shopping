@@ -31,7 +31,16 @@ module.exports = [
   {
     path: '/pages/union-check-list/union-check-list', // 联盟审核列表
     name: 'UnionCheckList',
-    config: {}
+    config: {
+      navigationBarTitleText: '审核列表'
+    }
+  },
+  {
+    path: '/pages/union-sort/union-sort', // 联盟-排序
+    name: 'UnionSort',
+    config: {
+      navigationBarTitleText: '排序'
+    }
   },
   {
     path: '/pages/employee/employee', // 员工
@@ -50,7 +59,7 @@ module.exports = [
     }
   },
   {
-    path: '/pages/asset/asset', // 收入 income
+    path: '/pages/asset/asset', // 收入
     name: 'Asset',
     config: {
       navigationBarTitleText: '收入',
@@ -138,6 +147,20 @@ module.exports = [
       navigationBarTitleText: '活动管理',
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTextStyle: 'white'
+    }
+  },
+  {
+    path: '/pages/error/error', // 异常
+    name: 'Error',
+    config: {
+      disableScroll: true
+    }
+  },
+  {
+    path: '/pages/audit/audit', // 盟主审核
+    name: 'Audit',
+    config: {
+      navigationBarTitleText: '审核'
     }
   },
   {

@@ -1,24 +1,77 @@
 <template>
   <article class="union-check-list">
-    <div class="test">
-      <union-card @editor="test" :useType="1" ></union-card>
-    </div>
+    <header class="tab">
+      <nav
+        v-for="(item,index) in navList"
+        :key="index"
+        :class="['t-item',tabFlag === index ? 'hit':'']"
+        @tap.stop="changeTab(index)"
+      >
+        {{item}}
+      </nav>
+    </header>
+    <section class="content">
+      <article class="empty" v-if="isEmpty">
+        <div class="empty-pic" :style="emptyImg"/>
+        <div class="empty-txt">暂无活动</div>
+      </article>
+      <scroll-view class="scroll" scroll-y v-if="!isEmpty">
+        <div class="ad-box" v-if="showAd">
+          <div class="txt">商家已成功支付，且已经添加优惠券</div>
+          <div class="close-icon" :style="closeIcon" @tap="closeAd"></div>
+        </div>
+        <ul class="box">
+          <li :class="['box-item',showAd?'show-ad':'']" v-for="(item, index) in cardInfoList" :key="index">
+            <union-check @tap="test"></union-check>
+          </li>
+        </ul>
+      </scroll-view>
+    </section>
   </article>
 </template>
 
 <script type="text/ecmascript-6">
   // import api from 'api'
+  import source from 'common/source'
   import UnionCard from 'components/union-card-item/union-card-item'
+  import UnionCheck from 'components/union-check-item/union-check-item'
 
   export default {
-    data() {
+    data () {
       return {
+        navList: ['申请中', '待审核', '已通过', '已拒绝'],
         tabFlag: 1,
-        isEmpty: false
+        isEmpty: false,
+        cardInfoList: new Array(6),
+        showAd: true
+      }
+    },
+    methods: {
+      changeTab (flag) {
+        this.isEmpty = !this.isEmpty
+        this.tabFlag = flag
+        this.showAd = true
+        // console.log(this.cardInfoList)
+        // DEFAULT_CARD_INFO_UNION.statusCode = flag
+        // this.cardInfoList = [DEFAULT_CARD_INFO_UNION]
+      },
+      closeAd () {
+        this.showAd = false
+      },
+      test () {
+      }
+    },
+    computed: {
+      emptyImg () {
+        return source.imgEmptyActive()
+      },
+      closeIcon () {
+        return source.imgCloseIcon()
       }
     },
     components: {
-      UnionCard
+      UnionCard,
+      UnionCheck
     }
   }
 </script>
@@ -29,8 +82,94 @@
   $nav-height = 40px // 导航栏高度
 
   .union-check-list
-    min-height :100vh
-    .test
-      padding :15px
+    position: relative
+    height: 100vh
+    .tab
+      position: fixed
+      top: 0
+      left: 0
+      right: 0
+      height: $nav-height
+      padding: 0 26px
+      box-sizing: border-box
+      layout(row)
+      justify-content: space-between
+      align-items: center
+      background-color: $color-main-1a
+      font-family: $font-family-light
+      font-size: $font-size-medium
+      color: $color-text-95
+      .t-item
+        position: relative
+        height: $nav-height
+        line-height: $nav-height
+        transition: 0.3 all
+        &.hit
+          color: $color-background-ff
+          cut-off-rule-bottom(6px, 6px, $color-assist-34, 2px)
+    .content
+      height: 100%
+      padding-top: $nav-height
+      box-sizing: border-box
+      .empty
+        box-sizing: border-box
+        height: 100%
+        padding-top: 34.9%
+        layout()
+        align-items: center
+        &.display-none
+          display: none
+        .empty-pic
+          width: 86px
+          height: 75.5px
+          background-size: 100%
+        .empty-txt
+          padding-top: 10.5px
+          text-align: center
+          font-family: $font-family-light
+          font-size: $font-size-small
+          color: $color-assist-27
+      .scroll
+        height: 100%
+        background: $color-background-f6
+        .ad-box
+          z-index: 9
+          position: fixed
+          top: $nav-height
+          left: 0
+          right: 0
+          height: 34px
+          box-sizing: border-box
+          padding-right: 15px
+          layout(row, block, no-wrap)
+          justify-content: space-between
+          align-items: center
+          background: $color-background-e9
+          .txt
+            flex: 1
+            box-sizing: border-box
+            padding: 0 15px
+            font-family: $font-family-light
+            font-size: $font-size-small
+            color: $color-assist-34
+            no-wrap()
+          .close-icon
+            height: 34px
+            width: 34px
+            padding: 0 15px
+            background-repeat: no-repeat
+            background-position: right center
+            background-size: 12px
+        .box
+          box-sizing: border-box
+          .box-item
+            padding-bottom: 10px
+            &:first-child
+              padding-top: 10px
+            &:last-child
+              padding-bottom: 20px
+          .show-ad:first-child
+            padding-top: 34px
+
 
 </style>

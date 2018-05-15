@@ -1,67 +1,6 @@
 <template>
   <article class="union-card-item">
-    <section class="wrap" v-if="useType === constUseType.union">
-      <div class="box" :style="backgroundImg">
-        <article class="b-top">
-          <div class="b-top-box">
-            <section class="icon">
-              <div class="icon-pic" :style="iconImg"></div>
-            </section>
-            <artilce class="info-box">
-              <section class="title">{{cardInfo.title}}</section>
-              <section class="date">{{cardInfo.endDate}}</section>
-              <section class="info">
-                <div class="i-item">销量 {{cardInfo.sales}}</div>
-                <div class="i-item">核销 {{cardInfo.chargeOff}}</div>
-              </section>
-            </artilce>
-            <section class="look-over">
-              <span class="txt" :style="arrowImg" @tap="previewHandler(cardInfo)">预览</span>
-            </section>
-          </div>
-        </article>
-        <article class="b-bottom" v-if="cardInfo.statusCode === constStatus.up">
-          <div class="title">{{cardInfo.statusStr}}</div>
-          <div class="btn delete" @tap="editorHandler(cardInfo)">编辑</div>
-          <div class="btn total" @tap="totalHandler(cardInfo)">统计</div>
-        </article>
-        <article class="b-bottom" v-if="cardInfo.statusCode === constStatus.down">
-          <div class="title">{{cardInfo.statusStr}}</div>
-          <div class="btn delete" @tap="deleteHandler(cardInfo)">删除</div>
-          <div class="btn total" @tap="totalHandler(cardInfo)">统计</div>
-        </article>
-        <article class="b-bottom" v-if="cardInfo.statusCode === constStatus.apply">
-          <div class="title">{{cardInfo.statusStr}}</div>
-          <div class="btn total" @tap="checkHandler(cardInfo)">审查</div>
-        </article>
-      </div>
-    </section>
-    <section class="wrap" v-if="useType === constUseType.unionApplying">
-      <div class="box" :style="backgroundImg">
-        <article class="b-top">
-          <div class="b-top-box">
-            <section class="icon">
-              <div class="icon-pic" :style="iconImg"></div>
-            </section>
-            <artilce class="info-box applying">
-              <section class="title">{{cardInfo.title}}</section>
-              <section class="info applying">
-                <div class="money"><em class="m-symbol">¥</em>{{cardInfo.money}}</div>
-                <div class="i-item">共{{cardInfo.cardNum}}张券</div>
-              </section>
-            </artilce>
-          </div>
-        </article>
-        <article class="b-bottom">
-          <section class="shop-list-item" v-for="(item,index) in cardInfo.shopList" :key="index">
-            <div class="shop-icon" :style="shopImg"></div>
-            <div class="shop-name">{{item}}</div>
-          </section>
-        </article>
-      </div>
-    </section>
-    <!--活动管理-->
-    <section class="wrap" v-if="useType === constUseType.shop">
+    <section class="wrap">
       <div class="box" :style="backgroundImg">
         <article class="b-top">
           <div class="b-top-box">
@@ -101,7 +40,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import { baseURL } from 'api/config'
+  import {baseURL} from 'api/config'
   import source from 'common/source'
 
   // 状态常量默认值
@@ -156,37 +95,37 @@
         default: DEFAULT_USE_TYPE
       }
     },
-    data () {
+    data() {
       return {
         imageUri: baseURL.image,
         bgImgType: this.useType // 背景图片类型
       }
     },
-    beforeMount () {
+    beforeMount() {
       console.log(this.cardInfo)
     },
-    mounted () {
+    mounted() {
       console.log(this.useType)
     },
     methods: {
-      previewHandler (cardInfo) {
+      previewHandler(cardInfo) {
         this.$emit('previewHandler', cardInfo)
       },
-      editorHandler (cardInfo) {
+      editorHandler(cardInfo) {
         this.$emit('editorHandler', cardInfo)
       },
-      totalHandler (cardInfo) {
+      totalHandler(cardInfo) {
         this.$emit('totalHandler', cardInfo)
       },
-      deleteHandler (cardInfo) {
+      deleteHandler(cardInfo) {
         this.$emit('deleteHandler', cardInfo)
       },
-      checkHandler (cardInfo) {
+      checkHandler(cardInfo) {
         this.$emit('checkHandler', cardInfo)
       }
     },
     computed: {
-      backgroundImg () {
+      backgroundImg() {
         switch (this.bgImgType) {
           case DEFAULT_USE_TYPE.unionApplying:
           case DEFAULT_USE_TYPE.union: {
@@ -200,7 +139,7 @@
           }
         }
       },
-      iconImg () {
+      iconImg() {
         switch (this.bgImgType) {
           case DEFAULT_USE_TYPE.unionApplying:
           case DEFAULT_USE_TYPE.union: {
@@ -214,10 +153,10 @@
           }
         }
       },
-      arrowImg () {
+      arrowImg() {
         return source.imgArrowRight()
       },
-      shopImg () {
+      shopImg() {
         return source.imgShopIcon()
       }
     }
