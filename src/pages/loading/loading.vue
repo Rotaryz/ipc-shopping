@@ -24,29 +24,33 @@
   import { baseURL, ERR_OK } from 'api/config'
   import * as wechat from 'common/js/wechat'
   import wx from 'wx'
+  import { mapActions, mapMutations } from 'vuex'
+  import { ROLE } from 'common/js/contants'
 
   console.info(baseURL.jumpVersion)
 
   export default {
+    beforeCreate () {
+    },
     created () {
-      console.log(0)
+      // console.log(0, wx)
     },
     onShow () {
-      console.log('onshow')
+      this._init()
+      // console.log('onshow')
     },
     beforeMount () {
-      console.log(1)
+      // this._init()
+      // console.log(1, wx)
     },
     mounted () {
-      console.log(2)
-      setTimeout(() => {
-        this._navTo()
-      }, 3000)
     },
     beforeDestroy () {
-      console.log(3)
+      // console.log(3)
     },
     methods: {
+      ...mapActions(['saveRole']),
+      ...mapMutations({saveRoleSync: 'ROLE_TYPE'}),
       // 微信获取用户信息btn
       wxGetUserInfo (event) {
         const e = event.mp
@@ -58,10 +62,10 @@
       // 获取临时登录凭证code
       _getCode (e) {
         wechat.login()
-          .then(code => {
+          .then(res => {
             const wxUser = e.detail
             const data = {
-              code,
+              code: res.code,
               iv: wxUser.iv,
               encryptedData: wxUser.encryptedData
             }
@@ -80,7 +84,7 @@
               return ''
             }
             const res = Json.data
-            let token = res.jk_token
+            let token = res.access_token
             if (token) {
               wx.setStorageSync('token', token)
               // await this.$getUserInfo(true)
@@ -94,10 +98,15 @@
       // 页面路由
       _navTo () {
         const url = `/pages/home/home`
-        this.$router.push(url)
+        this.$router.replace(url)
+        // this.$router.push(url)
       },
       // 初始化
       _init () {
+        let token = wx.getStorageSync('token')
+        if (!token) return
+        this.saveRoleSync(ROLE.UNION_ID)
+        this._navTo()
       }
     },
     computed: {}

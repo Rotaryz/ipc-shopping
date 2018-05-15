@@ -1,5 +1,5 @@
 const env = process.env.NODE_ENV
-const version = '/v2'
+const version = '/v1'
 const DEV = {
   image: 'https://img.jerryf.cn',
   login: 'https://dev.jike-jwt.jerryf.cn',

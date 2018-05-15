@@ -8,13 +8,14 @@ const token = wx.getStorageSync('token')
 const COMMON_HEADER = Object.assign(
   {},
   {'X-Requested-With': 'XMLHttpRequest'},
-  {'Current-merchant': wx.getStorageSync('merchantId')},
-  {token}
+  {'Current-merchant': wx.getStorageSync('merchantId') || 100005},
+  {'Authorization': token},
+  {'User-type': 'customer'}
 )
 const TIME_OUT = 10000
 const ERR_OK = 0
 const ERR_NO = -404
-// const TOKEN_OUT = 10000 // token 失效:带调整
+const TOKEN_OUT = 10000 // token 失效
 
 const fly = new Fly()
 
@@ -60,6 +61,12 @@ function checkCode (res) {
     // 可以进行switch操作，根据返回的code进行相对应的操作，然后抛异常
     console.warn(res.data.message)
     throw requestException(res)
+  }
+  // 凭证失效
+  if (res.data && (res.data.code === TOKEN_OUT)) {
+    // token失效返回登录页面
+    const url = `/pages/loading/loading`
+    wx.reLaunch({url})
   }
   return res.data
 }

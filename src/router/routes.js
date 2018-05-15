@@ -84,14 +84,14 @@ module.exports = [
       backgroundColor: '#F6F7FA'
     }
   },
-  // {
-  //   path: '/pages/example/example',
-  //   name: 'Example',
-  //   config: {
-  //     enablePullDownRefresh: true,
-  //     navigationBarTitleText: '示例'
-  //   }
-  // },
+  {
+    path: '/pages/example/example',
+    name: 'Example',
+    config: {
+      enablePullDownRefresh: true,
+      navigationBarTitleText: '示例'
+    }
+  },
   {
     path: '/pages/merchant-data/merchant-data', // 商家活动数据页面
     name: 'MerchantData',
