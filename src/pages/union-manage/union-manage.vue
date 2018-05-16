@@ -18,7 +18,14 @@
       <scroll-view class="scroll" scroll-y v-if="!isEmpty">
         <ul class="box">
           <li class="box-item" v-for="(item, index) in cardInfoList" :key="item.title+index">
-            <union-card :cardInfo="item" :useType="0" @previewHandler="test"></union-card>
+            <union-card
+              :cardInfo="item"
+              :useType="0"
+              @previewHandler="test"
+              @checkHandler="checkHandler"
+              @sortHandler="sortHandler"
+              @upperHandler="upperHandler"
+            ></union-card>
           </li>
         </ul>
       </scroll-view>
@@ -74,8 +81,10 @@
         downList: null
       }
     },
-    beforeMount () {
+    onShow () {
       this._init()
+    },
+    beforeMount () {
     },
     methods: {
       ...mapGetters(['role']),
@@ -102,6 +111,15 @@
             console.log(list)
             this.cardInfoList = list
           })
+      },
+      upperHandler(obj) {
+      },
+      checkHandler(obj) {
+        const activeId = obj.id
+        const url = `/pages/union-check-list/union-check-list?activeId=${activeId}`
+        this.$router.push(url)
+      },
+      sortHandler(obj) {
       },
       test (obj) {
         const url = `/pages/union-check-list/union-check-list`

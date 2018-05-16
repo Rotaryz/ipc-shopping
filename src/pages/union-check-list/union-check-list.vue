@@ -17,11 +17,11 @@
       </article>
       <scroll-view class="scroll" scroll-y v-if="!isEmpty">
         <div class="ad-box" v-if="showAd">
-          <div class="txt">商家已成功支付，且已经添加优惠券</div>
+          <div class="txt">{{adMsg}}</div>
           <div class="close-icon" :style="closeIcon" @tap="closeAd"></div>
         </div>
         <ul class="box">
-          <li :class="['box-item',showAd?'show-ad':'']" v-for="(item, index) in cardInfoList" :key="index">
+          <li :class="['box-item',showAd?'show-ad':'']" v-for="(item, index) in couponInfoList" :key="index">
             <union-check @tap="test"></union-check>
           </li>
         </ul>
@@ -31,7 +31,9 @@
 </template>
 
 <script type="text/ecmascript-6">
-  // import api from 'api'
+  import api from 'api'
+  import * as wechat from 'common/js/wechat'
+  import { ERR_OK } from 'api/config'
   import source from 'common/source'
   import UnionCard from 'components/union-card-item/union-card-item'
   import UnionCheck from 'components/union-check-item/union-check-item'
@@ -40,28 +42,107 @@
     data () {
       return {
         navList: ['申请中', '待审核', '已通过', '已拒绝'],
-        tabFlag: 1,
-        isEmpty: false,
-        cardInfoList: new Array(6),
-        showAd: true
+        tabFlag: 0,
+        couponInfoList: new Array(6),
+        showAd: true,
+        adMsg: '商家已成功支付，但还未添加优惠券',
+        currentActiveId: null
       }
+    },
+    onShow () {
+      this._init()
     },
     methods: {
       changeTab (flag) {
-        this.isEmpty = !this.isEmpty
         this.tabFlag = flag
-        this.showAd = true
-        // console.log(this.cardInfoList)
-        // DEFAULT_CARD_INFO_UNION.statusCode = flag
-        // this.cardInfoList = [DEFAULT_CARD_INFO_UNION]
+        this._showAd(this.tabFlag)
       },
       closeAd () {
         this.showAd = false
       },
       test () {
+      },
+      _showAd (flag) {
+        if (flag === 0 || flag === 1) {
+          this.showAd = true
+          console.log(flag)
+          flag === 0 && (this.adMsg = `商家已成功支付，但还未添加优惠券`)
+          flag === 1 && (this.adMsg = `商家已成功支付，且已经添加优惠券`)
+        } else {
+          this.showAd = false
+        }
+      },
+      _init () {
+        this.currentActiveId = this.$root.$mp.query.activeId
+        let data = this._formatReq(this.tabFlag)
+        this._rqGetCheckList(data)
+      },
+      _formatReq (flag) {
+        let data = {
+          'check_status': 0,
+          'has_promotion': 1,
+          'activity_alliance_id': this.currentActiveId
+        }
+        switch (flag) {
+          case 0 : {
+            data['check_status'] = 0
+            data['has_promotion'] = 0
+            break
+          }
+          case 1 : {
+            data['check_status'] = 0
+            data['has_promotion'] = 1
+            break
+          }
+          case 2 : {
+            data['check_status'] = 1
+            break
+          }
+          case 3 : {
+            data['check_status'] = 1
+            break
+          }
+        }
+        return data
+      },
+      _rqGetCheckList (data) {
+        api.uckGetCheckList(data)
+          .then(json => {
+            wechat.hideLoading()
+            if (json.error !== ERR_OK) {
+              return ''
+            }
+            console.log(json)
+            // let list = this._formatResData(json)
+            // console.log(list)
+            // this.couponInfoList = list
+          })
+          .catch(err => {
+            console.info(err)
+          })
+      },
+      // 格式化请求列表
+      _formatResData (json) {
+        let arr = []
+        let res = json.data
+        res.map(item => {
+          arr.push({
+            id: item.id,
+            title: item.name,
+            endDate: `${item.end_at}到期`,
+            sales: item.sale_count, // 销量
+            chargeOff: item.verification_power, // 核销
+            statusCode: item.status,
+            statusStr: item.status === 1 ? '报名中' : (item.status === 2 ? '已上架' : '已下架')
+          })
+        })
+        return arr
       }
     },
     computed: {
+      isEmpty () {
+        return this.couponInfoList.length <= 0
+      },
       emptyImg () {
         return source.imgEmptyActive()
       },

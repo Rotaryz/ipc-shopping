@@ -32,10 +32,9 @@
         </article>
         <article class="b-bottom" v-if="cardInfo.statusCode === constStatus.apply">
           <div class="title">{{cardInfo.statusStr}}</div>
-          <!--<div class="btn delete" @tap="checkHandler(cardInfo)">编辑</div>-->
           <div class="btn delete" @tap="checkHandler(cardInfo)">审查</div>
-          <div class="btn delete" @tap="checkHandler(cardInfo)">排序</div>
-          <div class="btn total" @tap="checkHandler(cardInfo)">上架</div>
+          <div class="btn delete" @tap="sortHandler(cardInfo)">排序</div>
+          <div class="btn total" @tap="upperHandler(cardInfo)">上架</div>
         </article>
       </div>
     </section>
@@ -105,10 +104,10 @@
       }
     },
     beforeMount () {
-      console.log(this.cardInfo)
+      // console.log(this.cardInfo)
     },
     mounted () {
-      console.log(this.useType)
+      // console.log(this.useType)
     },
     methods: {
       previewHandler (cardInfo) {
@@ -125,6 +124,12 @@
       },
       checkHandler (cardInfo) {
         this.$emit('checkHandler', cardInfo)
+      },
+      sortHandler (cardInfo) {
+        this.$emit('sortHandler', cardInfo)
+      },
+      upperHandler (cardInfo) {
+        this.$emit('upperHandler', cardInfo)
       }
     },
     computed: {

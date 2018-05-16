@@ -130,6 +130,24 @@
   import util from 'common/js/format'
   import Toast from '@/components/toast/toast'
 
+  function awardNote (a, b) {
+    return `1. 商家以及员工，每销售一张卡券，得到${a}元的奖励。
+            2. 商家销售卡的用户，到其他门店使用一次，得到联盟力${b}分奖励。（可以分全部联盟商家报名该活动的报名金）
+            3. 商家可以得到该活动全部商家的异业客户引流客户。`
+  }
+
+  function claimNote (a) {
+    return `1. 用户购买异业联盟卡后，提供商品给用户。
+            2. 添加商家自己的固定数量的免费优惠券。
+            3. 支持平台提供的${a}元代金券，小程序买单的使用。`
+  }
+
+  function detailNote (a) {
+    return `1. 本活动仅在${a}内开展。
+            2. 该活动需要商家付费参加，如果报名没有通过，会立刻原路退款。
+            3. 本次活动的最终解释权归赞播所有。`
+  }
+
   export default {
     data () {
       return {
@@ -214,14 +232,6 @@
         }
       },
       saveHandler () {
-        // console.log(this.name)
-        // console.log(this.startDate)
-        // console.log(this.endDate)
-        // console.log(this.address)
-        // console.log(this.price)
-        // console.log(this.stock)
-        // console.log(this.activePrizeList.toString())
-        // console.log(this.activeInfoList.toString())
         console.log(this._packData())
         this._rqCreateActive(this._packData())
       },
@@ -249,7 +259,10 @@
           address: this.address,
           price: this.price,
           stock: this.stock,
-          attach: this.activeInfo
+          attach: this.activeInfo,
+          award_note: awardNote(this.activeInfo.item0, this.activeInfo.item1),
+          claim_note: claimNote(this.activeInfo.item2),
+          detail_note: detailNote(this.address)
         }
       },
       _rqCreateActive (data) {
@@ -257,8 +270,8 @@
         api.uctCreateActive(data)
           .then(json => {
             console.log(json)
+            wechat.hideLoading()
             if (json.error !== ERR_OK) {
-              wechat.hideLoading()
               this.$refs.toast.show(json.message)
               return ''
             }
