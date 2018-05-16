@@ -8,9 +8,9 @@ export default {
    * @param data
    * @returns {Promise.<*>}
    */
-  empGetEmployeeList(data) {
+  empGetEmployeeList() {
     const url = `/api/alliances/employee/wait-index`
-    return request.get(url, data, true)
+    return request.get(url)
   },
   /**
    * 获取接受员工列表 accept
@@ -19,7 +19,7 @@ export default {
    */
   empGetAcceptList(data) {
     const url = `/api/alliances/employee/employee-message`
-    return request.get(url, data, true)
+    return request.get(url, data)
   },
   /**
    * 审核员工 accept
@@ -28,7 +28,7 @@ export default {
    */
   empAuditEmployee(data) {
     const url = `api/alliances/employee/employee-message/${data.id}`
-    return request.get(url, data, true)
+    return request.put(url, data)
   },
   /**
    * 删除员工 accept
@@ -37,7 +37,7 @@ export default {
    */
   empDel(data) {
     const url = `/api/alliances/employee/employee-message/${data.id}`
-    return request.get(url, data, true)
+    return request.get(url, data)
   },
   /**
    * 添加员工二维码
