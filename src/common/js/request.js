@@ -2,13 +2,17 @@ import wx from 'wx'
 import Fly from 'flyio'
 import { showLoading, hideLoading } from './wechat'
 import { baseURL, TIME_OUT, ERR_OK, ERR_NO, TOKEN_OUT } from 'api/config'
-// import { ROLE } from './contants'
+import { ROLE } from './contants'
 
 const COMMON_HEADER = () => {
   const token = wx.getStorageSync('token')
   const merchantId = wx.getStorageSync('merchantId') || 100005
-  const userType = wx.getStorageSync('userType')
-  console.log(userType, '==========')
+  let userType = wx.getStorageSync('userType')
+  if (userType === ROLE.UNION_ID || userType === ROLE.SHOP_ID) {
+    userType = 'merchant'
+  } else {
+    userType = ROLE.STAFF_ID
+  }
   return Object.assign(
     {'X-Requested-With': 'XMLHttpRequest'},
     {'Current-merchant': merchantId},
@@ -59,8 +63,9 @@ function checkCode (res) {
   if (res.data && (res.data.code === TOKEN_OUT)) {
     // token失效返回登录页面
     const url = `/pages/loading/loading?resCode=${TOKEN_OUT}`
+    console.log(url, '++++++++++')
     wx.reLaunch({url})
-    console.warn(res.msg)
+    // console.warn(res.msg)
   }
   // 如果code异常(这里已经包括网络错误，服务器错误，后端抛出的错误)，可以弹出一个错误提示，告诉用户
   if (res.status === ERR_NO) {

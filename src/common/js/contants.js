@@ -1,5 +1,5 @@
 export const ROLE = {
-  UNION_ID: 0, // 盟主身份
-  SHOP_ID: 1, // 商家身份
+  UNION_ID: 'union', // 盟主身份
+  SHOP_ID: 'shop', // 商家身份
   STAFF_ID: 'customer' // 员工身份
 }
