@@ -2,8 +2,11 @@
 import user from './user'
 import employee from './employee'
 import UnionManage from './union-manage'
+import UnionCreate from './union-create'
+
 export default {
   ...user,
   ...employee,
-  ...UnionManage
+  ...UnionManage,
+  ...UnionCreate
 }

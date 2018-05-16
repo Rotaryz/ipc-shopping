@@ -53,14 +53,14 @@
   // }
 
   // 卡券信息的默认值-盟主管理
-  const DEFAULT_CARD_INFO_UNION = {
-    title: '异业联盟卡',
-    endDate: '2018-01-17到期',
-    sales: '100', // 销量
-    chargeOff: '60', // 核销
-    statusCode: 1,
-    statusStr: '已上架'
-  }
+  // const DEFAULT_CARD_INFO_UNION = {
+  //   title: '异业联盟卡',
+  //   endDate: '2018-01-17到期',
+  //   sales: '100', // 销量
+  //   chargeOff: '60', // 核销
+  //   statusCode: 1,
+  //   statusStr: '已上架'
+  // }
 
   export default {
     data () {
@@ -68,8 +68,7 @@
         navList: ['报名中', '已上架', '已下架'],
         currentRole: null,
         tabFlag: 0,
-        isEmpty: false,
-        cardInfoList: new Array(6).fill(DEFAULT_CARD_INFO_UNION),
+        cardInfoList: [],
         applyList: null,
         upList: null,
         downList: null
@@ -101,20 +100,17 @@
             wechat.hideLoading()
             let list = this._formatResData(json)
             console.log(list)
+            this.cardInfoList = list
           })
       },
       test (obj) {
-        // console.log(obj)
-        // console.log(111)
         const url = `/pages/union-check-list/union-check-list`
         this.$router.push(url)
       },
       changeTab (flag) {
-        this.isEmpty = !this.isEmpty
+        // this.isEmpty = !this.isEmpty
         this.tabFlag = flag
-        // console.log(this.cardInfoList)
-        // DEFAULT_CARD_INFO_UNION.statusCode = flag
-        // this.cardInfoList = [DEFAULT_CARD_INFO_UNION]
+        this._rqGetActiveList(this.tabFlag + 1)
       },
       toCreateActive () {
         const url = `/pages/union-create-active/union-create-active`
@@ -124,24 +120,32 @@
       _formatResData (json) {
         let arr = []
         let res = json.data
+        console.log(res, '+')
         res.map(item => {
           arr.push({
             id: item.id,
-            title: item.name(),
+            title: item.name,
             endDate: `${item.end_at}到期`,
             sales: item.sale_count, // 销量
             chargeOff: item.verification_power, // 核销
-            statusCode: 1,
-            statusStr: '已上架'
+            statusCode: item.status,
+            statusStr: item.status === 1 ? '报名中' : (item.status === 2 ? '已上架' : '已下架')
           })
         })
         return arr
       }
     },
-    watch: {},
+    watch: {
+      cardInfoList () {
+
+      }
+    },
     computed: {
       emptyImg () {
         return source.imgEmptyActive()
+      },
+      isEmpty () {
+        return this.cardInfoList.length <= 0
       }
     },
     components: {

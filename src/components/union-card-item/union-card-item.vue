@@ -32,8 +32,9 @@
         </article>
         <article class="b-bottom" v-if="cardInfo.statusCode === constStatus.apply">
           <div class="title">{{cardInfo.statusStr}}</div>
-          <div class="btn total" @tap="checkHandler(cardInfo)">审查</div>
-          <div class="btn total" @tap="checkHandler(cardInfo)">排序</div>
+          <!--<div class="btn delete" @tap="checkHandler(cardInfo)">编辑</div>-->
+          <div class="btn delete" @tap="checkHandler(cardInfo)">审查</div>
+          <div class="btn delete" @tap="checkHandler(cardInfo)">排序</div>
           <div class="btn total" @tap="checkHandler(cardInfo)">上架</div>
         </article>
       </div>
@@ -42,7 +43,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {baseURL} from 'api/config'
+  import { baseURL } from 'api/config'
   import source from 'common/source'
 
   // 状态常量默认值
@@ -60,29 +61,29 @@
     shopApplying: 11 // 活动2
   }
 
-  // 卡券信息的默认值-盟主管理
-  const DEFAULT_CARD_INFO_UNION = {
-    title: '异业联盟卡',
-    endDate: '2018-01-17到期',
-    sales: '100', // 销量
-    chargeOff: '60', // 核销
-    statusCode: DEFAULT_CONST_STATUS.applying,
-    statusStr: '已上架'
-  }
-
-  // 卡券信息的默认值-盟主审核
-  const DEFAULT_CARD_INFO_APPLYING = {
-    title: '20家异业联盟卡',
-    money: '100',
-    cardNum: '4',
-    shopList: new Array(4).fill('国颐堂国颐堂')
-  }
+  // // 卡券信息的默认值-盟主管理
+  // const DEFAULT_CARD_INFO_UNION = {
+  //   title: '异业联盟卡',
+  //   endDate: '2018-01-17到期',
+  //   sales: '100', // 销量
+  //   chargeOff: '60', // 核销
+  //   statusCode: DEFAULT_CONST_STATUS.applying,
+  //   statusStr: '已上架'
+  // }
+  //
+  // // 卡券信息的默认值-盟主审核
+  // const DEFAULT_CARD_INFO_APPLYING = {
+  //   title: '20家异业联盟卡',
+  //   money: '100',
+  //   cardNum: '4',
+  //   shopList: new Array(4).fill('国颐堂国颐堂')
+  // }
 
   export default {
     props: {
       cardInfo: {
         type: Object,
-        default: DEFAULT_CARD_INFO_APPLYING || DEFAULT_CARD_INFO_UNION
+        default: {}
       },
       constStatus: {
         type: Object,
@@ -97,37 +98,37 @@
         default: DEFAULT_USE_TYPE
       }
     },
-    data() {
+    data () {
       return {
         imageUri: baseURL.image,
         bgImgType: this.useType // 背景图片类型
       }
     },
-    beforeMount() {
+    beforeMount () {
       console.log(this.cardInfo)
     },
-    mounted() {
+    mounted () {
       console.log(this.useType)
     },
     methods: {
-      previewHandler(cardInfo) {
+      previewHandler (cardInfo) {
         this.$emit('previewHandler', cardInfo)
       },
-      editorHandler(cardInfo) {
+      editorHandler (cardInfo) {
         this.$emit('editorHandler', cardInfo)
       },
-      totalHandler(cardInfo) {
+      totalHandler (cardInfo) {
         this.$emit('totalHandler', cardInfo)
       },
-      deleteHandler(cardInfo) {
+      deleteHandler (cardInfo) {
         this.$emit('deleteHandler', cardInfo)
       },
-      checkHandler(cardInfo) {
+      checkHandler (cardInfo) {
         this.$emit('checkHandler', cardInfo)
       }
     },
     computed: {
-      backgroundImg() {
+      backgroundImg () {
         switch (this.bgImgType) {
           case DEFAULT_USE_TYPE.unionApplying:
           case DEFAULT_USE_TYPE.union: {
@@ -141,7 +142,7 @@
           }
         }
       },
-      iconImg() {
+      iconImg () {
         switch (this.bgImgType) {
           case DEFAULT_USE_TYPE.unionApplying:
           case DEFAULT_USE_TYPE.union: {
@@ -155,10 +156,10 @@
           }
         }
       },
-      arrowImg() {
+      arrowImg () {
         return source.imgArrowRight()
       },
-      shopImg() {
+      shopImg () {
         return source.imgShopIcon()
       }
     }
