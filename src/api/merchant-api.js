@@ -40,7 +40,7 @@ export default {
    * @param data 状态
    * @returns {Promise.<*>}
    */
-  merApplyPay(count, activity_alliance_id, code) {
+  merApplyPay(count, activity_alliance_id = 0, code) {
     const url = `/api/alliances/merchant/create-order`
     let data = {
       count,
@@ -48,5 +48,14 @@ export default {
       code
     }
     return request.post(url, data, true)
+  },
+  /**
+   * 商家报名下单
+   * @param data 状态
+   * @returns {Promise.<*>}
+   */
+  merCouponList(data) {
+    const url = `/api/alliances/merchant/coupons`
+    return request.get(url, data, true)
   }
 }

@@ -26,7 +26,10 @@
             </div>
             <div class="cavas-list">
               <div class="left">活动费用</div>
-              <div class="right"><div class="icon">¥</div><div class="number">{{activityData.price}}</div></div>
+              <div class="right">
+                <div class="icon">¥</div>
+                <div class="number">{{activityData.price}}</div>
+              </div>
             </div>
             <div class="cavas-list">
               <div class="left">活动地址</div>
@@ -37,7 +40,7 @@
       </div>
     </div>
     <div class="activity-box">
-      <div class="add-number"  v-if="status === 0">
+      <div class="add-number" v-if="status === 0">
         <div class="text">购买数量</div>
         <div class="calculate-box">
           <div class="subtract" @tap="subtract">-</div>
@@ -48,8 +51,10 @@
       <div :class="['activity-rules', showRule ? '' : 'activity-hide']">
         <div class="rules-top">
           <div class="text">活动规则</div>
-          <img :src=" showRule ? image + '/defaults/ipc-shopping/home/icon-activity_up@2x.png' : image + '/defaults/ipc-shopping/home/icon-activity_down@2x.png' "  class="down" v-if="image">
-          <div class="click-box"  @tap="showRules"></div>
+          <img
+            :src=" showRule ? image + '/defaults/ipc-shopping/home/icon-activity_up@2x.png' : image + '/defaults/ipc-shopping/home/icon-activity_down@2x.png' "
+            class="down" v-if="image">
+          <div class="click-box" @tap="showRules"></div>
         </div>
         <div class="rules-con">
           <div class="rules-one rules-line">
@@ -78,19 +83,12 @@
           </div>
         </div>
       </div>
-      <div class="apply-box"  v-if="status === 1">
+      <div class="apply-box" v-if="status === 1">
         <div class="box-top">
           <img :src="image + '/defaults/ipc-shopping/home/icon-activity_pass@2x.png'" class="img" v-if="image">
           <div class="text">支付成功</div>
         </div>
         <div class="box-text">恭喜您支付成功，请尽快添加优惠券!</div>
-      </div>
-      <div class="apply-box apply-fails">
-        <div class="box-top">
-          <img :src="image + '/defaults/ipc-shopping/home/icon-activity_fail@2x.png'" class="img" v-if="image">
-          <div class="text">报名失败</div>
-        </div>
-        <div class="box-text">sorry，因为这次报名商家过多，您的活动申请无法通过。您可以申请退款或者申请排队，不退款申请排队的商家，下次活动拥有优先通过的权利！</div>
       </div>
       <div class="coupon-up">
         <div class="rules-top">
@@ -99,6 +97,13 @@
         <div class="coupon-info">
           <coupon></coupon>
         </div>
+      <div class="apply-box apply-fails">
+        <div class="box-top">
+          <img :src="image + '/defaults/ipc-shopping/home/icon-activity_fail@2x.png'" class="img" v-if="image">
+          <div class="text">报名失败</div>
+        </div>
+        <div class="box-text">sorry，因为这次报名商家过多，您的活动申请无法通过。您可以申请退款或者申请排队，不退款申请排队的商家，下次活动拥有优先通过的权利！</div>
+      </div>
       </div>
       <div class="coupon-up">
         <div class="rules-top">
@@ -111,17 +116,18 @@
       </div>
     </div>
     <footer class="btn" v-if="status === 0" @tap="appSubmit">报名(支付{{activityData.price * addNumber}}元）</footer>
+    <footer class="btn" v-if="status === 1" @tap="chooseCoupon">选择优惠卷</footer>
     <div class="page-bg"></div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import api from 'api'
-  import { baseURL } from 'api/config'
+  import {baseURL} from 'api/config'
   import Coupon from 'components/coupon-item/coupon-item'
   import * as wechat from 'common/js/wechat'
-  import { mapGetters } from 'vuex'
-  import { ROLE } from 'common/js/contants'
+  import {mapGetters} from 'vuex'
+  import {ROLE} from 'common/js/contants'
   import wx from 'wx'
 
   export default {
@@ -130,22 +136,22 @@
         image: baseURL.image,
         showRule: false,
         btnText: '添加优惠券',
-        status: null, // 页面状态 （0为未报名）
+        status: null, // 页面状态 （0为未报名,1为未添加优惠卷）
         activityData: {},
         addNumber: 1,
-        applyLock: true
+        applyLock: false
       }
     },
     mounted() {
       console.log(this.$root.$mp.query.id)
       this._rqManageDetails(this.$root.$mp.query.id)
     },
-    beforeMount () {
+    beforeMount() {
       this._init()
     },
     methods: {
       ...mapGetters(['role']),
-      _init () {
+      _init() {
         // let role = this.role()
         // this.currentRole = role
         // this.currentRole = role
@@ -165,6 +171,10 @@
           if (res.data.alliance_merchant_apply.length === 0) {
             this.status = 0
             this.showRule = true
+          } else {
+            if (parseInt(res.data.alliance_merchant_apply.promotion_id) === 0) {
+              this.status = 1
+            }
           }
           wechat.hideLoading()
         })
@@ -178,7 +188,40 @@
       add() {
         this.addNumber++
       },
-      appSubmit() {}
+      appSubmit() {
+        // console.log(wx.requestPayment)
+        if (!this.addNumber) return
+        if (this.applyLock) return
+        this.applyLock = true
+        setTimeout(() => {
+          this.applyLock = false
+        }, 3000)
+        const code = wx.getStorageSync('code')
+        api.merApplyPay(this.addNumber, this.activityData.id, code).then(res => {
+          console.log(res.data)
+          wechat.hideLoading()
+          const {timestamp, nonceStr, signType, paySign} = res.data.pay_info
+          wx.requestPayment({
+            timeStamp: timestamp,
+            nonceStr,
+            package: res.data.pay_info.package,
+            signType,
+            paySign,
+            'success': function (res) {
+              this.status = 1
+              console.log(11)
+            },
+            'fail': function (res) {
+            }
+          })
+        })
+      },
+      chooseCoupon() {
+        let id = 1
+        let url = `/pages/upload-coupon/upload-coupon?id=${id}`
+        this.$router.push(url)
+        console.log(url)
+      }
     },
     components: {
       Coupon
@@ -197,8 +240,10 @@
     height: 100%
     z-index: -1
     background: #F6F7FA
+
   .activity-content
     background: #F6F7FA
+
   .activity-detail
     position: relative
     padding-bottom: 27%
@@ -256,7 +301,7 @@
             line-height: 45px
             height: 45px
             padding-right: 8px
-            cut-off-rule-bottom(0, 0, rgba(255,255,255,0.16), 0.5px)
+            cut-off-rule-bottom(0, 0, rgba(255, 255, 255, 0.16), 0.5px)
             .tilte-left
               font-family: $font-family-regular
               font-size: $font-size-medium-x
@@ -281,7 +326,7 @@
               margin-right: 14px
               font-family: $font-family-light
               font-size: $font-size-medium
-              color: rgba(255,255,255,0.60)
+              color: rgba(255, 255, 255, 0.60)
             .right
               layout(row)
               font-family: $font-family-light
@@ -292,6 +337,7 @@
                 font-size: 9px
               .number
                 line-height: 1
+
   .activity-box
     padding: 0 15px
     .add-number
@@ -428,6 +474,7 @@
           color: #a4a4a4
       .coupon-info
         padding: 0 15px 12.5px 15px
+
   .btn
     position: fixed
     bottom: 0

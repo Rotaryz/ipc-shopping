@@ -157,6 +157,7 @@
     position: relative
     layout(row, block, nowrap)
     .wrap
+      width: 100%
       flex: 1
       position: relative
       height: 100px
