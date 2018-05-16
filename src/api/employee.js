@@ -47,5 +47,59 @@ export default {
   empAddCode(data) {
     const url = `/api/alliances/employee/add-employee-qrcode`
     return request.get(url, data, true)
+  },
+  /**
+   * 提现查询
+   * @param data
+   * @returns {Promise.<*>}
+   */
+  empGetWithdraw() {
+    const url = `/api/alliances/employee/withdrawal-info`
+    return request.get(url)
+  },
+  /**
+   * 商家提现
+   * @param data
+   * @returns {Promise.<*>}
+   */
+  empSetWithdrawShop(data) {
+    const url = `/api/alliances/employee/merchant-withdrawal`
+    return request.get(url, data)
+  },
+  /**
+   * 员工提现
+   * @param data
+   * @returns {Promise.<*>}
+   */
+  empSetWithdraw(data) {
+    const url = `/api/alliances/employee/customer-withdrawal`
+    return request.get(url, data)
+  },
+  /**
+   * 银行列表
+   * @param data
+   * @returns {Promise.<*>}
+   */
+  empBankList() {
+    const url = `/api/alliances/employee/bank-card`
+    return request.get(url)
+  },
+  /**
+   * 添加银行卡
+   * @param data
+   * @returns {Promise.<*>}
+   */
+  empAddBank(data) {
+    const url = `/api/alliances/employee/bank-cards`
+    return request.post(url, data)
+  },
+  /**
+   * 编辑银行卡
+   * @param data
+   * @returns {Promise.<*>}
+   */
+  empEditBank(data) {
+    const url = `/api/alliances/employee/bank-cards/${data.id}`
+    return request.put(url, data)
   }
 }

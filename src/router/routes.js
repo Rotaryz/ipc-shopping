@@ -76,6 +76,15 @@ module.exports = [
     }
   },
   {
+    path: '/pages/withdrawal-result/withdrawal-result', // 提现进度
+    name: 'WithdrawResult',
+    config: {
+      navigationBarTitleText: '提现',
+      disableScroll: true,
+      backgroundColor: '#F6F7FA'
+    }
+  },
+  {
     path: '/pages/bind-card/bind-card', // 绑定银行卡
     name: 'BindCard',
     config: {

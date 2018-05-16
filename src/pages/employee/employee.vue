@@ -84,7 +84,6 @@
         api.empGetEmployeeList(data).then(res => {
           if (res.error !== ERR_OK) return
           this.awaitList = res.data
-          console.log(res)
         }).catch(err => {
           console.log(err)
         })
