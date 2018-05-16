@@ -72,12 +72,12 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import api from 'api'
-  import {baseURL} from 'api/config'
-  import {mapGetters} from 'vuex'
-  import {ROLE} from 'common/js/contants'
+  // import api from 'api'
+  import { baseURL } from 'api/config'
+  import { mapGetters } from 'vuex'
+  import { ROLE } from 'common/js/contants'
   import HSliderItem from 'components/hSlider-item/hSlider-item'
-  // import wx from 'wx'
+  import wx from 'wx'
 
   const num = 999999
   const object = {
@@ -141,7 +141,7 @@
     }
   }
   export default {
-    data() {
+    data () {
       return {
         ROLE,
         currentRole: null,
@@ -153,40 +153,49 @@
         userId: 0
       }
     },
-    created() {
+    created () {
     },
-    beforeMount() {
+    beforeMount () {
       // let role = this.role()
       // this.role = role
       // console.log(role, '身份')
+      this._init()
     },
-    mounted() {
-      let role = this.role()
-      this.currentRole = role
+    mounted () {
     },
     methods: {
       ...mapGetters(['role']),
-      swiperChange(e) {
+      _init () {
+        // let role = this.role()
+        // this.currentRole = role
+        // this.currentRole = role
+        // 伪代码
+        this.currentRole = ROLE.UNION_ID
+        // wx.setStorageSync('merchantId', merchantId)
+        wx.setStorageSync('userType', ROLE.UNION_ID)
+        console.log(this.currentRole)
+      },
+      swiperChange (e) {
         let index = e.mp.detail.current
         this.dotCurrent = index
         // this.userId = index
         this.sliderCurrent = index
-        api.userAuthorise()
+        // api.userAuthorise()
       },
-      toUnion() {
+      toUnion () {
         const url = `/pages/union-manage/union-manage`
         this.$router.push(url)
       },
-      toEmployee() {
+      toEmployee () {
         const url = `/pages/employee/employee`
         this.$router.push(url)
       }
     },
     computed: {
-      leaderImg() {
+      leaderImg () {
         return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-mhome_union@2x.png)` || ''
       },
-      activeImg() {
+      activeImg () {
         switch (this.userId) {
           case 0: {
             return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-mhome_activity@2x.png)` || ''
@@ -202,7 +211,7 @@
           }
         }
       },
-      employeeImg() {
+      employeeImg () {
         switch (this.userId) {
           case 0: {
             return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-mhome_staff@2x.png)` || ''
@@ -215,7 +224,7 @@
           }
         }
       },
-      incomeImg() {
+      incomeImg () {
         switch (this.userId) {
           case 0: {
             return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-mhome_income@2x.png)` || ''

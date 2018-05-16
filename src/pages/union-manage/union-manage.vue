@@ -29,6 +29,10 @@
 
 <script type="text/ecmascript-6">
   import source from 'common/source'
+  import { mapGetters } from 'vuex'
+  import { ROLE } from 'common/js/contants'
+  import wx from 'wx'
+  import api from 'api'
   import UnionCard from 'components/union-card-item/union-card-item'
   import ActiveCard from 'components/active-card-item/active-card-item'
   import Coupon from 'components/coupon-item/coupon-item'
@@ -57,37 +61,60 @@
   }
 
   export default {
-    data() {
+    data () {
       return {
         navList: ['报名中', '已上架', '已下架'],
-        tabFlag: 1,
+        currentRole: null,
+        tabFlag: 0,
         isEmpty: false,
-        cardInfoList: new Array(6).fill(DEFAULT_CARD_INFO_UNION)
-        // cardInfoList: new Array(3).fill(DEFAULT_CARD_INFO_UNION)
+        cardInfoList: new Array(6).fill(DEFAULT_CARD_INFO_UNION),
+        applyList: null,
+        upList: null,
+        downList: null
       }
     },
+    beforeMount () {
+      this._init()
+    },
     methods: {
-      test(obj) {
+      ...mapGetters(['role']),
+      _init () {
+        // let role = this.role()
+        // this.currentRole = role
+        // this.currentRole = role
+        // 伪代码
+        this.currentRole = ROLE.UNION_ID
+        // wx.setStorageSync('merchantId', merchantId)
+        wx.setStorageSync('userType', ROLE.UNION_ID)
+        console.log(this.currentRole)
+        this._rqGetActiveList(this.tabFlag + 1)
+      },
+      _rqGetActiveList (status) {
+        api.unionManageGetActiveList({status}).then(res => {
+          console.log(res)
+        })
+      },
+      test (obj) {
         // console.log(obj)
         // console.log(111)
         const url = `/pages/union-check-list/union-check-list`
         this.$router.push(url)
       },
-      changeTab(flag) {
+      changeTab (flag) {
         this.isEmpty = !this.isEmpty
         this.tabFlag = flag
         // console.log(this.cardInfoList)
         // DEFAULT_CARD_INFO_UNION.statusCode = flag
         // this.cardInfoList = [DEFAULT_CARD_INFO_UNION]
       },
-      toCreateActive() {
+      toCreateActive () {
         const url = `/pages/union-create-active/union-create-active`
         this.$router.push(url)
       }
     },
     watch: {},
     computed: {
-      emptyImg() {
+      emptyImg () {
         return source.imgEmptyActive()
       }
     },
