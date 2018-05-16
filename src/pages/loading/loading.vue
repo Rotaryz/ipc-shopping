@@ -61,19 +61,19 @@
         if (e.detail.errMsg !== 'getUserInfo:ok') {
           return
         }
-        this._getCode(e)
+        const code = wx.getStorageSync('code')
+        const data = {
+          code,
+          iv: e.detail.iv,
+          encryptedData: e.detail.encryptedData
+        }
+        this._getToken(data)
       },
       // 获取临时登录凭证code
-      _getCode (e) {
+      _getCode () {
         wechat.login()
           .then(res => {
-            const wxUser = e.detail
-            const data = {
-              code: res.code,
-              iv: wxUser.iv,
-              encryptedData: wxUser.encryptedData
-            }
-            this._getToken(data)
+            wx.setStorageSync('code', res.code)
           })
           .catch(err => {
             console.info(err)
@@ -110,9 +110,9 @@
       },
       // 初始化
       _init () {
+        this._getCode()
         let token = this.$root.$mp.query.token
         let resCode = this.$root.$mp.query.resCode * 1
-        console.log(token, '========')
         // 伪代码start
         token = ROLE.testToken
         wx.setStorageSync('token', token)

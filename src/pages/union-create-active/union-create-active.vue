@@ -5,50 +5,84 @@
         <article class="b-i-item">
           <div class="title">活动名称</div>
           <div class="content">
-            <input class="c-input" type="text" placeholder="异业联盟活动" placeholder-class="content">
+            <div class="c-input disable" v-if="!isNewModel" @tap="disableHandler">{{name}}</div>
+            <input class="c-input" v-if="isNewModel" type="text" id='activeName' placeholder="异业联盟活动" placeholder-class="content" maxlength="20" :value="name" @input="inputHandler">
           </div>
         </article>
         <article class="b-i-item">
           <div class="title">活动时间</div>
           <div class="content">
-            <picker class="content-picker-box" mode="date" :start="todayStartDate" @change="bindDateChange" id="start">
+            <picker class="content-picker-box" v-if="isNewModel" mode="date" :start="todayStartDate" @change="bindDateChange" id="start">
               <view class="picker">
                 {{todayStartDate}}
               </view>
             </picker>
+            <section class="content-picker-box" v-if="!isNewModel" @tap="disableHandler">
+              <div class="picker disable">
+                {{todayStartDate}}
+              </div>
+            </section>
             <div class="date-cut-off">至</div>
-            <picker class="content-picker-box" mode="date" :start="endStartDate" @change="bindDateChange" id="end">
+            <picker class="content-picker-box" v-if="isNewModel" mode="date" :start="endStartDate" @change="bindDateChange" id="end">
               <view class="picker">
                 {{endStartDate}}
               </view>
             </picker>
+            <section class="content-picker-box" v-if="!isNewModel" @tap="disableHandler">
+              <view class="picker disable">
+                {{endStartDate}}
+              </view>
+            </section>
           </div>
         </article>
         <article class="b-i-item">
           <div class="title">活动地址</div>
           <div class="content">
-            <input class="c-input" type="text" disabled placeholder="广州市白云区市桥商圈" placeholder-class="content">
+            <div class="c-input disable" v-if="!isNewModel" @tap="disableHandler">{{address}}</div>
+            <input class="c-input" v-if="isNewModel" type="text" id='activeAddress' placeholder="广州市白云区市桥商圈" placeholder-class="content" maxlength="20" :value="address">
           </div>
         </article>
         <article class="b-i-item">
           <div class="title">活动费用</div>
           <em class="money">¥</em>
-          <div class="content ">
-            <input class="c-input" type="text" disabled placeholder="100" placeholder-class="content">
+          <div class="content c-price ">
+            <div class="c-input disable" v-if="!isNewModel" @tap="disableHandler">{{price}}</div>
+            <input class="c-input" v-if="isNewModel" type="digit" id='activePrice' placeholder="100" placeholder-class="content" maxlength="7" :value="price">
           </div>
         </article>
         <article class="b-i-item">
           <div class="title">卡券数量</div>
           <div class="content">
-            <input class="c-input" type="text" disabled placeholder="1000" placeholder-class="content">
+            <div class="c-input disable" v-if="!isNewModel" @tap="disableHandler">{{stock}}</div>
+            <input class="c-input" v-if="isNewModel" type="number" id='activeStock' placeholder="1000" placeholder-class="content" maxlength="7" :value="stock">
           </div>
         </article>
       </section>
       <section class="u-c-section active-prize">
         <div class="s-title">活动奖品</div>
-        <dl class="b-i-item" v-for="(item,index) in activePrizeList" :key="index">
-          <dt class="title">{{item.title}}</dt>
-          <dd class="content">{{item.content}}</dd>
+        <!--<dl class="b-i-item" v-for="(item,index) in activePrizeList" :key="index">-->
+        <!--<dt class="title">{{item.title}}</dt>-->
+        <!--<dd class="content">-->
+        <!--<input class="c-input" type="text" :placeholder="item.content" placeholder-class="content" maxlength="15" :value="item.content">-->
+        <!--</dd>-->
+        <!--</dl>-->
+        <dl class="b-i-item">
+          <dt class="title">活动奖品一</dt>
+          <dd class="content" @tap="disableHandler">
+            <input class="c-input disable" type="text" id='activePrize0' disabled placeholder="波尔多红酒" placeholder-class="content" maxlength="15" :value="activePrizeList[0]">
+          </dd>
+        </dl>
+        <dl class="b-i-item">
+          <dt class="title">活动奖品二</dt>
+          <dd class="content" @tap="disableHandler">
+            <input class="c-input disable" type="text" id='activePrize1' disabled placeholder="10张10元代金券" placeholder-class="content" maxlength="15" :value="activePrizeList[1]">
+          </dd>
+        </dl>
+        <dl class="b-i-item">
+          <dt class="title">活动奖品三</dt>
+          <dd class="content" @tap="disableHandler">
+            <input class="c-input disable" type="text" id='activePrize2' disabled placeholder="20张异业联盟券" placeholder-class="content" maxlength="15" :value="activePrizeList[2]">
+          </dd>
         </dl>
       </section>
       <section class="u-c-section active-info">
@@ -56,81 +90,141 @@
           <dl class="title-main">活动奖励</dl>
           <dl class="title-sub">凡成功参与该活动的商家，可以到的的好处：</dl>
           <dd class="content">
-            <div class="c-item" v-for="(item,index) in activeInfoList[0]" :key="index">{{item}}</div>
+            <!--<div class="c-item" v-for="(item,index) in activeInfoList[0]" :key="index">{{item}}</div>-->
+            <div class="c-item">1. 商家以及员工，每销售一张卡券，得到<input class="c-input-info" id='activeInfo0' type="number" :value="activeInfo.item0" maxlength="4" placeholder="50" placeholder-class="content"/>元的奖励。</div>
+            <div class="c-item">2. 商家销售卡的用户，到其他门店使用一次，得到联盟力<input class="c-input-info" id='activeInfo1' type="number" :value="activeInfo.item0 " maxlength="4" placeholder="10" placeholder-class="content"/>元的奖励。分奖励。（可以分全部联盟商家报名该活动的报名金）</div>
+            <div class="c-item">3. 商家可以得到该活动全部商家的异业客户引流客户。</div>
           </dd>
         </article>
         <article class="a-i-item">
           <dl class="title-main">活动要求</dl>
           <dl class="title-sub">凡报名参加活动的商家，需同意以下活动要求：</dl>
           <dd class="content">
-            <div class="c-item" v-for="(item,index) in activeInfoList[1]" :key="index">{{item}}</div>
+            <!--<div class="c-item" v-for="(item,index) in activeInfoList[1]" :key="index">{{item}}</div>-->
+            <div class="c-item">1. 用户购买异业联盟卡后，提供商品给用户。</div>
+            <div class="c-item">2. 添加商家自己的固定数量的免费优惠券。</div>
+            <div class="c-item">3. 支持平台提供的<input class="c-input-info" id='activeInfo2' type="number" :value="activeInfo.item2" maxlength="4" placeholder="10" placeholder-class="content"/>元的奖励。元代金券，小程序买单的使用。</div>
           </dd>
         </article>
         <article class="a-i-item">
           <dl class="title-main">活动明细</dl>
           <dd class="content">
-            <div class="c-item" v-for="(item,index) in activeInfoList[2]" :key="index">{{item}}</div>
+            <!--<div class="c-item" v-for="(item,index) in activeInfoList[2]" :key="index">{{item}}</div>-->
+            <div class="c-item">1. 本活动仅在{{address}}内开展。</div>
+            <div class="c-item">2. 该活动需要商家付费参加，如果报名没有通过，会立刻原路退款。</div>
+            <div class="c-item">3. 本次活动的最终解释权归赞播所有。</div>
           </dd>
         </article>
       </section>
-      <footer class="save-btn">保存</footer>
+      <footer class="save-btn" @tap="saveHandler">保存</footer>
     </form>
+    <toast ref="toast"></toast>
   </article>
 </template>
 
 <script type="text/ecmascript-6">
+  import api from 'api'
+  import { ERR_OK } from 'api/config'
+  import * as wechat from 'common/js/wechat'
   import wx from 'wx'
   import util from 'common/js/format'
+  import Toast from '@/components/toast/toast'
 
-  const activePrizeList = [
-    {
-      title: '活动奖品一',
-      content: '波尔多红酒'
-    },
-    {
-      title: '活动奖品二',
-      content: '10张10元代金券'
-    },
-    {
-      title: '活动奖品三',
-      content: '20张异业联盟券'
-    }
-  ]
-  const activeInfoList = [
-    [
-      '1. 商家以及员工，每销售一张卡券，得到50元的奖',
-      '励。\n',
-      '2. 商家销售卡的用户，到其他门店使用一次，得到联盟力10分奖励。（可以分全部联盟商家报名该活动的报名金）\n',
-      '3. 商家可以得到该活动全部商家的异业客户引流客户。'
-    ], [
-      '1. 用户购买异业联盟卡后，提供商品给用户。\n',
-      '2. 添加商家自己的固定数量的免费优惠券。\n',
-      '3. 支持平台提供的10元代金券，小程序买单的使用。'
-    ], [
-      '1. 本活动仅在XX商圈内开展。\n',
-      '2. 该活动需要商家付费参加，如果报名没有通过，会立刻原路退款。\n',
-      '3. 本次活动的最终解释权归赞播所有。'
-    ]
-
-  ]
   export default {
     data () {
       return {
         model: 0,
+        id: '',
+        name: '',
         startDate: null,
         endDate: null,
-        activePrizeList,
-        activeInfoList
+        address: '',
+        price: 0,
+        stock: 0,
+        activePrizeList: [],
+        activeInfo: {}
       }
     },
     beforeMount () {
       let title = `新建`
       this.isNewModel && wx.setNavigationBarTitle({title})
+      this._init()
     },
     mounted () {
       // console.log(util, Date.now())
     },
     methods: {
+      _init () {
+        this.name = `异业联盟活动`
+        this.startDate = util.formatTimeYMD(util.now + 1000 * 60 * 60 * 24)
+        this.endDate = util.formatTimeYMD(util.now + 1000 * 60 * 60 * 24 * 61)
+        this.address = `广州市白云区市桥商圈`
+        this.price = 100
+        this.stock = 1000
+        this.activePrizeList = ['波尔多红酒', '10张10元代金券', '20张异业联盟券']
+        this.activeInfo = {'item0': 50, 'item1': 10, 'item2': 10}
+      },
+      disableHandler () {
+        this.$refs.toast.show('不可修改')
+      },
+      inputHandler (e) {
+        let id = e.target.id
+        let value = e.target.value
+        switch (id) {
+          case 'activeName': {
+            this.name = value
+            break
+          }
+          case 'activeAddress': {
+            this.address = value
+            break
+          }
+          case 'activePrice': {
+            this.price = value
+            break
+          }
+          case 'activeStock': {
+            this.stock = value
+            break
+          }
+          // case 'activePrizeList0': {
+          //   this.activePrizeList[0] = value
+          //   break
+          // }
+          // case 'activePrizeList1': {
+          //   this.activePrizeList[1] = value
+          //   break
+          // }
+          // case 'activePrizeList2': {
+          //   this.activePrizeList[2] = value
+          //   break
+          // }
+          case 'activeInfoList0': {
+            this.activeInfo.item0 = value
+            break
+          }
+          case 'activeInfoList1': {
+            this.activeInfo.item1 = value
+            break
+          }
+          case 'activeInfoList2': {
+            this.activeInfo.item2 = value
+            break
+          }
+        }
+      },
+      saveHandler () {
+        // console.log(this.name)
+        // console.log(this.startDate)
+        // console.log(this.endDate)
+        // console.log(this.address)
+        // console.log(this.price)
+        // console.log(this.stock)
+        // console.log(this.activePrizeList.toString())
+        // console.log(this.activeInfoList.toString())
+        console.log(this._packData())
+        this._rqCreateActive(this._packData())
+      },
       bindDateChange (e) {
         const id = e.target.id
         const value = e.mp.detail.value
@@ -145,6 +239,34 @@
           }
         }
         console.log(this.startDate, e.mp.detail.value, id)
+      },
+      _packData () {
+        return {
+          id: this.id,
+          name: this.name,
+          start_at: this.startDate,
+          end_at: this.endDate,
+          address: this.address,
+          price: this.price,
+          stock: this.stock,
+          attach: this.activeInfo
+        }
+      },
+      _rqCreateActive (data) {
+        console.log(data)
+        api.uctCreateActive(data)
+          .then(json => {
+            console.log(json)
+            if (json.error !== ERR_OK) {
+              wechat.hideLoading()
+              this.$refs.toast.show(json.message)
+              return ''
+            }
+            this.$router.back()
+          })
+          .catch(err => {
+            console.info(err)
+          })
       }
     },
     computed: {
@@ -152,11 +274,14 @@
         return this.model === 0
       },
       todayStartDate () {
-        return this.startDate || util.formatTimeYMD()
+        return this.startDate
       },
       endStartDate () {
-        return this.endDate || util.formatTimeYMD(util.now + 1000 * 60 * 60 * 24 * 30 * 2)
+        return this.endDate
       }
+    },
+    components: {
+      Toast
     }
   }
 </script>
@@ -165,6 +290,9 @@
   @import "../../common/stylus/variable.styl"
   @import "../../common/stylus/mixin.styl"
   $input-height = 45px // 导航栏高度
+
+  .disable
+    color: $color-text-a4 !important
 
   .union-create-active
     position: relative
@@ -177,7 +305,7 @@
         background-color: $color-background-ff
         margin-bottom: 10px
         &.active-info
-          margin-bottom: 0
+          margin-bottom: 45px
         .b-i-item
           position: relative
           layout(row)
@@ -215,12 +343,20 @@
               display: inline-block
               .picker
                 display: inline-block
+                font-family: $font-family-light
+                font-size: $font-size-medium
+                color: $color-text-2d
             .date-cut-off
               display: inline-block
               padding: 0 5px
             .c-input
+              font-family: $font-family-light
+              font-size: $font-size-medium
+              color: $color-text-2d
               width: 100%
               height: 100%
+            .c-price
+              padding-left: 2px
         .s-title
           height: 42px
           line-height: 42px
@@ -255,7 +391,20 @@
               color: $color-text-2d
               letter-spacing: 0
               line-height: 21px
+            .c-input-info
+              display: inline-block
+              width: 38px
+              height: $font-size-medium
+              line-height: 21px
+              text-align: center
+              vertical-align: bottom
+              border: 0.5px solid $color-col-line-cd
       .save-btn
         normal-button-default()
         border-radius: 3px 3px 0 0
+        position: fixed
+        left: 0
+        right: 0
+        bottom: 0
+        z-index: 9
 </style>
