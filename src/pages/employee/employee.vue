@@ -1,13 +1,12 @@
 <template>
     <div class="employee">
-      <bgnull :showImagSta="0" :showBgnull="awaitList.length <= 0 && acceptList.length <= 0"></bgnull>
       <div class="em-list" v-if="awaitList.length > 0 || acceptList.length > 0">
         <div class="em-list-await"  v-if="awaitList.length > 0">
           <div class="em-list-await-title"><span>待处理申请</span></div>
           <div class="await-list-item" v-for="item in awaitList" :key="index">
             <div class="await-list-left">
-              <img class="left-image" src="" />
-              <div class="left-name">{{item.name}}</div>
+              <img class="left-image" :src="item.avatar_url" />
+              <div class="left-name">{{item.nickname}}</div>
             </div>
             <div class="await-list-right">
               <div class="right-refuse" v-on:click="refuse(item,index)">拒绝</div>
@@ -32,23 +31,25 @@
       </div>
       <confirm-msg :show.sync="show" :title.sync="title" v-on:confirm="confirm" v-on:cancel="cancel"></confirm-msg>
       <audit-msg ref="audit"></audit-msg>
+      <bgnull :showImagSta="0" :showBgnull="awaitList.length <= 0 && acceptList.length <= 0"></bgnull>
+      <toast ref="toast"></toast>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import {ERR_OK} from 'api/config'
   import Bgnull from 'components/bgnull/bgnull'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
   import AuditMsg from 'components/audit-msg/audit-msg'
   import api from 'api'
+  import * as wechat from 'common/js/wechat'
+  import Toast from '@/components/toast/toast'
+
   export default {
     data () {
       return {
         showBgnull: true,
-        awaitList: [
-          {name: '123'},
-          {name: '123'},
-          {name: '123'}
-        ],
+        awaitList: [],
         acceptList: [],
         show: false,
         title: '',
@@ -60,30 +61,70 @@
     components: {
       Bgnull,
       ConfirmMsg,
-      AuditMsg
+      AuditMsg,
+      Toast
     },
     // 分页
     onReachBottom () {
       console.log('上拉刷新....')
     },
-    beforeMount() {
-      console.log(`--${this.compName}--beforeMount`)
-    },
     mounted() {
       this.getInfo()
-      this.$refs.audit.show(1)
+      // this.$refs.audit.show(1) // 员工审核弹窗
       console.log(`--${this.compName}--mounted`)
     },
     methods: {
       async getInfo () {
         await this._getEmployee()
+        await this._getAccept()
+        wechat.hideLoading()
       },
-      _getEmployee() {
+      _getEmployee() { // 获取待处理员工
         let data = {}
-        api.empGetEmployeeList(data).then(res => { // 获取待处理员工
-          console.log(res)
+        api.empGetEmployeeList(data).then(res => {
+          if (res.error !== ERR_OK) return
+          this.awaitList = res.data
         }).catch(err => {
-          console.info(err)
+          console.log(err)
+        })
+      },
+      _getAccept() { // 获取接受的员工
+        let data = {}
+        api.empGetAcceptList(data).then(res => {
+          if (res.error !== ERR_OK) return
+          this.acceptList = res.data
+        }).catch(err => {
+          console.log(err)
+        })
+      },
+      _AuditEmployee(key) { // 审核员工 1为通过，2为拒绝
+        let data = {status: key, id: this.awaitList[this.dataIndex].id}
+        api.empAuditEmployee(data).then(res => {
+          if (res.error !== ERR_OK) {
+            this.$refs.toast.show(res.message)
+            return
+          }
+          if (key === 1) {
+            this.awaitList.splice(this.dataIndex, 1)
+            this.acceptList.push(this.dataTmp)
+          } else if (key === 2) {
+            this.awaitList.splice(this.dataIndex, 1)
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+        wechat.hideLoading()
+      },
+      _empDel () { // 删除员工
+        let data = {current_merchant: this.acceptList[this.dataIndex].id}
+        api.empDel(data).then(res => {
+          if (res.error !== ERR_OK) {
+            this.$refs.toast.show(res.message)
+            return
+          }
+          this.acceptList.splice(this.dataIndex, 1)
+        }).catch(err => {
+          console.log(err)
         })
       },
       refuse (obj, index) {
@@ -117,13 +158,12 @@
       confirm() {
         this.show = false
         if (this.isAwait !== '') {
-          if (this.isAwait === 'refuse') {
-            this.awaitList.splice(this.dataIndex, 1)
-          } else if (this.isAwait === 'accept') {
-            this.awaitList.splice(this.dataIndex, 1)
-            this.acceptList.push(this.dataTmp)
+          if (this.isAwait === 'refuse') { // 拒绝
+            this._AuditEmployee(2)
+          } else if (this.isAwait === 'accept') { // 接受
+            this._AuditEmployee(1)
           } else {
-            this.acceptList.splice(this.dataIndex, 1)
+            this._empDel()
           }
         }
       },

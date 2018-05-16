@@ -5,30 +5,47 @@
       <div class="code-msg">享受“一次努力，赚两份钱！”</div>
       <div class="code-img">
         <img class="max-img" :src="maxImg" alt="">
-        <img class="min-img" :src="maxImg" alt="">
       </div>
-      <div class="code-hint">扫码绑定加入国颐堂 {{this.$route.query.id}}</div>
+      <div class="code-hint">扫码绑定加入{{shopName}}</div>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import * as wechat from 'common/js/wechat'
+  import api from 'api'
+
   export default {
     data () {
       return {
         maxImg: '',
-        minImg: ''
+        shopName: ''
       }
     },
-    beforeMount() {
-      console.log(`--${this.compName}--beforeMount`)
-    },
     mounted() {
+      this.getInfo()
       console.log(this.$route.query.key)
       console.log(`--${this.compName}--mounted`)
     },
     beforeUpdate() {
       console.log(`--${this.compName}--beforeUpdate`)
+    },
+    methods: {
+      getInfo () {
+        this._empAddCode()
+      },
+      async _empAddCode () {
+        let data = {}
+        api.empAddCode(data).then(res => {
+          console.log(res)
+          this.maxImg = res.data.url
+          this.shopName = res.data.shop_name
+        }).catch(e => {
+          console.log(e)
+        })
+        // this.maxImg = 'https://img.jerryf.cn/static_files/mina_qrcodes/forever/2018/05/14/16/1526287427cO5RXk8E.png'
+        wechat.hideLoading()
+      }
     },
     computed: {
       ss() {
