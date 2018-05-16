@@ -40,6 +40,8 @@
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
   import AuditMsg from 'components/audit-msg/audit-msg'
   import api from 'api'
+  import * as wechat from 'common/js/wechat'
+
   export default {
     data () {
       return {
@@ -71,7 +73,7 @@
     },
     mounted() {
       this.getInfo()
-      this.$refs.audit.show(1)
+      this.$refs.audit.show(1) // 员工审核弹窗
       console.log(`--${this.compName}--mounted`)
     },
     methods: {
@@ -81,6 +83,7 @@
       _getEmployee() {
         let data = {}
         api.empGetEmployeeList(data).then(res => { // 获取待处理员工
+          wechat.hideLoading()
           console.log(res)
         }).catch(err => {
           console.info(err)
