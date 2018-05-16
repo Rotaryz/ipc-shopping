@@ -2,7 +2,7 @@
 import user from './user'
 import employee from './employee'
 import UnionManage from './union-manage'
-import MerchantActivity from './merchant-activity'
+import MerchantActivity from './merchant-api'
 export default {
   ...user,
   ...employee,

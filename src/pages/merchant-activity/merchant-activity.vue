@@ -14,7 +14,7 @@
           <img :src="image + '/defaults/ipc-shopping/merchant/bg-activity_card@2x.png'" class="canvas-bg" v-if="image">
           <div class="canvas-text">
             <div class="title">
-              <div class="tilte-left">异业联盟卡</div>
+              <div class="tilte-left">{{activityData.name}}</div>
               <div class="tilte-right">
                 <div class="text">预览活动</div>
                 <img :src="image + '/defaults/ipc-shopping/home/icon-union_j@2x.png'" class="right" v-if="image">
@@ -22,27 +22,27 @@
             </div>
             <div class="cavas-list">
               <div class="left">活动时间</div>
-              <div class="right">2018-04-10至2018-05-10</div>
+              <div class="right">{{activityData.start_at}}至{{activityData.end_at}}</div>
             </div>
             <div class="cavas-list">
               <div class="left">活动费用</div>
-              <div class="right"><div class="icon">¥</div><div class="number">100</div></div>
+              <div class="right"><div class="icon">¥</div><div class="number">{{activityData.price}}</div></div>
             </div>
             <div class="cavas-list">
               <div class="left">活动地址</div>
-              <div class="right">广州市白云区市桥商圈</div>
+              <div class="right">{{activityData.address}}</div>
             </div>
           </div>
         </div>
       </div>
     </div>
     <div class="activity-box">
-      <div class="add-number">
+      <div class="add-number"  v-if="status === 0">
         <div class="text">购买数量</div>
         <div class="calculate-box">
-          <div class="subtract">-</div>
-          <input type="number" class="number">
-          <div class="add">+</div>
+          <div class="subtract" @tap="subtract">-</div>
+          <input type="number" class="number" v-model="addNumber">
+          <div class="add" @tap="add">+</div>
         </div>
       </div>
       <div :class="['activity-rules', showRule ? '' : 'activity-hide']">
@@ -52,37 +52,40 @@
           <div class="click-box"  @tap="showRules"></div>
         </div>
         <div class="rules-con">
-          <div class="rules-one">
+          <div class="rules-one rules-line">
             <div class="title">活动奖励</div>
-            <div class="text">凡成功参与该活动的商家，可以到的的好处：</div>
-            <div class="text">1. 商家以及员工，每销售一张卡券，得到50元的奖励。</div>
-            <div class="text">2. 商家销售卡的用户，到其他门店使用一次，得到联盟力10分奖励。（可以分全部联盟商家报名该活 动的报名金）</div>
-            <div class="text">3. 商家可以得到该活动全部商家的异业客户引流客户。</div>
+            <!--<div class="text">凡成功参与该活动的商家，可以到的的好处：</div>-->
+            <!--<div class="text">1. 商家以及员工，每销售一张卡券，得到50元的奖励。</div>-->
+            <!--<div class="text">2. 商家销售卡的用户，到其他门店使用一次，得到联盟力10分奖励。（可以分全部联盟商家报名该活 动的报名金）</div>-->
+            <!--<div class="text">3. 商家可以得到该活动全部商家的异业客户引流客户。</div>-->
+            <div class="text">{{activityData.award_note}}</div>
           </div>
-          <div class="rules-one">
+          <div class="rules-one rules-line">
             <div class="title">活动要求</div>
-            <div class="text">凡报名参加活动的商家，需同意以下活动要求：</div>
-            <div class="text">1. 用户购买异业联盟卡后，提供商品给用户。</div>
-            <div class="text">2. 添加商家自己的固定数量的免费优惠券。</div>
-            <div class="text">3. 支持平台提供的10元代金券，小程序买单的使用。</div>
+            <!--<div class="text">凡报名参加活动的商家，需同意以下活动要求：</div>-->
+            <!--<div class="text">1. 用户购买异业联盟卡后，提供商品给用户。</div>-->
+            <!--<div class="text">2. 添加商家自己的固定数量的免费优惠券。</div>-->
+            <!--<div class="text">3. 支持平台提供的10元代金券，小程序买单的使用。</div>-->
+            <div class="text">{{activityData.claim_note}}</div>
           </div>
           <div class="rules-one">
             <div class="title">活动明细</div>
-            <div class="text">凡成功参与该活动的商家，可以到的的好处：</div>
-            <div class="text">1. 本活动仅在XX商圈内开展。</div>
-            <div class="text">2. 该活动需要商家付费参加，如果报名没有通过， 会立刻原路退款。</div>
-            <div class="text">3. 本次活动的最终解释权归赞播所有。</div>
+            <!--<div class="text">凡成功参与该活动的商家，可以到的的好处：</div>-->
+            <!--<div class="text">1. 本活动仅在XX商圈内开展。</div>-->
+            <!--<div class="text">2. 该活动需要商家付费参加，如果报名没有通过， 会立刻原路退款。</div>-->
+            <!--<div class="text">3. 本次活动的最终解释权归赞播所有。</div>-->
+            <div class="text">{{activityData.detail_note}}</div>
           </div>
         </div>
       </div>
-      <div class="apply-box" v-if="showRule">
+      <div class="apply-box"  v-if="status === 1">
         <div class="box-top">
           <img :src="image + '/defaults/ipc-shopping/home/icon-activity_pass@2x.png'" class="img" v-if="image">
           <div class="text">支付成功</div>
         </div>
         <div class="box-text">恭喜您支付成功，请尽快添加优惠券!</div>
       </div>
-      <div class="apply-box apply-fails" v-if="showRule">
+      <div class="apply-box apply-fails">
         <div class="box-top">
           <img :src="image + '/defaults/ipc-shopping/home/icon-activity_fail@2x.png'" class="img" v-if="image">
           <div class="text">报名失败</div>
@@ -107,27 +110,75 @@
         </div>
       </div>
     </div>
-    <footer class="btn">{{btnText}}</footer>
+    <footer class="btn" v-if="status === 0" @tap="appSubmit">报名(支付{{activityData.price * addNumber}}元）</footer>
     <div class="page-bg"></div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import api from 'api'
   import { baseURL } from 'api/config'
   import Coupon from 'components/coupon-item/coupon-item'
+  import * as wechat from 'common/js/wechat'
+  import { mapGetters } from 'vuex'
+  import { ROLE } from 'common/js/contants'
+  import wx from 'wx'
 
   export default {
     data() {
       return {
         image: baseURL.image,
         showRule: false,
-        btnText: '添加优惠券'
+        btnText: '添加优惠券',
+        status: null, // 页面状态 （0为未报名）
+        activityData: {},
+        addNumber: 1,
+        applyLock: true
       }
     },
+    mounted() {
+      console.log(this.$root.$mp.query.id)
+      this._rqManageDetails(this.$root.$mp.query.id)
+    },
+    beforeMount () {
+      this._init()
+    },
     methods: {
+      ...mapGetters(['role']),
+      _init () {
+        // let role = this.role()
+        // this.currentRole = role
+        // this.currentRole = role
+        // 伪代码
+        this.currentRole = ROLE.UNION_ID
+        // wx.setStorageSync('merchantId', merchantId)
+        wx.setStorageSync('userType', ROLE.UNION_ID)
+        console.log(this.currentRole)
+      },
       showRules() {
         this.showRule = !this.showRule
-      }
+      },
+      _rqManageDetails(id) {
+        api.merManageDetails(id).then(res => {
+          console.log(res.data)
+          this.activityData = res.data
+          if (res.data.alliance_merchant_apply.length === 0) {
+            this.status = 0
+            this.showRule = true
+          }
+          wechat.hideLoading()
+        })
+      },
+      subtract() {
+        if (parseInt(this.addNumber) <= 1) {
+          return
+        }
+        this.addNumber--
+      },
+      add() {
+        this.addNumber++
+      },
+      appSubmit() {}
     },
     components: {
       Coupon
@@ -317,7 +368,6 @@
         padding-left: 15px
         .rules-one
           padding: 15px 18px 17px 0
-          cut-off-rule-bottom(0, 0, #EDEDED)
           .title
             font-family: $font-family-regular
             font-size: $font-size-medium
@@ -328,6 +378,8 @@
             font-family: $font-family-light
             font-size: $font-size-medium
             color: $color-text-2d
+        .rules-line
+          cut-off-rule-bottom(0, 0, #EDEDED)
     .activity-hide
       height: 50px
       overflow: hidden
