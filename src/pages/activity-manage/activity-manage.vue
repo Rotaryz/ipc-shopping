@@ -6,7 +6,7 @@
     </header>
     <div class="manage-list" v-if="tabFlag === 0">
       <div class="box-list">
-        <active-card :useType="0" @previewHandler="test" ></active-card>
+        <active-card :useType="0" @previewHandler="test"></active-card>
       </div>
       <div class="box-list">
         <active-card :useType="0" @previewHandler="test"></active-card>
@@ -14,7 +14,7 @@
     </div>
     <div class="manage-list" v-if="tabFlag === 2">
       <div class="box-list">
-        <active-card :useType="0" @previewHandler="test" ></active-card>
+        <active-card :useType="0" @previewHandler="test"></active-card>
       </div>
       <div class="box-list">
         <active-card :useType="0" @previewHandler="test"></active-card>
@@ -24,7 +24,11 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import api from 'api'
   import ActiveCard from 'components/active-card-item/active-card-item'
+  import { mapGetters } from 'vuex'
+  import { ROLE } from 'common/js/contants'
+  import wx from 'wx'
 
   export default {
     data() {
@@ -32,9 +36,31 @@
         tabFlag: 0
       }
     },
+    created () {
+      this._rqGetActiveList(0)
+    },
+    beforeMount () {
+      this._init()
+    },
     methods: {
+      ...mapGetters(['role']),
+      _init () {
+        // let role = this.role()
+        // this.currentRole = role
+        // this.currentRole = role
+        // 伪代码
+        this.currentRole = ROLE.UNION_ID
+        // wx.setStorageSync('merchantId', merchantId)
+        wx.setStorageSync('userType', ROLE.UNION_ID)
+        console.log(this.currentRole)
+      },
       changeTab(flag) {
         this.tabFlag = flag
+      },
+      _rqGetActiveList(status) {
+        api.merpondActiveList({status}).then(res => {
+          console.log(res)
+        })
       }
     },
     components: {
@@ -69,6 +95,7 @@
       &.hit
         color: $color-background-ff
         cut-off-rule-bottom(40%, 40%, $color-assist-34, 2px)
+
   .manage-list
     padding: 0 15px
     .box-list

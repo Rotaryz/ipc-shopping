@@ -1,6 +1,6 @@
 <template>
   <div class="activity-content">
-    <div class="activity-detail" v-if="showRule">
+    <div class="activity-detail">
       <img :src="image + '/defaults/ipc-shopping/merchant/pic-activity_banner02@2x.png'" class="detail-bg" v-if="image">
       <div class="detail-money">
         <div class="money">

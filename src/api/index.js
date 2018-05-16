@@ -2,8 +2,10 @@
 import user from './user'
 import employee from './employee'
 import UnionManage from './union-manage'
+import MerchantActivity from './merchant-activity'
 export default {
   ...user,
   ...employee,
-  ...UnionManage
+  ...UnionManage,
+  ...MerchantActivity
 }
