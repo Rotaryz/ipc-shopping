@@ -21,38 +21,42 @@
 
 <script type="text/ecmascript-6">
   import api from 'api'
-  import { baseURL, ERR_OK } from 'api/config'
+  import {baseURL, ERR_OK, TOKEN_OUT} from 'api/config'
   import * as wechat from 'common/js/wechat'
   import wx from 'wx'
-  import { mapActions, mapMutations } from 'vuex'
-  import { ROLE } from 'common/js/contants'
+  import {mapActions, mapMutations} from 'vuex'
+  import {ROLE} from 'common/js/contants'
 
   console.info(baseURL.jumpVersion)
 
   export default {
-    beforeCreate () {
+    beforeCreate() {
     },
-    created () {
+    created() {
       // console.log(0, wx)
     },
-    onShow () {
+    onShow() {
       this._init()
+      // console.log(this.$root.$mp)
+      // this._navTo()
+      // const url = `/pages/loading/loading?type=tokenOut`
+      // wx.reLaunch({url})
       // console.log('onshow')
     },
-    beforeMount () {
+    beforeMount() {
       // this._init()
       // console.log(1, wx)
     },
-    mounted () {
+    mounted() {
     },
-    beforeDestroy () {
+    beforeDestroy() {
       // console.log(3)
     },
     methods: {
       ...mapActions(['saveRole']),
       ...mapMutations({saveRoleSync: 'ROLE_TYPE'}),
       // 微信获取用户信息btn
-      wxGetUserInfo (event) {
+      wxGetUserInfo(event) {
         const e = event.mp
         if (e.detail.errMsg !== 'getUserInfo:ok') {
           return
@@ -60,7 +64,7 @@
         this._getCode(e)
       },
       // 获取临时登录凭证code
-      _getCode (e) {
+      _getCode(e) {
         wechat.login()
           .then(res => {
             const wxUser = e.detail
@@ -76,7 +80,7 @@
           })
       },
       // 获取token
-      _getToken (data) {
+      _getToken(data) {
         api.userAuthorise(data)
           .then(Json => {
             wechat.hideLoading()
@@ -87,6 +91,7 @@
             let token = res.access_token
             if (token) {
               wx.setStorageSync('token', token)
+              this._checkRole()
               // await this.$getUserInfo(true)
               this._navTo()
             }
@@ -96,17 +101,26 @@
           })
       },
       // 页面路由
-      _navTo () {
-        const url = `/pages/home/home`
+      _navTo() {
+        const url = `/pages/home/home?type=obj`
         this.$router.replace(url)
-        // this.$router.push(url)
       },
       // 初始化
-      _init () {
+      _init() {
         let token = wx.getStorageSync('token')
+        let resCode = this.$root.$mp.query.resCode
         if (!token) return
-        this.saveRoleSync(ROLE.UNION_ID)
+        if (resCode === TOKEN_OUT) return
+        this._checkRole()
         this._navTo()
+      },
+      // 检查角色
+      _checkRole() {
+        const entryRole = this.$root.$mp.query.entryRole || ROLE.STAFF_ID
+        const merchantId = this.$root.$mp.query.merchantId // 员工历史记录栏进来没有商家ID
+        wx.setStorageSync('merchantId', merchantId)
+        wx.setStorageSync('userType', entryRole)
+        this.saveRoleSync(entryRole)
       }
     },
     computed: {}

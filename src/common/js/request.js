@@ -1,21 +1,21 @@
 import wx from 'wx'
 import Fly from 'flyio'
-import { showLoading, hideLoading } from './wechat'
-import { baseURL } from 'api/config'
+import {showLoading, hideLoading} from './wechat'
+import {baseURL, TIME_OUT, ERR_OK, ERR_NO, TOKEN_OUT} from 'api/config'
+import {ROLE} from './contants'
 
-const token = wx.getStorageSync('token')
+const COMMON_HEADER = () => {
+  const token = wx.getStorageSync('token')
+  const merchantId = wx.getStorageSync('merchantId') || 100005
+  const userType = wx.getStorageSync('userType') || ROLE.STAFF_ID
 
-const COMMON_HEADER = Object.assign(
-  {},
-  {'X-Requested-With': 'XMLHttpRequest'},
-  {'Current-merchant': wx.getStorageSync('merchantId') || 100005},
-  {'Authorization': token},
-  {'User-type': 'customer'}
-)
-const TIME_OUT = 10000
-const ERR_OK = 0
-const ERR_NO = -404
-const TOKEN_OUT = 10000 // token 失效
+  return Object.assign(
+    {'X-Requested-With': 'XMLHttpRequest'},
+    {'Current-merchant': merchantId},
+    {'Authorization': token},
+    {'User-type': userType}
+  )
+}
 
 const fly = new Fly()
 
@@ -32,12 +32,15 @@ fly.interceptors.response.use((response) => {
 // 配置请求基地址
 fly.config.baseURL = baseURL.api
 
-function checkStatus (response) {
+function checkStatus(response) {
   // loading
   // 如果http状态码正常，则直接返回数据
   if (response && (response.status === 200 || response.status === 304 || response.status === 422)) {
     return response
     // 如果不需要除了data之外的数据，可以直接 return response.data
+  } else if (response && (response.status === 404 || response.status >= 500)) {
+    const url = `/pages/error/error?key=${response.status}`
+    wx.reLaunch({url})
   }
   // 异常状态下，把错误信息返回去
   return {
@@ -51,7 +54,7 @@ function checkStatus (response) {
  * @param res
  * @returns {string|Object[]|CanvasPixelArray}
  */
-function checkCode (res) {
+function checkCode(res) {
   // 如果code异常(这里已经包括网络错误，服务器错误，后端抛出的错误)，可以弹出一个错误提示，告诉用户
   if (res.status === ERR_NO) {
     console.warn(res.msg)
@@ -65,8 +68,9 @@ function checkCode (res) {
   // 凭证失效
   if (res.data && (res.data.code === TOKEN_OUT)) {
     // token失效返回登录页面
-    const url = `/pages/loading/loading`
+    const url = `/pages/loading/loading?resCode=${TOKEN_OUT}`
     wx.reLaunch({url})
+    console.warn(res.msg)
   }
   return res.data
 }
@@ -76,7 +80,7 @@ function checkCode (res) {
  * @param res
  * @returns {{}}
  */
-function requestException (res) {
+function requestException(res) {
   hideLoading()
   const error = {}
   error.statusCode = res.status
@@ -91,52 +95,52 @@ function requestException (res) {
 }
 
 export default {
-  post (url, data, loading = true) {
+  post(url, data, loading = true) {
     if (loading) {
       showLoading()
     }
     return fly.post(url, data, {
       timeout: TIME_OUT,
-      headers: COMMON_HEADER
+      headers: COMMON_HEADER()
     }).then((response) => {
       return checkStatus(response)
     }).then((res) => {
       return checkCode(res)
     })
   },
-  get (url, params, loading = true) {
+  get(url, params, loading = true) {
     if (loading) {
       showLoading()
     }
     return fly.get(url, params, {
       timeout: TIME_OUT,
-      headers: COMMON_HEADER
+      headers: COMMON_HEADER()
     }).then((response) => {
       return checkStatus(response)
     }).then((res) => {
       return checkCode(res)
     })
   },
-  put (url, data, loading = true) {
+  put(url, data, loading = true) {
     if (loading) {
       showLoading()
     }
     return fly.put(url, data, {
       timeout: TIME_OUT,
-      headers: COMMON_HEADER
+      headers: COMMON_HEADER()
     }).then((response) => {
       return checkStatus(response)
     }).then((res) => {
       return checkCode(res)
     })
   },
-  delete (url, data, loading = true) {
+  delete(url, data, loading = true) {
     if (loading) {
       showLoading()
     }
     return fly.delete(url, data, {
       timeout: TIME_OUT,
-      headers: COMMON_HEADER
+      headers: COMMON_HEADER()
     }).then((response) => {
       return checkStatus(response)
     }).then((res) => {
