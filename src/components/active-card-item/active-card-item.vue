@@ -8,11 +8,11 @@
               <div class="icon-pic" :style="iconImg"></div>
             </section>
             <artilce class="info-box">
-              <section class="title">{{cardInfo.title}}</section>
-              <section class="date">{{cardInfo.endDate}}</section>
+              <section class="title">{{cardInfo.name}}</section>
+              <section class="date">{{cardInfo.end_at}}</section>
               <section class="info">
-                <div class="i-item">销量 {{cardInfo.sales}}</div>
-                <div class="i-item">核销 {{cardInfo.chargeOff}}</div>
+                <div class="i-item">销量 {{cardInfo.sale_count}}</div>
+                <div class="i-item">核销力 {{cardInfo.verification_power}}</div>
               </section>
             </artilce>
             <section class="look-over">
@@ -20,28 +20,32 @@
             </section>
           </div>
         </article>
-        <article class="b-bottom" v-if="cardInfo.statusCode === constStatus.addCoupon">
+        <article class="b-bottom" v-if="cardInfo.status === constStatus.addCoupon">
           <div class="title">{{cardInfo.statusStr}}</div>
           <div class="btn last" @tap="addHandler(cardInfo)">添加优惠券</div>
         </article>
-        <article class="b-bottom" v-if="cardInfo.statusCode === constStatus.changeCoupon">
+        <article class="b-bottom" v-if="cardInfo.status === constStatus.changeCoupon">
           <div class="title">{{cardInfo.statusStr}}</div>
           <div class="btn last" @tap="changeHandler(cardInfo)">修改优惠券</div>
         </article>
-        <article class="b-bottom" v-if="cardInfo.statusCode === constStatus.lookOver">
+        <article class="b-bottom" v-if="cardInfo.status === constStatus.lookOver">
           <div class="title">{{cardInfo.statusStr}}</div>
           <div class="btn last" @tap="lookHandler(cardInfo)">查看</div>
         </article>
-        <article class="b-bottom" v-if="cardInfo.statusCode === constStatus.up">
+        <article class="b-bottom" v-if="cardInfo.status === constStatus.up">
           <div class="title">{{cardInfo.statusStr}}</div>
           <div class="btn delete" @tap="buyHandler(cardInfo)">复购</div>
           <div class="btn delete" @tap="allocHandler(cardInfo)">分配</div>
           <div class="btn last" @tap="totalHandler(cardInfo)">统计</div>
         </article>
-        <article class="b-bottom" v-if="cardInfo.statusCode === constStatus.down">
+        <article class="b-bottom" v-if="cardInfo.status === constStatus.down">
           <div class="title">{{cardInfo.statusStr}}</div>
           <div class="btn delete" @tap="deleteHandler(cardInfo)">删除</div>
           <div class="btn last" @tap="totalHandler(cardInfo)">统计</div>
+        </article>
+        <article class="b-bottom" v-if="cardInfo.status === constStatus.apply">
+          <div class="title">报名中</div>
+          <div class="btn last" @tap="applyHandler(cardInfo)">报名</div>
         </article>
       </div>
     </section>
@@ -76,7 +80,8 @@
   // 状态常量默认值
   const DEFAULT_CONST_STATUS = {
     addCoupon: 0, // 添加优惠券,
-    changeCoupon: 1, // 修改优惠券
+    apply: 1, // 报名中
+    changeCoupon: 3, // 修改优惠券
     lookOver: 2, // 查看(审核中-报名成功-报名失败)
     up: 10, // 上架
     down: 11 // 下架
@@ -159,6 +164,9 @@
       },
       allocHandler (cardInfo) {
         this.$emit('allocHandler', cardInfo)
+      },
+      applyHandler (cardInfo) {
+        this.$emit('applyHandler', cardInfo)
       }
     },
     computed: {

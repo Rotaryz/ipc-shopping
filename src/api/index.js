@@ -2,6 +2,7 @@
 import user from './user'
 import employee from './employee'
 import UnionManage from './union-manage'
+import MerchantActivity from './merchant-api'
 import UnionCreate from './union-create'
 import UnionCheck from './union-check'
 
@@ -9,6 +10,8 @@ export default {
   ...user,
   ...employee,
   ...UnionManage,
+  ...MerchantActivity,
+  ...UnionCreate,
   ...UnionCreate,
   ...UnionCheck
 }

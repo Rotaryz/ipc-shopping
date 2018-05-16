@@ -5,36 +5,88 @@
       <div :class="['t-item',tabFlag === 2 ? 'hit':'']" @tap.stop="changeTab(2)">活动池</div>
     </header>
     <div class="manage-list" v-if="tabFlag === 0">
-      <div class="box-list">
-        <active-card :useType="0" @previewHandler="test" ></active-card>
+      <div class="list-data" v-if="activeList.length !== 0">
+        <div class="box-list">
+          <active-card :useType="0" @previewHandler="test"></active-card>
+        </div>
       </div>
-      <div class="box-list">
-        <active-card :useType="0" @previewHandler="test"></active-card>
+      <div class="list-null" v-if="activeList.length === 0">
+        <img :src="image + '/defaults/ipc-shopping/home/pic-union_empty@2x.png'" class="null-img" v-if="image" mode="widthFix">
+        <div class="text">暂无活动</div>
       </div>
     </div>
     <div class="manage-list" v-if="tabFlag === 2">
-      <div class="box-list">
-        <active-card :useType="0" @previewHandler="test" ></active-card>
+      <div class="list-data" v-if="pondList.length !== 0">
+        <div class="box-list" v-for="(iteam, index) in pondList" v-bind:key="index">
+          <active-card :useType="0" :cardInfo="iteam" @applyHandler="jumpApply"></active-card>
+        </div>
       </div>
-      <div class="box-list">
-        <active-card :useType="0" @previewHandler="test"></active-card>
+      <div class="list-null" v-if="pondList.length === 0">
+        <img :src="image + '/defaults/ipc-shopping/home/pic-union_empty@2x.png'" class="null-img" v-if="image" mode="widthFix">
+        <div class="text">暂无活动</div>
       </div>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import api from 'api'
+  import { baseURL } from 'api/config'
   import ActiveCard from 'components/active-card-item/active-card-item'
+  import * as wechat from 'common/js/wechat'
+  import { mapGetters } from 'vuex'
+  import { ROLE } from 'common/js/contants'
+  import wx from 'wx'
 
   export default {
     data() {
       return {
-        tabFlag: 0
+        image: baseURL.image,
+        tabFlag: 2,
+        pondList: [],
+        activeList: []
       }
     },
+    mounted () {
+      this._rqGetActiveList()
+      this._rqManageGetActiveList()
+    },
+    beforeMount () {
+      this._init()
+    },
     methods: {
+      ...mapGetters(['role']),
+      _init () {
+        // let role = this.role()
+        // this.currentRole = role
+        // this.currentRole = role
+        // 伪代码
+        this.currentRole = ROLE.UNION_ID
+        // wx.setStorageSync('merchantId', merchantId)
+        wx.setStorageSync('userType', ROLE.UNION_ID)
+        console.log(this.currentRole)
+      },
       changeTab(flag) {
         this.tabFlag = flag
+      },
+      _rqGetActiveList() {
+        api.merPondActiveList().then(res => {
+          console.log(res)
+          this.pondList = res.data
+          wechat.hideLoading()
+        })
+      },
+      _rqManageGetActiveList() {
+        api.merManageActiveList().then(res => {
+          console.log(res)
+          this.activeList = res.data
+          wechat.hideLoading()
+        })
+      },
+      jumpApply(cardInfo) {
+        const url = `/pages/merchant-activity/merchant-activity?id=${cardInfo.id}`
+        console.log(url)
+        this.$router.push(url)
       }
     },
     components: {
@@ -73,4 +125,16 @@
     padding: 0 15px
     .box-list
       margin-top: 10px
+  .list-null
+    padding-top: 177px
+    text-align: center
+    .null-img
+      margin: 0 auto
+      width: 25%
+      display: block
+    .text
+      margin-top: 7.5px
+      font-family: $font-family-light
+      font-size: $font-size-small
+      color: $color-assist-27
 </style>
