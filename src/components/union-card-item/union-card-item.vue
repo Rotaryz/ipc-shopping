@@ -33,6 +33,8 @@
         <article class="b-bottom" v-if="cardInfo.statusCode === constStatus.apply">
           <div class="title">{{cardInfo.statusStr}}</div>
           <div class="btn total" @tap="checkHandler(cardInfo)">审查</div>
+          <div class="btn total" @tap="checkHandler(cardInfo)">排序</div>
+          <div class="btn total" @tap="checkHandler(cardInfo)">上架</div>
         </article>
       </div>
     </section>
@@ -45,9 +47,9 @@
 
   // 状态常量默认值
   const DEFAULT_CONST_STATUS = {
-    apply: 0, // 报名,
-    up: 1, // 上线
-    down: 2 // 下线
+    apply: 1, // 报名,
+    up: 2, // 上线
+    down: 3 // 下线
   }
 
   // 使用场景默认值

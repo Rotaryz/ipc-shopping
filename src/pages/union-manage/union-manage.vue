@@ -29,10 +29,12 @@
 
 <script type="text/ecmascript-6">
   import source from 'common/source'
+  import { ERR_OK } from 'api/config'
   import { mapGetters } from 'vuex'
   import { ROLE } from 'common/js/contants'
   import wx from 'wx'
   import api from 'api'
+  import * as wechat from 'common/js/wechat'
   import UnionCard from 'components/union-card-item/union-card-item'
   import ActiveCard from 'components/active-card-item/active-card-item'
   import Coupon from 'components/coupon-item/coupon-item'
@@ -89,10 +91,17 @@
         console.log(this.currentRole)
         this._rqGetActiveList(this.tabFlag + 1)
       },
+      // 获取活动列表
       _rqGetActiveList (status) {
-        api.unionManageGetActiveList({status}).then(res => {
-          console.log(res)
-        })
+        api.umgGetActiveList({status})
+          .then(json => {
+            if (json.error !== ERR_OK) {
+              return ''
+            }
+            wechat.hideLoading()
+            let list = this._formatResData(json)
+            console.log(list)
+          })
       },
       test (obj) {
         // console.log(obj)
@@ -110,6 +119,23 @@
       toCreateActive () {
         const url = `/pages/union-create-active/union-create-active`
         this.$router.push(url)
+      },
+      // 格式化请求列表
+      _formatResData (json) {
+        let arr = []
+        let res = json.data
+        res.map(item => {
+          arr.push({
+            id: item.id,
+            title: item.name(),
+            endDate: `${item.end_at}到期`,
+            sales: item.sale_count, // 销量
+            chargeOff: item.verification_power, // 核销
+            statusCode: 1,
+            statusStr: '已上架'
+          })
+        })
+        return arr
       }
     },
     watch: {},

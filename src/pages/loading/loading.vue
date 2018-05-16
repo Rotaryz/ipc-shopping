@@ -83,15 +83,18 @@
       _getToken (data) {
         api.userAuthorise(data)
           .then(Json => {
-            wechat.hideLoading()
             if (Json.error !== ERR_OK) {
               return ''
             }
+            wechat.hideLoading()
             const res = Json.data
             let token = res.access_token
             if (token) {
+              const merchantId = this.$root.$mp.query.merchantId
+              wx.setStorageSync('merchantId', merchantId)
               wx.setStorageSync('token', token)
-              this._checkRole()
+              wx.setStorageSync('userType', ROLE.STAFF_ID)
+              this.saveRoleSync(ROLE.STAFF_ID)
               // await this.$getUserInfo(true)
               this._navTo()
             }
@@ -107,19 +110,25 @@
       },
       // 初始化
       _init () {
-        let token = wx.getStorageSync('token')
+        let token = this.$root.$mp.query.token
         let resCode = this.$root.$mp.query.resCode * 1
+        console.log(token, '========')
+        // 伪代码start
+        token = ROLE.testToken
+        wx.setStorageSync('token', token)
+        // 伪代码end
         if (!token) return
         if (resCode === TOKEN_OUT) return
-        this._checkRole()
+        this._checkRole(token)
         this._navTo()
       },
       // 检查角色
-      _checkRole () {
-        const entryRole = this.$root.$mp.query.entryRole || ROLE.STAFF_ID
+      _checkRole (token) {
+        const entryRole = this.$root.$mp.query.entryRole
         const merchantId = this.$root.$mp.query.merchantId // 员工历史记录栏进来没有商家ID
         wx.setStorageSync('merchantId', merchantId)
         wx.setStorageSync('userType', entryRole)
+        wx.setStorageSync('token', token)
         this.saveRoleSync(entryRole)
       }
     },

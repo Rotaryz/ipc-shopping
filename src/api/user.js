@@ -1,5 +1,7 @@
 import request from 'common/js/request'
-
+/**
+ * 方法前缀名：user
+ */
 export default {
   /**
    * 获取用户token
