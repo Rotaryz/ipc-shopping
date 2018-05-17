@@ -131,7 +131,7 @@
         this.$router.push({
           name: 'BindCard',
           path: '/pages/bind-card/bind-card',
-          params: {id: 123}
+          query: this.withdrawalInfo
         })
       },
       moneyChange (e) {
