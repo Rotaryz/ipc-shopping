@@ -9,8 +9,8 @@ export default {
    * @param data 入参
    * @returns {Promise.<*>}
    */
-  uckGetCheckList (data) {
+  uckGetCheckList(data, loading = true) {
     const url = `/api/alliances/check-list`
-    return request.get(url, data, true)
+    return request.get(url, data, loading)
   }
 }

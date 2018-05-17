@@ -15,7 +15,7 @@
         <div class="empty-pic" :style="emptyImg"/>
         <div class="empty-txt">暂无活动</div>
       </article>
-      <scroll-view class="scroll" scroll-y v-if="!isEmpty">
+      <scroll-view class="scroll" scroll-y v-if="!isEmpty" @scrolltolower="getMoreList">
         <ul class="box">
           <li class="box-item" v-for="(item, index) in cardInfoList" :key="item.title+index">
             <union-card
@@ -36,9 +36,9 @@
 
 <script type="text/ecmascript-6">
   import source from 'common/source'
-  import { ERR_OK } from 'api/config'
-  import { mapGetters } from 'vuex'
-  import { ROLE } from 'common/js/contants'
+  import {ERR_OK} from 'api/config'
+  import {mapGetters} from 'vuex'
+  import {ROLE} from 'common/js/contants'
   import wx from 'wx'
   import api from 'api'
   import * as wechat from 'common/js/wechat'
@@ -69,26 +69,44 @@
   //   statusStr: '已上架'
   // }
 
+  const LIMIT_DEF = 10
+
   export default {
-    data () {
+    data() {
       return {
         navList: ['报名中', '已上架', '已下架'],
         currentRole: null,
         tabFlag: 0,
         cardInfoList: [],
-        applyList: null,
-        upList: null,
-        downList: null
+        isAll: false,
+        page: 1,
+        limit: LIMIT_DEF
+        // applyList: {arr: [], limit: LIMIT_DEF, page: 1, isAll: false},
+        // upperList: {arr: [], limit: LIMIT_DEF, page: 1, isAll: false},
+        // downList: {arr: [], limit: LIMIT_DEF, page: 1, isAll: false}
       }
     },
-    onShow () {
+    onShow() {
       this._init()
     },
-    beforeMount () {
+    beforeMount() {
+    },
+    onPullDownRefresh() {
+      this._resetConfig()
+      let data = this._formatReq()
+      data.paga = 1
+      data.limit = Math.max(this.cardInfoList.length, LIMIT_DEF)
+      this._rqGetActiveList(data, false)
+        .then(json => {
+          let list = this._formatResData(json)
+          this.cardInfoList = list
+          this._isAll(json)
+          wx.stopPullDownRefresh()
+        })
     },
     methods: {
       ...mapGetters(['role']),
-      _init () {
+      _init() {
         // let role = this.role()
         // this.currentRole = role
         // this.currentRole = role
@@ -96,49 +114,44 @@
         this.currentRole = ROLE.UNION_ID
         // wx.setStorageSync('merchantId', merchantId)
         wx.setStorageSync('userType', ROLE.UNION_ID)
-        console.log(this.currentRole)
-        this._rqGetActiveList(this.tabFlag + 1)
-      },
-      // 获取活动列表
-      _rqGetActiveList (status) {
-        api.umgGetActiveList({status})
+        this._resetConfig()
+        let data = this._formatReq()
+        this._rqGetActiveList(data)
           .then(json => {
-            if (json.error !== ERR_OK) {
-              return ''
-            }
-            wechat.hideLoading()
             let list = this._formatResData(json)
-            console.log(list)
             this.cardInfoList = list
+            this._isAll(json)
           })
       },
-      upperHandler(obj) {
+      _formatReq() {
+        let data = {limit: this.limit, status: this.tabFlag + 1, page: this.page}
+        return data
       },
-      checkHandler(obj) {
-        const activeId = obj.id
-        const url = `/pages/union-check-list/union-check-list?activeId=${activeId}`
-        this.$router.push(url)
+      // 获取活动列表
+      _rqGetActiveList(data, loading) {
+        return new Promise(resolve => {
+          api.umgGetActiveList(data, loading)
+            .then(json => {
+              wechat.hideLoading()
+              if (json.error !== ERR_OK) {
+                return ''
+              }
+              resolve(json)
+            })
+            .catch(err => {
+              console.info(err)
+            })
+        })
       },
-      sortHandler(obj) {
-      },
-      test (obj) {
-        const url = `/pages/union-check-list/union-check-list`
-        this.$router.push(url)
-      },
-      changeTab (flag) {
-        // this.isEmpty = !this.isEmpty
-        this.tabFlag = flag
-        this._rqGetActiveList(this.tabFlag + 1)
-      },
-      toCreateActive () {
-        const url = `/pages/union-create-active/union-create-active`
-        this.$router.push(url)
+      _isAll(json) {
+        let total = json.meta.total
+        this.isAll = (this.cardInfoList.length >= total)
+        return this.isAll
       },
       // 格式化请求列表
-      _formatResData (json) {
+      _formatResData(json) {
         let arr = []
         let res = json.data
-        console.log(res, '+')
         res.map(item => {
           arr.push({
             id: item.id,
@@ -151,18 +164,68 @@
           })
         })
         return arr
+      },
+      _resetConfig() {
+        this.isAll = false
+        this.page = 1
+        this.limit = LIMIT_DEF
+      },
+      getMoreList() {
+        if (this.isAll) return
+        let data = this._formatReq()
+        data.page++
+        this._rqGetActiveList(data)
+          .then(json => {
+            let list = this._formatResData(json)
+            this.cardInfoList.push(...list)
+            this._isAll(json)
+            console.log(this.cardInfoList.length)
+          })
+      },
+      upperHandler(obj) {
+      },
+      checkHandler(obj) {
+        const activeId = obj.id
+        const url = `/pages/union-check-list/union-check-list?activeId=${activeId}`
+        this.$router.push(url)
+      },
+      sortHandler(obj) {
+        const activeId = obj.id
+        const url = `/pages/union-sort/union-sort?activeId=${activeId}`
+        this.$router.push(url)
+      },
+      test(obj) {
+        const url = `/pages/union-check-list/union-check-list`
+        this.$router.push(url)
+      },
+      changeTab(flag) {
+        if (this.tabFlag === flag) return
+        this.tabFlag = flag
+        this._resetConfig()
+        let data = this._formatReq()
+        this._rqGetActiveList(data)
+          .then(json => {
+            let list = this._formatResData(json)
+            this.cardInfoList = list
+            this._isAll(json)
+            wx.stopPullDownRefresh()
+          })
+      },
+      toCreateActive() {
+        const url = `/pages/union-create-active/union-create-active`
+        this.$router.push(url)
       }
     },
     watch: {
-      cardInfoList () {
+      cardInfoList() {
 
       }
     },
     computed: {
-      emptyImg () {
+      emptyImg() {
         return source.imgEmptyActive()
       },
-      isEmpty () {
+      isEmpty() {
         return this.cardInfoList.length <= 0
       }
     },

@@ -1,4 +1,5 @@
 import request from 'common/js/request'
+
 /**
  * 方法前缀名：uct
  */
@@ -8,8 +9,8 @@ export default {
    * @param data 入参
    * @returns {Promise.<*>}
    */
-  uctCreateActive(data) {
+  uctCreateActive(data, loading = true) {
     const url = `/api/alliances/alliance-activities`
-    return request.post(url, data, true)
+    return request.post(url, data, loading)
   }
 }

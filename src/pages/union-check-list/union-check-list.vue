@@ -15,14 +15,14 @@
         <div class="empty-pic" :style="emptyImg"/>
         <div class="empty-txt">暂无活动</div>
       </article>
-      <scroll-view class="scroll" scroll-y v-if="!isEmpty">
+      <scroll-view class="scroll" scroll-y v-if="!isEmpty" @scrolltolower="getMoreList">
         <div class="ad-box" v-if="showAd">
           <div class="txt">{{adMsg}}</div>
           <div class="close-icon" :style="closeIcon" @tap="closeAd"></div>
         </div>
         <ul class="box">
-          <li :class="['box-item',showAd?'show-ad':'']" v-for="(item, index) in couponInfoList" :key="index">
-            <union-check @tap="test"></union-check>
+          <li :class="['box-item',showAd?'show-ad':'']" v-for="(item, index) in checkInfoList" :key="index">
+            <union-check :shopItem="item"></union-check>
           </li>
         </ul>
       </scroll-view>
@@ -33,36 +33,64 @@
 <script type="text/ecmascript-6">
   import api from 'api'
   import * as wechat from 'common/js/wechat'
-  import { ERR_OK } from 'api/config'
+  import {ERR_OK} from 'api/config'
   import source from 'common/source'
+  import wx from 'wx'
   import UnionCard from 'components/union-card-item/union-card-item'
   import UnionCheck from 'components/union-check-item/union-check-item'
 
+  const LIMIT_DEF = 10
+
   export default {
-    data () {
+    data() {
       return {
         navList: ['申请中', '待审核', '已通过', '已拒绝'],
         tabFlag: 0,
-        couponInfoList: new Array(6),
+        checkInfoList: [],
         showAd: true,
         adMsg: '商家已成功支付，但还未添加优惠券',
-        currentActiveId: null
+        currentActiveId: null,
+        isAll: false,
+        page: 1,
+        limit: LIMIT_DEF
       }
     },
-    onShow () {
+    onShow() {
       this._init()
     },
+    onPullDownRefresh() {
+      this._resetConfig()
+      let data = this._formatReq()
+      data.paga = 1
+      data.limit = Math.max(this.checkInfoList.length, LIMIT_DEF)
+      this._rqGetCheckList(data, false)
+        .then(json => {
+          let list = this._formatResData(json)
+          this.checkInfoList = list
+          this._isAll(json)
+          wx.stopPullDownRefresh()
+        })
+    },
     methods: {
-      changeTab (flag) {
+      changeTab(flag) {
+        if (this.tabFlag === flag) return
         this.tabFlag = flag
-        this._showAd(this.tabFlag)
+        this._resetConfig()
+        let data = this._formatReq()
+        this._rqGetCheckList(data)
+          .then(json => {
+            let list = this._formatResData(json)
+            this.checkInfoList = list
+            this._isAll(json)
+            wx.stopPullDownRefresh()
+          })
       },
-      closeAd () {
+      closeAd() {
         this.showAd = false
       },
-      test () {
+      test() {
       },
-      _showAd (flag) {
+      _showAd(flag) {
         if (flag === 0 || flag === 1) {
           this.showAd = true
           console.log(flag)
@@ -72,16 +100,25 @@
           this.showAd = false
         }
       },
-      _init () {
+      _init() {
         this.currentActiveId = this.$root.$mp.query.activeId
-        let data = this._formatReq(this.tabFlag)
+        this._resetConfig()
+        let data = this._formatReq()
         this._rqGetCheckList(data)
+          .then(json => {
+            let list = this._formatResData(json)
+            this.checkInfoList = list
+            this._isAll(json)
+          })
       },
-      _formatReq (flag) {
+      _formatReq(flag) {
+        flag = this.tabFlag
         let data = {
           'check_status': 0,
           'has_promotion': 1,
-          'activity_alliance_id': this.currentActiveId
+          'activity_alliance_id': this.currentActiveId,
+          limit: this.limit,
+          page: this.page
         }
         switch (flag) {
           case 0 : {
@@ -105,48 +142,70 @@
         }
         return data
       },
-      _rqGetCheckList (data) {
-        api.uckGetCheckList(data)
-          .then(json => {
-            wechat.hideLoading()
-            if (json.error !== ERR_OK) {
-              return ''
-            }
-            console.log(json)
-            // let list = this._formatResData(json)
-            // console.log(list)
-            // this.couponInfoList = list
-          })
-          .catch(err => {
-            console.info(err)
-          })
+      _rqGetCheckList(data, loading) {
+        return new Promise(resolve => {
+          api.uckGetCheckList(data, loading)
+            .then(json => {
+              wechat.hideLoading()
+              if (json.error !== ERR_OK) {
+                return ''
+              }
+              resolve(json)
+            })
+            .catch(err => {
+              console.info(err)
+            })
+        })
+      },
+      _isAll(json) {
+        let total = json.meta.total
+        this.isAll = (this.checkInfoList.length >= total)
+        return this.isAll
+      },
+      _resetConfig() {
+        this.isAll = false
+        this.page = 1
+        this.limit = LIMIT_DEF
       },
       // 格式化请求列表
-      _formatResData (json) {
+      _formatResData(json) {
         let arr = []
         let res = json.data
         res.map(item => {
           arr.push({
             id: item.id,
-            title: item.name,
-            endDate: `${item.end_at}到期`,
-            sales: item.sale_count, // 销量
-            chargeOff: item.verification_power, // 核销
-            statusCode: item.status,
-            statusStr: item.status === 1 ? '报名中' : (item.status === 2 ? '已上架' : '已下架')
+            shopImg: item.merchant_data.logo_image,
+            name: item.merchant_data.shop_name,
+            location: item.merchant_data.address,
+            sales: item.count,
+            money: item.total,
+            statusCode: this.tabFlag
           })
         })
+        console.log(arr)
         return arr
+      },
+      getMoreList() {
+        if (this.isAll) return
+        let data = this._formatReq()
+        data.page++
+        this._rqGetCheckList(data)
+          .then(json => {
+            let list = this._formatResData(json)
+            this.checkInfoList.push(...list)
+            this._isAll(json)
+            console.log(this.checkInfoList.length)
+          })
       }
     },
     computed: {
-      isEmpty () {
-        return this.couponInfoList.length <= 0
+      isEmpty() {
+        return this.checkInfoList.length <= 0
       },
-      emptyImg () {
+      emptyImg() {
         return source.imgEmptyActive()
       },
-      closeIcon () {
+      closeIcon() {
         return source.imgCloseIcon()
       }
     },

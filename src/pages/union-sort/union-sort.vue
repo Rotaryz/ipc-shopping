@@ -22,6 +22,9 @@
 <script type="text/ecmascript-6">
   import Coupon from 'components/coupon-item/coupon-item'
   import util from 'common/js/util'
+  // import api from 'api'
+  // import * as wechat from 'common/js/wechat'
+  // import {ERR_OK} from 'api/config'
 
   const obj1 = {
     id: 100,
@@ -51,19 +54,23 @@
   arr[0].sortType = 11
 
   export default {
-    data () {
+    data() {
       return {
+        currentActiveId: null,
         couponList: arr,
         oldCouponList: null,
         isShowSave: false // 是否显示保存按钮
       }
     },
     methods: {
-      toSort () {
+      _init() {
+        this.currentActiveId = this.$root.$mp.query.activeId
+      },
+      toSort() {
         this.isShowSave = true
         this.oldCouponList = util.objDeepCopy(this.couponList)
       },
-      checkModel (type) {
+      checkModel(type) {
         this.isShowSave = !this.isShowSave
         switch (type) {
           case 0: {
@@ -72,7 +79,7 @@
           }
         }
       },
-      sortUpHandler (obj) {
+      sortUpHandler(obj) {
         if (this.couponList.length < 1) return
         let index = this.couponList.findIndex(val => val.id === obj.id)
         if (index === 0) return
@@ -84,7 +91,7 @@
         }
         this.couponList.splice(index - 1, 2, toUp, toDown)
       },
-      sortDownHandler (obj) {
+      sortDownHandler(obj) {
         if (this.couponList.length < 1) return
         let toUp = this.couponList[1]
         let toDown = this.couponList[0]
@@ -94,7 +101,7 @@
       }
     },
     computed: {
-      couponUseType () {
+      couponUseType() {
         console.log(this.isShowSave ? 1 : 0, '=========')
         return this.isShowSave ? 1 : 0
       }

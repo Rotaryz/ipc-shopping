@@ -1,4 +1,5 @@
 import request from 'common/js/request'
+
 /**
  * 方法前缀名：umg
  */
@@ -8,8 +9,8 @@ export default {
    * @param data 状态
    * @returns {Promise.<*>}
    */
-  umgGetActiveList(data) {
+  umgGetActiveList(data, loading = true) {
     const url = `/api/alliances/alliance-activities`
-    return request.get(url, data, true)
+    return request.get(url, data, loading)
   }
 }

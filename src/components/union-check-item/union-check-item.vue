@@ -27,16 +27,18 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import { baseURL } from 'api/config'
+  import {baseURL} from 'api/config'
   import source from 'common/source'
 
-  const OBJ = {
-    name: '福泉楼饮食文化',
-    location: '广州市白云区黄石路万达广场',
-    sales: 60,
-    money: 6000,
-    statusCode: 3
-  }
+  // const OBJ = {
+  //   id: '',
+  //   shopImg: '',
+  //   name: '福泉楼饮食文化',
+  //   location: '广州市白云区黄石路万达广场',
+  //   sales: 60,
+  //   money: 6000,
+  //   statusCode: 0
+  // }
 
   const CHECK_CONST_OBJ = {
     APPLYING: 0,
@@ -49,29 +51,29 @@
     props: {
       shopItem: {
         type: Object,
-        default: OBJ
+        default: {}
       },
       constObj: {
         type: Object,
         default: CHECK_CONST_OBJ
       }
     },
-    data () {
+    data() {
       return {
         imageUri: baseURL.image
       }
     },
     methods: {
-      lookOverHandler () {
-        this.shopItem.statusCode--
-        if (this.shopItem.statusCode < 0) {
-          this.shopItem.statusCode = this.constObj.REFUSE
-        }
+      lookOverHandler() {
+        // this.shopItem.statusCode--
+        // if (this.shopItem.statusCode < 0) {
+        //   this.shopItem.statusCode = this.constObj.REFUSE
+        // }
         this.$emit('lookOverHandler')
       }
     },
     computed: {
-      statusMsg () {
+      statusMsg() {
         switch (this.shopItem.statusCode) {
           case this.constObj.APPLYING :
             return `待添加优惠券`
@@ -83,14 +85,14 @@
             return `已退款` || `排队中`
         }
       },
-      shopImg () {
-        const img = `https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1526310402&di=f1710bff86bdb94c00c976283ad87a65&src=http://pic17.photophoto.cn/20101010/0036036893991891_b.jpg`
+      shopImg() {
+        const img = this.shopItem.shopImg
         return `background-image:url(${img})`
       },
-      arrowRightImg () {
+      arrowRightImg() {
         return source.imgArrowRightA4()
       },
-      backgroundMapImg () {
+      backgroundMapImg() {
         return source.imgMapIcon()
       }
     }

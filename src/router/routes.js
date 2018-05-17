@@ -20,7 +20,10 @@ module.exports = [
     path: '/pages/union-manage/union-manage', // 联盟管理
     name: 'UnionManage',
     config: {
-      navigationBarTitleText: '联盟管理'
+      navigationBarTitleText: '联盟管理',
+      backgroundColor: '#1A1D3D',
+      backgroundTextStyle: 'dark',
+      enablePullDownRefresh: true
     }
   },
   {
@@ -32,7 +35,10 @@ module.exports = [
     path: '/pages/union-check-list/union-check-list', // 联盟审核列表
     name: 'UnionCheckList',
     config: {
-      navigationBarTitleText: '审核列表'
+      navigationBarTitleText: '审核列表',
+      backgroundColor: '#1A1D3D',
+      backgroundTextStyle: 'dark',
+      enablePullDownRefresh: true
     }
   },
   {
