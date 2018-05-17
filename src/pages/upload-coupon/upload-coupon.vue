@@ -1,9 +1,15 @@
 <template>
   <div class="coupon-box">
     <div class="coupon-con">
-      <div class="title">可报名服务</div>
-      <div class="coupon-list">
-        <coupon  :useType="1" :useModel="1"></coupon>
+      <div class="title" v-if="couponList.length !== 0">可报名服务</div>
+      <div class="list-data" v-if="couponList.length !== 0">
+        <div class="box-list" v-for="(iteam, index) in couponList" v-bind:key="index">
+          <coupon  :useType="1" :couponInfo="iteam"></coupon>
+        </div>
+      </div>
+      <div class="list-null" v-if="couponList.length === 0">
+        <img :src="image + '/defaults/ipc-shopping/home/pic-union_empty@2x.png'" class="null-img" v-if="image" mode="widthFix">
+        <div class="text">暂无活动</div>
       </div>
     </div>
     <footer class="btn">保存</footer>
@@ -90,4 +96,18 @@
     left: 0
     right: 0
     normal-button-default()
+  .list-null
+    padding-top: 177px
+    text-align: center
+    .null-img
+      margin: 0 auto
+      width: 25%
+      display: block
+    .text
+      margin-top: 7.5px
+      font-family: $font-family-light
+      font-size: $font-size-small
+      color: $color-assist-27
+  .box-list
+    margin-bottom: 10px
 </style>

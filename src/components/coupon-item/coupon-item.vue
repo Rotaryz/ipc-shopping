@@ -5,8 +5,8 @@
       <section class="logo-box" :style="backgroundLogoImg"></section>
       <section class="info-box">
         <div class="title">
-          <div class="type">{{couponInfo.type}}</div>
-          <div class="name">{{couponInfo.name}}</div>
+          <div class="type">{{couponInfo.promotion_type_cn}}</div>
+          <div class="name">{{couponInfo.title}}</div>
         </div>
         <div class="scope">{{couponInfo.scope}}</div>
         <div class="date">{{couponInfo.useLife}}</div>
