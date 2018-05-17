@@ -50,10 +50,10 @@
           </div>
         </div>
       </div>
-      <div class="em-list-succeed"  v-if="btnSta !== 3">
+      <div class="em-list-succeed" v-if="btnSta !== 3">
         <div class="em-list-await-title">优惠券信息</div>
         <div class="await-list-items info">
-          <coupon :useModel="0" ></coupon>
+          <coupon :useModel="0"></coupon>
         </div>
       </div>
     </div>
@@ -75,9 +75,10 @@
 <script type="text/ecmascript-6">
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
   import Coupon from 'components/coupon-item/coupon-item'
-  import {baseURL} from 'api/config'
+  import { baseURL } from 'api/config'
   import Toast from '@/components/toast/toast'
   import wx from 'wx'
+
   const BTN = ['待审核', '审核中', '已审核', '已拒绝']
   export default {
     data () {
@@ -110,10 +111,10 @@
     onReachBottom () {
       console.log('上拉刷新....')
     },
-    beforeMount() {
+    beforeMount () {
       console.log(`--${this.compName}--beforeMount`)
     },
-    mounted() {
+    mounted () {
       wx.setNavigationBarTitle({title: BTN[this.btnSta]})
       console.log('imageUrl' + this.imageUrl)
       console.log(`--${this.compName}--mounted`)
@@ -140,6 +141,7 @@
     background-color: $color-background-f6
     height: 100vh
     overflow-y: auto
+
   .em-list
     padding-bottom: 65px
     .em-list-await
@@ -157,7 +159,7 @@
       height: 54px
       justify-content: space-between
       display: flex
-      cut-off-rule-bottom(0,0,$color-cut-line-ed)
+      cut-off-rule-bottom(0, 0, $color-cut-line-ed)
       &:last-child
         border-none()
     .await-list-item
@@ -198,12 +200,13 @@
           margin-right: 2px
     .await-list-items.info
       margin-left: -15px
-      padding :0 15px
+      padding: 0 15px
       padding-bottom: 15px
     .em-list-succeed
       padding-left: 15px
       margin-top: 10px
       background-color: $color-background-ff
+
   .floorAdd
     position: fixed
     z-index: 1
@@ -221,10 +224,10 @@
         font-family: $font-family-light
         font-size: $font-size-small-s
         color: $color-text-2d
-        display:flex
-        flex-direction:column
-        align-items:center
-        justify-content:center
+        display: flex
+        flex-direction: column
+        align-items: center
+        justify-content: center
         .img
           width: 17.5px
           height: 12.5px

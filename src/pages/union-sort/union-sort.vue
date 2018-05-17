@@ -165,6 +165,7 @@
               id: item.promotion.id,
               type: item.promotion.promotion_type_cn,
               name: item.promotion.title,
+              shopName: item.shop_name,
               scope: `限${item.shop_name}使用`,
               useLife: `有效期:2018-01-01至${item.end_at}`,
               sortType: 10

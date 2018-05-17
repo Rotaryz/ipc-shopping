@@ -25,6 +25,8 @@
               @checkHandler="checkHandler"
               @sortHandler="sortHandler"
               @upperHandler="upperHandler"
+              @deleteHandler="deleteHandler"
+              @totalHandler="totalHandler"
             ></union-card>
           </li>
         </ul>
@@ -32,8 +34,13 @@
     </section>
     <footer class="btn" @tap.stop="toCreateActive(0)">新建</footer>
     <toast ref="toast"></toast>
-    <!--<confirm-msg :title="'确认发布上架?'" :msg="'备注：发布上线后，申请中和待审核的'" :show="isShow" @confirm="test2"></confirm-msg>-->
-    <confirm-msg :msg="'确定退款？'" :show="isShow" @confirm="test2"></confirm-msg>
+    <confirm-msg
+      :title="msgInfo.title"
+      :msg="msgInfo.msg"
+      :show="msgInfo.isShow"
+      @confirm="confirmHandler"
+      @cancel="cancelHandler"
+    ></confirm-msg>
   </article>
 </template>
 
@@ -61,7 +68,11 @@
         isAll: false,
         page: 1,
         limit: LIMIT_DEF,
-        isShow: true
+        msgInfo: {
+          isShow: false,
+          title: '确认发布上架？',
+          msg: '备注：发布上线后，申请中和待审核的商家，都拒绝通过。'
+        }
       }
     },
     onShow () {
@@ -150,6 +161,17 @@
         this.page = 1
         this.limit = LIMIT_DEF
       },
+      _initMsgInfo (model) {
+        model === 0 && (this.msgInfo = {
+          isShow: false,
+          title: '确认发布上架？',
+          msg: '备注：发布上线后，申请中和待审核的商家，都拒绝通过。'
+        })
+        model === 1 && (this.msgInfo = {
+          isShow: false,
+          msg: '确定删除？'
+        })
+      },
       getMoreList () {
         if (this.isAll) return
         let data = this._formatReq()
@@ -162,8 +184,15 @@
             console.log(this.cardInfoList.length)
           })
       },
+      confirmHandler () {
+        this.msgInfo.isShow = false
+      },
+      cancelHandler () {
+        this.msgInfo.isShow = false
+      },
       upperHandler (obj) {
-        this.isShow = !this.isShow
+        this._initMsgInfo(0)
+        this.msgInfo.isShow = true
       },
       checkHandler (obj) {
         const activeId = obj.id
@@ -174,6 +203,10 @@
         const activeId = obj.id
         const url = `/pages/union-sort/union-sort?activeId=${activeId}`
         this.$router.push(url)
+      },
+      deleteHandler(obj) {
+        this._initMsgInfo(1)
+        this.msgInfo.isShow = true
       },
       test (obj) {
         const activeId = obj.id

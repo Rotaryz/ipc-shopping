@@ -18,7 +18,9 @@
     </article>
     <!--盟主模式-->
     <article class="wrap" v-if="useModel === constUseModel.union">
-      <section class="logo-box" :style="backgroundLogoImg"></section>
+      <section class="logo-box" :style="backgroundLogoImg">
+        <div class="l-b-shop-name">{{couponInfo.shopName}}</div>
+      </section>
       <section class="info-box">
         <div class="title">
           <div class="type">{{couponInfo.type}}</div>
@@ -39,7 +41,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {baseURL} from 'api/config'
+  import { baseURL } from 'api/config'
   // import source from 'common/source'
 
   // 使用场景默认值
@@ -59,7 +61,8 @@
     name: '100元代金券',
     scope: '限国颐堂(天河店)使用',
     useLife: '有效期:2018-01-01至2018-08-01',
-    sortType: 0
+    sortType: 0,
+    shopName: '国颐堂(天河店)国颐堂(天河店)'
   }
 
   export default {
@@ -89,26 +92,26 @@
         default: DEFAULT_INFO
       }
     },
-    data() {
+    data () {
       return {
         imageUri: baseURL.image
       }
     },
     methods: {
-      checkHandler(couponInfo) {
+      checkHandler (couponInfo) {
         this.$emit('checkHandler', couponInfo)
       },
-      lookOverHandler(couponInfo) {
+      lookOverHandler (couponInfo) {
         this.$emit('lookOverHandler', couponInfo)
       },
-      sortDownHandler(couponInfo, sortType) {
+      sortDownHandler (couponInfo, sortType) {
         this.$emit('sortDownHandler', couponInfo, sortType)
       },
-      sortUpHandler(couponInfo, sortType) {
+      sortUpHandler (couponInfo, sortType) {
         this.$emit('sortUpHandler', couponInfo, sortType)
       }
     },
-    created() {
+    created () {
       // console.log(this.useType, this.constUseType.normal)
     },
     // watch: {
@@ -118,33 +121,33 @@
     //   }
     // },
     computed: {
-      sortUpStyle() {
+      sortUpStyle () {
         console.log(this.couponInfo.sortType)
         return (this.useType === this.constUseType.sort && this.couponInfo.sortType === this.constUseType.sortUp)
       },
-      sortDownStyle() {
+      sortDownStyle () {
         return (this.useType === this.constUseType.sort && this.couponInfo.sortType === this.constUseType.sortDown)
       },
-      isNormal() {
+      isNormal () {
         return this.useType === this.constUseType.normal
       },
-      backgroundLogoImg() {
+      backgroundLogoImg () {
         const img = this.couponInfo.image_url
         return `background-image:url(${img})`
       },
-      backgroundCheckImg() {
+      backgroundCheckImg () {
         const img = `icon-activity_select@2x.png`
         return `background-image:url(${this.imageUri}/defaults/ipc-shopping/common/${img})`
       },
-      backgroundLookOverImg() {
+      backgroundLookOverImg () {
         const img = `icon-union_jt@2x.png`
         return `background-image:url(${this.imageUri}/defaults/ipc-shopping/common/${img})`
       },
-      backgroundSortDownImg() {
+      backgroundSortDownImg () {
         const img = `icon-union_down1@2x.png`
         return `background-image:url(${this.imageUri}/defaults/ipc-shopping/common/${img})`
       },
-      backgroundSortUpImg() {
+      backgroundSortUpImg () {
         const img = `icon-union_up1@2x.png`
         return `background-image:url(${this.imageUri}/defaults/ipc-shopping/common/${img})`
       }
@@ -189,6 +192,19 @@
         background-position: center center
         border-radius: 2px
         border: 0.5px solid $color-cut-line-ed
+        position: relative
+        .l-b-shop-name
+          position: absolute
+          bottom: 0
+          left: 0
+          right: 0
+          height: 15px
+          background-color: rgba(0, 0, 0, 0.60)
+          font-family: $font-family-light
+          font-size: $font-size-small-s
+          color: $color-background-ff
+          line-height: 15px
+          text-align: center
       .info-box
         flex: 1
         height: 100%
