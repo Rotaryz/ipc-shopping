@@ -50,12 +50,87 @@ export default {
     return request.post(url, data, true)
   },
   /**
-   * 商家报名下单
+   * 商家优惠卷
    * @param data 状态
    * @returns {Promise.<*>}
    */
   merCouponList(data) {
     const url = `/api/alliances/merchant/coupons`
     return request.get(url, data, true)
+  },
+  /**
+   * 商家优惠卷详情
+   * @param data 状态
+   * @returns {Promise.<*>}
+   */
+  merCouponDetails(id, data) {
+    const url = `/api/coupons/promotions/${id}`
+    return request.get(url, data, true)
+  },
+  /**
+   * 商家报名提交和修改优惠卷
+   * @param data 状态
+   * @returns {Promise.<*>}
+   */
+  merAddCoupon(data) {
+    const url = `/api/alliances/merchant/addcoupons`
+    return request.post(url, data, true)
+  },
+  /**
+   * 商家报名申请排队
+   * @param data 状态
+   * @returns {Promise.<*>}
+   */
+  merQueueUp(apply_id = 0) {
+    let data = {
+      apply_id
+    }
+    const url = `/api/alliances/merchant/queue-up`
+    return request.post(url, data, true)
+  },
+  /**
+   * 商家报名申请退款
+   * @param data 状态
+   * @returns {Promise.<*>}
+   */
+  merRefund(data) {
+    const url = `/api/alliances/merchant/refund`
+    return request.post(url, data, true)
+  },
+  /**
+   * 员工活动列表
+   * @param data 状态
+   * @returns {Promise.<*>}
+   */
+  merStaffList(data) {
+    const url = `/api/alliances/employees/activities`
+    return request.get(url, data, true)
+  },
+  /**
+   * 员工活动二维码
+   * @param data 状态
+   * @returns {Promise.<*>}
+   */
+  merStaffActiveQrcode(id, data) {
+    const url = `/api/alliances/employee/activity-qrcode/${id}`
+    return request.get(url, data, true)
+  },
+  /**
+     * 分销卡列表
+   * @param data 状态
+   * @returns {Promise.<*>}
+   */
+  merAllotList(data) {
+    const url = `/api/alliances/allot-list`
+    return request.get(url, data, true)
+  },
+  /**
+   * 分销卡列表调整
+   * @param data 状态
+   * @returns {Promise.<*>}
+   */
+  merAllotStock(data) {
+    const url = `/api/alliances/allot-stock`
+    return request.post(url, data, true)
   }
 }

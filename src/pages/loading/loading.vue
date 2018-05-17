@@ -21,21 +21,21 @@
 
 <script type="text/ecmascript-6">
   import api from 'api'
-  import { baseURL, ERR_OK, TOKEN_OUT } from 'api/config'
+  import {baseURL, ERR_OK, TOKEN_OUT} from 'api/config'
   import * as wechat from 'common/js/wechat'
   import wx from 'wx'
-  import { mapActions, mapMutations } from 'vuex'
-  import { ROLE } from 'common/js/contants'
+  import {mapActions, mapMutations} from 'vuex'
+  import {ROLE} from 'common/js/contants'
 
   console.info(baseURL.jumpVersion)
 
   export default {
-    beforeCreate () {
+    beforeCreate() {
     },
-    created () {
+    created() {
       // console.log(0, wx)
     },
-    onShow () {
+    onShow() {
       this._init()
       // console.log(this.$root.$mp)
       // this._navTo()
@@ -43,24 +43,26 @@
       // wx.reLaunch({url})
       // console.log('onshow')
     },
-    beforeMount () {
+    beforeMount() {
       // this._init()
       // console.log(1, wx)
     },
-    mounted () {
+    mounted() {
     },
-    beforeDestroy () {
+    beforeDestroy() {
       // console.log(3)
     },
     methods: {
       ...mapActions(['saveRole']),
       ...mapMutations({saveRoleSync: 'ROLE_TYPE'}),
       // 微信获取用户信息btn
-      wxGetUserInfo (event) {
+      wxGetUserInfo(event) {
         const e = event.mp
+        console.log(e)
         if (e.detail.errMsg !== 'getUserInfo:ok') {
           return
         }
+        console.log(22)
         const code = wx.getStorageSync('code')
         const data = {
           code,
@@ -70,7 +72,7 @@
         this._getToken(data)
       },
       // 获取临时登录凭证code
-      _getCode () {
+      _getCode() {
         wechat.login()
           .then(res => {
             wx.setStorageSync('code', res.code)
@@ -80,13 +82,14 @@
           })
       },
       // 获取token
-      _getToken (data) {
+      _getToken(data) {
         api.userAuthorise(data)
           .then(Json => {
+            wechat.hideLoading()
+            console.log(Json, '===')
             if (Json.error !== ERR_OK) {
               return ''
             }
-            wechat.hideLoading()
             const res = Json.data
             let token = res.access_token
             if (token) {
@@ -104,12 +107,12 @@
           })
       },
       // 页面路由
-      _navTo () {
+      _navTo() {
         const url = `/pages/home/home?type=obj`
         this.$router.replace(url)
       },
       // 初始化
-      _init () {
+      _init() {
         this._getCode()
         let token = this.$root.$mp.query.token
         let resCode = this.$root.$mp.query.resCode * 1
@@ -123,7 +126,7 @@
         this._navTo()
       },
       // 检查角色
-      _checkRole (token) {
+      _checkRole(token) {
         const entryRole = this.$root.$mp.query.entryRole
         const merchantId = this.$root.$mp.query.merchantId // 员工历史记录栏进来没有商家ID
         wx.setStorageSync('merchantId', merchantId)

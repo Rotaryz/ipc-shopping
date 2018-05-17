@@ -45,7 +45,7 @@
         </div>
       </div>
     </div>
-    <div class="model-box">
+    <div class="model-box" v-if="modelCon">
       <div class="model-con">
         <div class="model-top">
           <div class="top-title">陈晨晨</div>
@@ -70,12 +70,50 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import { baseURL } from 'api/config'
+  import {baseURL} from 'api/config'
   import ActiveCard from 'components/active-card-item/active-card-item'
+  import api from 'api'
+  import * as wechat from 'common/js/wechat'
+  import {mapGetters} from 'vuex'
+  import {ROLE} from 'common/js/contants'
+  import wx from 'wx'
+
   export default {
     data() {
       return {
-        image: baseURL.image
+        image: baseURL.image,
+        modelCon: false,
+        dataId: {
+          activity_alliance_id: 2
+        }
+      }
+    },
+    mounted() {
+      this.getAllocation()
+    },
+    beforeMount() {
+      this._init()
+    },
+    methods: {
+      ...mapGetters(['role']),
+      _init() {
+        // let role = this.role()
+        // this.currentRole = role
+        // this.currentRole = role
+        // 伪代码
+        this.currentRole = ROLE.UNION_ID
+        // wx.setStorageSync('merchantId', merchantId)
+        wx.setStorageSync('userType', ROLE.UNION_ID)
+        console.log(this.currentRole)
+      },
+      showRules() {
+        this.showRule = !this.showRule
+      },
+      getAllocation() {
+        api.merAllotList(this.dataId).then(res => {
+          wechat.hideLoading()
+          console.log(res)
+        })
       }
     },
     components: {
@@ -95,8 +133,10 @@
     height: 100%
     z-index: -1
     background: #F6F7FA
+
   .box-top
     padding: 10px 15px
+
   .merchant-box
     height: 54px
     background: $color-background-ff
@@ -130,6 +170,7 @@
         width: 12px
         height: 15px
         display: block
+
   .staff-box
     margin-top: 10px
     padding-left: 15px
@@ -170,6 +211,7 @@
           width: 12px
           height: 15px
           display: block
+
   .model-box
     position: fixed
     width: 100%
@@ -182,7 +224,7 @@
       position: absolute
       width: 100%
       left: 0
-      top: 0
+      bottom: 0
       .model-top
         background: $color-background-ff
         padding-left: 15px
