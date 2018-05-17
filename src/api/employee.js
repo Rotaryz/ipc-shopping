@@ -101,5 +101,23 @@ export default {
   empEditBank(data) {
     const url = `/api/alliances/employee/bank-cards/${data.id}`
     return request.put(url, data)
+  },
+  /**
+   * 商家 / 员工收入详情
+   * @param  employee, merchant
+   * @returns {Promise.<*>}
+   */
+  empAssetDetails(data) {
+    const url = `/api/alliances/money-manage/${data.type}-detail`
+    return request.get(url)
+  },
+  /**
+   * 商家 / 员工收入列表
+   * @param employee, merchant
+   * @returns {Promise.<*>}
+   */
+  empAssetList(data) {
+    const url = `/api/alliances/money-manage/${data.type}-log`
+    return request.get(url)
   }
 }

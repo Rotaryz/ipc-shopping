@@ -23,12 +23,12 @@
       <scroll-view scroll-y class="list" bindscrolltolower="loadMore" v-if="redPackList.length > 0">
         <div class="item" v-for="item in redPackList" :key="index">
           <div class="item-left">
-            <div class="title">{{item.title}}</div>
-            <div class="time">{{item.time}}</div>
+            <div class="title">{{item.activity_alliance.name}}</div>
+            <div class="time">{{item.activity_alliance.start_at}}</div>
           </div>
           <div class="item-right">
             <text class="small">+</text>
-            {{item.money}}
+            {{item.merchant_amount}}
           </div>
         </div>
       </scroll-view>
@@ -38,33 +38,63 @@
 </template>
 <script type="text/ecmascript-6">
   import Bgnull from '@/components/bgnull/bgnull'
-  import { baseURL } from 'api/config'
+  import { baseURL, ERR_OK } from 'api/config'
+  import api from 'api'
+  import * as wechat from 'common/js/wechat'
 
   export default {
     data () {
       return {
         imageUrl: baseURL.image,
-        canUse: '0.00',
         total: '0.00',
-        count: 0,
-        withdraw: true,
+        count: '0.00',
+        withdraw: false,
         redPackList: [],
-        page: 1,
-        imagesUrl: ''
+        page: 1
       }
     },
     components: {
       Bgnull
     },
+    mounted () {
+      this._getInfo()
+    },
     methods: {
+      async _getInfo() {
+        await this._getAssetDetails()
+        await this._getAssetList()
+        wechat.hideLoading()
+      },
+      _getAssetDetails() {
+        let data = {type: 'merchant'}
+        api.empAssetDetails(data).then(res => {
+          if (res.error !== ERR_OK) return
+          this.total = res.data.alliance_remaining
+          this.count = res.data.blocked_alliance_remaining
+          if (this.total * 1 > 0) {
+            this.withdraw = true
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+      },
+      _getAssetList() {
+        let data = {type: 'merchant'}
+        api.empAssetList(data).then(res => {
+          if (res.error !== ERR_OK) return
+          this.redPackList = res.data
+          console.log(res)
+        }).catch(err => {
+          console.log(err)
+        })
+      },
       withdrawFun () {
         if (!this.withdraw) {
           return
         }
         this.$router.push({
           name: 'Withdraw',
-          path: '/pages/withdraw/withdraw',
-          params: {id: 123}
+          path: '/pages/withdraw/withdraw'
         })
       }
     }
