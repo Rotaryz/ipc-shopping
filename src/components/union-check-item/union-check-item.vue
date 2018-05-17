@@ -65,10 +65,6 @@
     },
     methods: {
       lookOverHandler() {
-        // this.shopItem.statusCode--
-        // if (this.shopItem.statusCode < 0) {
-        //   this.shopItem.statusCode = this.constObj.REFUSE
-        // }
         this.$emit('lookOverHandler')
       }
     },

@@ -12,6 +12,7 @@
           :couponInfo="item"
           @sortDownHandler="sortDownHandler"
           @sortUpHandler="sortUpHandler"
+          @lookOverHandler="lookOverHandler"
         ></coupon>
       </li>
     </ul>
@@ -29,7 +30,7 @@
   import util from 'common/js/util'
   import api from 'api'
   import * as wechat from 'common/js/wechat'
-  import { ERR_OK } from 'api/config'
+  import {ERR_OK} from 'api/config'
   import wx from 'wx'
   import source from 'common/source'
   import Toast from '@/components/toast/toast'
@@ -64,7 +65,7 @@
   const LIMIT_DEF = 20
   // console.log(JSON.stringify(arr))
   export default {
-    data () {
+    data() {
       return {
         currentActiveId: null,
         couponList: [],
@@ -75,10 +76,10 @@
         limit: LIMIT_DEF
       }
     },
-    onShow () {
+    onShow() {
       this._init()
     },
-    onPullDownRefresh () {
+    onPullDownRefresh() {
       if (this.isShowSave) {
         wx.stopPullDownRefresh()
         return
@@ -97,7 +98,7 @@
         })
     },
     methods: {
-      _init () {
+      _init() {
         this.currentActiveId = this.$root.$mp.query.activeId
         this._resetConfig()
         let data = this._formatReq()
@@ -109,12 +110,12 @@
             this._isAll(json)
           })
       },
-      _adjustList () {
+      _adjustList() {
         if (this.couponList.length > 0) {
           this.couponList[0].sortType = 11
         }
       },
-      _rqGetCheckList (data, loading) {
+      _rqGetCheckList(data, loading) {
         return new Promise(resolve => {
           api.uckGetCheckList(data, loading)
             .then(json => {
@@ -129,17 +130,17 @@
             })
         })
       },
-      _isAll (json) {
+      _isAll(json) {
         let total = json.meta.total
         this.isAll = (this.couponList.length >= total)
         return this.isAll
       },
-      _resetConfig () {
+      _resetConfig() {
         this.isAll = false
         this.page = 1
         this.limit = LIMIT_DEF
       },
-      _formatReq () {
+      _formatReq() {
         let data = {
           'check_status': 1,
           'has_promotion': 1,
@@ -149,14 +150,8 @@
         }
         return data
       },
-      // id: 11,
-      // type: '代金券2',
-      // name: '100元代金券',
-      // scope: '限国颐堂(天河店)使用',
-      // useLife: '有效期:2018-01-01至2018-08-01',
-      // sortType: 10
       // 格式化请求列表
-      _formatResData (json) {
+      _formatResData(json) {
         let arr = []
         let res = json.data
         res.map(item => {
@@ -167,14 +162,15 @@
               name: item.promotion.title,
               shopName: item.shop_name,
               scope: `限${item.shop_name}使用`,
-              useLife: `有效期:2018-01-01至${item.end_at}`,
+              useLife: `有效期:${item.start_at}至${item.end_at}`,
+              image_url: item.promotion.image_url,
               sortType: 10
             })
           }
         })
         return arr
       },
-      _rqSortList (data, loading) {
+      _rqSortList(data, loading) {
         let self = this
         return new Promise(resolve => {
           api.umgSortList(data, loading)
@@ -191,7 +187,29 @@
             })
         })
       },
-      getMoreList () {
+      _packData() {
+        let arr = []
+        this.couponList.map(item => {
+          arr.push({id: item.id})
+        })
+        let str = JSON.stringify(arr)
+        return {apply_array: str}
+      },
+      _navToMp(json) {
+        json = {
+          appId: '',
+          path: 'pages/index/index?id=123',
+          extraData: {
+            foo: 'bar'
+          },
+          envVersion: 'develop',
+          success(res) {
+            // 打开成功
+          }
+        }
+        wx.navigateToMiniProgram(json)
+      },
+      getMoreList() {
         if (this.isShowSave) return
         if (this.isAll) return
         let data = this._formatReq()
@@ -204,11 +222,15 @@
             this._isAll(json)
           })
       },
-      toSortBtn () {
+      lookOverHandler(obj) {
+        // this._navToMp(obj)
+        console.log(666)
+      },
+      toSortBtn() {
         this.isShowSave = true
         this.oldCouponList = util.objDeepCopy(this.couponList)
       },
-      checkModelBtn (type) {
+      checkModelBtn(type) {
         switch (type) {
           case 0: { // 取消
             this.couponList = this.oldCouponList
@@ -216,7 +238,7 @@
             break
           }
           case 1: {
-            let data = {apply_array: ''}
+            let data = this._packData()
             this._rqSortList(data)
               .then(() => {
                 this.isShowSave = false
@@ -225,7 +247,7 @@
           }
         }
       },
-      sortUpHandler (obj) {
+      sortUpHandler(obj) {
         if (this.couponList.length < 1) return
         let index = this.couponList.findIndex(val => val.id === obj.id)
         if (index === 0) return
@@ -237,7 +259,7 @@
         }
         this.couponList.splice(index - 1, 2, toUp, toDown)
       },
-      sortDownHandler () {
+      sortDownHandler() {
         if (this.couponList.length < 1) return
         let toUp = this.couponList[1]
         let toDown = this.couponList[0]
@@ -247,13 +269,13 @@
       }
     },
     computed: {
-      couponUseType () {
+      couponUseType() {
         return this.isShowSave ? 1 : 0
       },
-      emptyImg () {
+      emptyImg() {
         return source.imgEmptyActive()
       },
-      isEmpty () {
+      isEmpty() {
         return this.couponList.length <= 0
       }
     },

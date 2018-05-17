@@ -172,13 +172,9 @@ module.exports = [
     }
   },
   {
-    path: '/pages/audit/audit', // 盟主审核
+    path: '/pages/audit/audit', // 盟主-审核-详情
     name: 'Audit',
-    config: {
-      navigationBarTitleText: '审核', // #f6f7fa
-      backgroundColor: 'f6f7fa',
-      disableScroll: true
-    }
+    config: {}
   },
   {
     path: '/pages/upload-coupon/upload-coupon', // 上传优惠卷

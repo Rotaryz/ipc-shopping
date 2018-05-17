@@ -22,7 +22,7 @@
         </div>
         <ul class="box">
           <li :class="['box-item',showAd?'show-ad':'']" v-for="(item, index) in checkInfoList" :key="index">
-            <union-check :shopItem="item"></union-check>
+            <union-check :shopItem="item" @lookOverHandler="lookOverHandler"></union-check>
           </li>
         </ul>
       </scroll-view>
@@ -89,7 +89,9 @@
       closeAd () {
         this.showAd = false
       },
-      test () {
+      lookOverHandler (obj) {
+        const url = `/pages/audit/audit?checkId=${obj.id}&tabFlag=${this.tabFlag}`
+        this.$router.push(url)
       },
       _showAd (flag) {
         flag = this.tabFlag
@@ -104,6 +106,7 @@
       },
       _init () {
         this.currentActiveId = this.$root.$mp.query.activeId
+        this.tabFlag = 0
         this._resetConfig()
         let data = this._formatReq()
         this._rqGetCheckList(data)
@@ -184,7 +187,6 @@
             statusCode: this.tabFlag
           })
         })
-        console.log(arr)
         return arr
       },
       getMoreList () {
@@ -196,7 +198,6 @@
             let list = this._formatResData(json)
             this.checkInfoList.push(...list)
             this._isAll(json)
-            console.log(this.checkInfoList.length)
           })
       }
     },
