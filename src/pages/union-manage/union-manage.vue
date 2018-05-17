@@ -31,48 +31,28 @@
       </scroll-view>
     </section>
     <footer class="btn" @tap.stop="toCreateActive(0)">新建</footer>
+    <toast ref="toast"></toast>
+    <!--<confirm-msg :title="'确认发布上架?'" :msg="'备注：发布上线后，申请中和待审核的'" :show="isShow" @confirm="test2"></confirm-msg>-->
+    <confirm-msg :msg="'确定退款？'" :show="isShow" @confirm="test2"></confirm-msg>
   </article>
 </template>
 
 <script type="text/ecmascript-6">
   import source from 'common/source'
-  import {ERR_OK} from 'api/config'
-  import {mapGetters} from 'vuex'
-  import {ROLE} from 'common/js/contants'
+  import { ERR_OK } from 'api/config'
+  import { mapGetters } from 'vuex'
+  import { ROLE } from 'common/js/contants'
   import wx from 'wx'
   import api from 'api'
   import * as wechat from 'common/js/wechat'
+  import Toast from '@/components/toast/toast'
   import UnionCard from 'components/union-card-item/union-card-item'
-  import ActiveCard from 'components/active-card-item/active-card-item'
-  import Coupon from 'components/coupon-item/coupon-item'
-  import UnionCheck from 'components/union-check-item/union-check-item'
-  // 状态常量默认值
-  // const DEFAULT_CONST_STATUS = {
-  //   apply: 0, // 报名,
-  //   up: 1, // 上线
-  //   down: 2 // 下线
-  // }
-  // const DEFAULT_USE_TYPE = {
-  //   union: 0, // 联盟管理
-  //   unionApplying: 1, // 联盟报名
-  //   shop: 10, // 活动管理
-  //   shopApplying: 11 // 活动2
-  // }
-
-  // 卡券信息的默认值-盟主管理
-  // const DEFAULT_CARD_INFO_UNION = {
-  //   title: '异业联盟卡',
-  //   endDate: '2018-01-17到期',
-  //   sales: '100', // 销量
-  //   chargeOff: '60', // 核销
-  //   statusCode: 1,
-  //   statusStr: '已上架'
-  // }
+  import ConfirmMsg from 'components/confirm-msg/confirm-msg'
 
   const LIMIT_DEF = 10
-
+  // this.$refs.toast.show('不可修改')
   export default {
-    data() {
+    data () {
       return {
         navList: ['报名中', '已上架', '已下架'],
         currentRole: null,
@@ -80,18 +60,16 @@
         cardInfoList: [],
         isAll: false,
         page: 1,
-        limit: LIMIT_DEF
-        // applyList: {arr: [], limit: LIMIT_DEF, page: 1, isAll: false},
-        // upperList: {arr: [], limit: LIMIT_DEF, page: 1, isAll: false},
-        // downList: {arr: [], limit: LIMIT_DEF, page: 1, isAll: false}
+        limit: LIMIT_DEF,
+        isShow: true
       }
     },
-    onShow() {
+    onShow () {
       this._init()
     },
-    beforeMount() {
+    beforeMount () {
     },
-    onPullDownRefresh() {
+    onPullDownRefresh () {
       this._resetConfig()
       let data = this._formatReq()
       data.paga = 1
@@ -106,7 +84,9 @@
     },
     methods: {
       ...mapGetters(['role']),
-      _init() {
+      test2 () {
+      },
+      _init () {
         // let role = this.role()
         // this.currentRole = role
         // this.currentRole = role
@@ -123,12 +103,12 @@
             this._isAll(json)
           })
       },
-      _formatReq() {
+      _formatReq () {
         let data = {limit: this.limit, status: this.tabFlag + 1, page: this.page}
         return data
       },
       // 获取活动列表
-      _rqGetActiveList(data, loading) {
+      _rqGetActiveList (data, loading) {
         return new Promise(resolve => {
           api.umgGetActiveList(data, loading)
             .then(json => {
@@ -143,13 +123,13 @@
             })
         })
       },
-      _isAll(json) {
+      _isAll (json) {
         let total = json.meta.total
         this.isAll = (this.cardInfoList.length >= total)
         return this.isAll
       },
       // 格式化请求列表
-      _formatResData(json) {
+      _formatResData (json) {
         let arr = []
         let res = json.data
         res.map(item => {
@@ -165,12 +145,12 @@
         })
         return arr
       },
-      _resetConfig() {
+      _resetConfig () {
         this.isAll = false
         this.page = 1
         this.limit = LIMIT_DEF
       },
-      getMoreList() {
+      getMoreList () {
         if (this.isAll) return
         let data = this._formatReq()
         data.page++
@@ -182,23 +162,25 @@
             console.log(this.cardInfoList.length)
           })
       },
-      upperHandler(obj) {
+      upperHandler (obj) {
+        this.isShow = !this.isShow
       },
-      checkHandler(obj) {
+      checkHandler (obj) {
         const activeId = obj.id
         const url = `/pages/union-check-list/union-check-list?activeId=${activeId}`
         this.$router.push(url)
       },
-      sortHandler(obj) {
+      sortHandler (obj) {
         const activeId = obj.id
         const url = `/pages/union-sort/union-sort?activeId=${activeId}`
         this.$router.push(url)
       },
-      test(obj) {
-        const url = `/pages/union-check-list/union-check-list`
+      test (obj) {
+        const activeId = obj.id
+        const url = `/pages/union-create-active/union-create-active?model=1&activeId=${activeId}`
         this.$router.push(url)
       },
-      changeTab(flag) {
+      changeTab (flag) {
         if (this.tabFlag === flag) return
         this.tabFlag = flag
         this._resetConfig()
@@ -211,29 +193,28 @@
             wx.stopPullDownRefresh()
           })
       },
-      toCreateActive() {
-        const url = `/pages/union-create-active/union-create-active`
+      toCreateActive () {
+        const url = `/pages/union-create-active/union-create-active?model=0`
         this.$router.push(url)
       }
     },
     watch: {
-      cardInfoList() {
+      cardInfoList () {
 
       }
     },
     computed: {
-      emptyImg() {
+      emptyImg () {
         return source.imgEmptyActive()
       },
-      isEmpty() {
+      isEmpty () {
         return this.cardInfoList.length <= 0
       }
     },
     components: {
+      Toast,
       UnionCard,
-      ActiveCard,
-      Coupon,
-      UnionCheck
+      ConfirmMsg
     }
   }
 </script>

@@ -1,8 +1,8 @@
 <template>
   <div class="confirm" v-if="show">
     <div class="modal-wrapper" @tap.stop="">
-      <div class="modal">
-        <div class="content-wrapper">
+      <div class="modal ">
+        <div :class="['content-wrapper',title?'big-model':'']">
           <div class="content">
             <div class="danger-wrapper" v-if="imgFlag">
               <!--<img v-if="imageUrlHead" src="{{imageUrlHead + '/defaults/c-image/square/pic-airship@2x.png'}}" class="full-image" />-->
@@ -24,17 +24,17 @@
   import { baseURL } from 'api/config'
 
   export default {
+    props: {
+      show: Boolean,
+      title: String,
+      msg: String
+    },
     data () {
       return {
         imageUrlHead: baseURL.image,
         imgFlag: false
       }
     },
-    props: [
-      'show',
-      'title',
-      'msg'
-    ],
     methods: {
       confirm () {
         this.$emit('confirm')
@@ -69,12 +69,15 @@
       background-color: $color-background-ff
       border-radius: 3px
       .modal
-        height: 140px
+        position: relative
         .content-wrapper
+          padding: 0 35.5px
           display: flex
           align-items: center
           justify-content: center
           height: 94px
+          &.big-model
+            height: 114px
           .content
             text-align: center
             .danger-wrapper
@@ -110,4 +113,5 @@
             cut-off-rule-right()
         .border-top-1px
           cut-off-rule-top()
+
 </style>

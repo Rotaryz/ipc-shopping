@@ -39,7 +39,7 @@
           <div class="title">活动地址</div>
           <div class="content">
             <div class="c-input disable" v-if="!isNewModel" @tap="disableHandler">{{address}}</div>
-            <input class="c-input" v-if="isNewModel" type="text" id='activeAddress' placeholder="广州市白云区市桥商圈" placeholder-class="content" maxlength="20" :value="address">
+            <input class="c-input" v-if="isNewModel" type="text" id='activeAddress' placeholder="广州市白云区市桥商圈" placeholder-class="content" maxlength="20" :value="address" @input="inputHandler">
           </div>
         </article>
         <article class="b-i-item">
@@ -47,14 +47,14 @@
           <em class="money">¥</em>
           <div class="content c-price ">
             <div class="c-input disable" v-if="!isNewModel" @tap="disableHandler">{{price}}</div>
-            <input class="c-input" v-if="isNewModel" type="digit" id='activePrice' placeholder="100" placeholder-class="content" maxlength="7" :value="price">
+            <input class="c-input" v-if="isNewModel" type="digit" id='activePrice' placeholder="100" placeholder-class="content" maxlength="7" :value="price" @input="inputHandler">
           </div>
         </article>
         <article class="b-i-item">
           <div class="title">卡券数量</div>
           <div class="content">
             <div class="c-input disable" v-if="!isNewModel" @tap="disableHandler">{{stock}}</div>
-            <input class="c-input" v-if="isNewModel" type="number" id='activeStock' placeholder="1000" placeholder-class="content" maxlength="7" :value="stock">
+            <input class="c-input" v-if="isNewModel" type="number" id='activeStock' placeholder="1000" placeholder-class="content" maxlength="7" :value="stock" @input="inputHandler">
           </div>
         </article>
       </section>
@@ -69,19 +69,19 @@
         <dl class="b-i-item">
           <dt class="title">活动奖品一</dt>
           <dd class="content" @tap="disableHandler">
-            <input class="c-input disable" type="text" id='activePrize0' disabled placeholder="波尔多红酒" placeholder-class="content" maxlength="15" :value="activePrizeList[0]">
+            <input class="c-input disable" type="text" id='activePrize0' disabled placeholder="波尔多红酒" placeholder-class="content" maxlength="15" :value="activePrizeList[0]" @input="inputHandler">
           </dd>
         </dl>
         <dl class="b-i-item">
           <dt class="title">活动奖品二</dt>
           <dd class="content" @tap="disableHandler">
-            <input class="c-input disable" type="text" id='activePrize1' disabled placeholder="10张10元代金券" placeholder-class="content" maxlength="15" :value="activePrizeList[1]">
+            <input class="c-input disable" type="text" id='activePrize1' disabled placeholder="10张10元代金券" placeholder-class="content" maxlength="15" :value="activePrizeList[1]" @input="inputHandler">
           </dd>
         </dl>
         <dl class="b-i-item">
           <dt class="title">活动奖品三</dt>
           <dd class="content" @tap="disableHandler">
-            <input class="c-input disable" type="text" id='activePrize2' disabled placeholder="20张异业联盟券" placeholder-class="content" maxlength="15" :value="activePrizeList[2]">
+            <input class="c-input disable" type="text" id='activePrize2' disabled placeholder="20张异业联盟券" placeholder-class="content" maxlength="15" :value="activePrizeList[2]" @input="inputHandler">
           </dd>
         </dl>
       </section>
@@ -91,8 +91,8 @@
           <dl class="title-sub">凡成功参与该活动的商家，可以到的的好处：</dl>
           <dd class="content">
             <!--<div class="c-item" v-for="(item,index) in activeInfoList[0]" :key="index">{{item}}</div>-->
-            <div class="c-item">1. 商家以及员工，每销售一张卡券，得到<input class="c-input-info" id='activeInfo0' type="number" :value="activeInfo.item0" maxlength="4" placeholder="50" placeholder-class="content"/>元的奖励。</div>
-            <div class="c-item">2. 商家销售卡的用户，到其他门店使用一次，得到联盟力<input class="c-input-info" id='activeInfo1' type="number" :value="activeInfo.item0 " maxlength="4" placeholder="10" placeholder-class="content"/>元的奖励。分奖励。（可以分全部联盟商家报名该活动的报名金）</div>
+            <div class="c-item">1. 商家以及员工，每销售一张卡券，得到<input class="c-input-info" id='activeInfo0' type="number" :value="activeInfo.item0" maxlength="4" placeholder="50" placeholder-class="content" @input="inputHandler"/>元的奖励。</div>
+            <div class="c-item">2. 商家销售卡的用户，到其他门店使用一次，得到联盟力<input class="c-input-info" id='activeInfo1' type="number" :value="activeInfo.item1 " maxlength="4" placeholder="10" placeholder-class="content" @input="inputHandler"/>元的奖励。分奖励。（可以分全部联盟商家报名该活动的报名金）</div>
             <div class="c-item">3. 商家可以得到该活动全部商家的异业客户引流客户。</div>
           </dd>
         </article>
@@ -103,7 +103,7 @@
             <!--<div class="c-item" v-for="(item,index) in activeInfoList[1]" :key="index">{{item}}</div>-->
             <div class="c-item">1. 用户购买异业联盟卡后，提供商品给用户。</div>
             <div class="c-item">2. 添加商家自己的固定数量的免费优惠券。</div>
-            <div class="c-item">3. 支持平台提供的<input class="c-input-info" id='activeInfo2' type="number" :value="activeInfo.item2" maxlength="4" placeholder="10" placeholder-class="content"/>元的奖励。元代金券，小程序买单的使用。</div>
+            <div class="c-item">3. 支持平台提供的<input class="c-input-info" id='activeInfo2' type="number" :value="activeInfo.item2" maxlength="4" placeholder="10" placeholder-class="content" @input="inputHandler"/>元的奖励。元代金券，小程序买单的使用。</div>
           </dd>
         </article>
         <article class="a-i-item">
@@ -173,6 +173,7 @@
     },
     methods: {
       _init () {
+        this.model = this.$root.$mp.query.model * 1
         this.name = `异业联盟活动`
         this.startDate = util.formatTimeYMD(util.now + 1000 * 60 * 60 * 24)
         this.endDate = util.formatTimeYMD(util.now + 1000 * 60 * 60 * 24 * 61)
@@ -181,6 +182,11 @@
         this.stock = 1000
         this.activePrizeList = ['波尔多红酒', '10张10元代金券', '20张异业联盟券']
         this.activeInfo = {'item0': 50, 'item1': 10, 'item2': 10}
+        if (!this.isNewModel) {
+          this.id = this.$root.$mp.query.activeId
+          let data = {id: this.id}
+          this._rqGetActiveList(data)
+        }
       },
       disableHandler () {
         this.$refs.toast.show('不可修改')
@@ -205,35 +211,43 @@
             this.stock = value
             break
           }
-          // case 'activePrizeList0': {
+          // case 'activePrize0': {
           //   this.activePrizeList[0] = value
           //   break
           // }
-          // case 'activePrizeList1': {
+          // case 'activePrize1': {
           //   this.activePrizeList[1] = value
           //   break
           // }
-          // case 'activePrizeList2': {
+          // case 'activePrize2': {
           //   this.activePrizeList[2] = value
           //   break
           // }
-          case 'activeInfoList0': {
+          case 'activeInfo0': {
             this.activeInfo.item0 = value
             break
           }
-          case 'activeInfoList1': {
+          case 'activeInfo1': {
             this.activeInfo.item1 = value
             break
           }
-          case 'activeInfoList2': {
+          case 'activeInfo2': {
             this.activeInfo.item2 = value
             break
           }
         }
       },
       saveHandler () {
-        console.log(this._packData())
-        this._rqCreateActive(this._packData())
+        switch (this.model) {
+          case 0 : {
+            this._rqCreateActive(this._packData())
+            break
+          }
+          case 1: {
+            this._rqUpdateActive(this._packData())
+            break
+          }
+        }
       },
       bindDateChange (e) {
         const id = e.target.id
@@ -248,7 +262,6 @@
             break
           }
         }
-        console.log(this.startDate, e.mp.detail.value, id)
       },
       _packData () {
         return {
@@ -259,17 +272,58 @@
           address: this.address,
           price: this.price,
           stock: this.stock,
-          attach: this.activeInfo,
+          attach: JSON.stringify(this.activeInfo),
           award_note: awardNote(this.activeInfo.item0, this.activeInfo.item1),
           claim_note: claimNote(this.activeInfo.item2),
           detail_note: detailNote(this.address)
         }
       },
+      _resolveReqData (json) {
+        console.log(json)
+        let res = json.data
+        this.name = res.name
+        this.startDate = res.start_at
+        this.endDate = res.end_at
+        this.address = res.address
+        this.price = res.price
+        this.stock = res.stock
+        // this.activePrizeList = ['波尔多红酒', '10张10元代金券', '20张异业联盟券']
+        res.attach && (this.activeInfo = res.attach)
+      },
+      // 获取活动信息
+      _rqGetActiveList (data) {
+        api.uctGetActive(data)
+          .then(json => {
+            if (json.error !== ERR_OK) {
+              return ''
+            }
+            wechat.hideLoading()
+            this._resolveReqData(json)
+          })
+          .catch(err => {
+            console.info(err)
+          })
+      },
+      // 创建活动
       _rqCreateActive (data) {
-        console.log(data)
         api.uctCreateActive(data)
           .then(json => {
             console.log(json)
+            wechat.hideLoading()
+            if (json.error !== ERR_OK) {
+              this.$refs.toast.show(json.message)
+              return ''
+            }
+            this.$router.back()
+          })
+          .catch(err => {
+            console.info(err)
+          })
+      },
+      // 修改活动
+      _rqUpdateActive (data) {
+        api.uctUpdateActive(data)
+          .then(json => {
             wechat.hideLoading()
             if (json.error !== ERR_OK) {
               this.$refs.toast.show(json.message)

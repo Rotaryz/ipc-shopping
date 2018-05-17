@@ -1,6 +1,10 @@
 <template>
   <div class="union-sort">
-    <ul class="content">
+    <article class="empty" v-if="isEmpty">
+      <div class="empty-pic" :style="emptyImg"/>
+      <div class="empty-txt">暂无活动</div>
+    </article>
+    <ul class="content" v-if="!isEmpty">
       <li :class="['c-item',isShowSave?'show-sort':'']" v-for="(item,index) in couponList" :key="index">
         <coupon
           :useModel="0"
@@ -11,11 +15,12 @@
         ></coupon>
       </li>
     </ul>
-    <footer class="btn" @tap="toSortBtn" v-if="!isShowSave">排序</footer>
-    <footer class="btn-group" v-if="isShowSave">
+    <footer class="btn" @tap="toSortBtn" v-if="!isShowSave && !isEmpty">排序</footer>
+    <footer class="btn-group" v-if="isShowSave && !isEmpty">
       <div class="btn-cancel" @tap="checkModelBtn(0)">取消</div>
       <div class="btn-save" @tap="checkModelBtn(1)">保存</div>
     </footer>
+    <toast ref="toast"></toast>
   </div>
 </template>
 
@@ -26,6 +31,8 @@
   import * as wechat from 'common/js/wechat'
   import { ERR_OK } from 'api/config'
   import wx from 'wx'
+  import source from 'common/source'
+  import Toast from '@/components/toast/toast'
 
   const obj1 = {
     id: 100,
@@ -55,12 +62,12 @@
   arr[0].sortType = 11
 
   const LIMIT_DEF = 20
-
+  // console.log(JSON.stringify(arr))
   export default {
     data () {
       return {
         currentActiveId: null,
-        couponList: arr,
+        couponList: [],
         oldCouponList: null,
         isShowSave: false, // 是否显示保存按钮
         isAll: false,
@@ -79,11 +86,12 @@
       this._resetConfig()
       let data = this._formatReq()
       data.paga = 1
-      data.limit = Math.max(this.checkInfoList.length, LIMIT_DEF)
+      data.limit = Math.max(this.couponList.length, LIMIT_DEF)
       this._rqGetCheckList(data, false)
         .then(json => {
           let list = this._formatResData(json)
-          this.checkInfoList = list
+          this.couponList = list
+          this._adjustList()
           this._isAll(json)
           wx.stopPullDownRefresh()
         })
@@ -97,8 +105,14 @@
           .then(json => {
             let list = this._formatResData(json)
             this.couponList = list
+            this._adjustList()
             this._isAll(json)
           })
+      },
+      _adjustList () {
+        if (this.couponList.length > 0) {
+          this.couponList[0].sortType = 11
+        }
       },
       _rqGetCheckList (data, loading) {
         return new Promise(resolve => {
@@ -108,8 +122,6 @@
               if (json.error !== ERR_OK) {
                 return ''
               }
-              console.log(json)
-              debugger
               resolve(json)
             })
             .catch(err => {
@@ -148,18 +160,35 @@
         let arr = []
         let res = json.data
         res.map(item => {
-          arr.push({
-            id: item.id,
-            shopImg: item.merchant_data.logo_image,
-            name: item.merchant_data.shop_name,
-            location: item.merchant_data.address,
-            sales: item.count,
-            money: item.total,
-            statusCode: this.tabFlag
-          })
+          if (item.promotion.id) {
+            arr.push({
+              id: item.promotion.id,
+              type: item.promotion.promotion_type_cn,
+              name: item.promotion.title,
+              scope: `限${item.shop_name}使用`,
+              useLife: `有效期:2018-01-01至${item.end_at}`,
+              sortType: 10
+            })
+          }
         })
-        console.log(arr)
         return arr
+      },
+      _rqSortList (data, loading) {
+        let self = this
+        return new Promise(resolve => {
+          api.umgSortList(data, loading)
+            .then(json => {
+              wechat.hideLoading()
+              if (json.error !== ERR_OK) {
+                self.$refs.toast.show(json.message)
+                return false
+              }
+              resolve(json)
+            })
+            .catch(err => {
+              console.info(err)
+            })
+        })
       },
       getMoreList () {
         if (this.isShowSave) return
@@ -170,6 +199,7 @@
           .then(json => {
             let list = this._formatResData(json)
             this.couponList.push(...list)
+            this._adjustList()
             this._isAll(json)
           })
       },
@@ -181,13 +211,18 @@
         switch (type) {
           case 0: { // 取消
             this.couponList = this.oldCouponList
+            this.isShowSave = false
             break
           }
           case 1: {
-            console.log(2)
+            let data = {apply_array: ''}
+            this._rqSortList(data)
+              .then(() => {
+                this.isShowSave = false
+              })
+            break
           }
         }
-        this.isShowSave = false
       },
       sortUpHandler (obj) {
         if (this.couponList.length < 1) return
@@ -213,10 +248,17 @@
     computed: {
       couponUseType () {
         return this.isShowSave ? 1 : 0
+      },
+      emptyImg () {
+        return source.imgEmptyActive()
+      },
+      isEmpty () {
+        return this.couponList.length <= 0
       }
     },
     components: {
-      Coupon
+      Coupon,
+      Toast
     }
   }
 </script>
@@ -224,6 +266,25 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable.styl"
   @import "../../common/stylus/mixin.styl"
+
+  .empty
+    box-sizing: border-box
+    height: 100%
+    padding-top: 34.9%
+    layout()
+    align-items: center
+    &.display-none
+      display: none
+    .empty-pic
+      width: 86px
+      height: 75.5px
+      background-size: 100%
+    .empty-txt
+      padding-top: 10.5px
+      text-align: center
+      font-family: $font-family-light
+      font-size: $font-size-small
+      color: $color-assist-27
 
   .union-sort
     min-height: 100vh

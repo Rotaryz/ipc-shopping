@@ -22,7 +22,7 @@ module.exports = [
     config: {
       navigationBarTitleText: '联盟管理',
       backgroundColor: '#1A1D3D',
-      backgroundTextStyle: 'dark',
+      backgroundTextStyle: 'light',
       enablePullDownRefresh: true
     }
   },
@@ -37,7 +37,7 @@ module.exports = [
     config: {
       navigationBarTitleText: '审核列表',
       backgroundColor: '#1A1D3D',
-      backgroundTextStyle: 'dark',
+      backgroundTextStyle: 'light',
       enablePullDownRefresh: true
     }
   },
