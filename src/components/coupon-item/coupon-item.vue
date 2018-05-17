@@ -9,11 +9,11 @@
           <div class="name">{{couponInfo.title}}</div>
         </div>
         <div class="scope">{{couponInfo.scope}}</div>
-        <div class="date">{{couponInfo.useLife}}</div>
+        <div class="date">有效期:{{couponInfo.end_at}}</div>
       </section>
       <section class="fun-box check-model" @tap="checkHandler(couponInfo)" v-if="useType === constUseType.check">
-        <div class="circle checked" v-bind:hidden="isCheck" :style="backgroundCheckImg"></div>
-        <div class="circle" v-bind:hidden="!isCheck"></div>
+        <div class="circle checked" :hidden="!isCheck" :style="backgroundCheckImg"></div>
+        <div class="circle" :hidden="isCheck"></div>
       </section>
     </article>
     <!--盟主模式-->
@@ -31,19 +31,22 @@
         </div>
       </section>
     </article>
-    <article class="union-sort" :style="backgroundSortDownImg" v-if="sortDownStyle" @tap="sortDownHandler(couponInfo)"></article>
-    <article class="union-sort" :style="backgroundSortUpImg" v-if="sortUpStyle" @tap="sortUpHandler(couponInfo)"></article>
+    <article class="union-sort" :style="backgroundSortDownImg" v-if="sortDownStyle"
+             @tap="sortDownHandler(couponInfo)"></article>
+    <article class="union-sort" :style="backgroundSortUpImg" v-if="sortUpStyle"
+             @tap="sortUpHandler(couponInfo)"></article>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import { baseURL } from 'api/config'
+  import {baseURL} from 'api/config'
   // import source from 'common/source'
 
   // 使用场景默认值
   const DEFAULT_USE_TYPE = {
     normal: 0, // 默认样式
     check: 1, // 选择样式
+    isCheck: false,
     shop: 1, // 商家模式,
     union: 0, // 盟主模式
     sort: 1, // 排序
@@ -73,6 +76,10 @@
         type: Number,
         default: DEFAULT_USE_TYPE.normal
       },
+      isCheck: {
+        type: Boolean,
+        default: false
+      },
       useModel: {
         type: Number,
         default: DEFAULT_USE_TYPE.shop
@@ -82,58 +89,62 @@
         default: DEFAULT_INFO
       }
     },
-    data () {
+    data() {
       return {
-        imageUri: baseURL.image,
-        isCheck: false
+        imageUri: baseURL.image
       }
     },
     methods: {
-      checkHandler (couponInfo) {
-        this.isCheck = !this.isCheck
+      checkHandler(couponInfo) {
         this.$emit('checkHandler', couponInfo)
       },
-      lookOverHandler (couponInfo) {
+      lookOverHandler(couponInfo) {
         this.$emit('lookOverHandler', couponInfo)
       },
-      sortDownHandler (couponInfo, sortType) {
+      sortDownHandler(couponInfo, sortType) {
         this.$emit('sortDownHandler', couponInfo, sortType)
       },
-      sortUpHandler (couponInfo, sortType) {
+      sortUpHandler(couponInfo, sortType) {
         this.$emit('sortUpHandler', couponInfo, sortType)
       }
     },
-    created () {
+    created() {
       // console.log(this.useType, this.constUseType.normal)
     },
+    // watch: {
+    //   // 监听isDialogVisible变更后对外发送事件通知，比如关闭弹窗时值变为false,通过$emit通知父组件的getDialogVisible，根据setDialogVisible方法去设置父组件的值
+    //   couponInfo(couponInfo) {
+    //     this.$emit('checkHandler', couponInfo)
+    //   }
+    // },
     computed: {
-      sortUpStyle () {
+      sortUpStyle() {
         console.log(this.couponInfo.sortType)
         return (this.useType === this.constUseType.sort && this.couponInfo.sortType === this.constUseType.sortUp)
       },
-      sortDownStyle () {
+      sortDownStyle() {
         return (this.useType === this.constUseType.sort && this.couponInfo.sortType === this.constUseType.sortDown)
       },
-      isNormal () {
+      isNormal() {
         return this.useType === this.constUseType.normal
       },
-      backgroundLogoImg () {
-        const img = `icon-activity_add@2x.png`
-        return `background-image:url(${this.imageUri}/defaults/ipc-shopping/common/${img})`
+      backgroundLogoImg() {
+        const img = this.couponInfo.image_url
+        return `background-image:url(${img})`
       },
-      backgroundCheckImg () {
+      backgroundCheckImg() {
         const img = `icon-activity_select@2x.png`
         return `background-image:url(${this.imageUri}/defaults/ipc-shopping/common/${img})`
       },
-      backgroundLookOverImg () {
+      backgroundLookOverImg() {
         const img = `icon-union_jt@2x.png`
         return `background-image:url(${this.imageUri}/defaults/ipc-shopping/common/${img})`
       },
-      backgroundSortDownImg () {
+      backgroundSortDownImg() {
         const img = `icon-union_down1@2x.png`
         return `background-image:url(${this.imageUri}/defaults/ipc-shopping/common/${img})`
       },
-      backgroundSortUpImg () {
+      backgroundSortUpImg() {
         const img = `icon-union_up1@2x.png`
         return `background-image:url(${this.imageUri}/defaults/ipc-shopping/common/${img})`
       }
@@ -237,10 +248,6 @@
         layout()
         justify-content: center
         align-items: center
-      .sort-model
-        width: 46px
-        height: 100%
-        background-color: transparent
         .circle
           width: 17px
           height: 17px
@@ -252,4 +259,9 @@
             background-size: contain
             background-repeat: no-repeat
             background-position: center center
+      .sort-model
+        width: 46px
+        height: 100%
+        background-color: transparent
+
 </style>
