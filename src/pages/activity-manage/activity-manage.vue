@@ -6,8 +6,8 @@
     </header>
     <div class="manage-list" v-if="tabFlag === 0">
       <div class="list-data" v-if="activeList.length !== 0">
-        <div class="box-list">
-          <active-card :useType="0" @previewHandler="test"></active-card>
+        <div class="box-list" v-for="(iteam, index) in activeList" v-bind:key="index">
+          <active-card :useType="0" @previewHandler="iteam" :cardInfo="iteam.activity_alliance"></active-card>
         </div>
       </div>
       <div class="list-null" v-if="activeList.length === 0">
@@ -44,7 +44,7 @@
     data() {
       return {
         image: baseURL.image,
-        tabFlag: 2,
+        tabFlag: 0,
         pondList: [],
         activeList: []
       }

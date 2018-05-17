@@ -14,7 +14,7 @@
         <div class="text">暂无活动</div>
       </div>
     </div>
-    <footer class="btn">保存</footer>
+    <footer :class="['btn',selectId ? '' : 'no-select']" @tap='upCoupon'>保存</footer>
     <div class="page-bg"></div>
   </div>
 </template>
@@ -33,11 +33,15 @@
       return {
         image: baseURL.image,
         couponList: [],
-        preIdx: -1
+        preIdx: -1,
+        selectId: null,
+        activityId: null
       }
     },
     mounted() {
       console.log(this.$root.$mp.query.id)
+      this.selectId = this.$root.$mp.query.selectId
+      this.activityId = this.$root.$mp.query.activityId || 5
       this._rqManageDetails()
     },
     beforeMount() {
@@ -63,8 +67,6 @@
         })
       },
       clickSelect(obj) {
-        // obj.isCheck = !obj.isCheck
-        // obj.isCheck = !obj.isCheck
         let index = this.couponList.findIndex(val => val.id === obj.id)
         if (this.preIdx === index) return
         if (this.preIdx > -1) {
@@ -72,19 +74,18 @@
         }
         this.couponList[index].isCheck = true
         this.preIdx = index
-        // this.preIdx = index
-        // obj.isCheck = !obj.isCheck
-        // console.log(obj.isCheck)
-        // console.log(this.couponList)
-        // this.couponList.map((item) => {
-        //   if (item.id === obj.id) {
-        //     item.isCheck = true
-        //     console.log(item)
-        //   } else {
-        //     item.isCheck = false
-        //   }
-        // })
-        // console.log(this.couponList)
+        this.selectId = obj.id
+        console.log(this.selectId)
+      },
+      upCoupon() {
+        if (!this.selectId) return
+        let data = {}
+        data.promotion_id = this.selectId
+        data.apply_id = this.activityId
+        api.merAddCoupon(data).then(res => {
+          console.log(res.data)
+          wechat.hideLoading()
+        })
       }
     },
     components: {
@@ -125,6 +126,8 @@
     left: 0
     right: 0
     normal-button-default()
+  .no-select
+    normal-button-default(#959DBD)
 
   .list-null
     padding-top: 177px

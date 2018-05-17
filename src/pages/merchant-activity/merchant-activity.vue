@@ -90,33 +90,39 @@
         </div>
         <div class="box-text">恭喜您支付成功，请尽快添加优惠券!</div>
       </div>
-      <div class="coupon-up">
+      <div class="coupon-up" v-if="status === 2 || status === 4">
         <div class="rules-top">
           <div class="text">优惠卷信息</div>
         </div>
         <div class="coupon-info">
-          <coupon></coupon>
+          <coupon :useModel="1" :useType="0" :couponInfo="coupon"></coupon>
         </div>
-      <div class="apply-box apply-fails">
+      </div>
+      <div class="coupon-up" v-if="status === 3">
+        <div class="rules-top">
+          <div class="text">已上传</div>
+          <div class="right">请更换更有折扣的商品</div>
+        </div>
+        <div class="coupon-info">
+          <coupon :useModel="1" :useType="0" :couponInfo="coupon"></coupon>
+        </div>
+      </div>
+      <div class="apply-box apply-fails" v-if="status > 4">
         <div class="box-top">
           <img :src="image + '/defaults/ipc-shopping/home/icon-activity_fail@2x.png'" class="img" v-if="image">
           <div class="text">报名失败</div>
         </div>
         <div class="box-text">sorry，因为这次报名商家过多，您的活动申请无法通过。您可以申请退款或者申请排队，不退款申请排队的商家，下次活动拥有优先通过的权利！</div>
       </div>
-      </div>
-      <div class="coupon-up">
-        <div class="rules-top">
-          <div class="text">已上传</div>
-          <div class="right">请更换更有折扣的商品</div>
-        </div>
-        <div class="coupon-info">
-          <coupon></coupon>
-        </div>
-      </div>
     </div>
     <footer class="btn" v-if="status === 0" @tap="appSubmit">报名(支付{{activityData.price * addNumber}}元）</footer>
-    <footer class="btn" v-if="status === 1" @tap="chooseCoupon">选择优惠卷</footer>
+    <footer class="btn" v-if="status === 1 || status === 3" @tap="chooseCoupon">{{couponText}}</footer>
+    <footer class="btn no-select" v-if="status === 2 || status === 4 || status > 5">{{btnText}}</footer>
+    <footer class="btn-box" v-if="status === 5">
+      <div class="btn-refunds btn-one" @tap.stop="applyRefund">申请退款</div>
+      <div class="btn-refunds" @tap.stop="applyLine">申请排队</div>
+    </footer>
+    <model :show="showTitle" :title="title" @confirm="applyConfirm" @cancel="applyCancel"></model>
     <div class="page-bg"></div>
   </div>
 </template>
@@ -125,6 +131,7 @@
   import api from 'api'
   import {baseURL} from 'api/config'
   import Coupon from 'components/coupon-item/coupon-item'
+  import model from 'components/confirm-msg/confirm-msg'
   import * as wechat from 'common/js/wechat'
   import {mapGetters} from 'vuex'
   import {ROLE} from 'common/js/contants'
@@ -135,16 +142,22 @@
       return {
         image: baseURL.image,
         showRule: false,
-        btnText: '添加优惠券',
-        status: null, // 页面状态 （0为未报名,1为未添加优惠卷）
+        btnText: '审核中',
+        couponText: '添加优惠卷',
+        status: null, // 页面状态 （0为未报名,1为未添加优惠卷,2为未审核中,3为更换优惠卷,4为未审核成功,5为未审核失败,6为退款成功,7为退款失败,8为排队中）
         activityData: {},
         addNumber: 1,
-        applyLock: false
+        applyLock: false,
+        coupon: {},
+        title: '确定排队？',
+        showTitle: false,
+        modelNumber: null,
+        applyId: null
       }
     },
     mounted() {
       console.log(this.$root.$mp.query.id)
-      this._rqManageDetails(this.$root.$mp.query.id)
+      this._rqManageDetails(this.$root.$mp.query.id || 1)
     },
     beforeMount() {
       this._init()
@@ -172,8 +185,43 @@
             this.status = 0
             this.showRule = true
           } else {
+            this.applyId = res.data.alliance_merchant_apply.id
             if (parseInt(res.data.alliance_merchant_apply.promotion_id) === 0) {
               this.status = 1
+            } else {
+              api.merCouponDetails(res.data.alliance_merchant_apply.promotion_id).then(res => {
+                console.log(res)
+                this.coupon = {
+                  image_url: res.data.promotion_detail_image_data[0].image_url,
+                  promotion_type_cn: res.data.promotion_type_cn,
+                  title: res.data.title,
+                  end_at: res.data.end_at,
+                  id: res.data.id
+                }
+              })
+              if (res.data.alliance_merchant_apply.check_status * 1 === 0) {
+                this.status = 2
+              } else if (res.data.alliance_merchant_apply.check_status * 1 === 1) {
+                this.status = 4
+                this.couponText = '报名成功'
+              } else if (res.data.alliance_merchant_apply.check_status * 1 === 3) {
+                this.status = 3
+                this.couponText = '更换优惠卷'
+              } else {
+                if (res.data.alliance_merchant_apply.refund_status * 1 === 0) {
+                  this.status = 5
+                } else if (res.data.alliance_merchant_apply.refund_status * 1 === 1) {
+                  this.status = 6
+                  this.couponText = '退款成功'
+                } else if (res.data.alliance_merchant_apply.refund_status * 1 === 2) {
+                  this.status = 7
+                  this.couponText = '退款失败'
+                } else if (res.data.alliance_merchant_apply.refund_status * 1 === 3) {
+                  this.status = 8
+                  this.couponText = '排队中'
+                }
+              }
+              console.log(this.status)
             }
           }
           wechat.hideLoading()
@@ -217,14 +265,44 @@
         })
       },
       chooseCoupon() {
-        let id = 1
-        let url = `/pages/upload-coupon/upload-coupon?id=${id}`
+        let activityId = this.applyId
+        let selectId = this.coupon.id
+        let url = `/pages/upload-coupon/upload-coupon?activityId=${activityId}&selectId=${selectId}`
         this.$router.push(url)
         console.log(url)
+      },
+      applyRefund() {
+        this.showTitle = true
+        this.title = '确定退款？'
+        this.modelNumber = 1
+      },
+      applyLine() {
+        this.showTitle = true
+        this.title = '确定排队？'
+        this.modelNumber = 2
+      },
+      applyCancel() {
+        this.showTitle = false
+      },
+      applyConfirm() {
+        if (this.modelNumber === 1) {
+          api.merRefund().then(res => {
+            console.log(res)
+            wechat.hideLoading()
+            this.showTitle = false
+          })
+        } else {
+          api.merQueueUp(this.applyId).then(res => {
+            console.log(res)
+            this.showTitle = false
+            wechat.hideLoading()
+          })
+        }
       }
     },
     components: {
-      Coupon
+      Coupon,
+      model
     }
   }
 </script>
@@ -339,7 +417,7 @@
                 line-height: 1
 
   .activity-box
-    padding: 0 15px
+    padding: 0 15px 60px
     .add-number
       vertical-line()
       height: 50px
@@ -481,4 +559,23 @@
     left: 0
     right: 0
     normal-button-default()
+    border-radius: 0
+
+  .no-select
+    normal-button-default(#959DBD)
+    border-radius: 0
+
+  .btn-box
+    position: fixed
+    bottom: 0
+    left: 0
+    right: 0
+    layout(row)
+    .btn-refunds
+      flex: 1
+      normal-button-default()
+      border-radius: 0
+    .btn-one
+      normal-button-default(#273156)
+      border-radius: 0
 </style>

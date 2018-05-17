@@ -131,8 +131,8 @@
       isNormal () {
         return this.useType === this.constUseType.normal
       },
-      backgroundLogoImg () {
-        const img = this.couponInfo.image_url
+      backgroundLogoImg() {
+        const img = this.couponInfo.image_url || `${this.imageUri}/defaults/ipc-shopping/common/icon-activity_select@2x.png`
         return `background-image:url(${img})`
       },
       backgroundCheckImg () {
