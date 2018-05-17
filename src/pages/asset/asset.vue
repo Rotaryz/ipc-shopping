@@ -66,8 +66,7 @@
         wechat.hideLoading()
       },
       _getAssetDetails() {
-        let data = {type: 'merchant'}
-        api.empAssetDetails(data).then(res => {
+        api.empAssetDetails().then(res => {
           if (res.error !== ERR_OK) return
           this.total = res.data.alliance_remaining
           this.count = res.data.blocked_alliance_remaining
@@ -79,8 +78,7 @@
         })
       },
       _getAssetList() {
-        let data = {type: 'merchant'}
-        api.empAssetList(data).then(res => {
+        api.empAssetList().then(res => {
           if (res.error !== ERR_OK) return
           this.redPackList = res.data
           console.log(res)

@@ -1,4 +1,5 @@
 import request from 'common/js/request'
+import wx from 'wx'
 /**
  * 方法前缀名：emp
  */
@@ -58,21 +59,16 @@ export default {
     return request.get(url)
   },
   /**
-   * 商家提现
-   * @param data
-   * @returns {Promise.<*>}
-   */
-  empSetWithdrawShop(data) {
-    const url = `/api/alliances/employee/merchant-withdrawal`
-    return request.get(url, data)
-  },
-  /**
-   * 员工提现
+   * 商家 / 员工 提现
    * @param data
    * @returns {Promise.<*>}
    */
   empSetWithdraw(data) {
-    const url = `/api/alliances/employee/customer-withdrawal`
+    let type = wx.getStorageSync('userType')
+    if (type !== 'customer') {
+      type = 'merchant'
+    }
+    const url = `/api/alliances/employee/${type}-withdrawal`
     return request.get(url, data)
   },
   /**
@@ -108,7 +104,13 @@ export default {
    * @returns {Promise.<*>}
    */
   empAssetDetails(data) {
-    const url = `/api/alliances/money-manage/${data.type}-detail`
+    let type = wx.getStorageSync('userType')
+    if (type === 'customer') {
+      type = 'employee'
+    } else {
+      type = 'merchant'
+    }
+    const url = `/api/alliances/money-manage/${type}-detail`
     return request.get(url)
   },
   /**
@@ -117,7 +119,13 @@ export default {
    * @returns {Promise.<*>}
    */
   empAssetList(data) {
-    const url = `/api/alliances/money-manage/${data.type}-log`
+    let type = wx.getStorageSync('userType')
+    if (type === 'customer') {
+      type = 'employee'
+    } else {
+      type = 'merchant'
+    }
+    const url = `/api/alliances/money-manage/${type}-log`
     return request.get(url)
   }
 }

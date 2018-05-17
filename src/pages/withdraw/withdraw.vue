@@ -143,9 +143,10 @@
         this.money = this.canUse * 1
       },
       confirm() {
-        let data = {}
+        let data = {money: this.money}
         api.empSetWithdraw(data).then(res => {
           if (res.error !== ERR_OK) {
+            this.$refs.toast.show(res.message)
             return
           }
           this.$router.push({
