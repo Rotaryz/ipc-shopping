@@ -136,7 +136,7 @@
             break
           }
           case 3 : {
-            data['check_status'] = 1
+            data['check_status'] = 2
             break
           }
         }
