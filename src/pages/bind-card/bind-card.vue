@@ -66,13 +66,11 @@
       Toast
     },
     mounted() {
-      console.log(1)
       this._empBankList()
       let qu = this.$root.$mp.query
       if (qu.id) {
         this.editBank(qu)
       }
-      wechat.hideLoading()
     },
     methods: {
       editBank (qu) {
@@ -81,6 +79,7 @@
         this.depositBank = qu.bank
         this.name = qu.user_name
         this.id = qu.id
+        this.checkForm = true
       },
       _empBankList () {
         api.empBankList().then(res => {
@@ -89,6 +88,7 @@
         }).catch(err => {
           console.log(err)
         })
+        wechat.hideLoading()
       },
       changeBank (e) {
         const index = e.mp.detail.value
