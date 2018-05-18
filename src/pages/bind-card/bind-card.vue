@@ -37,10 +37,14 @@
     <div class="btn-wrapper">
       <div :class="{disable: !checkForm}" class="btn" v-on:click="save">保存</div>
     </div>
+    <Toast ref="toast"></Toast>
   </div>
 </template>
 <script type="text/ecmascript-6">
-  import { baseURL } from 'api/config'
+  import { baseURL, ERR_OK } from 'api/config'
+  import api from 'api'
+  import * as wechat from 'common/js/wechat'
+  import Toast from '@/components/toast/toast'
 
   export default {
     data () {
@@ -51,19 +55,41 @@
           {id: 1, name: '11'},
           {id: 2, name: '21'}
         ],
-        banksInput: '',
         name: '',
         withdrawal_card: '',
-        checkForm: false
+        checkForm: false,
+        bankFlag: true, // true 添加, false 编辑
+        id: ''
       }
     },
+    components: {
+      Toast
+    },
     mounted() {
-      console.log(this)
-      console.log('>>>>')
-      console.log(this.$root.$mp.query)
-      // console.log(this.$route)
+      this._empBankList()
+      let qu = this.$root.$mp.query
+      if (qu.id) {
+        this.editBank(qu)
+      }
     },
     methods: {
+      editBank (qu) {
+        this.bankFlag = false
+        this.withdrawal_card = qu.withdrawal_card
+        this.depositBank = qu.bank
+        this.name = qu.user_name
+        this.id = qu.id
+        this.checkForm = true
+      },
+      _empBankList () {
+        api.empBankList().then(res => {
+          if (res.error !== ERR_OK) return
+          this.banks = res.data
+        }).catch(err => {
+          console.log(err)
+        })
+        wechat.hideLoading()
+      },
       changeBank (e) {
         const index = e.mp.detail.value
         this.depositBank = this.banks[index].name
@@ -86,7 +112,35 @@
         if (!this.checkForm) {
           return
         }
-        this.$router.go(-1)
+        let data = {
+          bank: this.depositBank,
+          withdrawal_card: this.withdrawal_card,
+          user_name: this.name
+        }
+        if (this.bankFlag) {
+          api.empAddBank(data).then(res => {
+            if (res.error !== ERR_OK) {
+              this.$refs.toast.show(res.message)
+              wechat.hideLoading()
+              return
+            }
+            this.$router.go(-1)
+          }).catch(err => {
+            console.log(err)
+          })
+        } else {
+          data.id = this.id
+          api.empEditBank(data).then(res => {
+            if (res.error !== ERR_OK) {
+              this.$refs.toast.show(res.message)
+              wechat.hideLoading()
+              return
+            }
+            this.$router.go(-1)
+          }).catch(err => {
+            console.log(err)
+          })
+        }
       }
     },
     watch: {
