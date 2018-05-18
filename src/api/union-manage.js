@@ -21,5 +21,14 @@ export default {
   umgSortList(data, loading = true) {
     const url = `/api/alliances/sort-apply`
     return request.post(url, data, loading)
+  },
+  /**
+   * 盟主活动上架
+   * @param data 状态
+   * @returns {Promise.<*>}
+   */
+  umgActiveOnline(data, loading = true) {
+    const url = `/api/alliances/online`
+    return request.get(url, data, loading)
   }
 }
