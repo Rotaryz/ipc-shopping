@@ -20,7 +20,7 @@
       </div>
     </div>
     <div class="content">
-      <scroll-view scroll-y class="list" bindscrolltolower="loadMore" v-if="redPackList.length > 0">
+      <scroll-view scroll-y class="list" @scrolltolower="loadMore" v-if="redPackList.length > 0">
         <div class="item" v-for="item in redPackList" :key="index">
           <div class="item-left">
             <div class="title">{{item.activity_alliance.name}}</div>
@@ -49,8 +49,21 @@
         total: '0.00',
         count: '0.00',
         withdraw: false,
-        redPackList: [],
-        page: 1
+        redPackList: [
+          // {activity_alliance: {name: 1, start_at: '2018'}, merchant_amount: '10.0'},
+          // {activity_alliance: {name: 1, start_at: '2018'}, merchant_amount: '10.0'},
+          // {activity_alliance: {name: 1, start_at: '2018'}, merchant_amount: '10.0'},
+          // {activity_alliance: {name: 1, start_at: '2018'}, merchant_amount: '10.0'},
+          // {activity_alliance: {name: 1, start_at: '2018'}, merchant_amount: '10.0'},
+          // {activity_alliance: {name: 1, start_at: '2018'}, merchant_amount: '10.0'},
+          // {activity_alliance: {name: 1, start_at: '2018'}, merchant_amount: '10.0'},
+          // {activity_alliance: {name: 1, start_at: '2018'}, merchant_amount: '10.0'},
+          // {activity_alliance: {name: 1, start_at: '2018'}, merchant_amount: '10.0'},
+          // {activity_alliance: {name: 1, start_at: '2018'}, merchant_amount: '10.0'},
+          // {activity_alliance: {name: 1, start_at: '2018'}, merchant_amount: '10.0'}
+        ],
+        page: 1,
+        limit: 10
       }
     },
     components: {
@@ -60,6 +73,11 @@
       this._getInfo()
     },
     methods: {
+      loadMore() { // 分页
+        this.page++
+        this._getAssetList()
+        wechat.hideLoading()
+      },
       async _getInfo() {
         await this._getAssetDetails()
         await this._getAssetList()
@@ -78,9 +96,13 @@
         })
       },
       _getAssetList() {
-        api.empAssetList().then(res => {
+        let data = {
+          page: this.page,
+          limit: this.limit
+        }
+        api.empAssetList(data).then(res => {
           if (res.error !== ERR_OK) return
-          this.redPackList = res.data
+          this.redPackList.push(...res.data)
           console.log(res)
         }).catch(err => {
           console.log(err)

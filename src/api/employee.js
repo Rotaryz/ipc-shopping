@@ -126,6 +126,6 @@ export default {
       type = 'merchant'
     }
     const url = `/api/alliances/money-manage/${type}-log`
-    return request.get(url)
+    return request.get(url, data)
   }
 }
