@@ -1,18 +1,26 @@
 <template>
   <div class="coupon-box">
     <div class="coupon-con">
-      <div class="title">可报名服务</div>
-      <div class="coupon-list">
-        <coupon  :useType="1" :useModel="1"></coupon>
+      <div class="title" v-if="couponList.length !== 0">可报名服务</div>
+      <div class="list-data" v-if="couponList.length !== 0">
+        <div class="box-list" v-for="(item, index) in couponList" v-bind:key="index">
+          <coupon :useModel="1" :useType="1" :couponInfo.sync="item" :isCheck="item.isCheck"
+                  @checkHandler="clickSelect"></coupon>
+        </div>
+      </div>
+      <div class="list-null" v-if="couponList.length === 0">
+        <img :src="image + '/defaults/ipc-shopping/home/pic-union_empty@2x.png'" class="null-img" v-if="image"
+             mode="widthFix">
+        <div class="text">暂无活动</div>
       </div>
     </div>
-    <footer class="btn">保存</footer>
+    <footer :class="['btn',selectId ? '' : 'no-select']" @tap='upCoupon'>保存</footer>
     <div class="page-bg"></div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import { baseURL } from 'api/config'
+  import {baseURL} from 'api/config'
   import Coupon from 'components/coupon-item/coupon-item'
   import * as wechat from 'common/js/wechat'
   import {mapGetters} from 'vuex'
@@ -24,11 +32,16 @@
     data() {
       return {
         image: baseURL.image,
-        couponList: []
+        couponList: [],
+        preIdx: -1,
+        selectId: null,
+        activityId: null
       }
     },
     mounted() {
       console.log(this.$root.$mp.query.id)
+      this.selectId = this.$root.$mp.query.selectId
+      this.activityId = this.$root.$mp.query.activityId || 5
       this._rqManageDetails()
     },
     beforeMount() {
@@ -52,6 +65,27 @@
           this.couponList = res.data
           wechat.hideLoading()
         })
+      },
+      clickSelect(obj) {
+        let index = this.couponList.findIndex(val => val.id === obj.id)
+        if (this.preIdx === index) return
+        if (this.preIdx > -1) {
+          this.couponList[this.preIdx].isCheck = false
+        }
+        this.couponList[index].isCheck = true
+        this.preIdx = index
+        this.selectId = obj.id
+        console.log(this.selectId)
+      },
+      upCoupon() {
+        if (!this.selectId) return
+        let data = {}
+        data.promotion_id = this.selectId
+        data.apply_id = this.activityId
+        api.merAddCoupon(data).then(res => {
+          console.log(res.data)
+          wechat.hideLoading()
+        })
       }
     },
     components: {
@@ -71,6 +105,7 @@
     height: 100%
     z-index: -1
     background: #F6F7FA
+
   .coupon-con
     padding: 0 15px
     box-sizing: border-box
@@ -84,10 +119,29 @@
     .coupon-list
       width: 100%
       margin-bottom: 10px
+
   .btn
     position: fixed
     bottom: 0
     left: 0
     right: 0
     normal-button-default()
+  .no-select
+    normal-button-default(#959DBD)
+
+  .list-null
+    padding-top: 177px
+    text-align: center
+    .null-img
+      margin: 0 auto
+      width: 25%
+      display: block
+    .text
+      margin-top: 7.5px
+      font-family: $font-family-light
+      font-size: $font-size-small
+      color: $color-assist-27
+
+  .box-list
+    margin-bottom: 10px
 </style>

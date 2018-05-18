@@ -6,12 +6,13 @@
     </header>
     <div class="manage-list" v-if="tabFlag === 0">
       <div class="list-data" v-if="activeList.length !== 0">
-        <div class="box-list">
-          <active-card :useType="0" @previewHandler="test"></active-card>
+        <div class="box-list" v-for="(iteam, index) in activeList" v-bind:key="index">
+          <active-card :useType="0" @previewHandler="iteam" :cardInfo="iteam.activity_alliance"></active-card>
         </div>
       </div>
       <div class="list-null" v-if="activeList.length === 0">
-        <img :src="image + '/defaults/ipc-shopping/home/pic-union_empty@2x.png'" class="null-img" v-if="image" mode="widthFix">
+        <img :src="image + '/defaults/ipc-shopping/home/pic-union_empty@2x.png'" class="null-img" v-if="image"
+             mode="widthFix">
         <div class="text">暂无活动</div>
       </div>
     </div>
@@ -22,7 +23,8 @@
         </div>
       </div>
       <div class="list-null" v-if="pondList.length === 0">
-        <img :src="image + '/defaults/ipc-shopping/home/pic-union_empty@2x.png'" class="null-img" v-if="image" mode="widthFix">
+        <img :src="image + '/defaults/ipc-shopping/home/pic-union_empty@2x.png'" class="null-img" v-if="image"
+             mode="widthFix">
         <div class="text">暂无活动</div>
       </div>
     </div>
@@ -31,32 +33,32 @@
 
 <script type="text/ecmascript-6">
   import api from 'api'
-  import { baseURL } from 'api/config'
+  import {baseURL} from 'api/config'
   import ActiveCard from 'components/active-card-item/active-card-item'
   import * as wechat from 'common/js/wechat'
-  import { mapGetters } from 'vuex'
-  import { ROLE } from 'common/js/contants'
+  import {mapGetters} from 'vuex'
+  import {ROLE} from 'common/js/contants'
   import wx from 'wx'
 
   export default {
     data() {
       return {
         image: baseURL.image,
-        tabFlag: 2,
+        tabFlag: 0,
         pondList: [],
         activeList: []
       }
     },
-    mounted () {
+    mounted() {
       this._rqGetActiveList()
       this._rqManageGetActiveList()
     },
-    beforeMount () {
+    beforeMount() {
       this._init()
     },
     methods: {
       ...mapGetters(['role']),
-      _init () {
+      _init() {
         // let role = this.role()
         // this.currentRole = role
         // this.currentRole = role
@@ -121,10 +123,12 @@
       &.hit
         color: $color-background-ff
         cut-off-rule-bottom(40%, 40%, $color-assist-34, 2px)
+
   .manage-list
     padding: 0 15px
     .box-list
       margin-top: 10px
+
   .list-null
     padding-top: 177px
     text-align: center

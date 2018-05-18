@@ -5,20 +5,22 @@
       <section class="logo-box" :style="backgroundLogoImg"></section>
       <section class="info-box">
         <div class="title">
-          <div class="type">{{couponInfo.type}}</div>
-          <div class="name">{{couponInfo.name}}</div>
+          <div class="type">{{couponInfo.promotion_type_cn}}</div>
+          <div class="name">{{couponInfo.title}}</div>
         </div>
         <div class="scope">{{couponInfo.scope}}</div>
-        <div class="date">{{couponInfo.useLife}}</div>
+        <div class="date">有效期:{{couponInfo.end_at}}</div>
       </section>
       <section class="fun-box check-model" @tap="checkHandler(couponInfo)" v-if="useType === constUseType.check">
-        <div class="circle checked" v-bind:hidden="isCheck" :style="backgroundCheckImg"></div>
-        <div class="circle" v-bind:hidden="!isCheck"></div>
+        <div class="circle checked" :hidden="!isCheck" :style="backgroundCheckImg"></div>
+        <div class="circle" :hidden="isCheck"></div>
       </section>
     </article>
     <!--盟主模式-->
     <article class="wrap" v-if="useModel === constUseModel.union">
-      <section class="logo-box" :style="backgroundLogoImg"></section>
+      <section class="logo-box" :style="backgroundLogoImg">
+        <div class="l-b-shop-name">{{couponInfo.shopName}}</div>
+      </section>
       <section class="info-box">
         <div class="title">
           <div class="type">{{couponInfo.type}}</div>
@@ -31,8 +33,10 @@
         </div>
       </section>
     </article>
-    <article class="union-sort" :style="backgroundSortDownImg" v-if="sortDownStyle" @tap="sortDownHandler(couponInfo)"></article>
-    <article class="union-sort" :style="backgroundSortUpImg" v-if="sortUpStyle" @tap="sortUpHandler(couponInfo)"></article>
+    <article class="union-sort" :style="backgroundSortDownImg" v-if="sortDownStyle"
+             @tap="sortDownHandler(couponInfo)"></article>
+    <article class="union-sort" :style="backgroundSortUpImg" v-if="sortUpStyle"
+             @tap="sortUpHandler(couponInfo)"></article>
   </div>
 </template>
 
@@ -44,6 +48,7 @@
   const DEFAULT_USE_TYPE = {
     normal: 0, // 默认样式
     check: 1, // 选择样式
+    isCheck: false,
     shop: 1, // 商家模式,
     union: 0, // 盟主模式
     sort: 1, // 排序
@@ -56,7 +61,8 @@
     name: '100元代金券',
     scope: '限国颐堂(天河店)使用',
     useLife: '有效期:2018-01-01至2018-08-01',
-    sortType: 0
+    sortType: 0,
+    shopName: '国颐堂(天河店)国颐堂(天河店)'
   }
 
   export default {
@@ -73,6 +79,10 @@
         type: Number,
         default: DEFAULT_USE_TYPE.normal
       },
+      isCheck: {
+        type: Boolean,
+        default: false
+      },
       useModel: {
         type: Number,
         default: DEFAULT_USE_TYPE.shop
@@ -84,13 +94,11 @@
     },
     data () {
       return {
-        imageUri: baseURL.image,
-        isCheck: false
+        imageUri: baseURL.image
       }
     },
     methods: {
       checkHandler (couponInfo) {
-        this.isCheck = !this.isCheck
         this.$emit('checkHandler', couponInfo)
       },
       lookOverHandler (couponInfo) {
@@ -106,6 +114,12 @@
     created () {
       // console.log(this.useType, this.constUseType.normal)
     },
+    // watch: {
+    //   // 监听isDialogVisible变更后对外发送事件通知，比如关闭弹窗时值变为false,通过$emit通知父组件的getDialogVisible，根据setDialogVisible方法去设置父组件的值
+    //   couponInfo(couponInfo) {
+    //     this.$emit('checkHandler', couponInfo)
+    //   }
+    // },
     computed: {
       sortUpStyle () {
         console.log(this.couponInfo.sortType)
@@ -117,9 +131,9 @@
       isNormal () {
         return this.useType === this.constUseType.normal
       },
-      backgroundLogoImg () {
-        const img = `icon-activity_add@2x.png`
-        return `background-image:url(${this.imageUri}/defaults/ipc-shopping/common/${img})`
+      backgroundLogoImg() {
+        const img = this.couponInfo.image_url || `${this.imageUri}/defaults/ipc-shopping/common/icon-activity_select@2x.png`
+        return `background-image:url(${img})`
       },
       backgroundCheckImg () {
         const img = `icon-activity_select@2x.png`
@@ -178,6 +192,19 @@
         background-position: center center
         border-radius: 2px
         border: 0.5px solid $color-cut-line-ed
+        position: relative
+        .l-b-shop-name
+          position: absolute
+          bottom: 0
+          left: 0
+          right: 0
+          height: 15px
+          background-color: rgba(0, 0, 0, 0.60)
+          font-family: $font-family-light
+          font-size: $font-size-small-s
+          color: $color-background-ff
+          line-height: 15px
+          text-align: center
       .info-box
         flex: 1
         height: 100%
@@ -237,10 +264,6 @@
         layout()
         justify-content: center
         align-items: center
-      .sort-model
-        width: 46px
-        height: 100%
-        background-color: transparent
         .circle
           width: 17px
           height: 17px
@@ -252,4 +275,9 @@
             background-size: contain
             background-repeat: no-repeat
             background-position: center center
+      .sort-model
+        width: 46px
+        height: 100%
+        background-color: transparent
+
 </style>

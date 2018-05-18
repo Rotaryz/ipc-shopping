@@ -16,10 +16,12 @@
         </button>
       </article>
     </section>
+    <toast ref="toast"></toast>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import Toast from 'components/toast/toast'
   import api from 'api'
   import { baseURL, ERR_OK, TOKEN_OUT } from 'api/config'
   import * as wechat from 'common/js/wechat'
@@ -28,29 +30,24 @@
   import { ROLE } from 'common/js/contants'
 
   console.info(baseURL.jumpVersion)
-
   export default {
+    data () {
+      return {
+        authorizationCount: 1
+      }
+    },
     beforeCreate () {
     },
     created () {
-      // console.log(0, wx)
     },
     onShow () {
       this._init()
-      // console.log(this.$root.$mp)
-      // this._navTo()
-      // const url = `/pages/loading/loading?type=tokenOut`
-      // wx.reLaunch({url})
-      // console.log('onshow')
     },
     beforeMount () {
-      // this._init()
-      // console.log(1, wx)
     },
     mounted () {
     },
     beforeDestroy () {
-      // console.log(3)
     },
     methods: {
       ...mapActions(['saveRole']),
@@ -81,10 +78,13 @@
       },
       // 获取token
       _getToken (data) {
+        this.authorizationCount++
         api.userAuthorise(data)
           .then(Json => {
-            if (Json.error !== ERR_OK) {
-              return ''
+            if (Json.error !== ERR_OK && this.authorizationCount <= 5) {
+              return this._getToken(data)
+            } else if (Json.error !== ERR_OK && this.authorizationCount > 5) {
+              return this.$refs.toast.show('登录失败,请重新登录.')
             }
             wechat.hideLoading()
             const res = Json.data
@@ -132,10 +132,11 @@
         this.saveRoleSync(entryRole)
       }
     },
-    computed: {}
+    components: {
+      Toast
+    }
   }
 </script>
-
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import '../../common/stylus/variable'
   @import '../../common/stylus/mixin'
@@ -188,7 +189,7 @@
         padding: 0 12px
         .btn
           width: 100%
-          background: #1AC521
+          background: $color-wx-1a
           height: 100%
           border-radius: 4px
           display: flex
@@ -205,7 +206,9 @@
           .wx-login-txt
             font-size: $font-size-medium-x
             color: $color-background-ff
-            font-family: PingFangSC-Regular
+            font-family: $font-family-regular
+
+
 </style>
 
 

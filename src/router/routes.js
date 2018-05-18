@@ -1,4 +1,12 @@
 module.exports = [
+  // {
+  //   path: '/pages/example/example',
+  //   name: 'Example',
+  //   config: {
+  //     enablePullDownRefresh: true,
+  //     navigationBarTitleText: '示例'
+  //   }
+  // },
   {
     path: '/pages/loading/loading', // loading
     name: 'Loading',
@@ -22,7 +30,7 @@ module.exports = [
     config: {
       navigationBarTitleText: '联盟管理',
       backgroundColor: '#1A1D3D',
-      backgroundTextStyle: 'dark',
+      backgroundTextStyle: 'light',
       enablePullDownRefresh: true
     }
   },
@@ -37,7 +45,7 @@ module.exports = [
     config: {
       navigationBarTitleText: '审核列表',
       backgroundColor: '#1A1D3D',
-      backgroundTextStyle: 'dark',
+      backgroundTextStyle: 'light',
       enablePullDownRefresh: true
     }
   },
@@ -97,14 +105,6 @@ module.exports = [
       navigationBarTitleText: '绑定银行卡',
       disableScroll: true,
       backgroundColor: '#F6F7FA'
-    }
-  },
-  {
-    path: '/pages/example/example',
-    name: 'Example',
-    config: {
-      enablePullDownRefresh: true,
-      navigationBarTitleText: '示例'
     }
   },
   {
@@ -172,13 +172,9 @@ module.exports = [
     }
   },
   {
-    path: '/pages/audit/audit', // 盟主审核
+    path: '/pages/audit/audit', // 盟主-审核-详情
     name: 'Audit',
-    config: {
-      navigationBarTitleText: '审核', // #f6f7fa
-      backgroundColor: 'f6f7fa',
-      disableScroll: true
-    }
+    config: {}
   },
   {
     path: '/pages/upload-coupon/upload-coupon', // 上传优惠卷

@@ -1,6 +1,10 @@
 <template>
   <div class="union-sort">
-    <ul class="content">
+    <article class="empty" v-if="isEmpty">
+      <div class="empty-pic" :style="emptyImg"/>
+      <div class="empty-txt">暂无活动</div>
+    </article>
+    <ul class="content" v-if="!isEmpty">
       <li :class="['c-item',isShowSave?'show-sort':'']" v-for="(item,index) in couponList" :key="index">
         <coupon
           :useModel="0"
@@ -8,23 +12,28 @@
           :couponInfo="item"
           @sortDownHandler="sortDownHandler"
           @sortUpHandler="sortUpHandler"
+          @lookOverHandler="lookOverHandler"
         ></coupon>
       </li>
     </ul>
-    <footer class="btn" @tap="toSort" v-if="!isShowSave">排序</footer>
-    <footer class="btn-group" v-if="isShowSave">
-      <div class="btn-cancel" @tap="checkModel(0)">取消</div>
-      <div class="btn-save" @tap="checkModel(1)">保存</div>
+    <footer class="btn" @tap="toSortBtn" v-if="!isShowSave && !isEmpty">排序</footer>
+    <footer class="btn-group" v-if="isShowSave && !isEmpty">
+      <div class="btn-cancel" @tap="checkModelBtn(0)">取消</div>
+      <div class="btn-save" @tap="checkModelBtn(1)">保存</div>
     </footer>
+    <toast ref="toast"></toast>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import Coupon from 'components/coupon-item/coupon-item'
   import util from 'common/js/util'
-  // import api from 'api'
-  // import * as wechat from 'common/js/wechat'
-  // import {ERR_OK} from 'api/config'
+  import api from 'api'
+  import * as wechat from 'common/js/wechat'
+  import {ERR_OK} from 'api/config'
+  import wx from 'wx'
+  import source from 'common/source'
+  import Toast from '@/components/toast/toast'
 
   const obj1 = {
     id: 100,
@@ -53,28 +62,187 @@
   const arr = [obj1, obj2, obj3]
   arr[0].sortType = 11
 
+  const LIMIT_DEF = 20
+  // console.log(JSON.stringify(arr))
   export default {
     data() {
       return {
         currentActiveId: null,
-        couponList: arr,
+        couponList: [],
         oldCouponList: null,
-        isShowSave: false // 是否显示保存按钮
+        isShowSave: false, // 是否显示保存按钮
+        isAll: false,
+        page: 1,
+        limit: LIMIT_DEF
       }
+    },
+    onShow() {
+      this._init()
+    },
+    onPullDownRefresh() {
+      if (this.isShowSave) {
+        wx.stopPullDownRefresh()
+        return
+      }
+      this._resetConfig()
+      let data = this._formatReq()
+      data.paga = 1
+      data.limit = Math.max(this.couponList.length, LIMIT_DEF)
+      this._rqGetCheckList(data, false)
+        .then(json => {
+          let list = this._formatResData(json)
+          this.couponList = list
+          this._adjustList()
+          this._isAll(json)
+          wx.stopPullDownRefresh()
+        })
     },
     methods: {
       _init() {
         this.currentActiveId = this.$root.$mp.query.activeId
+        this._resetConfig()
+        let data = this._formatReq()
+        this._rqGetCheckList(data)
+          .then(json => {
+            let list = this._formatResData(json)
+            this.couponList = list
+            this._adjustList()
+            this._isAll(json)
+          })
       },
-      toSort() {
+      _adjustList() {
+        if (this.couponList.length > 0) {
+          this.couponList[0].sortType = 11
+        }
+      },
+      _rqGetCheckList(data, loading) {
+        return new Promise(resolve => {
+          api.uckGetCheckList(data, loading)
+            .then(json => {
+              wechat.hideLoading()
+              if (json.error !== ERR_OK) {
+                return ''
+              }
+              resolve(json)
+            })
+            .catch(err => {
+              console.info(err)
+            })
+        })
+      },
+      _isAll(json) {
+        let total = json.meta.total
+        this.isAll = (this.couponList.length >= total)
+        return this.isAll
+      },
+      _resetConfig() {
+        this.isAll = false
+        this.page = 1
+        this.limit = LIMIT_DEF
+      },
+      _formatReq() {
+        let data = {
+          'check_status': 1,
+          'has_promotion': 1,
+          'activity_alliance_id': this.currentActiveId,
+          limit: this.limit,
+          page: this.page
+        }
+        return data
+      },
+      // 格式化请求列表
+      _formatResData(json) {
+        let arr = []
+        let res = json.data
+        res.map(item => {
+          if (item.promotion.id) {
+            arr.push({
+              id: item.promotion.id,
+              type: item.promotion.promotion_type_cn,
+              name: item.promotion.title,
+              shopName: item.shop_name,
+              scope: `限${item.shop_name}使用`,
+              useLife: `有效期:${item.start_at}至${item.end_at}`,
+              image_url: item.promotion.image_url,
+              sortType: 10
+            })
+          }
+        })
+        return arr
+      },
+      _rqSortList(data, loading) {
+        let self = this
+        return new Promise(resolve => {
+          api.umgSortList(data, loading)
+            .then(json => {
+              wechat.hideLoading()
+              if (json.error !== ERR_OK) {
+                self.$refs.toast.show(json.message)
+                return false
+              }
+              resolve(json)
+            })
+            .catch(err => {
+              console.info(err)
+            })
+        })
+      },
+      _packData() {
+        let arr = []
+        this.couponList.map(item => {
+          arr.push({id: item.id})
+        })
+        let str = JSON.stringify(arr)
+        return {apply_array: str}
+      },
+      _navToMp(json) {
+        json = {
+          appId: '',
+          path: 'pages/index/index?id=123',
+          extraData: {
+            foo: 'bar'
+          },
+          envVersion: 'develop',
+          success(res) {
+            // 打开成功
+          }
+        }
+        wx.navigateToMiniProgram(json)
+      },
+      getMoreList() {
+        if (this.isShowSave) return
+        if (this.isAll) return
+        let data = this._formatReq()
+        data.page++
+        this._rqGetCheckList(data)
+          .then(json => {
+            let list = this._formatResData(json)
+            this.couponList.push(...list)
+            this._adjustList()
+            this._isAll(json)
+          })
+      },
+      lookOverHandler(obj) {
+        // this._navToMp(obj)
+        console.log(666)
+      },
+      toSortBtn() {
         this.isShowSave = true
         this.oldCouponList = util.objDeepCopy(this.couponList)
       },
-      checkModel(type) {
-        this.isShowSave = !this.isShowSave
+      checkModelBtn(type) {
         switch (type) {
-          case 0: {
+          case 0: { // 取消
             this.couponList = this.oldCouponList
+            this.isShowSave = false
+            break
+          }
+          case 1: {
+            let data = this._packData()
+            this._rqSortList(data)
+              .then(() => {
+                this.isShowSave = false
+              })
             break
           }
         }
@@ -91,7 +259,7 @@
         }
         this.couponList.splice(index - 1, 2, toUp, toDown)
       },
-      sortDownHandler(obj) {
+      sortDownHandler() {
         if (this.couponList.length < 1) return
         let toUp = this.couponList[1]
         let toDown = this.couponList[0]
@@ -102,12 +270,18 @@
     },
     computed: {
       couponUseType() {
-        console.log(this.isShowSave ? 1 : 0, '=========')
         return this.isShowSave ? 1 : 0
+      },
+      emptyImg() {
+        return source.imgEmptyActive()
+      },
+      isEmpty() {
+        return this.couponList.length <= 0
       }
     },
     components: {
-      Coupon
+      Coupon,
+      Toast
     }
   }
 </script>
@@ -115,6 +289,25 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable.styl"
   @import "../../common/stylus/mixin.styl"
+
+  .empty
+    box-sizing: border-box
+    height: 100%
+    padding-top: 34.9%
+    layout()
+    align-items: center
+    &.display-none
+      display: none
+    .empty-pic
+      width: 86px
+      height: 75.5px
+      background-size: 100%
+    .empty-txt
+      padding-top: 10.5px
+      text-align: center
+      font-family: $font-family-light
+      font-size: $font-size-small
+      color: $color-assist-27
 
   .union-sort
     min-height: 100vh

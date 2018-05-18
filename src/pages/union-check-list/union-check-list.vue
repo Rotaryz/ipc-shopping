@@ -22,7 +22,7 @@
         </div>
         <ul class="box">
           <li :class="['box-item',showAd?'show-ad':'']" v-for="(item, index) in checkInfoList" :key="index">
-            <union-check :shopItem="item"></union-check>
+            <union-check :shopItem="item" @lookOverHandler="lookOverHandler"></union-check>
           </li>
         </ul>
       </scroll-view>
@@ -33,7 +33,7 @@
 <script type="text/ecmascript-6">
   import api from 'api'
   import * as wechat from 'common/js/wechat'
-  import {ERR_OK} from 'api/config'
+  import { ERR_OK } from 'api/config'
   import source from 'common/source'
   import wx from 'wx'
   import UnionCard from 'components/union-card-item/union-card-item'
@@ -42,7 +42,7 @@
   const LIMIT_DEF = 10
 
   export default {
-    data() {
+    data () {
       return {
         navList: ['申请中', '待审核', '已通过', '已拒绝'],
         tabFlag: 0,
@@ -55,10 +55,10 @@
         limit: LIMIT_DEF
       }
     },
-    onShow() {
+    onShow () {
       this._init()
     },
-    onPullDownRefresh() {
+    onPullDownRefresh () {
       this._resetConfig()
       let data = this._formatReq()
       data.paga = 1
@@ -72,7 +72,7 @@
         })
     },
     methods: {
-      changeTab(flag) {
+      changeTab (flag) {
         if (this.tabFlag === flag) return
         this.tabFlag = flag
         this._resetConfig()
@@ -84,13 +84,17 @@
             this._isAll(json)
             wx.stopPullDownRefresh()
           })
+        this._showAd()
       },
-      closeAd() {
+      closeAd () {
         this.showAd = false
       },
-      test() {
+      lookOverHandler (obj) {
+        const url = `/pages/audit/audit?checkId=${obj.id}&tabFlag=${this.tabFlag}`
+        this.$router.push(url)
       },
-      _showAd(flag) {
+      _showAd (flag) {
+        flag = this.tabFlag
         if (flag === 0 || flag === 1) {
           this.showAd = true
           console.log(flag)
@@ -100,8 +104,9 @@
           this.showAd = false
         }
       },
-      _init() {
+      _init () {
         this.currentActiveId = this.$root.$mp.query.activeId
+        this.tabFlag = 0
         this._resetConfig()
         let data = this._formatReq()
         this._rqGetCheckList(data)
@@ -111,7 +116,7 @@
             this._isAll(json)
           })
       },
-      _formatReq(flag) {
+      _formatReq (flag) {
         flag = this.tabFlag
         let data = {
           'check_status': 0,
@@ -136,13 +141,13 @@
             break
           }
           case 3 : {
-            data['check_status'] = 1
+            data['check_status'] = 2
             break
           }
         }
         return data
       },
-      _rqGetCheckList(data, loading) {
+      _rqGetCheckList (data, loading) {
         return new Promise(resolve => {
           api.uckGetCheckList(data, loading)
             .then(json => {
@@ -157,18 +162,18 @@
             })
         })
       },
-      _isAll(json) {
+      _isAll (json) {
         let total = json.meta.total
         this.isAll = (this.checkInfoList.length >= total)
         return this.isAll
       },
-      _resetConfig() {
+      _resetConfig () {
         this.isAll = false
         this.page = 1
         this.limit = LIMIT_DEF
       },
       // 格式化请求列表
-      _formatResData(json) {
+      _formatResData (json) {
         let arr = []
         let res = json.data
         res.map(item => {
@@ -182,10 +187,9 @@
             statusCode: this.tabFlag
           })
         })
-        console.log(arr)
         return arr
       },
-      getMoreList() {
+      getMoreList () {
         if (this.isAll) return
         let data = this._formatReq()
         data.page++
@@ -194,18 +198,17 @@
             let list = this._formatResData(json)
             this.checkInfoList.push(...list)
             this._isAll(json)
-            console.log(this.checkInfoList.length)
           })
       }
     },
     computed: {
-      isEmpty() {
+      isEmpty () {
         return this.checkInfoList.length <= 0
       },
-      emptyImg() {
+      emptyImg () {
         return source.imgEmptyActive()
       },
-      closeIcon() {
+      closeIcon () {
         return source.imgCloseIcon()
       }
     },
