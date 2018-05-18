@@ -1,10 +1,11 @@
 <template>
   <div class="data-box">
     <div class="merchant-title">
-      <div class="merchant-title-tab"  :class="bigBtn === 'merchant' ? 'active' : '' " @tap="clickTab('merchant')">商家总榜</div>
-      <div class="merchant-title-tab"  :class="bigBtn === 'staff' ? 'active' : '' " @tap="clickTab('staff')">员工总榜</div>
+      <div class="merchant-title-tab" :class="bigBtn === 'merchant' ? 'active' : '' " @tap="clickTab('merchant')">商家总榜
+      </div>
+      <div class="merchant-title-tab" :class="bigBtn === 'staff' ? 'active' : '' " @tap="clickTab('staff')">员工总榜</div>
     </div>
-    <div class="all-merchant"  v-if="bigBtn === 'merchant'">
+    <div class="all-merchant" v-if="bigBtn === 'merchant'">
       <div class="all-top">
         <div class="data-title">
           <div class="text">门店</div>
@@ -13,43 +14,16 @@
           <div class="text">联盟力</div>
         </div>
         <div class="data-content">
-          <scroll-view class="content-scroll" @scrolltolower="test22" scroll-y="true">
-            <div class="self-merchant-list">
-              <div class="selft-merchant-list-box">美容美甲…</div>
-              <div class="selft-merchant-list-box">100</div>
-              <div class="selft-merchant-list-box">100</div>
-              <div class="selft-merchant-list-box">100</div>
+          <scroll-view class="content-scroll" @scrolltolower="scrollAllShop" scroll-y="true">
+            <div class="data-all"   v-if="allShopList.length !== 0">
+              <div class="self-merchant-list"  v-for="(item, index) in allShopList"  v-bind:key="index">
+                <div class="selft-merchant-list-box">{{item.merchant_id}}</div>
+                <div class="selft-merchant-list-box">{{item.sale_count}}/{{item.init_stock}}</div>
+                <div class="selft-merchant-list-box">{{item.other_verification}}</div>
+                <div class="selft-merchant-list-box">{{item.alliance_power}}</div>
+              </div>
             </div>
-            <div class="self-merchant-list">
-              <div class="selft-merchant-list-box">美容美甲美容美甲美容美甲…</div>
-              <div class="selft-merchant-list-box">100</div>
-              <div class="selft-merchant-list-box">100</div>
-              <div class="selft-merchant-list-box">100</div>
-            </div>
-            <div class="self-merchant-list">
-              <div class="selft-merchant-list-box">美容美甲美容美甲美容美甲…</div>
-              <div class="selft-merchant-list-box">100</div>
-              <div class="selft-merchant-list-box">100</div>
-              <div class="selft-merchant-list-box">100</div>
-            </div>
-            <div class="self-merchant-list">
-              <div class="selft-merchant-list-box">美容美甲美容美甲美容美甲…</div>
-              <div class="selft-merchant-list-box">100</div>
-              <div class="selft-merchant-list-box">100</div>
-              <div class="selft-merchant-list-box">100</div>
-            </div>
-            <div class="self-merchant-list">
-              <div class="selft-merchant-list-box">美容美甲美容美甲美容美甲…</div>
-              <div class="selft-merchant-list-box">100</div>
-              <div class="selft-merchant-list-box">100</div>
-              <div class="selft-merchant-list-box">100</div>
-            </div>
-            <div class="self-merchant-list">
-              <div class="selft-merchant-list-box">美容美甲美容美甲美容美甲…</div>
-              <div class="selft-merchant-list-box">100</div>
-              <div class="selft-merchant-list-box">100</div>
-              <div class="selft-merchant-list-box">100</div>
-            </div>
+            <div class="data-null"  v-if="allShopList.length === 0">暂无数据～</div>
           </scroll-view>
         </div>
       </div>
@@ -64,143 +38,71 @@
         </div>
       </div>
     </div>
-    <div class="all-staff"  v-if="bigBtn === 'staff'">
+    <div class="all-staff" v-if="bigBtn === 'staff'">
       <div class="all-staff-box">
         <div class="rank-list">
-          <img v-if="image" :src="image + '/defaults/ipc-shopping/activitydata/bg-activity_lizi@2x.png'" class="rank-bg"
-               mode="widthFix">
+          <img v-if="image" :src="image + '/defaults/ipc-shopping/activitydata/bg-activity_lizi@2x.png'"
+               class="rank-bg" mode="widthFix">
           <div class="rank-box rank-two">
             <div class="rank-two-hard">
               <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_second@2x.png'" v-if="image"
                    class="hard-img-crown">
-              <img :src="image + '/defaults/ipc-shopping/activitydata/timg.jpg'" v-if="image" class="hard-img">
+              <img :src="allStaffList[1].avatar_url" v-if="image" class="hard-img">
             </div>
             <div class="rank-two-text">
               <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_second2@2x.png'" v-if="image"
                    class="img">
-              <div class="name">销售小能手</div>
+              <div class="name">{{allStaffList[1].nickname}}</div>
             </div>
             <div class="rank-two-bottom">
               <div class="left-text">核销力</div>
-              <div class="right-text">638</div>
+              <div class="right-text">{{allStaffList[1].sale_count}}</div>
             </div>
           </div>
           <div class="rank-box rank-two rank-one">
             <div class="rank-two-hard">
               <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_first@2x.png'" v-if="image"
                    class="hard-img-crown">
-              <img :src="image + '/defaults/ipc-shopping/activitydata/timg.jpg'" v-if="image" class="hard-img">
+              <img :src="allStaffList[0].avatar_url" v-if="image" class="hard-img">
             </div>
             <div class="rank-two-text">
               <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_first1@2x.png'" v-if="image"
                    class="img">
-              <div class="name first-name">销售小能手</div>
+              <div class="name first-name">{{allStaffList[0].nickname}}</div>
             </div>
             <div class="rank-two-bottom">
               <div class="left-text">核销力</div>
-              <div class="right-text">638</div>
+              <div class="right-text">{{allStaffList[0].sale_count}}</div>
             </div>
           </div>
           <div class="rank-box rank-two">
             <div class="rank-two-hard">
               <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_third@2x.png'" v-if="image"
                    class="hard-img-crown">
-              <img :src="image + '/defaults/ipc-shopping/activitydata/timg.jpg'" v-if="image" class="hard-img">
+              <img :src="allStaffList[2].avatar_url" v-if="image" class="hard-img">
             </div>
             <div class="rank-two-text">
               <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_third3@2x.png'" v-if="image"
                    class="img">
-              <div class="name thr-name">销售小能手</div>
+              <div class="name thr-name">{{allStaffList[0].nickname}}</div>
             </div>
             <div class="rank-two-bottom">
               <div class="left-text">核销力</div>
-              <div class="right-text">638</div>
+              <div class="right-text">{{allStaffList[2].sale_count}}</div>
             </div>
           </div>
         </div>
         <div class="data-content">
-          <div class="self-merchant-list">
+          <div class="self-merchant-list" v-for="(item, index) in allStaffTwoList" v-bind:key="index">
             <div class="self-staff-list-box user-box">
-              <div class="number">4</div>
-              <img class="img" :src="image + '/defaults/ipc-shopping/activitydata/timg.jpg'" v-if="image">
+              <div class="number">{{index + 4}}</div>
+              <img class="img" :src="item.avatar_url" v-if="image">
             </div>
-            <div class="self-staff-list-box">阿飞</div>
-            <div class="self-staff-list-box">100</div>
+            <div class="self-staff-list-box">{{item.nickname}}</div>
+            <div class="self-staff-list-box">{{item.sale_count}}</div>
             <div class="self-staff-list-box money-box">
               <div class="icon">¥</div>
-              <div class="money">2000</div>
-            </div>
-          </div>
-          <div class="self-merchant-list">
-            <div class="self-staff-list-box user-box">
-              <div class="number">5</div>
-              <img class="img" :src="image + '/defaults/ipc-shopping/activitydata/timg.jpg'" v-if="image">
-            </div>
-            <div class="self-staff-list-box">阿飞</div>
-            <div class="self-staff-list-box">100</div>
-            <div class="self-staff-list-box money-box">
-              <div class="icon">¥</div>
-              <div class="money">2000</div>
-            </div>
-          </div>
-          <div class="self-merchant-list">
-            <div class="self-staff-list-box user-box">
-              <div class="number">6</div>
-              <img class="img" :src="image + '/defaults/ipc-shopping/activitydata/timg.jpg'" v-if="image">
-            </div>
-            <div class="self-staff-list-box">阿飞</div>
-            <div class="self-staff-list-box">100</div>
-            <div class="self-staff-list-box money-box">
-              <div class="icon">¥</div>
-              <div class="money">2000</div>
-            </div>
-          </div>
-          <div class="self-merchant-list">
-            <div class="self-staff-list-box user-box">
-              <div class="number">7</div>
-              <img class="img" :src="image + '/defaults/ipc-shopping/activitydata/timg.jpg'" v-if="image">
-            </div>
-            <div class="self-staff-list-box">阿飞</div>
-            <div class="self-staff-list-box">100</div>
-            <div class="self-staff-list-box money-box">
-              <div class="icon">¥</div>
-              <div class="money">2000</div>
-            </div>
-          </div>
-          <div class="self-merchant-list">
-            <div class="self-staff-list-box user-box">
-              <div class="number">8</div>
-              <img class="img" :src="image + '/defaults/ipc-shopping/activitydata/timg.jpg'" v-if="image">
-            </div>
-            <div class="self-staff-list-box">阿飞</div>
-            <div class="self-staff-list-box">100</div>
-            <div class="self-staff-list-box money-box">
-              <div class="icon">¥</div>
-              <div class="money">2000</div>
-            </div>
-          </div>
-          <div class="self-merchant-list">
-            <div class="self-staff-list-box user-box">
-              <div class="number">9</div>
-              <img class="img" :src="image + '/defaults/ipc-shopping/activitydata/timg.jpg'" v-if="image">
-            </div>
-            <div class="self-staff-list-box">阿飞</div>
-            <div class="self-staff-list-box">100</div>
-            <div class="self-staff-list-box money-box">
-              <div class="icon">¥</div>
-              <div class="money">2000</div>
-            </div>
-          </div>
-          <div class="self-merchant-list">
-            <div class="self-staff-list-box user-box">
-              <div class="number">10</div>
-              <img class="img" :src="image + '/defaults/ipc-shopping/activitydata/timg.jpg'" v-if="image">
-            </div>
-            <div class="self-staff-list-box">阿飞</div>
-            <div class="self-staff-list-box">100</div>
-            <div class="self-staff-list-box money-box">
-              <div class="icon">¥</div>
-              <div class="money">2000</div>
+              <div class="money">{{item.commission}}</div>
             </div>
           </div>
         </div>
@@ -212,6 +114,12 @@
 
 <script type="text/ecmascript-6">
   import {baseURL} from 'api/config'
+  import * as wechat from 'common/js/wechat'
+  import {mapGetters} from 'vuex'
+  import {ROLE} from 'common/js/contants'
+  import wx from 'wx'
+  import api from 'api'
+
   const options = {
     // color: ['#8941AF', '#A740AE', '#AE4077', '#B16544', '#B44343', '#5EAD83', '#40A1AE', '#4778C0', '#2843C3', '#57876E', '#128787', '#728AEC', '#1B6FBD', '#8941AF', '#A740AE', '#AE4077', '#B16544', '#B44343', '#5EAD83', '#40A1AE', '#4778C0', '#2843C3', '#57876E', '#128787', '#728AEC', '#1B6FBD'],
     color: ['#6D42E6', '#4778C0', '#47AFC0', '#40A1AE', '#8941AF', '#4644DF'],
@@ -274,12 +182,85 @@
           options: options
         },
         image: baseURL.image,
-        bigBtn: 'merchant'
+        bigBtn: 'merchant',
+        allShopList: [], // 商店总榜数据参数
+        allfShopPage: 1,
+        isAllShop: false,
+        fristAllShop: false,
+        allStaffList: [], // 商店总榜总榜数据参数
+        allStaffTwoList: [],
+        fristAllStaff: false
       }
     },
+    onPullDownRefresh() {
+      if (this.staffScene === 2) {
+        this.selfStaffPage = 1
+        this.selfStaffList = []
+        this.isAllselfStaff = false
+        this._getSelfStaff()
+        this._getBar()
+      } else {
+        this.allStaffList = []
+        this.allStaffTwoList = []
+        this._getAllfStaff()
+      }
+    },
+    mounted() {
+      this._getAllfShop()
+      this._getCake()
+    },
     methods: {
+      ...mapGetters(['role']),
+      _init() {
+        // let role = this.role()
+        // this.currentRole = role
+        // this.currentRole = role
+        // 伪代码
+        this.currentRole = ROLE.UNION_ID
+        // wx.setStorageSync('merchantId', merchantId)
+        wx.setStorageSync('userType', ROLE.UNION_ID)
+        console.log(this.currentRole)
+      },
       clickTab(value) {
         this.bigBtn = value
+      },
+      // 商家总榜数据
+      _getAllfShop() {
+        api.dataAllShop(this.activeId, this.allfShopPage).then(res => {
+          console.log(res)
+          this.allShopList.push(...res.data)
+          console.log(this.allShopList, '```````````2222')
+          console.log(res.data, '```````````22223332222')
+          wechat.hideLoading()
+          this._isAllALLShop(res)
+          console.log(this.isAllSelfShop)
+          this.allfShopPage++
+        })
+      },
+      scrollAllShop() {
+        if (this.isAllShop) return
+        this._getAllfShop()
+      },
+      _isAllALLShop(res) {
+        if (this.allShopList.length >= res.meta.total * 1) {
+          this.isAllShop = true
+        }
+      },
+      _getCake() {
+        api.dataCake(this.activeId).then(res => {
+          console.log(res)
+          wechat.hideLoading()
+        })
+      },
+      // 商家员工总榜数据
+      _getAllfStaff() {
+        api.dataAllStaff(this.activeId, this.allfStaffPage).then(res => {
+          this.allStaffList = res.data.slice(0, 3)
+          this.allStaffTwoList = res.data.slice(3)
+          console.log(this.allStaffList)
+          console.log(this.allStaffTwoList)
+          wechat.hideLoading()
+        })
       }
     }
   }
@@ -441,6 +422,7 @@
               height: 24px
               border-radius: 50%
               display: block
+              border: 0.5px solid $color-cut-line-ff16
           .money-box
             align-items: flex-end
             justify-content: flex-end
@@ -519,6 +501,7 @@
         .money
           font-size: $font-size-medium-x
           font-family: DINAlternate-Bold
+
   .ec-box
     height: 207.5px
     ec-canvas

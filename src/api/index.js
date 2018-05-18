@@ -6,6 +6,7 @@ import MerchantActivity from './merchant-api'
 import UnionCreate from './union-create'
 import UnionCheck from './union-check'
 import Home from './home'
+import dataApi from './data-api'
 
 export default {
   ...user,
@@ -15,5 +16,7 @@ export default {
   ...UnionCreate,
   ...UnionCreate,
   ...UnionCheck,
-  ...Home
+  ...Home,
+  ...UnionCheck,
+  ...dataApi
 }
