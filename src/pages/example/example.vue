@@ -3,7 +3,7 @@
     <div class="btn" @tap="toSave2">同步数据</div>
     <div class="btn2" @tap="getRole">获取身份</div>
     <div class="line" v-if="flag"></div>
-    <div class="box" v-for="(val,key,index) in list" :key="index">{{val}}-{{key}}</div>
+    <div class="box" v-for="(val,key,index) in list" :key="index" @tap="ttt">{{val}}-{{key}}</div>
     <toast ref="toast"></toast>
   </div>
 </template>
@@ -42,6 +42,9 @@
       toSave2 () {
         this.roleSync(ROLE.STAFF_ID + '员工')
         console.log('=============')
+      },
+      ttt() {
+        this.$refs.toast.show('sss')
       }
     },
     // methods: {

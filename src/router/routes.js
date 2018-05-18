@@ -1,4 +1,12 @@
 module.exports = [
+  // {
+  //   path: '/pages/example/example',
+  //   name: 'Example',
+  //   config: {
+  //     enablePullDownRefresh: true,
+  //     navigationBarTitleText: '示例'
+  //   }
+  // },
   {
     path: '/pages/loading/loading', // loading
     name: 'Loading',
@@ -97,14 +105,6 @@ module.exports = [
       navigationBarTitleText: '绑定银行卡',
       disableScroll: true,
       backgroundColor: '#F6F7FA'
-    }
-  },
-  {
-    path: '/pages/example/example',
-    name: 'Example',
-    config: {
-      enablePullDownRefresh: true,
-      navigationBarTitleText: '示例'
     }
   },
   {

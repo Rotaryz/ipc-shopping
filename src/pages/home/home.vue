@@ -15,7 +15,7 @@
         </section>
       </article>
       <ul class="swiper-dots-box">
-        <li :class="['dot',dotCurrent===index?'dot-hit':'']" v-for="(item,index) in activeList" :key="index+item.title"></li>
+        <li :class="['dot',dotCurrent===index?'dot-hit':'',dotStyle]" v-for="(item,index) in activeList" :key="index"></li>
       </ul>
     </header>
     <footer class="tab-leader" v-if="currentRole===ROLE.UNION_ID">
@@ -140,13 +140,15 @@
       number: 0
     }
   }
+  let arr = [object, object2, object3]
   export default {
     data () {
       return {
+        arr,
         ROLE,
         currentRole: null,
         imageUri: baseURL.image,
-        activeList: [object, object2, object3],
+        activeList: [object],
         employeeList: new Array(6).fill(0),
         dotCurrent: 0,
         sliderCurrent: 0,
@@ -170,7 +172,7 @@
         // this.currentRole = role
         // this.currentRole = role
         // 伪代码
-        this.currentRole = ROLE.UNION_ID
+        this.currentRole = ROLE.STAFF_ID
         // wx.setStorageSync('merchantId', merchantId)
         wx.setStorageSync('userType', ROLE.UNION_ID)
         console.log(this.currentRole)
@@ -192,6 +194,9 @@
       }
     },
     computed: {
+      dotStyle () {
+        return this.activeList.length <= 1 ? 'd-op' : ''
+      },
       leaderImg () {
         return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-mhome_union@2x.png)` || ''
       },
@@ -303,6 +308,8 @@
           width: 15px
           border-radius: 100px
           background-color: $color-dot-a7
+        &.d-op
+          opacity: 0
 
     .tab-leader
       position: relative
@@ -428,10 +435,12 @@
                     height: 24px
                     box-sizing: border-box
                     border-radius: 50%
+                    border: 0.5px solid $color-cut-line-ff16
                     overflow: hidden
                     .icon-pic
                       width: 100%
                       height: 100%
+                      border-radius: 50%
                   .progress
                     position: relative
                     flex: 1

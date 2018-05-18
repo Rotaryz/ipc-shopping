@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <section class="bc-box" @tap="test">
+    <section class="bc-box">
       <img class="bc-img" src="/static/img/login-bg.jpg" mode="widthFix"/>
     </section>
     <section class="cover">
@@ -16,29 +16,24 @@
         </button>
       </article>
     </section>
-    <article class="toast" v-if="showToast">
-      <div class="content">{{content}}</div>
-    </article>
+    <toast ref="toast"></toast>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import Toast from 'components/toast/toast'
   import api from 'api'
   import { baseURL, ERR_OK, TOKEN_OUT } from 'api/config'
   import * as wechat from 'common/js/wechat'
   import wx from 'wx'
   import { mapActions, mapMutations } from 'vuex'
   import { ROLE } from 'common/js/contants'
-  // import Toast from '../../components/toast/toast'
 
   console.info(baseURL.jumpVersion)
-
   export default {
     data () {
       return {
-        authorizationCount: 1,
-        showToast: false,
-        content: ''
+        authorizationCount: 1
       }
     },
     beforeCreate () {
@@ -46,7 +41,6 @@
     created () {
     },
     onShow () {
-      this.toastShow('hellow')
       this._init()
     },
     beforeMount () {
@@ -58,24 +52,9 @@
     methods: {
       ...mapActions(['saveRole']),
       ...mapMutations({saveRoleSync: 'ROLE_TYPE'}),
-      test () {
-        console.log(2222)
-        this.toastShow('hellow')
-      },
-      toastShow (content) {
-        if (this.showToast) {
-          return
-        }
-        this.content = content
-        this.showToast = true
-        // setTimeout(() => {
-        //   this.showToast = false
-        // }, 2000)
-      },
       // 微信获取用户信息btn
       wxGetUserInfo (event) {
         const e = event.mp
-        console.log(e, '===========')
         if (e.detail.errMsg !== 'getUserInfo:ok') {
           return
         }
@@ -102,13 +81,12 @@
         this.authorizationCount++
         api.userAuthorise(data)
           .then(Json => {
-            wechat.hideLoading()
             if (Json.error !== ERR_OK && this.authorizationCount <= 5) {
-              console.log(22)
               return this._getToken(data)
             } else if (Json.error !== ERR_OK && this.authorizationCount > 5) {
-              return this.toastShow('登录失败,请重新登录')
+              return this.$refs.toast.show('登录失败,请重新登录.')
             }
+            wechat.hideLoading()
             const res = Json.data
             let token = res.access_token
             if (token) {
@@ -136,7 +114,7 @@
         let token = this.$root.$mp.query.token
         let resCode = this.$root.$mp.query.resCode * 1
         // 伪代码start
-        // token = ROLE.testToken
+        token = ROLE.testToken
         wx.setStorageSync('token', token)
         // 伪代码end
         if (!token) return
@@ -154,31 +132,14 @@
         this.saveRoleSync(entryRole)
       }
     },
-    computed: {
-      // Toast
+    components: {
+      Toast
     }
   }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import '../../common/stylus/variable'
   @import '../../common/stylus/mixin'
-
-  .toast
-    position: fixed
-    z-index: 99999
-    top: 42%
-    left: 50%
-    max-width: 170px
-    padding: 10px 15px
-    border-radius: 2px
-    transform: translateX(-50%)
-    text-align: center
-    background-color: rgba(54, 53, 71, .9)
-    .content
-      line-height: 20px
-      font-size: $font-size-medium
-      color: $color-background-ff
-
 
   .content
     height: 100vh
