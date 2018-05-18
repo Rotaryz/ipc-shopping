@@ -40,6 +40,33 @@ export default {
   homeGetStaffSale(data, loading = true) {
     const url = `/api/alliances/data/emploee-sale-comparison`
     return request.get(url, data, loading)
+  },
+  /**
+   * 联盟活动公告
+   * @param data 入参
+   * @returns {Promise.<*>}
+   */
+  homeGetNotice(data, loading = true) {
+    const url = `/api/alliances/data/notice`
+    return request.get(url, data, loading)
+  },
+  /**
+   * 获取全局数据
+   * @param data 入参
+   * @returns {Promise.<*>}
+   */
+  homeGetGlobalData(data, loading = true) {
+    const url = `/api/alliances/data/get-global-data`
+    return request.get(url, data, loading)
+  },
+  /**
+   *  判断该员工在该商家的状态
+   * @param data 入参
+   * @returns {Promise.<*>}
+   */
+  homeCustomerStatus(data, loading = true) {
+    const url = `/api/customer-status`
+    return request.get(url, data, loading)
   }
 
 }

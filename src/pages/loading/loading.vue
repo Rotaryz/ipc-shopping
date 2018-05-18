@@ -17,6 +17,7 @@
       </article>
     </section>
     <toast ref="toast"></toast>
+    <audit-msg></audit-msg>
   </div>
 </template>
 
@@ -28,12 +29,14 @@
   import wx from 'wx'
   import { mapActions, mapMutations } from 'vuex'
   import { ROLE } from 'common/js/contants'
+  import AuditMsg from 'components/audit-msg/audit-msg'
 
   console.info(baseURL.jumpVersion)
   export default {
     data () {
       return {
-        authorizationCount: 1
+        authorizationCount: 1,
+        entryRole: ROLE.STAFF_ID
       }
     },
     beforeCreate () {
@@ -68,13 +71,16 @@
       },
       // 获取临时登录凭证code
       _getCode () {
-        wechat.login()
-          .then(res => {
-            wx.setStorageSync('code', res.code)
-          })
-          .catch(err => {
-            console.info(err)
-          })
+        return new Promise(resolve => {
+          wechat.login()
+            .then(res => {
+              wx.setStorageSync('code', res.code)
+              resolve(res.code)
+            })
+            .catch(err => {
+              console.info(err)
+            })
+        })
       },
       // 获取token
       _getToken (data) {
@@ -84,18 +90,18 @@
             if (Json.error !== ERR_OK && this.authorizationCount <= 5) {
               return this._getToken(data)
             } else if (Json.error !== ERR_OK && this.authorizationCount > 5) {
+              this.authorizationCount = 1
               return this.$refs.toast.show('登录失败,请重新登录.')
             }
-            wechat.hideLoading()
+            this.authorizationCount = 1
             const res = Json.data
             let token = res.access_token
             if (token) {
-              const merchantId = this.$root.$mp.query.merchantId
-              wx.setStorageSync('merchantId', merchantId)
+              // const merchantId = this.$root.$mp.query.merchantId
+              // wx.setStorageSync('merchantId', merchantId)
               wx.setStorageSync('token', token)
               wx.setStorageSync('userType', ROLE.STAFF_ID)
               this.saveRoleSync(ROLE.STAFF_ID)
-              // await this.$getUserInfo(true)
               this._navTo()
             }
           })
@@ -105,35 +111,76 @@
       },
       // 页面路由
       _navTo () {
-        const url = `/pages/home/home?type=obj`
-        this.$router.replace(url)
+        if (this.entryRole === ROLE.STAFF_ID) {
+          this._rqCustomerStatus()
+            .then(json => {
+              wechat.hideLoading()
+              // let status = json.data.status
+              console.log(json)
+            })
+        } else {
+          const url = `/pages/home/home`
+          this.$router.replace(url)
+        }
       },
       // 初始化
       _init () {
-        this._getCode()
-        let token = this.$root.$mp.query.token
         let resCode = this.$root.$mp.query.resCode * 1
-        // 伪代码start
-        token = ROLE.testToken
-        wx.setStorageSync('token', token)
-        // 伪代码end
-        if (!token) return
         if (resCode === TOKEN_OUT) return
-        this._checkRole(token)
-        this._navTo()
+        this._getCode()
+        this._checkRole()
+        this._work()
+        // let token = this.$root.$mp.query.token
+        // // 伪代码start
+        // token = ROLE.testToken
+        // wx.setStorageSync('token', token)
+        // // 伪代码end
+        // if (!token) return
+        // this._checkRole(token)
+        // this._navTo()
       },
       // 检查角色
-      _checkRole (token) {
+      _checkRole () {
         const entryRole = this.$root.$mp.query.entryRole
-        const merchantId = this.$root.$mp.query.merchantId // 员工历史记录栏进来没有商家ID
+        if (entryRole) {
+          this.entryRole = entryRole
+          this.saveRoleSync(entryRole)
+        }
+        wx.setStorageSync('userType', this.entryRole)
+      },
+      // 工作
+      _work () {
+        const merchantId = this.$root.$mp.query.merchantId
         wx.setStorageSync('merchantId', merchantId)
-        wx.setStorageSync('userType', entryRole)
-        wx.setStorageSync('token', token)
-        this.saveRoleSync(entryRole)
+        let token = null
+        if (this.entryRole === ROLE.STAFF_ID) {
+          token = wx.getStorageSync('token')
+        } else {
+          token = this.$root.$mp.query.token
+          token && wx.setStorageSync('token', token)
+        }
+        if (!token) return
+        this._navTo()
+      },
+      _rqCustomerStatus () {
+        return new Promise(resolve => {
+          api.homeCustomerStatus()
+            .then(json => {
+              if (json.error !== ERR_OK) {
+                return false
+              }
+              wechat.hideLoading()
+              resolve(json)
+            })
+            .catch(err => {
+              console.info(err)
+            })
+        })
       }
     },
     components: {
-      Toast
+      Toast,
+      AuditMsg
     }
   }
 </script>

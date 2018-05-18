@@ -20,7 +20,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import api from 'api'
+  import {baseURL} from 'api/config'
   const PATHARRAY = [ // 添加无数据时默认页面所需要的路径图片
     {
       title: '抱歉！您撞到了404页面…',
@@ -36,7 +36,7 @@
   export default {
     data () {
       return {
-        imageUrl: api.image,
+        imageUrl: baseURL.image,
         imagesUrl: '',
         title: '',
         msg: ''

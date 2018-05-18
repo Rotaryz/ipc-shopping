@@ -3,9 +3,9 @@
     <section class="progress-bar">
       <circle-progress :activeInfo="item"></circle-progress>
     </section>
-    <section class="top-bar">
+    <section class="top-bar" @tap="lookTotalHandler(item)">
       <div class="title">{{item.title}}</div>
-      <div class="look-over" :style="arrowImg">查看统计</div>
+      <div v-if="item.isOnline" class="look-over" :style="arrowImg">查看统计</div>
     </section>
     <section class="container">
       <div class="data-box">
@@ -36,7 +36,7 @@
     props: {
       item: Object
     },
-    data() {
+    data () {
       return {
         timer: null,
         saleCard: 0,
@@ -45,13 +45,15 @@
         otherCard: 0
       }
     },
-    beforeMount() {
+    beforeMount () {
     },
-    mounted() {
-      // this._loading()
+    mounted () {
     },
     methods: {
-      _loading() {
+      lookTotalHandler (item) {
+        this.$emit('lookTotalHandler', item)
+      },
+      _loading () {
         if (this.timer) return
         let saleCard = this.item.saleCard.number
         let currentCard = this.item.currentCard.number
@@ -78,7 +80,7 @@
       }
     },
     computed: {
-      arrowImg() {
+      arrowImg () {
         return source.imgArrowRight()
       }
     },
@@ -111,6 +113,7 @@
       align-items: center
       cut-off-rule-bottom(4.3478260869565%, 0, $color-cut-line-ff16)
       .title
+        flex: 1
         font-family: $font-family-regular
         font-size: $font-size-medium-x
         color: $color-background-ff

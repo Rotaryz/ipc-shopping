@@ -64,6 +64,7 @@
         navList: ['报名中', '已上架', '已下架'],
         currentRole: null,
         tabFlag: 0,
+        model: null,
         cardInfoList: [],
         isAll: false,
         page: 1,
@@ -172,6 +173,19 @@
           msg: '确定删除？'
         })
       },
+      _rqActiveOnline (data, cb) {
+        api.umgActiveOnline(data)
+          .then(json => {
+            wechat.hideLoading()
+            if (json.error !== ERR_OK) {
+              return this.$refs.toast.show(json.message)
+            }
+            cb()
+          })
+          .catch(err => {
+            console.info(err)
+          })
+      },
       getMoreList () {
         if (this.isAll) return
         let data = this._formatReq()
@@ -186,13 +200,38 @@
       },
       confirmHandler () {
         this.msgInfo.isShow = false
+        let data = {activity_alliance_id: this.currentActiveId}
+        let self = this
+        switch (this.model) {
+          case 0 : {
+            this._rqActiveOnline(data, () => {
+              let index = self.cardInfoList.findIndex(self.currentActiveId)
+              self.cardInfoList.splice(index, 1)
+              self.currentActiveId = null
+            })
+            break
+          }
+          case 1: {
+            console.log(2)
+            break
+          }
+        }
+      },
+      deleteHandler (obj) {
+        this._initMsgInfo(1)
+        this.msgInfo.isShow = true
+        this.currentActiveId = obj.id
+        this.model = 1
       },
       cancelHandler () {
         this.msgInfo.isShow = false
+        this.currentActiveId = null
       },
       upperHandler (obj) {
         this._initMsgInfo(0)
         this.msgInfo.isShow = true
+        this.currentActiveId = obj.id
+        this.model = 0
       },
       checkHandler (obj) {
         const activeId = obj.id
@@ -203,10 +242,6 @@
         const activeId = obj.id
         const url = `/pages/union-sort/union-sort?activeId=${activeId}`
         this.$router.push(url)
-      },
-      deleteHandler(obj) {
-        this._initMsgInfo(1)
-        this.msgInfo.isShow = true
       },
       test (obj) {
         const activeId = obj.id
