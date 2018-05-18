@@ -126,6 +126,7 @@
         }).catch(err => {
           console.log(err)
         })
+        wechat.hideLoading()
       },
       refuse (obj, index) {
         this.dataTmp = obj
@@ -209,7 +210,7 @@
           width: 34px
           height: 34px
           border-radius: 100%
-          border: .5px solid $color-text-2d
+          border: .5px solid $color-cut-line-ed
           margin-right: 10px
         .left-name
           display: inline-block
