@@ -76,7 +76,7 @@
 <script type="text/ecmascript-6">
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
   import Coupon from 'components/coupon-item/coupon-item'
-  import {baseURL, ERR_OK} from 'api/config'
+  import { baseURL, ERR_OK } from 'api/config'
   import Toast from '@/components/toast/toast'
   import wx from 'wx'
   import api from 'api'
@@ -91,7 +91,7 @@
   // money: 1000
 
   export default {
-    data() {
+    data () {
       return {
         imageUrl: baseURL.image,
         awaitList: {},
@@ -102,22 +102,23 @@
         currentCheckId: null
       }
     },
-    created() {
+    created () {
+    },
+    beforeMount () {
       this._init()
     },
-    beforeMount() {
+    mounted () {
     },
-    mounted() {
-    },
-    beforeUpdate() {
+    beforeUpdate () {
     },
     methods: {
-      _init() {
+      _init () {
         this.currentActiveId = this.$root.$mp.query.checkId
         this.btnSta = this.$root.$mp.query.tabFlag
         wx.setNavigationBarTitle({title: BTN[this.btnSta]})
+        this._rqGetDetail({id: this.currentActiveId})
       },
-      _rqGetDetail(data, loading) {
+      _rqGetDetail (data, loading) {
         api.uckGetCheckDetail(data, loading)
           .then(json => {
             wechat.hideLoading()
@@ -131,7 +132,7 @@
             console.info(err)
           })
       },
-      _renderData(json) {
+      _renderData (json) {
         let res = json.data
         this.awaitList.shop_name = res.merchant_data.shop_name
         this.awaitList.shop_type = res.merchant_data.industry
@@ -149,7 +150,7 @@
           this.couponInfo.image_url = res.promotion.image_url
         }
       },
-      _rqCheckApply(data, loading) {
+      _rqCheckApply (data, loading) {
         api.uckCheckApply(data, loading)
           .then(json => {
             if (json.error !== ERR_OK) {
@@ -162,7 +163,7 @@
             console.info(err)
           })
       },
-      _navToMp(json) {
+      _navToMp (json) {
         json = {
           appId: '',
           path: 'pages/index/index?id=123',
@@ -170,36 +171,36 @@
             foo: 'bar'
           },
           envVersion: 'develop',
-          success(res) {
+          success (res) {
             // 打开成功
           }
         }
         wx.navigateToMiniProgram(json)
       },
-      _formatReq(flag) {
+      _formatReq (flag) {
         // 1通过 2拒绝 3替换 4提醒
         return {check_status: flag, apply_id: this.currentCheckId}
       },
-      lookOverHandler(obj) {
+      lookOverHandler (obj) {
         // this._navToMp(obj)
         console.log(666)
       },
-      changeCoupon() {
+      changeCoupon () {
         let data = this._formatReq(3)
         this._rqCheckApply(data)
         // this.$refs.toast.show('更换优惠券')
       },
-      refuse() {
+      refuse () {
         let data = this._formatReq(2)
         this._rqCheckApply(data)
         // this.$refs.toast.show('已拒绝')
       },
-      accept() {
+      accept () {
         let data = this._formatReq(1)
         this._rqCheckApply(data)
         // this.$refs.toast.show('已接受')
       },
-      remind() {
+      remind () {
         let data = this._formatReq(4)
         this._rqCheckApply(data)
         // this.$refs.toast.show('已提醒')

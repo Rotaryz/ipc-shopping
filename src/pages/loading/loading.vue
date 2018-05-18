@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <section class="bc-box">
+    <section class="bc-box" @tap="test">
       <img class="bc-img" src="/static/img/login-bg.jpg" mode="widthFix"/>
     </section>
     <section class="cover">
@@ -16,53 +16,69 @@
         </button>
       </article>
     </section>
+    <article class="toast" v-if="showToast">
+      <div class="content">{{content}}</div>
+    </article>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import api from 'api'
-  import {baseURL, ERR_OK, TOKEN_OUT} from 'api/config'
+  import { baseURL, ERR_OK, TOKEN_OUT } from 'api/config'
   import * as wechat from 'common/js/wechat'
   import wx from 'wx'
-  import {mapActions, mapMutations} from 'vuex'
-  import {ROLE} from 'common/js/contants'
+  import { mapActions, mapMutations } from 'vuex'
+  import { ROLE } from 'common/js/contants'
+  // import Toast from '../../components/toast/toast'
 
   console.info(baseURL.jumpVersion)
 
   export default {
-    beforeCreate() {
+    data () {
+      return {
+        authorizationCount: 1,
+        showToast: false,
+        content: ''
+      }
     },
-    created() {
-      // console.log(0, wx)
+    beforeCreate () {
     },
-    onShow() {
+    created () {
+    },
+    onShow () {
+      this.toastShow('hellow')
       this._init()
-      // console.log(this.$root.$mp)
-      // this._navTo()
-      // const url = `/pages/loading/loading?type=tokenOut`
-      // wx.reLaunch({url})
-      // console.log('onshow')
     },
-    beforeMount() {
-      // this._init()
-      // console.log(1, wx)
+    beforeMount () {
     },
-    mounted() {
+    mounted () {
     },
-    beforeDestroy() {
-      // console.log(3)
+    beforeDestroy () {
     },
     methods: {
       ...mapActions(['saveRole']),
       ...mapMutations({saveRoleSync: 'ROLE_TYPE'}),
+      test () {
+        console.log(2222)
+        this.toastShow('hellow')
+      },
+      toastShow (content) {
+        if (this.showToast) {
+          return
+        }
+        this.content = content
+        this.showToast = true
+        // setTimeout(() => {
+        //   this.showToast = false
+        // }, 2000)
+      },
       // 微信获取用户信息btn
-      wxGetUserInfo(event) {
+      wxGetUserInfo (event) {
         const e = event.mp
-        console.log(e)
+        console.log(e, '===========')
         if (e.detail.errMsg !== 'getUserInfo:ok') {
           return
         }
-        console.log(22)
         const code = wx.getStorageSync('code')
         const data = {
           code,
@@ -72,7 +88,7 @@
         this._getToken(data)
       },
       // 获取临时登录凭证code
-      _getCode() {
+      _getCode () {
         wechat.login()
           .then(res => {
             wx.setStorageSync('code', res.code)
@@ -82,13 +98,16 @@
           })
       },
       // 获取token
-      _getToken(data) {
+      _getToken (data) {
+        this.authorizationCount++
         api.userAuthorise(data)
           .then(Json => {
             wechat.hideLoading()
-            console.log(Json, '===')
-            if (Json.error !== ERR_OK) {
-              return ''
+            if (Json.error !== ERR_OK && this.authorizationCount <= 5) {
+              console.log(22)
+              return this._getToken(data)
+            } else if (Json.error !== ERR_OK && this.authorizationCount > 5) {
+              return this.toastShow('登录失败,请重新登录')
             }
             const res = Json.data
             let token = res.access_token
@@ -107,17 +126,17 @@
           })
       },
       // 页面路由
-      _navTo() {
+      _navTo () {
         const url = `/pages/home/home?type=obj`
         this.$router.replace(url)
       },
       // 初始化
-      _init() {
+      _init () {
         this._getCode()
         let token = this.$root.$mp.query.token
         let resCode = this.$root.$mp.query.resCode * 1
         // 伪代码start
-        token = ROLE.testToken
+        // token = ROLE.testToken
         wx.setStorageSync('token', token)
         // 伪代码end
         if (!token) return
@@ -126,7 +145,7 @@
         this._navTo()
       },
       // 检查角色
-      _checkRole(token) {
+      _checkRole (token) {
         const entryRole = this.$root.$mp.query.entryRole
         const merchantId = this.$root.$mp.query.merchantId // 员工历史记录栏进来没有商家ID
         wx.setStorageSync('merchantId', merchantId)
@@ -135,13 +154,31 @@
         this.saveRoleSync(entryRole)
       }
     },
-    computed: {}
+    computed: {
+      // Toast
+    }
   }
 </script>
-
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import '../../common/stylus/variable'
   @import '../../common/stylus/mixin'
+
+  .toast
+    position: fixed
+    z-index: 99999
+    top: 42%
+    left: 50%
+    max-width: 170px
+    padding: 10px 15px
+    border-radius: 2px
+    transform: translateX(-50%)
+    text-align: center
+    background-color: rgba(54, 53, 71, .9)
+    .content
+      line-height: 20px
+      font-size: $font-size-medium
+      color: $color-background-ff
+
 
   .content
     height: 100vh
@@ -191,7 +228,7 @@
         padding: 0 12px
         .btn
           width: 100%
-          background: #1AC521
+          background: $color-wx-1a
           height: 100%
           border-radius: 4px
           display: flex
@@ -208,7 +245,9 @@
           .wx-login-txt
             font-size: $font-size-medium-x
             color: $color-background-ff
-            font-family: PingFangSC-Regular
+            font-family: $font-family-regular
+
+
 </style>
 
 
