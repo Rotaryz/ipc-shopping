@@ -156,8 +156,7 @@
       }
     },
     mounted() {
-      console.log(this.$root.$mp.query.id)
-      this._rqManageDetails(this.$root.$mp.query.id || 1)
+      this._rqManageDetails(4)
     },
     beforeMount() {
       this._init()

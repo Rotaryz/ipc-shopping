@@ -79,10 +79,10 @@
 
   // 状态常量默认值
   const DEFAULT_CONST_STATUS = {
+    lookOver: 2, // 查看(审核中-报名成功-报名失败)
     addCoupon: 0, // 添加优惠券,
     apply: 1, // 报名中
     changeCoupon: 3, // 修改优惠券
-    lookOver: 2, // 查看(审核中-报名成功-报名失败)
     up: 10, // 上架
     down: 11 // 下架
   }

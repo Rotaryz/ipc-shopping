@@ -114,6 +114,7 @@ module.exports = [
       navigationBarTitleText: '活动数据',
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTextStyle: 'white',
+      enablePullDownRefresh: true,
       // 这儿添加要用的小程序组件
       usingComponents: {
         'ec-canvas': '../../../static/ec-canvas/ec-canvas'
@@ -127,6 +128,7 @@ module.exports = [
       navigationBarTitleText: '活动数据',
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTextStyle: 'white',
+      enablePullDownRefresh: true,
       // 这儿添加要用的小程序组件
       usingComponents: {
         'ec-canvas': '../../../static/ec-canvas/ec-canvas'
@@ -140,6 +142,7 @@ module.exports = [
       navigationBarTitleText: '活动数据',
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTextStyle: 'white',
+      enablePullDownRefresh: true,
       // 这儿添加要用的小程序组件
       usingComponents: {
         'ec-canvas': '../../../static/ec-canvas/ec-canvas'
@@ -152,7 +155,8 @@ module.exports = [
     config: {
       navigationBarTitleText: '活动管理',
       navigationBarBackgroundColor: '#1A1D3D',
-      navigationBarTextStyle: 'white'
+      navigationBarTextStyle: 'white',
+      enablePullDownRefresh: true
     }
   },
   {
@@ -182,7 +186,8 @@ module.exports = [
     config: {
       navigationBarTitleText: '上传优惠劵',
       navigationBarBackgroundColor: '#1A1D3D',
-      navigationBarTextStyle: 'white'
+      navigationBarTextStyle: 'white',
+      enablePullDownRefresh: true
     }
   },
   {

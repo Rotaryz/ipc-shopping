@@ -113,8 +113,8 @@
     },
     methods: {
       _init() {
-        this.currentActiveId = this.$root.$mp.query.checkId
-        this.btnSta = this.$root.$mp.query.tabFlag
+        // this.currentActiveId = this.$root.$mp.query.checkId
+        // this.btnSta = this.$root.$mp.query.tabFlag
         wx.setNavigationBarTitle({title: BTN[this.btnSta]})
       },
       _rqGetDetail(data, loading) {
