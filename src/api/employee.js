@@ -37,8 +37,8 @@ export default {
    * @returns {Promise.<*>}
    */
   empDel(data) {
-    const url = `/api/alliances/employee/employee-message/${data.id}`
-    return request.get(url, data)
+    const url = `/api/alliances/employee/employee-message/${data.customer_id}`
+    return request.delete(url, data)
   },
   /**
    * 添加员工二维码
