@@ -130,6 +130,7 @@
       // 初始化
       _init() {
         let resCode = this.$root.$mp.query.resCode * 1
+        // 盟主回退B端
         if (resCode === TOKEN_OUT) return
         this._getCode()
         this._checkRole()

@@ -48,7 +48,7 @@
   import source from 'common/source'
   import { ERR_OK } from 'api/config'
   import { mapGetters } from 'vuex'
-  import { ROLE } from 'common/js/contants'
+  // import { ROLE } from 'common/js/contants'
   import wx from 'wx'
   import api from 'api'
   import * as wechat from 'common/js/wechat'
@@ -96,16 +96,9 @@
     },
     methods: {
       ...mapGetters(['role']),
-      test2 () {
-      },
       _init () {
-        // let role = this.role()
-        // this.currentRole = role
-        // this.currentRole = role
-        // 伪代码
-        this.currentRole = ROLE.UNION_ID
-        // wx.setStorageSync('merchantId', merchantId)
-        wx.setStorageSync('userType', ROLE.UNION_ID)
+        let role = this.role()
+        this.currentRole = role
         this._resetConfig()
         let data = this._formatReq()
         this._rqGetActiveList(data)

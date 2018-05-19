@@ -124,9 +124,6 @@
     created () {
     },
     beforeMount () {
-      // let role = this.role()
-      // this.role = role
-      // console.log(role, '身份')
       this._init()
     },
     mounted () {
@@ -134,13 +131,8 @@
     methods: {
       ...mapGetters(['role']),
       _init () {
-        // let role = this.role()
-        // this.currentRole = role
-        // this.currentRole = role
-        // 伪代码
-        this.currentRole = ROLE.STAFF_ID
-        // wx.setStorageSync('merchantId', merchantId)
-        wx.setStorageSync('userType', ROLE.STAFF_ID)
+        let role = this.role()
+        this.currentRole = role
         this.setNavTitle()
         switch (this.currentRole) {
           case ROLE.UNION_ID: {
