@@ -30,7 +30,6 @@
         <div class="addEmployee" v-on:click="addEmployee">邀请员工</div>
       </div>
       <confirm-msg :show.sync="show" :title.sync="title" v-on:confirm="confirm" v-on:cancel="cancel"></confirm-msg>
-      <audit-msg ref="audit"></audit-msg>
       <bgnull :showImagSta="0" :showBgnull="awaitList.length <= 0 && acceptList.length <= 0"></bgnull>
       <toast ref="toast"></toast>
     </div>
@@ -40,7 +39,6 @@
   import {ERR_OK} from 'api/config'
   import Bgnull from 'components/bgnull/bgnull'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
-  import AuditMsg from 'components/audit-msg/audit-msg'
   import api from 'api'
   import * as wechat from 'common/js/wechat'
   import Toast from '@/components/toast/toast'
@@ -61,7 +59,6 @@
     components: {
       Bgnull,
       ConfirmMsg,
-      AuditMsg,
       Toast
     },
     // 分页
@@ -70,7 +67,6 @@
     },
     mounted() {
       this.getInfo()
-      // this.$refs.audit.show(1) // 员工审核弹窗
       console.log(`--${this.compName}--mounted`)
     },
     methods: {
