@@ -22,15 +22,15 @@
         </article>
         <article class="b-bottom" v-if="cardInfo.status === constStatus.addCoupon">
           <div class="title">{{cardInfo.statusStr}}</div>
-          <div class="btn last" @tap="addHandler(cardInfo)">添加优惠券</div>
+          <div class="btn last" @tap="applyHandler(cardInfo)">添加优惠券</div>
         </article>
         <article class="b-bottom" v-if="cardInfo.status === constStatus.changeCoupon">
           <div class="title">{{cardInfo.statusStr}}</div>
-          <div class="btn last" @tap="changeHandler(cardInfo)">修改优惠券</div>
+          <div class="btn last" @tap="applyHandler(cardInfo)">修改优惠券</div>
         </article>
         <article class="b-bottom" v-if="cardInfo.status === constStatus.lookOver">
           <div class="title">{{cardInfo.statusStr}}</div>
-          <div class="btn last" @tap="lookHandler(cardInfo)">查看</div>
+          <div class="btn last" @tap="applyHandler(cardInfo)">查看</div>
         </article>
         <article class="b-bottom" v-if="cardInfo.status === constStatus.up">
           <div class="title">{{cardInfo.statusStr}}</div>
@@ -46,6 +46,40 @@
         <article class="b-bottom" v-if="cardInfo.status === constStatus.apply">
           <div class="title">报名中</div>
           <div class="btn last" @tap="applyHandler(cardInfo)">报名</div>
+        </article>
+      </div>
+    </section>
+    <section class="wrap" v-if="useType === constUseType.staffModel">
+      <div class="box" :style="backgroundImg">
+        <article :class="['b-top',downStyle?'down-status':'']">
+          <div class="b-top-box">
+            <section class="icon">
+              <div class="icon-pic" :style="iconImg"></div>
+            </section>
+            <artilce class="info-box">
+              <!--<section class="title">{{cardInfo.name}}</section>-->
+              <!--<section class="date">{{cardInfo.end_at}}</section>-->
+              <section class="title">{{cardInfo.name}}</section>
+              <section class="date">{{cardInfo.end_at}}</section>
+              <section class="info">
+                <!--<div class="i-item">销量 {{cardInfo.sale_count}}</div>-->
+                <!--<div class="i-item">核销力 {{cardInfo.verification_power}}</div>-->
+                <div class="i-item staff-item">{{cardInfo.store}} 10</div>
+              </section>
+            </artilce>
+            <section class="look-over">
+              <span class="txt" :style="arrowImg" @tap="previewHandler(cardInfo)">预览</span>
+            </section>
+          </div>
+        </article>
+        <article class="b-bottom" v-if="cardInfo.statusCode === constStatus.staffUp">
+          <div class="title">{{cardInfo.statusStr}}</div>
+          <div class="btn " @tap="addHandler(cardInfo)">二维码</div>
+          <div class="btn last" @tap="addHandler(cardInfo)">统计</div>
+        </article>
+        <article class="b-bottom" v-if="cardInfo.statusCode === constStatus.staffDown">
+          <div class="title">{{cardInfo.statusStr}}</div>
+          <div class="btn last" @tap="changeHandler(cardInfo)">统计</div>
         </article>
       </div>
     </section>
@@ -74,7 +108,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import { baseURL } from 'api/config'
+  import {baseURL} from 'api/config'
   import source from 'common/source'
 
   // 状态常量默认值
@@ -84,13 +118,16 @@
     apply: 1, // 报名中
     changeCoupon: 3, // 修改优惠券
     up: 10, // 上架
-    down: 11 // 下架
+    down: 11, // 下架
+    staffDown: 102, // 下架
+    staffUp: 101 // 上架
   }
 
   // 使用场景默认值
   const DEFAULT_USE_TYPE = {
     shop: 0, // 活动管理
-    shopAllot: 1 // 活动分配
+    shopAllot: 1, // 活动分配
+    staffModel: 100 // 员工模式
   }
 
   // 卡券信息的默认值-盟主管理
@@ -129,65 +166,65 @@
         default: DEFAULT_USE_TYPE
       }
     },
-    data () {
+    data() {
       return {
         imageUri: baseURL.image
       }
     },
-    beforeMount () {
+    beforeMount() {
       // console.log(this.cardInfo)
     },
-    mounted () {
+    mounted() {
       // console.log(this.useType)
     },
     methods: {
-      previewHandler (cardInfo) {
+      previewHandler(cardInfo) {
         this.$emit('previewHandler', cardInfo)
       },
-      editorHandler (cardInfo) {
+      editorHandler(cardInfo) {
         this.$emit('editorHandler', cardInfo)
       },
-      totalHandler (cardInfo) {
+      totalHandler(cardInfo) {
         this.$emit('totalHandler', cardInfo)
       },
-      deleteHandler (cardInfo) {
+      deleteHandler(cardInfo) {
         this.$emit('deleteHandler', cardInfo)
       },
-      changeHandler (cardInfo) {
+      changeHandler(cardInfo) {
         this.$emit('changeHandler', cardInfo)
       },
-      lookHandler (cardInfo) {
+      lookHandler(cardInfo) {
         this.$emit('lookHandler', cardInfo)
       },
-      buyHandler (cardInfo) {
+      buyHandler(cardInfo) {
         this.$emit('buyHandler', cardInfo)
       },
-      allocHandler (cardInfo) {
+      allocHandler(cardInfo) {
         this.$emit('allocHandler', cardInfo)
       },
-      applyHandler (cardInfo) {
+      applyHandler(cardInfo) {
         this.$emit('applyHandler', cardInfo)
       }
     },
     computed: {
-      downStyle () {
+      downStyle() {
         return this.cardInfo.statusCode === this.constStatus.down
       },
-      isAlloct () {
+      isAlloct() {
         return this.useType === this.constUseType.shopAllot
       },
-      backgroundImg () {
+      backgroundImg() {
         return (
           this.isAlloct ? `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/bg-staff_card@2x.png)` : `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/pic-activity_cardp@2x.png)`
         )
       },
-      iconImg () {
+      iconImg() {
         return `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/pic-activity_cardp2@2x.png)` || ''
       },
-      arrowImg () {
+      arrowImg() {
         return source.imgArrowRight()
       },
-      shopImg () {
+      shopImg() {
         return source.imgShopIcon()
       }
     }
@@ -292,6 +329,9 @@
                   font-size: $font-size-small
                   notice-icon()
                   margin-right: 6px
+                  &.staff-item
+                    background-color: transparent
+                    padding :0
                 .money
                   font-family: $font-family-bold
                   font-size: $font-size-large-xx

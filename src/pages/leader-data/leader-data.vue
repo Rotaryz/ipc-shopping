@@ -183,6 +183,7 @@
         },
         image: baseURL.image,
         bigBtn: 'merchant',
+        activeId: 1,
         allShopList: [], // 商店总榜数据参数
         allfShopPage: 1,
         isAllShop: false,
@@ -206,6 +207,7 @@
       }
     },
     mounted() {
+      this.activeId = this.$root.$mp.query.id
       this._getAllfShop()
       this._getCake()
     },
