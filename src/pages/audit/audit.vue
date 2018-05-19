@@ -102,10 +102,12 @@
         currentCheckId: null
       }
     },
+    onShow () {
+      this._init()
+    },
     created () {
     },
     beforeMount () {
-      this._init()
     },
     mounted () {
     },
@@ -114,7 +116,7 @@
     methods: {
       _init () {
         this.currentActiveId = this.$root.$mp.query.checkId
-        this.btnSta = this.$root.$mp.query.tabFlag
+        this.btnSta = this.$root.$mp.query.tabFlag * 1
         wx.setNavigationBarTitle({title: BTN[this.btnSta]})
         this._rqGetDetail({id: this.currentActiveId})
       },

@@ -21,7 +21,7 @@
             <union-card
               :cardInfo="item"
               :useType="0"
-              @previewHandler="test"
+              @previewHandler="previewHandler"
               @checkHandler="checkHandler"
               @sortHandler="sortHandler"
               @upperHandler="upperHandler"
@@ -55,6 +55,7 @@
   import Toast from '@/components/toast/toast'
   import UnionCard from 'components/union-card-item/union-card-item'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
+  import { ROLE } from '../../common/js/contants'
 
   const LIMIT_DEF = 10
   // this.$refs.toast.show('不可修改')
@@ -81,6 +82,8 @@
     },
     beforeMount () {
     },
+    mounted () {
+    },
     onPullDownRefresh () {
       this._resetConfig()
       let data = this._formatReq()
@@ -96,10 +99,18 @@
     },
     methods: {
       ...mapGetters(['role']),
+      test () {
+        let token = ROLE.testToken
+        this.currentRole = ROLE.UNION_ID
+        wx.setStorageSync('userType', this.currentRole)
+        wx.setStorageSync('token', token)
+      },
       _init () {
         let role = this.role()
         this.currentRole = role
+        this.test()
         this._resetConfig()
+        console.log(222)
         let data = this._formatReq()
         this._rqGetActiveList(data)
           .then(json => {
@@ -236,7 +247,7 @@
         const url = `/pages/union-sort/union-sort?activeId=${activeId}`
         this.$router.push(url)
       },
-      test (obj) {
+      previewHandler (obj) {
         const activeId = obj.id
         const url = `/pages/union-create-active/union-create-active?model=1&activeId=${activeId}`
         this.$router.push(url)

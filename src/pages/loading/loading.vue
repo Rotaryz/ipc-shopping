@@ -17,47 +17,47 @@
       </article>
     </section>
     <toast ref="toast"></toast>
-    <audit-msg @confirmHandler="confirmHandler" :flag="status"></audit-msg>
+    <!--<audit-msg @confirmHandler="confirmHandler" :flag="status"></audit-msg>-->
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import Toast from 'components/toast/toast'
   import api from 'api'
-  import {baseURL, ERR_OK, TOKEN_OUT} from 'api/config'
+  import { baseURL, ERR_OK } from 'api/config'
   import * as wechat from 'common/js/wechat'
   import wx from 'wx'
-  import {mapActions, mapMutations} from 'vuex'
-  import {ROLE} from 'common/js/contants'
+  import { mapActions, mapMutations } from 'vuex'
+  import { ROLE } from 'common/js/contants'
   import AuditMsg from 'components/audit-msg/audit-msg'
 
   console.info(baseURL.jumpVersion)
   export default {
-    data() {
+    data () {
       return {
         authorizationCount: 1,
         entryRole: ROLE.STAFF_ID,
         status: -1
       }
     },
-    beforeCreate() {
+    beforeCreate () {
     },
-    created() {
+    created () {
     },
-    onShow() {
+    onShow () {
       this._init()
     },
-    beforeMount() {
+    beforeMount () {
     },
-    mounted() {
+    mounted () {
     },
-    beforeDestroy() {
+    beforeDestroy () {
     },
     methods: {
       ...mapActions(['saveRole']),
       ...mapMutations({saveRoleSync: 'ROLE_TYPE'}),
       // 微信获取用户信息btn
-      wxGetUserInfo(event) {
+      wxGetUserInfo (event) {
         const e = event.mp
         if (e.detail.errMsg !== 'getUserInfo:ok') {
           return
@@ -70,24 +70,25 @@
         }
         this._getToken(data)
       },
-      // 获取临时登录凭证code
-      _getCode() {
-        return new Promise(resolve => {
-          wechat.login()
-            .then(res => {
-              wx.setStorageSync('code', res.code)
-              resolve(res.code)
-            })
-            .catch(err => {
-              console.info(err)
-            })
-        })
-      },
+      // // 获取临时登录凭证code
+      // _getCode () {
+      //   return new Promise(resolve => {
+      //     wechat.login()
+      //       .then(res => {
+      //         wx.setStorageSync('code', res.code)
+      //         resolve(res.code)
+      //       })
+      //       .catch(err => {
+      //         console.info(err)
+      //       })
+      //   })
+      // },
       // 获取token
-      _getToken(data) {
+      _getToken (data) {
         this.authorizationCount++
         api.userAuthorise(data)
           .then(Json => {
+            wechat.hideLoading()
             if (Json.error !== ERR_OK && this.authorizationCount <= 5) {
               return this._getToken(data)
             } else if (Json.error !== ERR_OK && this.authorizationCount > 5) {
@@ -109,75 +110,79 @@
           })
       },
       // 页面路由
-      _navTo() {
-        if (this.entryRole === ROLE.STAFF_ID) {
-          this._rqCustomerStatus()
-            .then(json => {
-              wechat.hideLoading()
-              let status = json.data.status * 1
-              if (isNaN(status)) {
-                const url = `/pages/home/home`
-                this.$router.replace(url)
-              } else {
-                this.status = status
-              }
-            })
-        } else {
-          const url = `/pages/home/home`
-          this.$router.replace(url)
-        }
-      },
-      // 初始化
-      _init() {
-        let resCode = this.$root.$mp.query.resCode * 1
-        // 盟主回退B端
-        if (resCode === TOKEN_OUT) return
-        this._getCode()
-        this._checkRole()
-        this._work()
-      },
-      // 检查角色
-      _checkRole() {
-        const entryRole = this.$root.$mp.query.entryRole
-        if (entryRole) {
-          this.entryRole = entryRole
-          this.saveRoleSync(entryRole)
-        }
-        wx.setStorageSync('userType', this.entryRole)
-      },
-      // 工作
-      _work() {
-        const merchantId = this.$root.$mp.query.merchantId
-        wx.setStorageSync('merchantId', merchantId)
-        let token = null
-        if (this.entryRole === ROLE.STAFF_ID) {
-          token = wx.getStorageSync('token')
-        } else {
-          token = this.$root.$mp.query.token
-          token && wx.setStorageSync('token', token)
-        }
-        if (!token) return
-        this._navTo()
-      },
-      _rqCustomerStatus() {
-        return new Promise(resolve => {
-          api.homeCustomerStatus()
-            .then(json => {
-              if (json.error !== ERR_OK) {
-                return false
-              }
-              wechat.hideLoading()
-              resolve(json)
-            })
-            .catch(err => {
-              console.info(err)
-            })
-        })
-      },
-      confirmHandler() {
+      _navTo () {
         const url = `/pages/home/home`
         this.$router.replace(url)
+        // if (this.entryRole === ROLE.STAFF_ID) {
+        //   this._rqCustomerStatus()
+        //     .then(json => {
+        //       wechat.hideLoading()
+        //       let status = json.data.status * 1
+        //       if (isNaN(status)) {
+        //         const url = `/pages/home/home`
+        //         this.$router.replace(url)
+        //       } else {
+        //         this.status = status
+        //       }
+        //     })
+        // } else {
+        //   const url = `/pages/home/home`
+        //   this.$router.replace(url)
+        // }
       }
+      // 初始化
+      // _init () {
+      //   let resCode = this.$root.$mp.query.resCode * 1
+      //   // 盟主回退B端
+      //   if (resCode === TOKEN_OUT) return
+      //   this._getCode()
+      //   // this._checkRole()
+      //   // this._work()
+      // },
+      // 检查角色
+      // _checkRole () {
+      //   const entryRole = this.$root.$mp.query.entryRole
+      //   console.log(entryRole)
+      //   if (entryRole) {
+      //     this.entryRole = entryRole
+      //     this.saveRoleSync(entryRole)
+      //   }
+      //   wx.setStorageSync('userType', this.entryRole)
+      // },
+      // 工作
+      // _work () {
+      //   const merchantId = this.$root.$mp.query.merchantId
+      //   console.log(merchantId)
+      //   wx.setStorageSync('merchantId', merchantId)
+      //   let token = null
+      //   if (this.entryRole === ROLE.STAFF_ID) {
+      //     token = wx.getStorageSync('token')
+      //   } else {
+      //     // token = this.$root.$mp.query.token
+      //     // token && wx.setStorageSync('token', token)
+      //   }
+      //   if (!token) return
+      //   this._navTo()
+      // },
+      // _rqCustomerStatus () {
+      //   return new Promise(resolve => {
+      //     api.homeCustomerStatus()
+      //       .then(json => {
+      //         if (json.error !== ERR_OK) {
+      //           return false
+      //         }
+      //         wechat.hideLoading()
+      //         resolve(json)
+      //       })
+      //       .catch(err => {
+      //         console.info(err)
+      //       })
+      //   })
+      // },
+      // confirmHandler () {
+      //   const url = `/pages/home/home`
+      //   this.$router.replace(url)
+      // }
     },
     components: {
       Toast,
