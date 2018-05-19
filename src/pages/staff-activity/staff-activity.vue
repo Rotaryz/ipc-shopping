@@ -1,22 +1,17 @@
 <template>
   <div>
-    <div class="list-box">
-      <div class="box-top">
-        <active-card :useType="1" @previewHandler="test"></active-card>
-      </div>
-      <div class="box-top">
-        <active-card :useType="0" @previewHandler="test"></active-card>
-      </div>
-      <div class="box-top">
-        <active-card :useType="0" @previewHandler="test"></active-card>
+    <div class="list-box"  v-if="staffList.length !== 0">
+      <div class="box-top" v-for="(item, index) in pageList" v-bind:key="index">
+        <active-card :useType="100" @previewHandler="test" :cardInfo="item"></active-card>
       </div>
     </div>
-    <div class="list-null">
+    <div class="list-null" v-if="staffList.length === 0">
       <img :src="image + '/defaults/ipc-shopping/home/pic-union_empty@2x.png'" class="null-img" v-if="image"
            mode="widthFix">
       <div class="text">暂无活动</div>
     </div>
     <div class="page-bg"></div>
+    <toast ref="toast"></toast>
   </div>
 </template>
 
@@ -28,18 +23,35 @@
   import api from 'api'
   import * as wechat from 'common/js/wechat'
   import wx from 'wx'
+  import Toast from '@/components/toast/toast'
 
   export default {
     data() {
       return {
-        image: baseURL.image
+        image: baseURL.image,
+        staffList: [],
+        isAllActive: false,
+        pageList: {
+          page: 1,
+          limit: 10
+        }
       }
     },
     mounted() {
-      this._getStaff()
+      this._getStaff(this.pageList)
     },
     beforeMount() {
       this._init()
+    },
+    onPullDownRefresh() {
+      this.staffList = []
+      this.isAllActive = false
+      this.pageList.page = 1
+      this._getStaff(this.pageList)
+    },
+    onReachBottom() {
+      if (this.isAllActive) return
+      this._getStaff(this.pageList)
     },
     methods: {
       ...mapGetters(['role']),
@@ -55,13 +67,51 @@
       },
       _getStaff() {
         api.merStaffList().then(res => {
+          if (res.error === ROLE.error) {
+            this.staffList.push(...this._formatRqData(res))
+            this._isAllActive(res)
+            this.pageList.page++
+          } else {
+            this.$refs.toast.show(res.message)
+          }
           console.log(res)
           wechat.hideLoading()
         })
+      },
+      // 格式化服务器数据
+      _formatRqData(res) {
+        if (res.data && res.data.length === 0) return []
+        let arr = []
+        res.data.map(item => {
+          let status = 101
+          let statusStr = '已上架'
+          if (item.activity_alliance.status === 2) {
+            status = 101
+          } else if (item.activity_alliance.status === 3) {
+            status = 102
+            statusStr = '已下架'
+          }
+          arr.push({
+            name: item.activity_alliance.name,
+            end_at: item.activity_alliance.end_at,
+            store: item.stock,
+            // status: status,
+            statusStr: statusStr,
+            statusCode: status
+          })
+        })
+        return arr
+      },
+      // 检查是否已经查询完毕
+      _isAllActive(res) {
+        if (this.staffList.length >= res.meta.total * 1) {
+          this.isAllActive = true
+        }
       }
     },
     components: {
-      ActiveCard
+      ActiveCard,
+      Toast
     }
   }
 </script>

@@ -152,11 +152,14 @@
         title: '确定排队？',
         showTitle: false,
         modelNumber: null,
-        applyId: null
+        applyId: null,
+        acitiveId: 4
       }
     },
     mounted() {
-      this._rqManageDetails(4)
+      this.acitiveId = this.$root.$mp.query.id
+      console.log(this.acitiveId, '```````````````')
+      this._rqManageDetails(this.acitiveId)
     },
     beforeMount() {
       this._init()
@@ -169,9 +172,13 @@
         // this.currentRole = role
         // 伪代码
         this.currentRole = ROLE.UNION_ID
+        this._test()
         // wx.setStorageSync('merchantId', merchantId)
         wx.setStorageSync('userType', ROLE.UNION_ID)
         console.log(this.currentRole)
+      },
+      _test() {
+        wx.setStorageSync('token', ROLE.testToken)
       },
       showRules() {
         this.showRule = !this.showRule
@@ -259,6 +266,9 @@
               console.log(11)
             },
             'fail': function (res) {
+              api.merCloseOrder(res.data.order_id).then(res => {
+                console.log(res)
+              })
             }
           })
         })

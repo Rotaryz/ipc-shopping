@@ -129,8 +129,22 @@ export default {
    * @param data 状态
    * @returns {Promise.<*>}
    */
-  merAllotStock(data) {
+  merAllotStock(activity_alliance_id = 1, customer_id = 1, allot_count = 1) {
+    let data = {
+      activity_alliance_id,
+      customer_id,
+      allot_count
+    }
     const url = `/api/alliances/allot-stock`
+    return request.post(url, data, true)
+  },
+  /**
+   * 商家取消支付关闭报名订单
+   * @param data 状态
+   * @returns {Promise.<*>}
+   */
+  merCloseOrder(id, data) {
+    const url = `api/alliances/merchant/close-order/${id}`
     return request.post(url, data, true)
   }
 }

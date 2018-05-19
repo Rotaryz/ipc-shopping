@@ -223,6 +223,7 @@
         image: baseURL.image,
         staffScene: 2,
         staffBtn: 'self',
+        activeId: 1,
         selfStaffList: [], // 商店员工参数
         selfStaffPage: 1,
         isAllselfStaff: false,
@@ -245,6 +246,7 @@
       }
     },
     mounted() {
+      this.activeId = this.$root.$mp.query.id
       this._getSelfStaff()
       this._getBar()
     },
