@@ -169,6 +169,13 @@
               }
             }
           }
+          if (item.status === 2) {
+            status = 10
+            statusStr = '已上架'
+          } else if (item.status === 3) {
+            status = 11
+            statusStr = '已下架'
+          }
           arr.push({
             name: item.activity_alliance.name,
             end_at: item.activity_alliance.end_at,
