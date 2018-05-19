@@ -35,33 +35,6 @@
   import source from 'common/source'
   import Toast from '@/components/toast/toast'
 
-  const obj1 = {
-    id: 100,
-    type: '代金券',
-    name: '100元代金券',
-    scope: '限国颐堂(天河店)使用',
-    useLife: '有效期:2018-01-01至2018-08-01',
-    sortType: 10
-  }
-  const obj2 = {
-    id: 11,
-    type: '代金券2',
-    name: '100元代金券',
-    scope: '限国颐堂(天河店)使用',
-    useLife: '有效期:2018-01-01至2018-08-01',
-    sortType: 10
-  }
-  const obj3 = {
-    id: 22,
-    type: '代金券3',
-    name: '100元代金券',
-    scope: '限国颐堂(天河店)使用',
-    useLife: '有效期:2018-01-01至2018-08-01',
-    sortType: 10
-  }
-  const arr = [obj1, obj2, obj3]
-  arr[0].sortType = 11
-
   const LIMIT_DEF = 20
   // console.log(JSON.stringify(arr))
   export default {

@@ -1,11 +1,11 @@
 <template>
   <div class="confirm" v-if="showToast">
-    <div class="modal-wrapper" @tap.stop="">
+    <div class="modal-wrapper" @tap.stop="_hack">
       <div class="modal">
         <div class="content-wrapper">
           <div class="content">
             <div class="danger-wrapper">
-              <img :src="imageUrlHead + content.img" class="full-image" />
+              <img :src="imageUrlHead + content.img" class="full-image"/>
             </div>
             <div class="font title" v-if="content.title">{{content.title}}</div>
             <div class="font" v-if="content.msg">{{content.msg}}</div>
@@ -20,33 +20,39 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import { baseURL } from 'api/config'
+  import {baseURL} from 'api/config'
+
   const PATH = `/defaults/ipc-shopping/common/`
   const IMGARRAY = [
-    {img: 'pic-yhome_03@2x.png', title: '您的身份审核未通过', msg: '问问老板吧'},
+    {img: 'pic-yhome_01@2x.png', title: '您的身份正在审核中', msg: '请耐心等待结果'},
     {img: 'pic-yhome_02@2x.png', title: '您的身份审核通过', msg: '开始赚钱吧'},
-    {img: 'pic-yhome_01@2x.png', title: '您的身份正在审核中', msg: '请耐心等待结果'}
+    {img: 'pic-yhome_03@2x.png', title: '您的身份审核未通过', msg: '问问老板吧'}
   ]
   export default {
-    data () {
+    props: {
+      flag: {
+        type: Number,
+        default: 0
+      }
+    },
+    data() {
       return {
         imageUrlHead: baseURL.image + PATH,
-        content: {},
-        flag: 0,
-        showToast: true
+        showToast: this.flag >= 0
       }
     },
     methods: {
-      show (content) {
-        if (this.showToast) {
-          return
-        }
-        this.flag = content
-        this.content = IMGARRAY[content]
-        this.showToast = true
+      _hack() {
+        // 防止报错
       },
-      confirm () {
+      confirm() {
         this.showToast = false
+        this.$emit('confirmHandler')
+      }
+    },
+    computed: {
+      content() {
+        return IMGARRAY[this.flag]
       }
     }
   }
@@ -59,18 +65,14 @@
     position: fixed
     top: 0
     left: 0
-    z-index: 100
-    width: 100%
+    right: 0
+    bottom: 0
     height: 100%
+    padding-top: 105.5px
     over-flow: hidden
     background: $color-mask-bgc
-    z-index: 1500
+    z-index: 99999
     .modal-wrapper
-      position: absolute
-      top: 0px
-      left: 0px
-      right: 0px
-      bottom: 0px
       margin: auto
       width: 275px
       height: 243px

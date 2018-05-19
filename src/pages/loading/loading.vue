@@ -17,46 +17,47 @@
       </article>
     </section>
     <toast ref="toast"></toast>
-    <audit-msg></audit-msg>
+    <audit-msg @confirmHandler="confirmHandler" :flag="status"></audit-msg>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import Toast from 'components/toast/toast'
   import api from 'api'
-  import { baseURL, ERR_OK, TOKEN_OUT } from 'api/config'
+  import {baseURL, ERR_OK, TOKEN_OUT} from 'api/config'
   import * as wechat from 'common/js/wechat'
   import wx from 'wx'
-  import { mapActions, mapMutations } from 'vuex'
-  import { ROLE } from 'common/js/contants'
+  import {mapActions, mapMutations} from 'vuex'
+  import {ROLE} from 'common/js/contants'
   import AuditMsg from 'components/audit-msg/audit-msg'
 
   console.info(baseURL.jumpVersion)
   export default {
-    data () {
+    data() {
       return {
         authorizationCount: 1,
-        entryRole: ROLE.STAFF_ID
+        entryRole: ROLE.STAFF_ID,
+        status: -1
       }
     },
-    beforeCreate () {
+    beforeCreate() {
     },
-    created () {
+    created() {
     },
-    onShow () {
+    onShow() {
       this._init()
     },
-    beforeMount () {
+    beforeMount() {
     },
-    mounted () {
+    mounted() {
     },
-    beforeDestroy () {
+    beforeDestroy() {
     },
     methods: {
       ...mapActions(['saveRole']),
       ...mapMutations({saveRoleSync: 'ROLE_TYPE'}),
       // 微信获取用户信息btn
-      wxGetUserInfo (event) {
+      wxGetUserInfo(event) {
         const e = event.mp
         if (e.detail.errMsg !== 'getUserInfo:ok') {
           return
@@ -70,7 +71,7 @@
         this._getToken(data)
       },
       // 获取临时登录凭证code
-      _getCode () {
+      _getCode() {
         return new Promise(resolve => {
           wechat.login()
             .then(res => {
@@ -83,7 +84,7 @@
         })
       },
       // 获取token
-      _getToken (data) {
+      _getToken(data) {
         this.authorizationCount++
         api.userAuthorise(data)
           .then(Json => {
@@ -97,8 +98,6 @@
             const res = Json.data
             let token = res.access_token
             if (token) {
-              // const merchantId = this.$root.$mp.query.merchantId
-              // wx.setStorageSync('merchantId', merchantId)
               wx.setStorageSync('token', token)
               wx.setStorageSync('userType', ROLE.STAFF_ID)
               this.saveRoleSync(ROLE.STAFF_ID)
@@ -110,13 +109,18 @@
           })
       },
       // 页面路由
-      _navTo () {
+      _navTo() {
         if (this.entryRole === ROLE.STAFF_ID) {
           this._rqCustomerStatus()
             .then(json => {
               wechat.hideLoading()
-              // let status = json.data.status
-              console.log(json)
+              let status = json.data.status * 1
+              if (isNaN(status)) {
+                const url = `/pages/home/home`
+                this.$router.replace(url)
+              } else {
+                this.status = status
+              }
             })
         } else {
           const url = `/pages/home/home`
@@ -124,23 +128,15 @@
         }
       },
       // 初始化
-      _init () {
+      _init() {
         let resCode = this.$root.$mp.query.resCode * 1
         if (resCode === TOKEN_OUT) return
         this._getCode()
         this._checkRole()
         this._work()
-        // let token = this.$root.$mp.query.token
-        // // 伪代码start
-        // token = ROLE.testToken
-        // wx.setStorageSync('token', token)
-        // // 伪代码end
-        // if (!token) return
-        // this._checkRole(token)
-        // this._navTo()
       },
       // 检查角色
-      _checkRole () {
+      _checkRole() {
         const entryRole = this.$root.$mp.query.entryRole
         if (entryRole) {
           this.entryRole = entryRole
@@ -149,7 +145,7 @@
         wx.setStorageSync('userType', this.entryRole)
       },
       // 工作
-      _work () {
+      _work() {
         const merchantId = this.$root.$mp.query.merchantId
         wx.setStorageSync('merchantId', merchantId)
         let token = null
@@ -162,7 +158,7 @@
         if (!token) return
         this._navTo()
       },
-      _rqCustomerStatus () {
+      _rqCustomerStatus() {
         return new Promise(resolve => {
           api.homeCustomerStatus()
             .then(json => {
@@ -176,6 +172,10 @@
               console.info(err)
             })
         })
+      },
+      confirmHandler() {
+        const url = `/pages/home/home`
+        this.$router.replace(url)
       }
     },
     components: {
