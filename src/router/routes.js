@@ -10,7 +10,9 @@ module.exports = [
   {
     path: '/pages/home/home', // 首页
     name: 'Home',
-    config: {}
+    config: {
+      navigationBarTitleText: '异业联盟'
+    }
   },
   {
     path: '/pages/loading/loading', // loading

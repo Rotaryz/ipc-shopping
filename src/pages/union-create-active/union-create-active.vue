@@ -14,23 +14,23 @@
           <div class="content">
             <picker class="content-picker-box" v-if="isNewModel" mode="date" :start="todayStartDate" @change="bindDateChange" id="start">
               <view class="picker">
-                {{todayStartDate}}
+                {{startDate}}
               </view>
             </picker>
             <section class="content-picker-box" v-if="!isNewModel" @tap="disableHandler">
               <div class="picker disable">
-                {{todayStartDate}}
+                {{startDate}}
               </div>
             </section>
             <div class="date-cut-off">至</div>
             <picker class="content-picker-box" v-if="isNewModel" mode="date" :start="endStartDate" @change="bindDateChange" id="end">
               <view class="picker">
-                {{endStartDate}}
+                {{endDate}}
               </view>
             </picker>
             <section class="content-picker-box" v-if="!isNewModel" @tap="disableHandler">
               <view class="picker disable">
-                {{endStartDate}}
+                {{endDate}}
               </view>
             </section>
           </div>
@@ -124,32 +124,32 @@
 
 <script type="text/ecmascript-6">
   import api from 'api'
-  import { ERR_OK } from 'api/config'
+  import {ERR_OK} from 'api/config'
   import * as wechat from 'common/js/wechat'
   import wx from 'wx'
   import util from 'common/js/format'
   import Toast from '@/components/toast/toast'
 
-  function awardNote (a, b) {
+  function awardNote(a, b) {
     return `1. 商家以及员工，每销售一张卡券，得到${a}元的奖励。
             2. 商家销售卡的用户，到其他门店使用一次，得到联盟力${b}分奖励。（可以分全部联盟商家报名该活动的报名金）
             3. 商家可以得到该活动全部商家的异业客户引流客户。`
   }
 
-  function claimNote (a) {
+  function claimNote(a) {
     return `1. 用户购买异业联盟卡后，提供商品给用户。
             2. 添加商家自己的固定数量的免费优惠券。
             3. 支持平台提供的${a}元代金券，小程序买单的使用。`
   }
 
-  function detailNote (a) {
+  function detailNote(a) {
     return `1. 本活动仅在${a}内开展。
             2. 该活动需要商家付费参加，如果报名没有通过，会立刻原路退款。
             3. 本次活动的最终解释权归赞播所有。`
   }
 
   export default {
-    data () {
+    data() {
       return {
         model: 0,
         id: '',
@@ -163,16 +163,16 @@
         activeInfo: {}
       }
     },
-    beforeMount () {
+    beforeMount() {
       let title = `新建`
       this.isNewModel && wx.setNavigationBarTitle({title})
       this._init()
     },
-    mounted () {
+    mounted() {
       // console.log(util, Date.now())
     },
     methods: {
-      _init () {
+      _init() {
         this.model = this.$root.$mp.query.model * 1
         this.name = `异业联盟活动`
         this.startDate = util.formatTimeYMD(util.now + 1000 * 60 * 60 * 24)
@@ -188,10 +188,10 @@
           this._rqGetActiveList(data)
         }
       },
-      disableHandler () {
+      disableHandler() {
         this.$refs.toast.show('不可修改')
       },
-      inputHandler (e) {
+      inputHandler(e) {
         let id = e.target.id
         let value = e.target.value
         switch (id) {
@@ -204,8 +204,13 @@
             break
           }
           case 'activePrice': {
+            let re = /([0-9]+\.[0-9]{2})[0-9]*/
+            value = value.replace(re, '$1')
+            if (isNaN(value * 1)) {
+              return this.price
+            }
             this.price = value
-            break
+            return value
           }
           case 'activeStock': {
             this.stock = value
@@ -237,19 +242,40 @@
           }
         }
       },
-      saveHandler () {
+      _checkSaveInfo() {
+        // 日期
+        if (new Date(this.endDate) - new Date(this.startDate) < 0) {
+          this.$refs.toast.show('结束时间不能小于开始时间')
+          return false
+        }
+        // 价格
+        let re = /([0-9]+\.[0-9])[0-9]*|^([1-9][0-9]*)$/
+        if (isNaN(this.price * 1)) {
+          this.$refs.toast.show('请输入正确的价格')
+          return false
+        } else if (!re.test('' + this.price)) {
+          this.$refs.toast.show('请输入正确的价格')
+          return false
+        }
+        return true
+      },
+      saveHandler() {
         switch (this.model) {
           case 0 : {
-            this._rqCreateActive(this._packData())
+            if (!this._checkSaveInfo()) {
+            }
+            // this._rqCreateActive(this._packData())
             break
           }
           case 1: {
-            this._rqUpdateActive(this._packData())
+            if (!this._checkSaveInfo()) {
+            }
+            // this._rqUpdateActive(this._packData())
             break
           }
         }
       },
-      bindDateChange (e) {
+      bindDateChange(e) {
         const id = e.target.id
         const value = e.mp.detail.value
         switch (id) {
@@ -263,7 +289,7 @@
           }
         }
       },
-      _packData () {
+      _packData() {
         return {
           id: this.id,
           name: this.name,
@@ -278,8 +304,7 @@
           detail_note: detailNote(this.address)
         }
       },
-      _resolveReqData (json) {
-        console.log(json)
+      _resolveReqData(json) {
         let res = json.data
         this.name = res.name
         this.startDate = res.start_at
@@ -291,7 +316,7 @@
         res.attach && (this.activeInfo = res.attach)
       },
       // 获取活动信息
-      _rqGetActiveList (data) {
+      _rqGetActiveList(data) {
         api.uctGetActive(data)
           .then(json => {
             if (json.error !== ERR_OK) {
@@ -305,7 +330,7 @@
           })
       },
       // 创建活动
-      _rqCreateActive (data) {
+      _rqCreateActive(data) {
         api.uctCreateActive(data)
           .then(json => {
             console.log(json)
@@ -321,7 +346,7 @@
           })
       },
       // 修改活动
-      _rqUpdateActive (data) {
+      _rqUpdateActive(data) {
         api.uctUpdateActive(data)
           .then(json => {
             wechat.hideLoading()
@@ -337,14 +362,14 @@
       }
     },
     computed: {
-      isNewModel () {
+      isNewModel() {
         return this.model === 0
       },
-      todayStartDate () {
-        return this.startDate
+      todayStartDate() {
+        return util.formatTimeYMD(util.now + 1000 * 60 * 60 * 24)
       },
-      endStartDate () {
-        return this.endDate
+      endStartDate() {
+        return util.formatTimeYMD(util.now + 1000 * 60 * 60 * 24 * 61)
       }
     },
     components: {
