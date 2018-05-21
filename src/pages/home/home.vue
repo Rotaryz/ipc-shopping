@@ -147,10 +147,10 @@
       _test () {
         this.entryRole = ROLE.UNION_ID
         this.currentRole = this.entryRole
-        this.$root.$mp.query.token = this.entryRole
+        this.$root.$mp.query.token = ROLE.testToken
         wx.setStorageSync('userType', this.entryRole)
         wx.setStorageSync('token', ROLE.testToken)
-        wx.setStorageSync('merchantId', 100035)
+        wx.setStorageSync('merchantId', 100004)
       },
       // 初始化
       _loginInit () {

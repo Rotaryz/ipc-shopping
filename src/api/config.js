@@ -1,10 +1,16 @@
 const env = process.env.NODE_ENV
 const version = '/v1'
+// const DEV = {
+//   image: 'https://img.jerryf.cn',
+//   login: 'https://dev.jike-jwt.jerryf.cn',
+//   api: 'https://dev.jike-backend-api.jerryf.cn' + version,
+//   jumpVersion: 'develop'
+// }
 const DEV = {
-  image: 'https://img.jerryf.cn',
-  login: 'https://dev.jike-jwt.jerryf.cn',
-  api: 'https://dev.jike-backend-api.jerryf.cn' + version,
-  jumpVersion: 'develop'
+  image: 'https://img.jkweixin.net',
+  login: 'https://jwt.jkweixin.net',
+  api: 'https://backend-api.jkweixin.net' + version,
+  jumpVersion: 'trial'
 }
 
 const TEST = {

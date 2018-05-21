@@ -48,8 +48,8 @@
     data () {
       return {
         showBgnull: true,
-        awaitList: [1],
-        acceptList: [1],
+        awaitList: [],
+        acceptList: [],
         show: false,
         title: '',
         dataTmp: {},
