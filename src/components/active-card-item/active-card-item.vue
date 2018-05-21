@@ -74,8 +74,8 @@
         </article>
         <article class="b-bottom" v-if="cardInfo.statusCode === constStatus.staffUp">
           <div class="title">{{cardInfo.statusStr}}</div>
-          <div class="btn " @tap="addHandler(cardInfo)">二维码</div>
-          <div class="btn last" @tap="addHandler(cardInfo)">统计</div>
+          <div class="btn " @tap="addHandCode(cardInfo)">二维码</div>
+          <div class="btn last" @tap="addHandData(cardInfo)">统计</div>
         </article>
         <article class="b-bottom" v-if="cardInfo.statusCode === constStatus.staffDown">
           <div class="title">{{cardInfo.statusStr}}</div>
@@ -204,6 +204,12 @@
       },
       applyHandler(cardInfo) {
         this.$emit('applyHandler', cardInfo)
+      },
+      addHandCode(cardInfo) {
+        this.$emit('addHandCode', cardInfo)
+      },
+      addHandData(cardInfo) {
+        this.$emit('addHandData', cardInfo)
       }
     },
     computed: {

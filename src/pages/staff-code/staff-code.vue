@@ -7,7 +7,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {baseURL} from 'api/config'
+  import {baseURL, ERR_OK} from 'api/config'
   import {mapGetters} from 'vuex'
   import {ROLE} from 'common/js/contants'
   import api from 'api'
@@ -44,7 +44,7 @@
       },
       getStaffCode() {
         api.merStaffActiveQrcode().then(res => {
-          if (res.error === ROLE.error) {
+          if (res.error === ERR_OK) {
             console.log(res)
             this.codeImage = res.data.qrcode_image
           } else {
