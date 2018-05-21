@@ -8,7 +8,7 @@
           <swiper class="home-swiper" @change="swiperChange" :current="sliderCurrent">
             <block v-for="(item, index) in activeList" :key="index+item.title">
               <swiper-item class="home-swiper-item">
-                <h-slider-item :item="item"></h-slider-item>
+                <h-slider-item :item="item" @lookTotalHandler="lookTotalHandler"></h-slider-item>
               </swiper-item>
             </block>
           </swiper>
@@ -20,38 +20,38 @@
     </header>
     <footer class="tab-leader" v-if="currentRole===ROLE.UNION_ID">
       <nav class="t-l-nav" :style="leaderImg" @tap.stop="toUnion">联盟管理</nav>
-      <nav class="t-l-nav" :style="activeImg">活动管理</nav>
+      <nav class="t-l-nav" :style="activeImg" @tap.stop="toShop">活动管理</nav>
       <nav class="t-l-nav" :style="employeeImg" @tap.stop="toEmployee">员工管理</nav>
-      <nav class="t-l-nav" :style="incomeImg">收入/提现</nav>
+      <nav class="t-l-nav" :style="incomeImg" @tap.stop="toAsset">收入/提现</nav>
     </footer>
     <footer class="tab-merchant" v-if="currentRole===ROLE.SHOP_ID">
-      <section class="t-m-ad">
+      <section class="t-m-ad" v-if="noticeList.length>0" @tap="watchActiveHandler">
         <div class="title">公告</div>
         <div class="content">异业联盟卡活动正在等你报名正在等你…</div>
         <div class="watch-btn">查看</div>
       </section>
-      <nav class="t-l-nav" :style="activeImg">活动管理</nav>
-      <nav class="t-l-nav" :style="employeeImg">员工管理</nav>
-      <nav class="t-l-nav" :style="incomeImg">收入/提现</nav>
+      <nav class="t-l-nav" :style="activeImg" @tap.stop="toShop">活动管理</nav>
+      <nav class="t-l-nav" :style="employeeImg" @tap.stop="toEmployee">员工管理</nav>
+      <nav class="t-l-nav" :style="incomeImg" @tap.stop="toAsset">收入/提现</nav>
     </footer>
     <footer class="tab-employee" v-if="currentRole===ROLE.STAFF_ID">
       <section class="t-e-sales">
         <div class="title">销卡对比</div>
         <article class="content-box">
-          <scroll-view class="content" scroll-y="true">
+          <scroll-view class="content" scroll-y="true" v-if="employeeList.length>0">
             <ul class="c-holder">
               <li class="emp-item" v-for="(item,index) in employeeList" :key="index">
                 <article class="emp-item-box">
                   <section class="icon">
-                    <img class="icon-pic" v-if="imageUri" :src="imageUri+'/defaults/ipc-shopping/home/icon-mhome_union@2x.png'">
+                    <img class="icon-pic" :src="item.avatarUrl">
                   </section>
                   <section class="progress">
                     <div class="name-bar">
-                      <div class="name">陈蒙蒙meo</div>
-                      <div class="sales">8/10</div>
+                      <div class="name">{{item.nickName}}</div>
+                      <div class="sales">{{item.saleCount}}/{{item.initStock}}</div>
                     </div>
                     <article class="p-box">
-                      <div class="p-pro"></div>
+                      <div class="p-pro" :style="'width:'+ item.percentage +'%'"></div>
                     </article>
                   </section>
                   <section class="number">
@@ -63,96 +63,62 @@
               </li>
             </ul>
           </scroll-view>
+          <section class="content" v-else-if="employeeList.length<=0">
+            <div class="staff-empty">暂无数据～</div>
+          </section>
         </article>
       </section>
-      <nav class="t-l-nav" :style="activeImg">活动管理</nav>
-      <nav class="t-l-nav" :style="incomeImg">收入/提现</nav>
+      <nav class="t-l-nav" :style="activeImg" @tap.stop="toShop">活动管理</nav>
+      <nav class="t-l-nav" :style="incomeImg" @tap.stop="toAsset">收入/提现</nav>
     </footer>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  // import api from 'api'
+  import api from 'api'
   import { baseURL } from 'api/config'
   import { mapGetters } from 'vuex'
   import { ROLE } from 'common/js/contants'
   import HSliderItem from 'components/hSlider-item/hSlider-item'
   import wx from 'wx'
+  import { ERR_OK } from '../../api/config'
+  import * as wechat from 'common/js/wechat'
 
-  const num = 999999
-  const object = {
+  const ACTIVE_DEF = [{
     title: '异业联盟卡',
-    percent: 80,
-    saleCard: {
-      title: '售卡数',
-      number: (Math.random() * num) >> 0
-    },
-    currentCard: {
-      title: '本店核销数',
-      number: num
-    },
-    income: {
-      title: '员工收入',
-      number: (Math.random() * num) >> 0
-    },
-    otherCard: {
-      title: '异业核销数',
-      number: 0
-    }
-  }
-  const object2 = {
-    title: '异业联盟卡2',
     percent: 0,
+    isOnline: false,
     saleCard: {
       title: '售卡数',
-      number: (Math.random() * num) >> 0
+      number: 0
     },
     currentCard: {
       title: '本店核销数',
-      number: num
+      number: 0
     },
     income: {
       title: '员工收入',
-      number: (Math.random() * num) >> 0
+      number: 0
     },
     otherCard: {
       title: '异业核销数',
       number: 0
     }
-  }
-  const object3 = {
-    title: '异业联盟卡3',
-    percent: 100,
-    saleCard: {
-      title: '售卡数',
-      number: (Math.random() * num) >> 0
-    },
-    currentCard: {
-      title: '本店核销数',
-      number: num
-    },
-    income: {
-      title: '员工收入',
-      number: (Math.random() * num) >> 0
-    },
-    otherCard: {
-      title: '异业核销数',
-      number: 0
-    }
-  }
-  let arr = [object, object2, object3]
+  }]
+
   export default {
     data () {
       return {
-        arr,
         ROLE,
         currentRole: null,
         imageUri: baseURL.image,
-        activeList: [object],
-        employeeList: new Array(6).fill(0),
+        activeList: ACTIVE_DEF,
+        employeeList: [],
         dotCurrent: 0,
         sliderCurrent: 0,
-        userId: 0
+        userId: 0,
+        noticeList: [],
+        currentActiveId: null
       }
     },
     created () {
@@ -174,22 +140,235 @@
         // 伪代码
         this.currentRole = ROLE.STAFF_ID
         // wx.setStorageSync('merchantId', merchantId)
-        wx.setStorageSync('userType', ROLE.UNION_ID)
-        console.log(this.currentRole)
+        wx.setStorageSync('userType', ROLE.STAFF_ID)
+        this.setNavTitle()
+        switch (this.currentRole) {
+          case ROLE.UNION_ID: {
+            this._rqGetUnionAll()
+              .then(json => {
+                let list = this._formatInfoData(json)
+                if (list.length > 0) {
+                  this.activeList = list
+                  this.currentActiveId = this.activeList[this.dotCurrent].activeId
+                }
+              })
+            break
+          }
+          case ROLE.SHOP_ID: {
+            this._rqGetShopAll()
+              .then(json => {
+                let list = this._formatInfoData(json)
+                if (list.length > 0) {
+                  this.activeList = list
+                  this.currentActiveId = this.activeList[this.dotCurrent].activeId
+                }
+              })
+            this._rqGetNotice()
+              .then(json => {
+                let arr = json.data
+                this.noticeList = arr
+              })
+            break
+          }
+          case ROLE.STAFF_ID: {
+            this._rqGetStaffAll()
+              .then(json => {
+                let list = this._formatInfoData(json)
+                if (list.length > 0) {
+                  this.activeList = list
+                  this.currentActiveId = this.activeList[this.dotCurrent].activeId
+                  this._getStaffSale()
+                }
+              })
+            break
+          }
+        }
+      },
+      setNavTitle () {
+        this._rqGetGolbalData()
+          .then(json => {
+            let title = json.data.merchant.shop_name
+            this.currentRole === ROLE.STAFF_ID && (title = '员工')
+            wx.setNavigationBarTitle({title})
+          })
+      },
+      _rqGetUnionAll () {
+        return new Promise(resolve => {
+          api.homeGetUnion()
+            .then(json => {
+              if (json.error !== ERR_OK) {
+                return false
+              }
+              wechat.hideLoading()
+              resolve(json)
+            })
+            .catch(err => {
+              console.info(err)
+            })
+        })
+      },
+      _formatNotice (json) {
+        let arr = []
+        let res = json.data
+        res.map(item => {
+        })
+        return arr
+      },
+      _formatInfoData (json) {
+        let arr = []
+        let res = json.data
+        res.map(item => {
+          arr.push({
+            activeId: item.activity_alliance_id,
+            title: item.activity_name,
+            percent: item.percentage * 100,
+            isOnline: item.is_online,
+            saleCard: {
+              title: '售卡数',
+              number: item.sale_count
+            },
+            currentCard: {
+              title: '本店核销数',
+              number: item.self_verification
+            },
+            income: {
+              title: '员工收入',
+              number: item.commission
+            },
+            otherCard: {
+              title: '异业核销数',
+              number: item.other_verification
+            }
+          })
+        })
+        return arr
+      },
+      _rqGetShopAll () {
+        return new Promise(resolve => {
+          api.homeGetShop()
+            .then(json => {
+              if (json.error !== ERR_OK) {
+                return false
+              }
+              wechat.hideLoading()
+              resolve(json)
+            })
+            .catch(err => {
+              console.info(err)
+            })
+        })
+      },
+      _rqGetStaffAll () {
+        return new Promise(resolve => {
+          api.homeGetStaff()
+            .then(json => {
+              if (json.error !== ERR_OK) {
+                return false
+              }
+              wechat.hideLoading()
+              resolve(json)
+            })
+            .catch(err => {
+              console.info(err)
+            })
+        })
+      },
+      _rqGetNotice () {
+        return new Promise(resolve => {
+          api.homeGetNotice()
+            .then(json => {
+              if (json.error !== ERR_OK) {
+                return false
+              }
+              wechat.hideLoading()
+              resolve(json)
+            })
+            .catch(err => {
+              console.info(err)
+            })
+        })
+      },
+      _rqGetStaffSales (data) {
+        return new Promise(resolve => {
+          api.homeGetStaffSale(data)
+            .then(json => {
+              if (json.error !== ERR_OK) {
+                return false
+              }
+              wechat.hideLoading()
+              resolve(json)
+            })
+            .catch(err => {
+              console.info(err)
+            })
+        })
+      },
+      _rqGetGolbalData (data) {
+        return new Promise(resolve => {
+          api.homeGetGlobalData(data)
+            .then(json => {
+              if (json.error !== ERR_OK) {
+                return false
+              }
+              wechat.hideLoading()
+              resolve(json)
+            })
+            .catch(err => {
+              console.info(err)
+            })
+        })
+      },
+      _getStaffSale () {
+        let data = {activity_alliance_id: this.currentActiveId}
+        this._rqGetStaffSales(data)
+          .then(json => {
+            let list = this._formatStaffData(json)
+            this.employeeList = list
+          })
+      },
+      _formatStaffData (json) {
+        let arr = []
+        let res = json.data
+        res.map(item => {
+          arr.push({
+            customerId: item.customer_id,
+            avatarUrl: item.customer.avatar_url,
+            nickName: item.customer.nickname,
+            saleCount: item.sale_count,
+            initStock: item.init_stock,
+            percentage: item.percentage
+          })
+        })
+        return arr
+      },
+      lookTotalHandler (obj) {
+        console.log(obj)
+      },
+      watchActiveHandler () {
+        const url = `/pages/activity-manage/activity-manage`
+        this.$router.push(url)
       },
       swiperChange (e) {
         let index = e.mp.detail.current
         this.dotCurrent = index
-        // this.userId = index
         this.sliderCurrent = index
-        // api.userAuthorise()
+        this.currentActiveId = this.activeList[this.dotCurrent].activeId
+        this._getStaffSale()
       },
       toUnion () {
         const url = `/pages/union-manage/union-manage`
         this.$router.push(url)
       },
+      toShop () {
+        const url = `/pages/activity-manage/activity-manage`
+        this.$router.push(url)
+      },
       toEmployee () {
         const url = `/pages/employee/employee`
+        this.$router.push(url)
+      },
+      toAsset () {
+        const url = `/pages/asset/asset`
         this.$router.push(url)
       }
     },
@@ -373,7 +552,7 @@
       .t-l-nav
         padding: 10.43478260869% 0 20.579710144927%
         width: 31.304347826086%
-        background-size: 100%
+        background-size: 100% 100%
         background-position: center center
         background-repeat: no-repeat
         font-family: $font-family-regular
@@ -469,7 +648,7 @@
                       border-radius: 100px
                       overflow: hidden
                       .p-pro
-                        width: 50%
+                        width: 0%
                         height: 100%
                         background-image: linear-gradient(-90deg, $color-assist-2a 0%, $color-assist-33 100%)
                         border-radius: 100px
@@ -485,7 +664,14 @@
                     div:nth-child(2)
                       font-family: $font-family-din
                       font-size: $font-size-large
-
+            .staff-empty
+              layout()
+              height :100%
+              justify-content :center
+              align-items :center
+              font-family: $font-family-light
+              font-size: $font-size-small
+              color: $color-text-95
       .t-l-nav
         padding: 4.927536231884% 0
         width: 47.826086956521%

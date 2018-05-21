@@ -1,5 +1,5 @@
 <template>
-    <error-page :showBgnull="showBgnull" :showImagSta="key"></error-page>
+  <error-page :showBgnull="showBgnull" :showImagSta="key"></error-page>
 </template>
 
 <script type="text/ecmascript-6">
@@ -11,22 +11,27 @@
    */
   import ErrorPage from 'components/error-page/error-page'
   import wx from 'wx'
+
   const CODE = ['报错', '升级中']
   export default {
     data () {
       return {
         showBgnull: true,
-        key: 1
+        key: 0
       }
     },
     components: {
       ErrorPage
     },
-    mounted() {
+    beforeMount () {
       if (this.$root.$mp.query.key) {
-        this.key = this.$root.$mp.query.key
+        let key = this.$root.$mp.query.key
+        console.log(key, typeof key)
+        this.key = key * 1 === 404 ? 0 : 1
       }
       wx.setNavigationBarTitle({title: CODE[this.key]})
+    },
+    mounted () {
     }
   }
 </script>

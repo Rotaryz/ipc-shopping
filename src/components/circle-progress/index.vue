@@ -27,24 +27,21 @@
       }
     },
     beforeCreate () {
-      // console.log(1, this.activeInfo)
     },
     created () {
-      // console.log(2, this.activeInfo)
     },
     beforeMount () {
-      // console.log(3, this.activeInfo)
     },
     mounted () {
-      // console.log(4)
       this._loading()
     },
     beforeUpdate () {
-      this._loading()
+      // this._loading()
     },
     methods: {
       _loading () {
         if (this.timer) return
+        if (this.number * 1 === 0) return
         if (this.activeInfo.percent !== this.number) {
           const percent = this.activeInfo.percent
           let milliSecond = 1500

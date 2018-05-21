@@ -32,8 +32,8 @@
       return {
         imageUrlHead: baseURL.image + PATH,
         content: {},
-        flag: '',
-        showToast: false
+        flag: 0,
+        showToast: true
       }
     },
     methods: {

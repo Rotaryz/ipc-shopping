@@ -14,7 +14,7 @@
         <div class="text">暂无活动</div>
       </div>
     </div>
-    <footer :class="['btn',selectId ? '' : 'no-select']" @tap='upCoupon'>保存</footer>
+    <footer :class="['btn',selectId !== 0? '' : 'no-select']" @tap='upCoupon'>保存</footer>
     <div class="page-bg"></div>
   </div>
 </template>
@@ -28,6 +28,7 @@
   import wx from 'wx'
   import api from 'api'
 
+  const LIMIT_DEF = 10
   export default {
     data() {
       return {
@@ -35,13 +36,38 @@
         couponList: [],
         preIdx: -1,
         selectId: null,
-        activityId: null
+        activityId: null,
+        objId: {
+          id: null
+        },
+        couponData: {
+          page: 1,
+          limit: LIMIT_DEF
+        },
+        isAll: false
       }
     },
+    onPullDownRefresh() {
+      this.couponData.page = 1
+      this.couponList = []
+      this.isAll = false
+      this._rqManageDetails()
+      wx.stopPullDownRefresh()
+    },
     mounted() {
-      console.log(this.$root.$mp.query.id)
       this.selectId = this.$root.$mp.query.selectId
-      this.activityId = this.$root.$mp.query.activityId || 5
+      if (!this.selectId) {
+        this.selectId = 0
+      }
+      this.objId.id = this.selectId
+      console.log(this.objId)
+      console.log(this.$root.$mp.query.selectId, '---------')
+      this.activityId = this.$root.$mp.query.activityId
+      console.log(this.$root.$mp.query.activityId, '---------')
+      this._rqManageDetails()
+    },
+    onReachBottom() {
+      if (this.isAll) return
       this._rqManageDetails()
     },
     beforeMount() {
@@ -60,13 +86,17 @@
         console.log(this.currentRole)
       },
       _rqManageDetails() {
-        api.merCouponList().then(res => {
+        api.merCouponList(this.couponData).then(res => {
           console.log(res.data)
-          this.couponList = res.data
+          this.couponList.push(...res.data)
+          this.clickSelect(this.objId)
+          this._isAllActive(res)
+          this.couponData.page++
           wechat.hideLoading()
         })
       },
       clickSelect(obj) {
+        console.log(obj.id, '-------')
         let index = this.couponList.findIndex(val => val.id === obj.id)
         if (this.preIdx === index) return
         if (this.preIdx > -1) {
@@ -75,7 +105,11 @@
         this.couponList[index].isCheck = true
         this.preIdx = index
         this.selectId = obj.id
-        console.log(this.selectId)
+      },
+      _isAllActive(res) {
+        if (this.couponList.length >= res.meta.total * 1) {
+          this.isAll = true
+        }
       },
       upCoupon() {
         if (!this.selectId) return
@@ -126,6 +160,7 @@
     left: 0
     right: 0
     normal-button-default()
+
   .no-select
     normal-button-default(#959DBD)
 
