@@ -16,17 +16,19 @@
     </div>
     <footer :class="['btn',selectId !== 0? '' : 'no-select']" @tap='upCoupon'>保存</footer>
     <div class="page-bg"></div>
+    <toast ref="toast"></toast>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import {baseURL} from 'api/config'
+  import {baseURL, ERR_OK} from 'api/config'
   import Coupon from 'components/coupon-item/coupon-item'
   import * as wechat from 'common/js/wechat'
   import {mapGetters} from 'vuex'
   import {ROLE} from 'common/js/contants'
   import wx from 'wx'
   import api from 'api'
+  import Toast from '@/components/toast/toast'
 
   const LIMIT_DEF = 10
   export default {
@@ -117,13 +119,19 @@
         data.promotion_id = this.selectId
         data.apply_id = this.activityId
         api.merAddCoupon(data).then(res => {
+          if (res.error === ERR_OK) {
+            this.$router.back(1)
+          } else {
+            this.$refs.toast.show(res.message)
+          }
           console.log(res.data)
           wechat.hideLoading()
         })
       }
     },
     components: {
-      Coupon
+      Coupon,
+      Toast
     }
   }
 </script>

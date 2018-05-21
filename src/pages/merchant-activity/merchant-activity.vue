@@ -28,7 +28,7 @@
               <div class="left">活动费用</div>
               <div class="right">
                 <div class="icon">¥</div>
-                <div class="number">{{activityData.price}}</div>
+                <div class="number">{{activityData.apply_price}}</div>
               </div>
             </div>
             <div class="cavas-list">
@@ -124,18 +124,20 @@
     </footer>
     <model :show="showTitle" :title="title" @confirm="applyConfirm" @cancel="applyCancel"></model>
     <div class="page-bg"></div>
+    <toast ref="toast"></toast>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import api from 'api'
-  import {baseURL} from 'api/config'
+  import {baseURL, ERR_OK} from 'api/config'
   import Coupon from 'components/coupon-item/coupon-item'
   import model from 'components/confirm-msg/confirm-msg'
   import * as wechat from 'common/js/wechat'
   import {mapGetters} from 'vuex'
   import {ROLE} from 'common/js/contants'
   import wx from 'wx'
+  import Toast from '@/components/toast/toast'
 
   export default {
     data() {
@@ -153,10 +155,11 @@
         showTitle: false,
         modelNumber: null,
         applyId: null,
-        acitiveId: 4
+        acitiveId: 1
       }
     },
-    mounted() {
+    onShow() {
+      this.addNumber = 1
       this.acitiveId = this.$root.$mp.query.id
       console.log(this.acitiveId, '```````````````')
       this._rqManageDetails(this.acitiveId)
@@ -180,55 +183,61 @@
       _test() {
         wx.setStorageSync('token', ROLE.testToken)
       },
+      // 显示规则
       showRules() {
         this.showRule = !this.showRule
       },
+      // 获取商家活动详情
       _rqManageDetails(id) {
         api.merManageDetails(id).then(res => {
           console.log(res.data)
-          this.activityData = res.data
-          if (res.data.alliance_merchant_apply.length === 0) {
-            this.status = 0
-            this.showRule = true
-          } else {
-            this.applyId = res.data.alliance_merchant_apply.id
-            if (parseInt(res.data.alliance_merchant_apply.promotion_id) === 0) {
-              this.status = 1
+          if (res.error === ERR_OK) {
+            this.activityData = res.data
+            if (res.data.alliance_merchant_apply.length === 0) {
+              this.status = 0
+              this.showRule = true
             } else {
-              api.merCouponDetails(res.data.alliance_merchant_apply.promotion_id).then(res => {
-                console.log(res)
-                this.coupon = {
-                  image_url: res.data.promotion_detail_image_data[0].image_url,
-                  promotion_type_cn: res.data.promotion_type_cn,
-                  title: res.data.title,
-                  end_at: res.data.end_at,
-                  id: res.data.id
-                }
-              })
-              if (res.data.alliance_merchant_apply.check_status * 1 === 0) {
-                this.status = 2
-              } else if (res.data.alliance_merchant_apply.check_status * 1 === 1) {
-                this.status = 4
-                this.couponText = '报名成功'
-              } else if (res.data.alliance_merchant_apply.check_status * 1 === 3) {
-                this.status = 3
-                this.couponText = '更换优惠卷'
+              this.applyId = res.data.alliance_merchant_apply.id
+              if (parseInt(res.data.alliance_merchant_apply.promotion_id) === 0) {
+                this.status = 1
               } else {
-                if (res.data.alliance_merchant_apply.refund_status * 1 === 0) {
-                  this.status = 5
-                } else if (res.data.alliance_merchant_apply.refund_status * 1 === 1) {
-                  this.status = 6
-                  this.couponText = '退款成功'
-                } else if (res.data.alliance_merchant_apply.refund_status * 1 === 2) {
-                  this.status = 7
-                  this.couponText = '退款失败'
-                } else if (res.data.alliance_merchant_apply.refund_status * 1 === 3) {
-                  this.status = 8
-                  this.couponText = '排队中'
+                api.merCouponDetails(res.data.alliance_merchant_apply.promotion_id).then(res => {
+                  console.log(res)
+                  this.coupon = {
+                    image_url: res.data.promotion_detail_image_data[0].image_url,
+                    promotion_type_cn: res.data.promotion_type_cn,
+                    title: res.data.title,
+                    end_at: res.data.end_at,
+                    id: res.data.id
+                  }
+                })
+                if (res.data.alliance_merchant_apply.check_status * 1 === 0) {
+                  this.status = 2
+                } else if (res.data.alliance_merchant_apply.check_status * 1 === 1) {
+                  this.status = 4
+                  this.couponText = '报名成功'
+                } else if (res.data.alliance_merchant_apply.check_status * 1 === 3) {
+                  this.status = 3
+                  this.couponText = '更换优惠卷'
+                } else {
+                  if (res.data.alliance_merchant_apply.refund_status * 1 === 0) {
+                    this.status = 5
+                  } else if (res.data.alliance_merchant_apply.refund_status * 1 === 1) {
+                    this.status = 6
+                    this.couponText = '退款成功'
+                  } else if (res.data.alliance_merchant_apply.refund_status * 1 === 2) {
+                    this.status = 7
+                    this.couponText = '退款失败'
+                  } else if (res.data.alliance_merchant_apply.refund_status * 1 === 3) {
+                    this.status = 8
+                    this.couponText = '排队中'
+                  }
                 }
+                console.log(this.status)
               }
-              console.log(this.status)
             }
+          } else {
+            this.$refs.toast.show(res.message)
           }
           wechat.hideLoading()
         })
@@ -243,7 +252,7 @@
         this.addNumber++
       },
       appSubmit() {
-        // console.log(wx.requestPayment)
+        // 下单调取支付
         if (!this.addNumber) return
         if (this.applyLock) return
         this.applyLock = true
@@ -251,26 +260,34 @@
           this.applyLock = false
         }, 3000)
         const code = wx.getStorageSync('code')
+        // 调起支付
         api.merApplyPay(this.addNumber, this.activityData.id, code).then(res => {
           console.log(res.data)
+          if (res.error === ERR_OK) {
+            let orderId = res.data.order_id
+            const {timestamp, nonceStr, signType, paySign} = res.data.pay_info
+            wx.requestPayment({
+              timeStamp: timestamp,
+              nonceStr,
+              package: res.data.pay_info.package,
+              signType,
+              paySign,
+              'success': function (res) {
+                this.$router.back(1)
+              },
+              'fail': function (res) {
+                // 支付失败关闭订单
+                console.log(res, '支付失败关闭订单``````')
+                api.merCloseOrder(orderId).then(res => {
+                  console.log(res)
+                })
+                wechat.hideLoading()
+              }
+            })
+          } else {
+            this.$refs.toast.show(res.message)
+          }
           wechat.hideLoading()
-          const {timestamp, nonceStr, signType, paySign} = res.data.pay_info
-          wx.requestPayment({
-            timeStamp: timestamp,
-            nonceStr,
-            package: res.data.pay_info.package,
-            signType,
-            paySign,
-            'success': function (res) {
-              this.status = 1
-              console.log(11)
-            },
-            'fail': function (res) {
-              api.merCloseOrder(res.data.order_id).then(res => {
-                console.log(res)
-              })
-            }
-          })
         })
       },
       chooseCoupon() {
@@ -295,23 +312,38 @@
       },
       applyConfirm() {
         if (this.modelNumber === 1) {
+          // 报名申请退款
           api.merRefund().then(res => {
-            console.log(res)
+            console.log(res, '报名申请退款`````')
+            if (res.error === ERR_OK) {
+              this.$refs.toast.show('申请退款成功')
+              this.$router.back(1)
+            } else {
+              this.$refs.toast.show(res.message)
+            }
             wechat.hideLoading()
             this.showTitle = false
           })
         } else {
+          // 报名申请排队
           api.merQueueUp(this.applyId).then(res => {
-            console.log(res)
-            this.showTitle = false
+            console.log(res, '报名申请排队`````')
+            if (res.error === ERR_OK) {
+              this.$refs.toast.show('申请申请排队')
+              this.$router.back(1)
+            } else {
+              this.$refs.toast.show(res.message)
+            }
             wechat.hideLoading()
+            this.showTitle = false
           })
         }
       }
     },
     components: {
       Coupon,
-      model
+      model,
+      Toast
     }
   }
 </script>

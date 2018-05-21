@@ -8,12 +8,13 @@ export default {
    * @param data 状态
    * @returns {Promise.<*>}
    */
-  merPondActiveList(page = 1, limit = 10, status = 1) {
+  merPondActiveList(page = 1, limit = 10, status = 1, exclude_has_apply = 1) {
     const url = `/api/alliances/alliance-activities`
     let data = {
       page,
       limit,
-      status
+      status,
+      exclude_has_apply
     }
     return request.get(url, data, true)
   },
@@ -129,11 +130,12 @@ export default {
    * @param data 状态
    * @returns {Promise.<*>}
    */
-  merAllotStock(activity_alliance_id = 1, customer_id = 1, allot_count = 1) {
+  merAllotStock(activity_alliance_id = 1, customer_id = 1, allot_count = 1, shop_id = 0) {
     let data = {
       activity_alliance_id,
       customer_id,
-      allot_count
+      allot_count,
+      shop_id
     }
     const url = `/api/alliances/allot-stock`
     return request.post(url, data, true)
@@ -145,6 +147,6 @@ export default {
    */
   merCloseOrder(id, data) {
     const url = `api/alliances/merchant/close-order/${id}`
-    return request.post(url, data, true)
+    return request.get(url, data, true)
   }
 }

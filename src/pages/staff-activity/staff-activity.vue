@@ -2,7 +2,7 @@
   <div>
     <div class="list-box"  v-if="staffList.length !== 0">
       <div class="box-top" v-for="(item, index) in pageList" v-bind:key="index">
-        <active-card :useType="100" @previewHandler="test" :cardInfo="item"></active-card>
+        <active-card :useType="100" @addHandCode="jumpCode" @addHandData="jumpData" :cardInfo="item"></active-card>
       </div>
     </div>
     <div class="list-null" v-if="staffList.length === 0">
@@ -16,7 +16,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {baseURL} from 'api/config'
+  import {baseURL, ERR_OK} from 'api/config'
   import ActiveCard from 'components/active-card-item/active-card-item'
   import {mapGetters} from 'vuex'
   import {ROLE} from 'common/js/contants'
@@ -67,7 +67,7 @@
       },
       _getStaff() {
         api.merStaffList().then(res => {
-          if (res.error === ROLE.error) {
+          if (res.error === ERR_OK) {
             this.staffList.push(...this._formatRqData(res))
             this._isAllActive(res)
             this.pageList.page++
@@ -107,6 +107,18 @@
         if (this.staffList.length >= res.meta.total * 1) {
           this.isAllActive = true
         }
+      },
+      jumpCode(cardInfo) {
+        console.log(cardInfo.id)
+        const url = `/pages/staff-code/staff-code?id=${cardInfo.id}`
+        console.log(url)
+        this.$router.push(url)
+      },
+      jumpData(cardInfo) {
+        console.log(cardInfo.id)
+        const url = `/pages/staff-data/staff-data?id=${cardInfo.id}`
+        console.log(url)
+        this.$router.push(url)
       }
     },
     components: {

@@ -16,6 +16,20 @@
         <img :src="image + '/defaults/ipc-shopping/aliance/icon-union_j@2x.png'" v-if="image" class="box-img">
       </div>
     </div>
+    <div class="merchant-box" @tap="showBox(item, 0)"  v-for="(item, index) in staffList" v-bind:key="index">
+      <div class="box-left">
+        <img :src="item.logo_image" class="box-img">
+        <div class="text">{{item.shop_name}}</div>
+      </div>
+      <div class="box-right">
+        <div class="text">
+          <text v-if="item.sale_count !== 0">{{item.sale_count}}/</text>
+          {{item.stock}}
+        </div>
+        <img :src="image + '/defaults/ipc-shopping/aliance/icon-union_j@2x.png'" v-if="image" class="box-img">
+        <div class="show-model" @tap="showBox(item, 0)"></div>
+      </div>
+    </div>
     <div class="staff-box" v-for="(item, index) in staffList" v-bind:key="index">
       <div class="staff-list">
         <div class="box-left">
@@ -30,9 +44,10 @@
           <img :src="image + '/defaults/ipc-shopping/aliance/icon-union_j@2x.png'" v-if="image" class="box-img">
         </div>
       </div>
-      <div class="show-model" @tap="showBox(item)"></div>
+      <div class="show-model" @tap="showBox(item, 1)"></div>
     </div>
     <div class="model-box" v-if="modelCon">
+      <div class="model-bgbtn" @tap="cancel"></div>
       <div class="model-con">
         <div class="model-top">
           <div class="top-title">{{upName}}</div>
@@ -60,7 +75,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {baseURL} from 'api/config'
+  import {baseURL, ERR_OK} from 'api/config'
   import ActiveCard from 'components/active-card-item/active-card-item'
   import api from 'api'
   import * as wechat from 'common/js/wechat'
@@ -82,7 +97,9 @@
         stockNumber: 3,
         upNumber: 0,
         preNumber: 0,
+        sumbitType: 0,
         staffList: [],
+        merchantList: [],
         merchant: {
           shop_name: 'eleven',
           logo_image: 'https://img.jerryf.cn/defaults/ipc-shopping/activitydata/timg.jpg',
@@ -98,7 +115,9 @@
     },
     mounted() {
       this.dataId.activity_alliance_id = this.$root.$mp.query.id
-      this.getAllocation()
+      if (!this.dataId.activity_alliance_id) {
+        this.dataId.activity_alliance_id = 1
+      }
       this.getAllotDetals()
     },
     beforeMount() {
@@ -123,11 +142,30 @@
       showRules() {
         this.showRule = !this.showRule
       },
+      getAllotDetals() {
+        api.merManageDetails(this.dataId.activity_alliance_id).then(res => {
+          if (res.error === ERR_OK) {
+            console.log(res)
+            this.info.title = res.data.name
+            this.info.endDate = res.data.end_at
+            this.info.store = res.data.stock
+            this.getAllocation()
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+        })
+      },
       getAllocation() {
         api.merAllotList(this.dataId).then(res => {
-          if (res.error === 0) {
-            this.merchant = res.data.merchant
+          if (res.error === ERR_OK) {
+            this.merchantList = res.data.merchant
+            for (var i = 0; i < res.data.merchant.length; i++) {
+              this.info.store = this.info.store - res.data.merchant[i].stock
+            }
             this.staffList = res.data.employees
+            for (var s = 0; s < res.data.employees.length; s++) {
+              this.info.store = this.info.store - res.data.employees[s].stock
+            }
           } else {
             this.$refs.toast.show(res.message)
           }
@@ -135,19 +173,8 @@
           console.log(res)
         })
       },
-      getAllotDetals() {
-        api.merManageDetails(this.dataId.activity_alliance_id).then(res => {
-          if (res.error === 0) {
-            console.log(res)
-            this.info.title = res.data.name
-            this.info.endDate = res.data.end_at
-            this.info.store = res.data.stock
-          } else {
-            this.$refs.toast.show(res.message)
-          }
-        })
-      },
-      showBox(item) {
+      showBox(item, index) {
+        this.sumbitType = index
         // let number = item.stock - item.sale_count
         // this.upId = item.customer_id
         // this.upName = item.nickname
@@ -168,6 +195,7 @@
         if (this.upNumber >= this.info.store) return
         this.upNumber++
       },
+      // 提交分配
       sumbit() {
         if (this.upNumber > this.info.store) {
           this.$refs.toast.show('数量超过范围')
@@ -176,7 +204,7 @@
         let number = this.upNumber - this.preScene
         api.merAllotStock(this.dataId.activity_alliance_id, this.upId, number).then(res => {
           console.log(res)
-          if (res.error === 0) {
+          if (res.error === ERR_OK) {
             this.$refs.toast.show('分配成功')
           } else {
             this.$refs.toast.show(res.message)
@@ -306,12 +334,21 @@
     left: 0
     top: 0
     z-index: 2
-    background: rgba(0, 0, 0, .7)
+    .model-bgbtn
+      position: absolute
+      width: 100%
+      height: 100%
+      left: 0
+      bottom: 0
+      z-index: 3
+      background: rgba(0, 0, 0, .7)
+      opacity: 0.7
     .model-con
       position: absolute
       width: 100%
       left: 0
       bottom: 0
+      z-index: 4
       .model-top
         background: $color-background-ff
         padding-left: 15px

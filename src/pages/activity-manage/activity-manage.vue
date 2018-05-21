@@ -7,7 +7,8 @@
     <div class="manage-list" v-if="tabFlag === 0">
       <div class="list-data" v-if="activeList.length !== 0">
         <div class="box-list" v-for="(iteam, index) in activeList" v-bind:key="index">
-          <active-card :useType="0" @buyHandler="resetBuy" @allocHandler="jumpAllot"  @applyHandler="jumpApply" :cardInfo="iteam"></active-card>
+          <active-card :useType="0" @buyHandler="resetBuy" @allocHandler="jumpAllot" @applyHandler="jumpApply"
+                       :cardInfo="iteam"></active-card>
         </div>
       </div>
       <div class="list-null" v-if="activeList.length === 0">
@@ -34,7 +35,10 @@
         <div class="model-top">
           <div class="top-title">
             <div class="left">{{resetName}}</div>
-            <div class="right"><text>100</text><text class="money">元</text></div>
+            <div class="right">
+              <text>100</text>
+              <text class="money">元</text>
+            </div>
           </div>
           <div class="add-number">
             <div class="text">数量</div>
@@ -46,7 +50,10 @@
           </div>
           <div class="top-title">
             <div class="left">总价</div>
-            <div class="right all-right"><text>{{resetMoney * upNumber}}</text><text class="money">元</text></div>
+            <div class="right all-right">
+              <text>{{resetMoney * upNumber}}</text>
+              <text class="money">元</text>
+            </div>
           </div>
         </div>
         <div class="model-bg">
@@ -62,7 +69,7 @@
 
 <script type="text/ecmascript-6">
   import api from 'api'
-  import {baseURL} from 'api/config'
+  import {baseURL, ERR_OK} from 'api/config'
   import ActiveCard from 'components/active-card-item/active-card-item'
   import * as wechat from 'common/js/wechat'
   import {mapGetters} from 'vuex'
@@ -95,11 +102,24 @@
       }
     },
     mounted() {
+      wx.getSystemInfo({
+        success: function(res) {
+          console.log(res.system)
+          this.ios = res.system.search('iOS') !== -1
+          console.log(this.ios, '````````')
+        }
+      })
+    },
+    onShow() {
+      this._init()
+      this.ActiveData.page = 1
+      this.activeList = []
+      this.isAllActive = false
+      this.PondPage = 1
+      this.pondList = []
+      this.isAllPond = false
       this._rqGetActiveList()
       this._rqManageGetActiveList()
-    },
-    beforeMount() {
-      this._init()
     },
     onPullDownRefresh() {
       if (this.tabFlag === 0) {
@@ -267,29 +287,38 @@
         const code = wx.getStorageSync('code')
         api.merApplyPay(this.upNumber, this.curId, code).then(res => {
           console.log(res.data)
+          if (res.error === ERR_OK) {
+            let orderId = res.data.order_id
+            const {timestamp, nonceStr, signType, paySign} = res.data.pay_info
+            wx.requestPayment({
+              timeStamp: timestamp,
+              nonceStr,
+              package: res.data.pay_info.package,
+              signType,
+              paySign,
+              'success': function (res) {
+                this.$refs.toast.show('复购成功')
+              },
+              'fail': function (res) {
+                // 支付失败关闭订单
+                console.log(res, '支付失败关闭订单``````')
+                api.merCloseOrder(orderId).then(res => {
+                  console.log(res)
+                })
+                wechat.hideLoading()
+              }
+            })
+          } else {
+            this.$refs.toast.show(res.message)
+          }
           wechat.hideLoading()
-          const {timestamp, nonceStr, signType, paySign} = res.data.pay_info
-          wx.requestPayment({
-            timeStamp: timestamp,
-            nonceStr,
-            package: res.data.pay_info.package,
-            signType,
-            paySign,
-            'success': function (res) {
-              console.log(res)
-            },
-            'fail': function (res) {
-              api.merCloseOrder(res.data.order_id).then(res => {
-                console.log(res)
-              })
-            }
-          })
         })
       },
       resetBuy(cardInfo) {
         console.log(cardInfo)
         this.modelCon = !this.modelCon
         this.resetName = cardInfo.name
+        this.resetMoney = cardInfo.apply_price
         this.curId = cardInfo.id
       },
       colseModel() {
@@ -355,6 +384,7 @@
       font-family: $font-family-light
       font-size: $font-size-small
       color: $color-assist-27
+
   .model-box
     position: fixed
     width: 100%
@@ -362,7 +392,6 @@
     left: 0
     top: 0
     z-index: 2
-    background: rgba(0, 0, 0, .7)
     .model-bgbtn
       position: absolute
       width: 100%
