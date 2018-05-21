@@ -47,13 +47,13 @@
   .bgnull
     position: relative
     width: 100vw
-    height: 100vh
+    height: 100%
     background-color: $color-background-f6
     .center
       width: 87px
       height: 99.5px
       position: absolute
-      top: -170px
+      top: -35%
       left: 0px
       right: 0px
       bottom: 0px
