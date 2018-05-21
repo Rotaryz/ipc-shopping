@@ -113,7 +113,7 @@
     data () {
       return {
         ROLE, // 角色定义常量值
-        currentRole: ROLE.STAFF_ID, // 当前角色
+        currentRole: null, // 当前角色
         imageUri: baseURL.image, // 图片路径
         activeList: ACTIVE_DEF, // 活动列表
         employeeList: [], // 员工列表
@@ -142,7 +142,7 @@
       ...mapMutations({saveRoleSync: 'ROLE_TYPE'}),
       ...mapGetters(['role']),
       _login () {
-        // this._loginInit()
+        this._loginInit()
       },
       _test () {
         this.entryRole = ROLE.UNION_ID

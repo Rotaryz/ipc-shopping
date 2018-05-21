@@ -1,42 +1,43 @@
 <template>
-    <div class="employee">
-      <div class="em-list" v-if="awaitList.length > 0 || acceptList.length > 0">
-        <div class="em-list-await"  v-if="awaitList.length > 0">
-          <div class="em-list-await-title"><span>待处理申请</span></div>
-          <div class="await-list-item" v-for="item in awaitList" :key="index">
-            <div class="await-list-left">
-              <img class="left-image" :src="item.avatar_url" />
-              <div class="left-name">{{item.nickname}}</div>
-            </div>
-            <div class="await-list-right">
-              <div class="right-refuse" v-on:click="refuse(item,index)">拒绝</div>
-              <div class="right-accept" v-on:click="accept(item,index)">接受</div>
-            </div>
+  <div class="employee">
+    <form class="em-list" v-if="awaitList.length > 0 || acceptList.length > 0" @submit="formSubmit" report-submit='true'>
+      <div class="em-list-await" v-if="awaitList.length > 0">
+        <div class="em-list-await-title"><span>待处理申请</span></div>
+        <div class="await-list-item" v-for="item in awaitList" :key="index">
+          <div class="await-list-left">
+            <img class="left-image" :src="item.avatar_url"/>
+            <div class="left-name">{{item.nickname}}</div>
           </div>
-        </div>
-        <div class="em-list-succeed"  v-if="acceptList.length > 0">
-          <div class="await-list-item" v-for="item in acceptList" :key="index">
-            <div class="await-list-left">
-              <img class="left-image" src="" />
-              <div class="left-name">{{item.name}}</div>
-            </div>
-            <div class="await-list-right">
-              <div class="right-del" v-on:click="del(item,index)">删除</div>
-            </div>
+          <div class="await-list-right">
+            <label for="btn-1" class="right-refuse" v-on:click="refuse(item,index)">拒绝</label>
+            <button id="btn-1" class="btn-form-id" form-type="submit"></button>
+            <div class="right-accept" v-on:click="accept(item,index)">接受</div>
           </div>
         </div>
       </div>
-      <div class="floorAdd">
-        <div class="addEmployee" v-on:click="addEmployee">邀请员工</div>
+      <div class="em-list-succeed" v-if="acceptList.length > 0">
+        <div class="await-list-item" v-for="item in acceptList" :key="index">
+          <div class="await-list-left">
+            <img class="left-image" src=""/>
+            <div class="left-name">{{item.name}}</div>
+          </div>
+          <div class="await-list-right">
+            <div class="right-del" v-on:click="del(item,index)">删除</div>
+          </div>
+        </div>
       </div>
-      <confirm-msg :show.sync="show" :title.sync="title" v-on:confirm="confirm" v-on:cancel="cancel"></confirm-msg>
-      <bgnull :showImagSta="0" :showBgnull="awaitList.length <= 0 && acceptList.length <= 0"></bgnull>
-      <toast ref="toast"></toast>
+    </form>
+    <div class="floorAdd">
+      <div class="addEmployee" v-on:click="addEmployee">邀请员工</div>
     </div>
+    <confirm-msg :show.sync="show" :title.sync="title" v-on:confirm="confirm" v-on:cancel="cancel"></confirm-msg>
+    <bgnull :showImagSta="0" :showBgnull="awaitList.length <= 0 && acceptList.length <= 0"></bgnull>
+    <toast ref="toast"></toast>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import {ERR_OK} from 'api/config'
+  import { ERR_OK } from 'api/config'
   import Bgnull from 'components/bgnull/bgnull'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
   import api from 'api'
@@ -47,8 +48,8 @@
     data () {
       return {
         showBgnull: true,
-        awaitList: [],
-        acceptList: [],
+        awaitList: [1],
+        acceptList: [1],
         show: false,
         title: '',
         dataTmp: {},
@@ -65,17 +66,22 @@
     onReachBottom () {
       console.log('上拉刷新....')
     },
-    mounted() {
-      this.getInfo()
+    mounted () {
+      // this.getInfo()
       console.log(`--${this.compName}--mounted`)
     },
     methods: {
+      formSubmit (e) {
+        let formId = e.mp.detail.formId
+        let data = {'form_ids': [formId]}
+        api.homeCollectFormId(data)
+      },
       async getInfo () {
         await this._getEmployee()
         await this._getAccept()
         wechat.hideLoading()
       },
-      _getEmployee() { // 获取待处理员工
+      _getEmployee () { // 获取待处理员工
         let data = {}
         api.empGetEmployeeList(data).then(res => {
           if (res.error !== ERR_OK) return
@@ -84,7 +90,7 @@
           console.log(err)
         })
       },
-      _getAccept() { // 获取接受的员工
+      _getAccept () { // 获取接受的员工
         let data = {}
         api.empGetAcceptList(data).then(res => {
           if (res.error !== ERR_OK) return
@@ -93,7 +99,7 @@
           console.log(err)
         })
       },
-      _AuditEmployee(key) { // 审核员工 1为通过，2为拒绝
+      _AuditEmployee (key) { // 审核员工 1为通过，2为拒绝
         let data = {status: key, id: this.awaitList[this.dataIndex].id}
         api.empAuditEmployee(data).then(res => {
           if (res.error !== ERR_OK) {
@@ -152,7 +158,7 @@
           query: {key: 123}
         })
       },
-      confirm() {
+      confirm () {
         this.show = false
         if (this.isAwait !== '') {
           if (this.isAwait === 'refuse') { // 拒绝
@@ -164,7 +170,7 @@
           }
         }
       },
-      cancel() {
+      cancel () {
         this.show = false
       }
     }
@@ -174,12 +180,19 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import '../../common/stylus/variable'
   @import '../../common/stylus/mixin'
+
+  .btn-form-id
+    position: absolute
+    opacity: 0
+    top: -100%
+
   .employee
     height: 100vh
     width: 100vw
     background-color: $color-background-f6
+
   .em-list
-    padding-bottom: 90rpx
+    padding-bottom: 90 rpx
     .em-list-await
       padding-left: 15px
       background-color: $color-background-ff
@@ -194,7 +207,7 @@
       height: 54px
       justify-content: space-between
       display: flex
-      cut-off-rule-bottom(0,0,#EDEDED)
+      cut-off-rule-bottom(0, 0, #EDEDED)
       &:last-child
         border-none()
     .await-list-item
@@ -224,7 +237,7 @@
           function-button()
         .right-accept
           margin-right: 15px
-          function-button($color-assist-34,$color-assist-34)
+          function-button($color-assist-34, $color-assist-34)
         .right-del
           margin-right: 15px
           function-button()
@@ -232,6 +245,7 @@
       padding-left: 15px
       margin-top: 10px
       background-color: $color-background-ff
+
   .floorAdd
     position: fixed
     z-index: 1

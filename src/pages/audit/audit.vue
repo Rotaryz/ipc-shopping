@@ -103,7 +103,7 @@
         couponInfo: {},
         show: false,
         title: '',
-        btnSta: 1,
+        btnSta: 0,
         currentCheckId: null
       }
     },
@@ -254,15 +254,15 @@
       padding-left: 15px
       background-color: $color-background-ff
     .em-list-await-title
-      height: 50px
-      line-height: 50px
+      height: 42px
+      line-height: 42px
       text-indent: 8px
       vertical-line()
       font-family: $font-family-regular
       font-size: $font-size-medium
       color: $color-text-2d
     .await-list-item
-      height: 54px
+      height: 45px
       justify-content: space-between
       display: flex
       cut-off-rule-bottom(0, 0, $color-cut-line-ed)
