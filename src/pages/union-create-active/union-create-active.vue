@@ -1,6 +1,6 @@
 <template>
   <article class="union-create-active">
-    <form class="u-c-form">
+    <form class="u-c-form" @submit="formSubmit" report-submit='true'>
       <section class="u-c-section base-info">
         <article class="b-i-item">
           <div class="title">活动名称</div>
@@ -116,7 +116,7 @@
           </dd>
         </article>
       </section>
-      <footer class="save-btn" @tap="saveHandler">保存</footer>
+      <button class="save-btn" form-type="submit" @tap="saveHandler">保存</button>
     </form>
     <toast ref="toast"></toast>
   </article>
@@ -124,32 +124,32 @@
 
 <script type="text/ecmascript-6">
   import api from 'api'
-  import {ERR_OK} from 'api/config'
+  import { ERR_OK } from 'api/config'
   import * as wechat from 'common/js/wechat'
   import wx from 'wx'
   import util from 'common/js/format'
   import Toast from '@/components/toast/toast'
 
-  function awardNote(a, b) {
+  function awardNote (a, b) {
     return `1. 商家以及员工，每销售一张卡券，得到${a}元的奖励。
             2. 商家销售卡的用户，到其他门店使用一次，得到联盟力${b}分奖励。（可以分全部联盟商家报名该活动的报名金）
             3. 商家可以得到该活动全部商家的异业客户引流客户。`
   }
 
-  function claimNote(a) {
+  function claimNote (a) {
     return `1. 用户购买异业联盟卡后，提供商品给用户。
             2. 添加商家自己的固定数量的免费优惠券。
             3. 支持平台提供的${a}元代金券，小程序买单的使用。`
   }
 
-  function detailNote(a) {
+  function detailNote (a) {
     return `1. 本活动仅在${a}内开展。
             2. 该活动需要商家付费参加，如果报名没有通过，会立刻原路退款。
             3. 本次活动的最终解释权归赞播所有。`
   }
 
   export default {
-    data() {
+    data () {
       return {
         model: 0,
         id: '',
@@ -163,16 +163,16 @@
         activeInfo: {}
       }
     },
-    beforeMount() {
+    beforeMount () {
       let title = `新建`
       this.isNewModel && wx.setNavigationBarTitle({title})
       this._init()
     },
-    mounted() {
+    mounted () {
       // console.log(util, Date.now())
     },
     methods: {
-      _init() {
+      _init () {
         this.model = this.$root.$mp.query.model * 1
         this.name = `异业联盟活动`
         this.startDate = util.formatTimeYMD(util.now + 1000 * 60 * 60 * 24)
@@ -188,10 +188,10 @@
           this._rqGetActiveList(data)
         }
       },
-      disableHandler() {
+      disableHandler () {
         this.$refs.toast.show('不可修改')
       },
-      inputHandler(e) {
+      inputHandler (e) {
         let id = e.target.id
         let value = e.target.value
         switch (id) {
@@ -242,9 +242,9 @@
           }
         }
       },
-      _checkSaveInfo() {
+      _checkSaveInfo () {
         // 日期
-        if (new Date(this.endDate) - new Date(this.startDate) < 1000 * 60 * 60 * 24 * 61) {
+        if (new Date(this.endDate) - new Date(this.startDate) < 1000 * 60 * 60 * 24 * 60) {
           this.$refs.toast.show('活动时间不能小于60天')
           return false
         }
@@ -259,7 +259,13 @@
         }
         return true
       },
-      saveHandler() {
+      formSubmit (e) {
+        if (!this._checkSaveInfo()) return
+        let formId = e.mp.detail.formId
+        let data = {'form_ids': [formId]}
+        api.homeCollectFormId(data)
+      },
+      saveHandler () {
         switch (this.model) {
           case 0 : {
             if (!this._checkSaveInfo()) return
@@ -273,7 +279,7 @@
           }
         }
       },
-      bindDateChange(e) {
+      bindDateChange (e) {
         const id = e.target.id
         const value = e.mp.detail.value
         switch (id) {
@@ -287,7 +293,7 @@
           }
         }
       },
-      _packData() {
+      _packData () {
         return {
           id: this.id,
           name: this.name,
@@ -302,7 +308,7 @@
           detail_note: detailNote(this.address)
         }
       },
-      _resolveReqData(json) {
+      _resolveReqData (json) {
         let res = json.data
         this.name = res.name
         this.startDate = res.start_at
@@ -314,7 +320,7 @@
         res.attach && (this.activeInfo = res.attach)
       },
       // 获取活动信息
-      _rqGetActiveList(data) {
+      _rqGetActiveList (data) {
         api.uctGetActive(data)
           .then(json => {
             if (json.error !== ERR_OK) {
@@ -328,7 +334,7 @@
           })
       },
       // 创建活动
-      _rqCreateActive(data) {
+      _rqCreateActive (data) {
         api.uctCreateActive(data)
           .then(json => {
             console.log(json)
@@ -344,7 +350,7 @@
           })
       },
       // 修改活动
-      _rqUpdateActive(data) {
+      _rqUpdateActive (data) {
         api.uctUpdateActive(data)
           .then(json => {
             wechat.hideLoading()
@@ -360,13 +366,13 @@
       }
     },
     computed: {
-      isNewModel() {
+      isNewModel () {
         return this.model === 0
       },
-      todayStartDate() {
+      todayStartDate () {
         return util.formatTimeYMD(util.now + 1000 * 60 * 60 * 24)
       },
-      endStartDate() {
+      endStartDate () {
         return util.formatTimeYMD(util.now + 1000 * 60 * 60 * 24 * 61)
       }
     },
