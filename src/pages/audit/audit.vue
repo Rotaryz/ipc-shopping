@@ -57,15 +57,20 @@
         </div>
       </div>
     </div>
-    <form class="floorAdd" v-if="btnSta === 0 || btnSta === 1 " @submit="formSubmit" report-submit='true'>
+    <form class="floorAdd" v-if="btnSta === 0 " @submit="formSubmit" report-submit='true'>
       <div class="addEmployee">
-        <button class="change" v-if="btnSta === 1" @tap="changeCoupon" form-type="submit">
-          <img class="img" v-if="imageUrl" :src="imageUrl+'/defaults/ipc-shopping/common/icon-union_yhj@2x.png'">
+        <button class="refuse" @tap="refuse" form-type="submit">拒绝</button>
+        <button class="pass" @tap="remind" form-type="submit">提醒(添加优惠券)</button>
+      </div>
+    </form>
+    <form class="floorAdd" v-if="btnSta === 1 " @submit="formSubmit" report-submit='true'>
+      <div class="addEmployee">
+        <button class="change btn-1" @tap="changeCoupon" form-type="submit">
+          <img class="img btn-1" v-if="imageUrl" :src="imageUrl+'/defaults/ipc-shopping/common/icon-union_yhj@2x.png'">
           <div class="txt">更换优惠券</div>
         </button>
-        <button class="refuse" v-if="btnSta === 0 || btnSta === 1" @tap="refuse" form-type="submit">拒绝</button>
-        <button class="pass" v-if="btnSta === 0" @tap="remind" form-type="submit">提醒(添加优惠券)</button>
-        <button class="pass" v-if="btnSta === 1" @tap="accept" form-type="submit">通过</button>
+        <button class="refuse btn-1" @tap="refuse" form-type="submit">拒绝</button>
+        <button class="pass" @tap="accept" form-type="submit">通过</button>
       </div>
     </form>
     <!--<confirm-msg :show.sync="show" :title.sync="title" v-on:confirm="confirm" v-on:cancel="cancel"></confirm-msg>-->
@@ -244,7 +249,7 @@
   .em-list
     padding-bottom: 65px
     &.em-list-2
-      padding-bottom: 65px
+      padding-bottom: 0px
     .em-list-await
       padding-left: 15px
       background-color: $color-background-ff
@@ -329,10 +334,14 @@
         align-items: center
         box-sizing: border-box
         padding-top: 9.5px
+        &.btn-1
+          border: none
         .img
           width: 17.5px
           height: 12.5px
           margin-bottom: 5px
+          &.btn-1
+            margin-bottom: 0
         .txt
           font-family: $font-family-light
           font-size: $font-size-small-s
@@ -347,6 +356,8 @@
         letter-spacing: 0.64px
         background-color: $color-assist-27
         border-radius: 3px 0 0 0
+        &.btn-1
+          border-radius: 0
       .pass
         text-align center
         flex: 1
