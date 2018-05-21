@@ -244,8 +244,8 @@
       },
       _checkSaveInfo() {
         // 日期
-        if (new Date(this.endDate) - new Date(this.startDate) < 0) {
-          this.$refs.toast.show('结束时间不能小于开始时间')
+        if (new Date(this.endDate) - new Date(this.startDate) < 1000 * 60 * 60 * 24 * 61) {
+          this.$refs.toast.show('活动时间不能小于60天')
           return false
         }
         // 价格
@@ -262,15 +262,13 @@
       saveHandler() {
         switch (this.model) {
           case 0 : {
-            if (!this._checkSaveInfo()) {
-            }
-            // this._rqCreateActive(this._packData())
+            if (!this._checkSaveInfo()) return
+            this._rqCreateActive(this._packData())
             break
           }
           case 1: {
-            if (!this._checkSaveInfo()) {
-            }
-            // this._rqUpdateActive(this._packData())
+            if (!this._checkSaveInfo()) return
+            this._rqUpdateActive(this._packData())
             break
           }
         }
