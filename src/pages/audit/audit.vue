@@ -150,6 +150,9 @@
           this.couponInfo.scope = `限${res.merchant_data.shop_name}使用`
           this.couponInfo.useLife = `有效期:${res.promotion.start_at}至${res.promotion.end_at}`
           this.couponInfo.image_url = res.promotion.image_url
+          this.couponInfo.appId = res.promotion.appid
+          this.couponInfo.appPath = res.promotion.path
+          this.couponInfo.merchantId = res.promotion.merchant_id
         }
       },
       _rqCheckApply (data, loading) {
@@ -165,27 +168,30 @@
             console.info(err)
           })
       },
-      _navToMp (json) {
-        json = {
-          appId: '',
-          path: 'pages/index/index?id=123',
-          extraData: {
-            foo: 'bar'
-          },
-          envVersion: 'develop',
-          success (res) {
-            // 打开成功
-          }
-        }
-        wx.navigateToMiniProgram(json)
-      },
       _formatReq (flag) {
         // 1通过 2拒绝 3替换 4提醒
         return {check_status: flag, apply_id: this.currentCheckId}
       },
+      // 跳C端预览
+      _toMpC (json) {
+        wx.navigateToMiniProgram({
+          appId: json.appId,
+          path: json.path,
+          extraData: {},
+          envVersion: baseURL.jumpVersion,
+          success (res) {
+            // 打开成功
+            console.log(res)
+          }
+        })
+      },
+      // 查看跳C端
       lookOverHandler (obj) {
-        // this._navToMp(obj)
-        console.log(666)
+        const id = obj.id
+        const appId = obj.appId
+        const merchantId = obj.merchantId
+        const path = `${obj.appPath}?type=1&id=${id}&currentMerchant=${merchantId}`
+        this._toMpC({appId, path})
       },
       changeCoupon () {
         let data = this._formatReq(3)
@@ -203,7 +209,7 @@
         // this.$refs.toast.show('已接受')
       },
       remind () {
-        let data = this._formatReq(4)
+        let data = this._formatReq(3)
         this._rqCheckApply(data)
         // this.$refs.toast.show('已提醒')
       }
