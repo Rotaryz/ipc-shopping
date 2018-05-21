@@ -78,6 +78,8 @@
     width: 100%
     height: 100%
     position: relative
+    -webkit-transform: rotate(-0.05deg)
+    transform: rotate(-0.05deg)
     .c-p-svg
       height: 100%
       background-size: cover

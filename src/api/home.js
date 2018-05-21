@@ -67,6 +67,15 @@ export default {
   homeCustomerStatus(data, loading = true) {
     const url = `/api/customer-status`
     return request.get(url, data, loading)
+  },
+  /**
+   *  判断该员工在该商家的状态
+   * @param data 入参
+   * @returns {Promise.<*>}
+   */
+  homeCollectFormId(data, loading = false) {
+    const url = `/api/alliances/data/collect-formid`
+    return request.post(url, data, loading)
   }
 
 }
