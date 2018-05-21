@@ -80,12 +80,12 @@
 
 <script type="text/ecmascript-6">
   import api from 'api'
-  import { baseURL } from 'api/config'
-  import { mapGetters, mapMutations } from 'vuex'
-  import { ROLE, SHOP_HELPER } from 'common/js/contants'
+  import {baseURL} from 'api/config'
+  import {mapGetters, mapMutations} from 'vuex'
+  import {ROLE, SHOP_HELPER} from 'common/js/contants'
   import HSliderItem from 'components/hSlider-item/hSlider-item'
   import wx from 'wx'
-  import { ERR_OK, TOKEN_OUT } from '../../api/config'
+  import {ERR_OK, TOKEN_OUT} from '../../api/config'
   import * as wechat from 'common/js/wechat'
   import AuditMsg from 'components/audit-msg/audit-msg'
   import Toast from 'components/toast/toast'
@@ -113,7 +113,7 @@
   }]
 
   export default {
-    data () {
+    data() {
       return {
         ROLE, // 角色定义常量值
         currentRole: null, // 当前角色
@@ -131,30 +131,31 @@
         backCount: 0 // 回退b端的次数
       }
     },
-    created () {
+    created() {
     },
-    onShow () {
+    onShow() {
       this._login()
     },
-    beforeMount () {
+    beforeMount() {
       // this._init()
     },
-    mounted () {
+    mounted() {
     },
     methods: {
       ...mapMutations({saveRoleSync: 'ROLE_TYPE'}),
       ...mapGetters(['role']),
       // 登录验证
-      _login () {
-        this._loginInit()
+      _login() {
+        console.log(this.$root.$mp.query, '==========')
+        // this._loginInit()
       },
       // 上传form-id
-      formSubmit (e) {
+      formSubmit(e) {
         let formId = e.mp.detail.formId
         let data = {'form_ids': [formId]}
         api.homeCollectFormId(data)
       },
-      _test () {
+      _test() {
         this.entryRole = ROLE.UNION_ID
         this.currentRole = this.entryRole
         this.$root.$mp.query.token = ROLE.testToken
@@ -163,22 +164,14 @@
         wx.setStorageSync('merchantId', 100004)
       },
       // 从消息模板来的数据
-      _fromMsgTpl () {
-        let token = this.$root.$mp.query.token
-        let entryRole = this.$root.$mp.query.entryRole
-        let merchantId = this.$root.$mp.query.merchantId
-        let activeId = this.$root.$mp.query.activeId
-        let targetPage = this.$root.$mp.query.targetPage
-        let url = `${targetPage}?id=${activeId}`
-        if (!entryRole) return
-        wx.setStorageSync('userType', token)
-        wx.setStorageSync('token', entryRole)
-        wx.setStorageSync('merchantId', merchantId)
-        if (url === `/pages/home/home`) return
-        this.$router.push(url)
+      _getFromMsgTpl() {
+        if (+this.$root.$mp.query.scene === 1014) {
+          let id = this.$root.$mp.query.id
+          id && (this.currentActiveId = id)
+        }
       },
       // 初始化
-      _loginInit () {
+      _loginInit() {
         this._getMerchantId()
         this._checkRole()
         this._test()
@@ -204,11 +197,11 @@
           })
       },
       // 员工点确定后操作
-      staffConfirmHandler () {
+      staffConfirmHandler() {
         this._init()
       },
       // 检查角色
-      _checkRole () {
+      _checkRole() {
         this.entryRole = ROLE.STAFF_ID
         const entryRole = this.$root.$mp.query.entryRole
         entryRole && (this.entryRole = entryRole)
@@ -217,7 +210,7 @@
         wx.setStorageSync('userType', this.entryRole)
       },
       // 返回商家助手
-      _backToB () {
+      _backToB() {
         if (this.backCount > 0) return
         this.backCount++
         wechat.showLoading()
@@ -228,14 +221,14 @@
           path: path,
           extraData: {},
           envVersion: baseURL.jumpVersion,
-          success (res) {
+          success(res) {
             // 打开成功
             console.log(res)
           }
         })
       },
       // 获取token
-      _getToken () {
+      _getToken() {
         let token = null
         if (this.entryRole === ROLE.STAFF_ID) {
           token = wx.getStorageSync('token')
@@ -250,11 +243,10 @@
           }
         }
         this.currentToken = token
-        console.log(token, '----------------------------')
         token && wx.setStorageSync('token', token)
       },
       // 检查token是否过期
-      _isTokenOut () {
+      _isTokenOut() {
         let resCode = this.$root.$mp.query.resCode * 1
         // 盟主回退B端
         if (resCode === TOKEN_OUT && this.currentRole === ROLE.STAFF_ID) {
@@ -268,7 +260,7 @@
         return false
       },
       // 获取临时登录凭证code
-      _getCode () {
+      _getCode() {
         return new Promise(resolve => {
           wechat.login()
             .then(res => {
@@ -281,12 +273,12 @@
         })
       },
       // 获取商家ID
-      _getMerchantId () {
+      _getMerchantId() {
         const merchantId = this.$root.$mp.query.merchantId
         merchantId && wx.setStorageSync('merchantId', merchantId)
       },
       // 检查员工身份状态
-      _rqCustomerStatus () {
+      _rqCustomerStatus() {
         return new Promise(resolve => {
           api.homeCustomerStatus()
             .then(json => {
@@ -306,7 +298,7 @@
         })
       },
       // 项目初始化
-      _init () {
+      _init() {
         console.log(this.onShowCount)
         if (this.onShowCount > 0) return
         this.onShowCount++
@@ -320,6 +312,7 @@
                 if (list.length > 0) {
                   this.activeList = list
                   this.currentActiveId = this.activeList[this.dotCurrent].activeId
+                  this._getFromMsgTpl()
                 }
               })
             break
@@ -331,6 +324,7 @@
                 if (list.length > 0) {
                   this.activeList = list
                   this.currentActiveId = this.activeList[this.dotCurrent].activeId
+                  this._getFromMsgTpl()
                 }
               })
             this._rqGetNotice()
@@ -347,6 +341,7 @@
                 if (list.length > 0) {
                   this.activeList = list
                   this.currentActiveId = this.activeList[this.dotCurrent].activeId
+                  this._getFromMsgTpl()
                   this._getStaffSale()
                 }
               })
@@ -355,7 +350,7 @@
         }
       },
       // 保存标题
-      setNavTitle (data) {
+      setNavTitle(data) {
         this._rqGetGolbalData(data)
           .then(json => {
             let title = json.data.merchant.shop_name
@@ -364,7 +359,7 @@
           })
       },
       // 获取盟主所有活动信息
-      _rqGetUnionAll () {
+      _rqGetUnionAll() {
         return new Promise(resolve => {
           api.homeGetUnion()
             .then(json => {
@@ -380,7 +375,7 @@
         })
       },
       // 格式化公告
-      _formatNotice (json) {
+      _formatNotice(json) {
         let arr = []
         let res = json.data
         res.map(item => {
@@ -388,7 +383,7 @@
         return arr
       },
       // 格式化活动信息
-      _formatInfoData (json) {
+      _formatInfoData(json) {
         let arr = []
         let res = json.data
         res.map(item => {
@@ -418,7 +413,7 @@
         return arr
       },
       // 请求商家信息
-      _rqGetShopAll () {
+      _rqGetShopAll() {
         return new Promise(resolve => {
           api.homeGetShop()
             .then(json => {
@@ -434,7 +429,7 @@
         })
       },
       // 请求员工信息
-      _rqGetStaffAll () {
+      _rqGetStaffAll() {
         return new Promise(resolve => {
           api.homeGetStaff()
             .then(json => {
@@ -450,7 +445,7 @@
         })
       },
       // 请求公告信息
-      _rqGetNotice () {
+      _rqGetNotice() {
         return new Promise(resolve => {
           api.homeGetNotice()
             .then(json => {
@@ -466,7 +461,7 @@
         })
       },
       // 请求员工销卡对比信息
-      _rqGetStaffSales (data) {
+      _rqGetStaffSales(data) {
         return new Promise(resolve => {
           api.homeGetStaffSale(data)
             .then(json => {
@@ -482,7 +477,7 @@
         })
       },
       // 获取全局数据
-      _rqGetGolbalData (data) {
+      _rqGetGolbalData(data) {
         return new Promise(resolve => {
           api.homeGetGlobalData(data)
             .then(json => {
@@ -498,7 +493,7 @@
         })
       },
       // 获取员工销卡比信息
-      _getStaffSale () {
+      _getStaffSale() {
         if (this.currentRole !== ROLE.STAFF_ID) return
         let data = {activity_alliance_id: this.currentActiveId}
         this._rqGetStaffSales(data)
@@ -508,7 +503,7 @@
           })
       },
       // 格式化员工销卡比信息
-      _formatStaffData (json) {
+      _formatStaffData(json) {
         let arr = []
         let res = json.data
         res.map(item => {
@@ -524,7 +519,7 @@
         return arr
       },
       // 查看统计
-      lookTotalHandler (obj) {
+      lookTotalHandler(obj) {
         let url = ''
         let id = obj.activeId
         switch (this.currentRole) {
@@ -544,12 +539,12 @@
         url && this.$router.push(url)
       },
       // 查看商家活动管理
-      watchActiveHandler () {
+      watchActiveHandler() {
         const url = `/pages/activity-manage/activity-manage`
         this.$router.push(url)
       },
       // swiper滑动块
-      swiperChange (e) {
+      swiperChange(e) {
         let index = e.mp.detail.current
         this.dotCurrent = index
         this.sliderCurrent = index
@@ -557,34 +552,34 @@
         this._getStaffSale()
       },
       // 去联盟管理
-      toUnion () {
+      toUnion() {
         const url = `/pages/union-manage/union-manage`
         this.$router.push(url)
       },
       // 去活动管理
-      toShop () {
+      toShop() {
         const url = `/pages/activity-manage/activity-manage`
         this.$router.push(url)
       },
       // 去员工管理
-      toEmployee () {
+      toEmployee() {
         const url = `/pages/employee/employee`
         this.$router.push(url)
       },
       // 去收入、提现
-      toAsset () {
+      toAsset() {
         const url = `/pages/asset/asset`
         this.$router.push(url)
       }
     },
     computed: {
-      dotStyle () {
+      dotStyle() {
         return this.activeList.length <= 1 ? 'd-op' : ''
       },
-      leaderImg () {
+      leaderImg() {
         return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-mhome_union@2x.png)` || ''
       },
-      activeImg () {
+      activeImg() {
         switch (this.currentRole) {
           case ROLE.UNION_ID: {
             return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-mhome_activity@2x.png)` || ''
@@ -600,7 +595,7 @@
           }
         }
       },
-      employeeImg () {
+      employeeImg() {
         switch (this.currentRole) {
           case ROLE.UNION_ID: {
             return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-mhome_staff@2x.png)` || ''
@@ -613,7 +608,7 @@
           }
         }
       },
-      incomeImg () {
+      incomeImg() {
         switch (this.currentRole) {
           case ROLE.UNION_ID: {
             return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-mhome_income@2x.png)` || ''
