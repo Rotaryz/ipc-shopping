@@ -71,18 +71,21 @@
       <nav class="t-l-nav" :style="activeImg" @tap.stop="toShop">活动管理</nav>
       <nav class="t-l-nav" :style="incomeImg" @tap.stop="toAsset">收入/提现</nav>
     </footer>
+    <audit-msg @confirmHandler="staffConfirmHandler" :flag="status"></audit-msg>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import api from 'api'
   import { baseURL } from 'api/config'
-  import { mapGetters } from 'vuex'
-  import { ROLE } from 'common/js/contants'
+  import { mapGetters, mapMutations } from 'vuex'
+  import { ROLE, SHOP_HELPER } from 'common/js/contants'
   import HSliderItem from 'components/hSlider-item/hSlider-item'
   import wx from 'wx'
-  import { ERR_OK } from '../../api/config'
+  import { ERR_OK, TOKEN_OUT } from '../../api/config'
   import * as wechat from 'common/js/wechat'
+  import AuditMsg from 'components/audit-msg/audit-msg'
+  import Toast from 'components/toast/toast'
 
   const ACTIVE_DEF = [{
     title: '异业联盟卡',
@@ -109,39 +112,181 @@
   export default {
     data () {
       return {
-        ROLE,
-        currentRole: null,
-        imageUri: baseURL.image,
-        activeList: ACTIVE_DEF,
-        employeeList: [],
-        dotCurrent: 0,
-        sliderCurrent: 0,
-        userId: 0,
-        noticeList: [],
-        currentActiveId: null
+        ROLE, // 角色定义常量值
+        currentRole: ROLE.STAFF_ID, // 当前角色
+        imageUri: baseURL.image, // 图片路径
+        activeList: ACTIVE_DEF, // 活动列表
+        employeeList: [], // 员工列表
+        dotCurrent: 0, // dot指示器下标
+        sliderCurrent: 0, // swiper指示器下标
+        noticeList: [], // 公告列表
+        currentActiveId: null, // 当前活动id
+        entryRole: ROLE.STAFF_ID, // 进入来的角色
+        onShowCount: 0, // 首页on-show的次数
+        currentToken: null, // 当前token
+        status: -1, // 员工状态
+        backCount: 0 // 回退b端的次数
       }
     },
     created () {
     },
+    onShow () {
+      this._login()
+    },
     beforeMount () {
-      // let role = this.role()
-      // this.role = role
-      // console.log(role, '身份')
-      this._init()
+      // this._init()
     },
     mounted () {
     },
     methods: {
+      ...mapMutations({saveRoleSync: 'ROLE_TYPE'}),
       ...mapGetters(['role']),
+      _login () {
+        // this._loginInit()
+      },
+      _test () {
+        this.entryRole = ROLE.UNION_ID
+        this.currentRole = this.entryRole
+        this.$root.$mp.query.token = this.entryRole
+        wx.setStorageSync('userType', this.entryRole)
+        wx.setStorageSync('token', ROLE.testToken)
+        wx.setStorageSync('merchantId', 100035)
+      },
+      // 初始化
+      _loginInit () {
+        this._getMerchantId()
+        this._checkRole()
+        this._test()
+        if (this._isTokenOut()) return
+        this._getToken()
+        if (!this.currentToken) return
+        this._getCode()
+          .then(() => {
+            if (this.entryRole === ROLE.STAFF_ID) {
+              this._rqCustomerStatus()
+                .then(json => {
+                  wechat.hideLoading()
+                  let status = json.data.status * 1
+                  if (isNaN(status)) {
+                    this.status = -1
+                  } else {
+                    this.status = status
+                  }
+                })
+            } else {
+              this._init()
+            }
+          })
+      },
+      // 员工点确定后操作
+      staffConfirmHandler () {
+        this._init()
+      },
+      // 检查角色
+      _checkRole () {
+        this.entryRole = ROLE.STAFF_ID
+        const entryRole = this.$root.$mp.query.entryRole
+        entryRole && (this.entryRole = entryRole)
+        this.saveRoleSync(this.entryRole)
+        this.currentRole = this.entryRole
+        wx.setStorageSync('userType', this.entryRole)
+      },
+      // 返回商家助手
+      _backToB () {
+        if (this.backCount > 0) return
+        this.backCount++
+        wechat.showLoading()
+        let appId = SHOP_HELPER.APPID
+        let path = SHOP_HELPER.PATH
+        wx.navigateToMiniProgram({
+          appId: appId,
+          path: path,
+          extraData: {},
+          envVersion: baseURL.jumpVersion,
+          success (res) {
+            // 打开成功
+            console.log(res)
+          }
+        })
+      },
+      // 获取token
+      _getToken () {
+        let token = null
+        if (this.entryRole === ROLE.STAFF_ID) {
+          token = wx.getStorageSync('token')
+          if (!token) {
+            let url = `/pages/loading/loading`
+            this.$router.replace(url)
+          }
+        } else {
+          token = this.$root.$mp.query.token
+          if (!token) {
+            this._backToB()
+          }
+        }
+        this.currentToken = token
+        console.log(token, '----------------------------')
+        token && wx.setStorageSync('token', token)
+      },
+      // 检查token是否过期
+      _isTokenOut () {
+        let resCode = this.$root.$mp.query.resCode * 1
+        // 盟主回退B端
+        if (resCode === TOKEN_OUT && this.currentRole === ROLE.STAFF_ID) {
+          let url = `/pages/loading/loading`
+          this.$router.replace(url)
+          return true
+        } else if (resCode === TOKEN_OUT) {
+          this._backToB()
+          return true
+        }
+        return false
+      },
+      // 获取临时登录凭证code
+      _getCode () {
+        return new Promise(resolve => {
+          wechat.login()
+            .then(res => {
+              wx.setStorageSync('code', res.code)
+              resolve(res.code)
+            })
+            .catch(err => {
+              console.info(err)
+            })
+        })
+      },
+      // 获取商家ID
+      _getMerchantId () {
+        const merchantId = this.$root.$mp.query.merchantId
+        merchantId && wx.setStorageSync('merchantId', merchantId)
+      },
+      // 检查员工身份状态
+      _rqCustomerStatus () {
+        return new Promise(resolve => {
+          api.homeCustomerStatus()
+            .then(json => {
+              if (json.error !== ERR_OK) {
+                if (json.message === '凭证已失效') {
+                  let url = `/pages/loading/loading`
+                  this.$router.replace(url)
+                }
+                return false
+              }
+              wechat.hideLoading()
+              resolve(json)
+            })
+            .catch(err => {
+              console.info(err)
+            })
+        })
+      },
+      // 项目初始化
       _init () {
-        // let role = this.role()
-        // this.currentRole = role
-        // this.currentRole = role
-        // 伪代码
-        this.currentRole = ROLE.STAFF_ID
-        // wx.setStorageSync('merchantId', merchantId)
-        wx.setStorageSync('userType', ROLE.STAFF_ID)
-        this.setNavTitle()
+        console.log(this.onShowCount)
+        if (this.onShowCount > 0) return
+        this.onShowCount++
+        let code = wx.getStorageSync('code')
+        this.setNavTitle({wx_code: code})
         switch (this.currentRole) {
           case ROLE.UNION_ID: {
             this._rqGetUnionAll()
@@ -184,14 +329,16 @@
           }
         }
       },
-      setNavTitle () {
-        this._rqGetGolbalData()
+      // 保存标题
+      setNavTitle (data) {
+        this._rqGetGolbalData(data)
           .then(json => {
             let title = json.data.merchant.shop_name
             this.currentRole === ROLE.STAFF_ID && (title = '员工')
             wx.setNavigationBarTitle({title})
           })
       },
+      // 获取盟主所有活动信息
       _rqGetUnionAll () {
         return new Promise(resolve => {
           api.homeGetUnion()
@@ -207,6 +354,7 @@
             })
         })
       },
+      // 格式化公告
       _formatNotice (json) {
         let arr = []
         let res = json.data
@@ -214,6 +362,7 @@
         })
         return arr
       },
+      // 格式化活动信息
       _formatInfoData (json) {
         let arr = []
         let res = json.data
@@ -243,6 +392,7 @@
         })
         return arr
       },
+      // 请求商家信息
       _rqGetShopAll () {
         return new Promise(resolve => {
           api.homeGetShop()
@@ -258,6 +408,7 @@
             })
         })
       },
+      // 请求员工信息
       _rqGetStaffAll () {
         return new Promise(resolve => {
           api.homeGetStaff()
@@ -273,6 +424,7 @@
             })
         })
       },
+      // 请求公告信息
       _rqGetNotice () {
         return new Promise(resolve => {
           api.homeGetNotice()
@@ -288,6 +440,7 @@
             })
         })
       },
+      // 请求员工销卡对比信息
       _rqGetStaffSales (data) {
         return new Promise(resolve => {
           api.homeGetStaffSale(data)
@@ -303,6 +456,7 @@
             })
         })
       },
+      // 获取全局数据
       _rqGetGolbalData (data) {
         return new Promise(resolve => {
           api.homeGetGlobalData(data)
@@ -318,7 +472,9 @@
             })
         })
       },
+      // 获取员工销卡比信息
       _getStaffSale () {
+        if (this.currentRole !== ROLE.STAFF_ID) return
         let data = {activity_alliance_id: this.currentActiveId}
         this._rqGetStaffSales(data)
           .then(json => {
@@ -326,6 +482,7 @@
             this.employeeList = list
           })
       },
+      // 格式化员工销卡比信息
       _formatStaffData (json) {
         let arr = []
         let res = json.data
@@ -341,13 +498,32 @@
         })
         return arr
       },
+      // 查看统计
       lookTotalHandler (obj) {
-        console.log(obj)
+        let url = ''
+        let id = obj.activeId
+        switch (this.currentRole) {
+          case ROLE.UNION_ID : {
+            url = `/pages/leader-data/leader-data?id=${id}`
+            break
+          }
+          case ROLE.SHOP_ID: {
+            url = `/pages/merchant-data/merchant-data?id=${id}`
+            break
+          }
+          case ROLE.STAFF_ID: {
+            url = `/pages/staff-data/staff-data?id=${id}`
+            break
+          }
+        }
+        url && this.$router.push(url)
       },
+      // 查看商家活动管理
       watchActiveHandler () {
         const url = `/pages/activity-manage/activity-manage`
         this.$router.push(url)
       },
+      // swiper滑动块
       swiperChange (e) {
         let index = e.mp.detail.current
         this.dotCurrent = index
@@ -355,18 +531,22 @@
         this.currentActiveId = this.activeList[this.dotCurrent].activeId
         this._getStaffSale()
       },
+      // 去联盟管理
       toUnion () {
         const url = `/pages/union-manage/union-manage`
         this.$router.push(url)
       },
+      // 去活动管理
       toShop () {
         const url = `/pages/activity-manage/activity-manage`
         this.$router.push(url)
       },
+      // 去员工管理
       toEmployee () {
         const url = `/pages/employee/employee`
         this.$router.push(url)
       },
+      // 去收入、提现
       toAsset () {
         const url = `/pages/asset/asset`
         this.$router.push(url)
@@ -380,14 +560,14 @@
         return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-mhome_union@2x.png)` || ''
       },
       activeImg () {
-        switch (this.userId) {
-          case 0: {
+        switch (this.currentRole) {
+          case ROLE.UNION_ID: {
             return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-mhome_activity@2x.png)` || ''
           }
-          case 1: {
+          case ROLE.SHOP_ID: {
             return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-shome_activity@2x.png)` || ''
           }
-          case 2: {
+          case ROLE.STAFF_ID: {
             return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-yhome_activity@2x.png)` || ''
           }
           default: {
@@ -396,11 +576,11 @@
         }
       },
       employeeImg () {
-        switch (this.userId) {
-          case 0: {
+        switch (this.currentRole) {
+          case ROLE.UNION_ID: {
             return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-mhome_staff@2x.png)` || ''
           }
-          case 1: {
+          case ROLE.SHOP_ID: {
             return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-shome_staff@2x.png)` || ''
           }
           default: {
@@ -409,14 +589,14 @@
         }
       },
       incomeImg () {
-        switch (this.userId) {
-          case 0: {
+        switch (this.currentRole) {
+          case ROLE.UNION_ID: {
             return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-mhome_income@2x.png)` || ''
           }
-          case 1: {
+          case ROLE.SHOP_ID: {
             return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-shome_income@2x.png)` || ''
           }
-          case 2: {
+          case ROLE.STAFF_ID: {
             return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-yhome_income@2x.png)` || ''
           }
           default: {
@@ -426,7 +606,9 @@
       }
     },
     components: {
-      HSliderItem
+      HSliderItem,
+      AuditMsg,
+      Toast
     }
   }
 </script>
@@ -652,6 +834,7 @@
                         height: 100%
                         background-image: linear-gradient(-90deg, $color-assist-2a 0%, $color-assist-33 100%)
                         border-radius: 100px
+                        transition: 0.3s all
                   .number
                     position: relative
                     layout(row, block, no-wrap)
@@ -666,9 +849,9 @@
                       font-size: $font-size-large
             .staff-empty
               layout()
-              height :100%
-              justify-content :center
-              align-items :center
+              height: 100%
+              justify-content: center
+              align-items: center
               font-family: $font-family-light
               font-size: $font-size-small
               color: $color-text-95

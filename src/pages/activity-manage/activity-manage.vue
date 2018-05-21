@@ -7,7 +7,8 @@
     <div class="manage-list" v-if="tabFlag === 0">
       <div class="list-data" v-if="activeList.length !== 0">
         <div class="box-list" v-for="(iteam, index) in activeList" v-bind:key="index">
-          <active-card :useType="0" @previewHandler="iteam" :cardInfo="iteam"></active-card>
+          <active-card :useType="0" @buyHandler="resetBuy" @allocHandler="jumpAllot" @applyHandler="jumpApply"
+                       :cardInfo="iteam"></active-card>
         </div>
       </div>
       <div class="list-null" v-if="activeList.length === 0">
@@ -28,24 +29,60 @@
         <div class="text">暂无活动</div>
       </div>
     </div>
+    <div class="model-box" v-if="modelCon">
+      <div class="model-bgbtn" @tap="colseModel"></div>
+      <div class="model-con">
+        <div class="model-top">
+          <div class="top-title">
+            <div class="left">{{resetName}}</div>
+            <div class="right">
+              <text>100</text>
+              <text class="money">元</text>
+            </div>
+          </div>
+          <div class="add-number">
+            <div class="text">数量</div>
+            <div class="calculate-box">
+              <div class="subtract" @tap="subtract">-</div>
+              <input type="number" class="number" v-model="upNumber">
+              <div class="add" @tap="add">+</div>
+            </div>
+          </div>
+          <div class="top-title">
+            <div class="left">总价</div>
+            <div class="right all-right">
+              <text>{{resetMoney * upNumber}}</text>
+              <text class="money">元</text>
+            </div>
+          </div>
+        </div>
+        <div class="model-bg">
+        </div>
+        <div class="bottom-btn">
+          <div class="btn" @tap="sumbit">保存</div>
+        </div>
+      </div>
+    </div>
+    <toast ref="toast"></toast>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import api from 'api'
-  import {baseURL} from 'api/config'
+  import {baseURL, ERR_OK} from 'api/config'
   import ActiveCard from 'components/active-card-item/active-card-item'
   import * as wechat from 'common/js/wechat'
   import {mapGetters} from 'vuex'
   import {ROLE} from 'common/js/contants'
   import wx from 'wx'
+  import Toast from '@/components/toast/toast'
 
   const LIMIT_DEF = 10
   export default {
     data() {
       return {
         image: baseURL.image,
-        tabFlag: 2,
+        tabFlag: 0,
         pondList: [],
         activeList: [],
         isAllActive: false,
@@ -55,15 +92,34 @@
         ActiveData: {
           page: 1,
           limit: LIMIT_DEF
-        }
+        },
+        modelCon: false,
+        upNumber: 1,
+        resetName: '异业联盟卡',
+        resetMoney: 100,
+        applyLock: false,
+        curId: 1
       }
     },
     mounted() {
+      wx.getSystemInfo({
+        success: function(res) {
+          console.log(res.system)
+          this.ios = res.system.search('iOS') !== -1
+          console.log(this.ios, '````````')
+        }
+      })
+    },
+    onShow() {
+      this._init()
+      this.ActiveData.page = 1
+      this.activeList = []
+      this.isAllActive = false
+      this.PondPage = 1
+      this.pondList = []
+      this.isAllPond = false
       this._rqGetActiveList()
       this._rqManageGetActiveList()
-    },
-    beforeMount() {
-      this._init()
     },
     onPullDownRefresh() {
       if (this.tabFlag === 0) {
@@ -95,6 +151,7 @@
         // this.currentRole = role
         // this.currentRole = role
         // 伪代码
+        this._test()
         this.currentRole = ROLE.UNION_ID
         // wx.setStorageSync('merchantId', merchantId)
         wx.setStorageSync('userType', ROLE.UNION_ID)
@@ -102,6 +159,9 @@
       },
       changeTab(flag) {
         this.tabFlag = flag
+      },
+      _test() {
+        wx.setStorageSync('token', ROLE.testToken)
       },
       // 获得活动池的活动
       _rqGetActiveList() {
@@ -126,7 +186,14 @@
         })
       },
       jumpApply(cardInfo) {
+        console.log(cardInfo.id)
         const url = `/pages/merchant-activity/merchant-activity?id=${cardInfo.id}`
+        console.log(url)
+        this.$router.push(url)
+      },
+      jumpAllot(cardInfo) {
+        console.log(cardInfo.id)
+        const url = `/pages/allocation-card/allocation-card?id=${cardInfo.id}`
         console.log(url)
         this.$router.push(url)
       },
@@ -169,13 +236,21 @@
               }
             }
           }
+          if (item.status === 2) {
+            status = 10
+            statusStr = '已上架'
+          } else if (item.status === 3) {
+            status = 11
+            statusStr = '已下架'
+          }
           arr.push({
             name: item.activity_alliance.name,
             end_at: item.activity_alliance.end_at,
             sale_count: item.alliance_merchant_report.sale_count,
             verification_power: item.alliance_merchant_report.verification_power,
             status: status,
-            statusStr: statusStr
+            statusStr: statusStr,
+            id: item.activity_alliance_id
           })
         })
         return arr
@@ -191,10 +266,68 @@
         if (this.pondList.length >= res.meta.total * 1) {
           this.isAllPond = true
         }
+      },
+      subtract() {
+        if (parseInt(this.upNumber) <= 1) {
+          return
+        }
+        this.upNumber--
+      },
+      add() {
+        this.upNumber++
+      },
+      sumbit() {
+        // console.log(wx.requestPayment)
+        if (!this.upNumber) return
+        if (this.applyLock) return
+        this.applyLock = true
+        setTimeout(() => {
+          this.applyLock = false
+        }, 3000)
+        const code = wx.getStorageSync('code')
+        api.merApplyPay(this.upNumber, this.curId, code).then(res => {
+          console.log(res.data)
+          if (res.error === ERR_OK) {
+            let orderId = res.data.order_id
+            const {timestamp, nonceStr, signType, paySign} = res.data.pay_info
+            wx.requestPayment({
+              timeStamp: timestamp,
+              nonceStr,
+              package: res.data.pay_info.package,
+              signType,
+              paySign,
+              'success': function (res) {
+                this.$refs.toast.show('复购成功')
+              },
+              'fail': function (res) {
+                // 支付失败关闭订单
+                console.log(res, '支付失败关闭订单``````')
+                api.merCloseOrder(orderId).then(res => {
+                  console.log(res)
+                })
+                wechat.hideLoading()
+              }
+            })
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+          wechat.hideLoading()
+        })
+      },
+      resetBuy(cardInfo) {
+        console.log(cardInfo)
+        this.modelCon = !this.modelCon
+        this.resetName = cardInfo.name
+        this.resetMoney = cardInfo.apply_price
+        this.curId = cardInfo.id
+      },
+      colseModel() {
+        this.modelCon = !this.modelCon
       }
     },
     components: {
-      ActiveCard
+      ActiveCard,
+      Toast
     }
   }
 </script>
@@ -251,4 +384,113 @@
       font-family: $font-family-light
       font-size: $font-size-small
       color: $color-assist-27
+
+  .model-box
+    position: fixed
+    width: 100%
+    height: 100%
+    left: 0
+    top: 0
+    z-index: 2
+    .model-bgbtn
+      position: absolute
+      width: 100%
+      height: 100%
+      left: 0
+      bottom: 0
+      z-index: 3
+      background: rgba(0, 0, 0, .7)
+      opacity: 0.7
+    .model-con
+      position: absolute
+      width: 100%
+      left: 0
+      bottom: 0
+      z-index: 4
+      .model-top
+        background: $color-background-ff
+        padding-left: 15px
+        .top-title
+          font-family: $font-family-light
+          font-size: $font-size-medium
+          color: #464646
+          cut-off-rule-bottom()
+          line-height: 45px
+          height: 45px
+          layout(row)
+          justify-content: space-between
+          padding-right: 15px
+          .left
+            font-family: $font-family-light
+            font-size: $font-size-medium
+            color: #464646
+          .right
+            font-family: $font-family-light
+            font-size: $font-size-medium
+            color: #464646
+            .money
+              font-size: $font-size-small-s
+          .all-right
+            color: #3460EC
+        .add-number
+          height: 45px
+          border-radius: 3px
+          padding-right: 15px
+          background: $color-background-ff
+          layout(row)
+          justify-content: space-between
+          align-items: center
+          .text
+            font-family: $font-family-light
+            font-size: $font-size-medium
+            color: $color-text-46
+          .calculate-box
+            layout(row)
+            .subtract
+              border: 0.5px solid #EDEDED
+              width: 22px
+              height: 22px
+              color: $color-assist-34
+              text-align: center
+              line-height: 22px
+              background: #FFFFFF
+              border-radius: 1px
+            .number
+              width: 48px
+              height: 22px
+              min-height: 22px
+              margin: 0 2.5px
+              display: block
+              text-align: center
+              font-family: $font-family-light
+              font-size: $font-size-medium
+              color: $color-text-2d
+              border: 0.5px solid #EDEDED
+            .add
+              border: 0.5px solid #3460EC
+              width: 22px
+              height: 22px
+              color: $color-background-ff
+              text-align: center
+              line-height: 22px
+              background: #3460EC
+              border-radius: 1px
+            .add-noselet
+              background: #959DBD
+              border: 0px
+      .model-bg
+        padding-right: 15px
+        padding-top: 9.5px
+        text-align: right
+        height: 187px
+        font-family: $font-family-light
+        font-size: $font-size-small-s
+        color: #F2633E
+        background: #F6F7FA
+      .bottom-btn
+        layout(row)
+        .btn
+          flex: 1
+          normal-button-default()
+          border-radius: 0
 </style>

@@ -90,6 +90,7 @@
         this.showAd = false
       },
       lookOverHandler (obj) {
+        console.log(this.checkInfoList)
         const url = `/pages/audit/audit?checkId=${obj.id}&tabFlag=${this.tabFlag}`
         this.$router.push(url)
       },

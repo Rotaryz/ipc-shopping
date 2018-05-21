@@ -21,12 +21,13 @@
             <union-card
               :cardInfo="item"
               :useType="0"
-              @previewHandler="test"
+              @previewHandler="previewHandler"
               @checkHandler="checkHandler"
               @sortHandler="sortHandler"
               @upperHandler="upperHandler"
               @deleteHandler="deleteHandler"
               @totalHandler="totalHandler"
+              @editorHandler="editorHandler"
             ></union-card>
           </li>
         </ul>
@@ -45,19 +46,20 @@
 </template>
 
 <script type="text/ecmascript-6">
+  // import { ROLE } from 'common/js/contants'
   import source from 'common/source'
-  import { ERR_OK } from 'api/config'
+  import { ERR_OK, baseURL } from 'api/config'
   import { mapGetters } from 'vuex'
-  import { ROLE } from 'common/js/contants'
   import wx from 'wx'
   import api from 'api'
   import * as wechat from 'common/js/wechat'
   import Toast from '@/components/toast/toast'
   import UnionCard from 'components/union-card-item/union-card-item'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
+  // import { ROLE } from '../../common/js/contants'
 
   const LIMIT_DEF = 10
-  // this.$refs.toast.show('不可修改')
+
   export default {
     data () {
       return {
@@ -81,6 +83,8 @@
     },
     beforeMount () {
     },
+    mounted () {
+    },
     onPullDownRefresh () {
       this._resetConfig()
       let data = this._formatReq()
@@ -96,16 +100,17 @@
     },
     methods: {
       ...mapGetters(['role']),
-      test2 () {
-      },
+      // test () {
+      //   let token = ROLE.testToken
+      //   this.currentRole = ROLE.UNION_ID
+      //   wx.setStorageSync('userType', this.currentRole)
+      //   wx.setStorageSync('token', token)
+      // },
+      // 初始化
       _init () {
-        // let role = this.role()
-        // this.currentRole = role
-        // this.currentRole = role
-        // 伪代码
-        this.currentRole = ROLE.UNION_ID
-        // wx.setStorageSync('merchantId', merchantId)
-        wx.setStorageSync('userType', ROLE.UNION_ID)
+        let role = this.role()
+        this.currentRole = role
+        // this.test()
         this._resetConfig()
         let data = this._formatReq()
         this._rqGetActiveList(data)
@@ -115,6 +120,7 @@
             this._isAll(json)
           })
       },
+      // 格式请求数据
       _formatReq () {
         let data = {limit: this.limit, status: this.tabFlag + 1, page: this.page}
         return data
@@ -135,6 +141,7 @@
             })
         })
       },
+      // 判断是否获取了所有数据
       _isAll (json) {
         let total = json.meta.total
         this.isAll = (this.cardInfoList.length >= total)
@@ -147,6 +154,8 @@
         res.map(item => {
           arr.push({
             id: item.id,
+            appId: item.appid,
+            appPath: item.path,
             title: item.name,
             endDate: `${item.end_at}到期`,
             sales: item.sale_count, // 销量
@@ -157,11 +166,13 @@
         })
         return arr
       },
+      // 重置参数
       _resetConfig () {
         this.isAll = false
         this.page = 1
         this.limit = LIMIT_DEF
       },
+      // 弹窗提示信息初始化
       _initMsgInfo (model) {
         model === 0 && (this.msgInfo = {
           isShow: false,
@@ -173,6 +184,7 @@
           msg: '确定删除？'
         })
       },
+      // 请求活动上架
       _rqActiveOnline (data, cb) {
         api.umgActiveOnline(data)
           .then(json => {
@@ -186,6 +198,7 @@
             console.info(err)
           })
       },
+      // 获取更多活动
       getMoreList () {
         if (this.isAll) return
         let data = this._formatReq()
@@ -198,6 +211,7 @@
             console.log(this.cardInfoList.length)
           })
       },
+      // 弹窗确认操作
       confirmHandler () {
         this.msgInfo.isShow = false
         let data = {activity_alliance_id: this.currentActiveId}
@@ -217,37 +231,75 @@
           }
         }
       },
+      // 删除按钮
       deleteHandler (obj) {
         this._initMsgInfo(1)
         this.msgInfo.isShow = true
         this.currentActiveId = obj.id
         this.model = 1
       },
+      // 弹窗取消操作
       cancelHandler () {
         this.msgInfo.isShow = false
         this.currentActiveId = null
       },
+      // 上线按钮
       upperHandler (obj) {
         this._initMsgInfo(0)
         this.msgInfo.isShow = true
         this.currentActiveId = obj.id
         this.model = 0
       },
+      // 审查列表按钮
       checkHandler (obj) {
         const activeId = obj.id
         const url = `/pages/union-check-list/union-check-list?activeId=${activeId}`
         this.$router.push(url)
       },
+      // 排序按钮
       sortHandler (obj) {
         const activeId = obj.id
         const url = `/pages/union-sort/union-sort?activeId=${activeId}`
         this.$router.push(url)
       },
-      test (obj) {
-        const activeId = obj.id
-        const url = `/pages/union-create-active/union-create-active?model=1&activeId=${activeId}`
+      // 统计
+      totalHandler (obj) {
+        const url = `/pages/leader-data/leader-data?id=${obj.id}`
         this.$router.push(url)
       },
+      // 预览按钮
+      previewHandler (obj) {
+        const activityId = obj.id
+        const employeesId = 0
+        const appId = obj.appId
+        const path = `${obj.appPath}?activityId=${activityId}&employeesId=${employeesId}`
+        // let url = `/pages/activity-detail/activity-detail?activityId='活动id'&employeesId='员工id,无员工id默认0'`
+        // console.log(activityId)
+        if (+obj.statusCode === 1) {
+          this.$refs.toast.show('活动还未上线')
+        } else {
+          this._toMpC({appId, path})
+        }
+      },
+      // 编辑
+      editorHandler (obj) {
+        const url = `/pages/union-create-active/union-create-active?model=1&activeId=${obj.id}`
+        this.$router.push(url)
+      },
+      // 跳C端预览
+      _toMpC (json) {
+        wx.navigateToMiniProgram({
+          appId: json.appId,
+          path: json.path,
+          extraData: {},
+          envVersion: baseURL.jumpVersion,
+          success (res) {
+            // 打开成功
+            console.log(res)
+          }
+        })
+      },
+      // tab栏切换
       changeTab (flag) {
         if (this.tabFlag === flag) return
         this.tabFlag = flag
@@ -261,14 +313,10 @@
             wx.stopPullDownRefresh()
           })
       },
+      // 新建按钮
       toCreateActive () {
         const url = `/pages/union-create-active/union-create-active?model=0`
         this.$router.push(url)
-      }
-    },
-    watch: {
-      cardInfoList () {
-
       }
     },
     computed: {

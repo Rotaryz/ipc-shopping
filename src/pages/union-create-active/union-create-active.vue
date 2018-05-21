@@ -1,6 +1,6 @@
 <template>
   <article class="union-create-active">
-    <form class="u-c-form">
+    <form class="u-c-form" @submit="formSubmit" report-submit='true'>
       <section class="u-c-section base-info">
         <article class="b-i-item">
           <div class="title">活动名称</div>
@@ -14,23 +14,23 @@
           <div class="content">
             <picker class="content-picker-box" v-if="isNewModel" mode="date" :start="todayStartDate" @change="bindDateChange" id="start">
               <view class="picker">
-                {{todayStartDate}}
+                {{startDate}}
               </view>
             </picker>
             <section class="content-picker-box" v-if="!isNewModel" @tap="disableHandler">
               <div class="picker disable">
-                {{todayStartDate}}
+                {{startDate}}
               </div>
             </section>
             <div class="date-cut-off">至</div>
             <picker class="content-picker-box" v-if="isNewModel" mode="date" :start="endStartDate" @change="bindDateChange" id="end">
               <view class="picker">
-                {{endStartDate}}
+                {{endDate}}
               </view>
             </picker>
             <section class="content-picker-box" v-if="!isNewModel" @tap="disableHandler">
               <view class="picker disable">
-                {{endStartDate}}
+                {{endDate}}
               </view>
             </section>
           </div>
@@ -116,7 +116,7 @@
           </dd>
         </article>
       </section>
-      <footer class="save-btn" @tap="saveHandler">保存</footer>
+      <button class="save-btn" form-type="submit" @tap="saveHandler">保存</button>
     </form>
     <toast ref="toast"></toast>
   </article>
@@ -204,8 +204,13 @@
             break
           }
           case 'activePrice': {
+            let re = /([0-9]+\.[0-9]{2})[0-9]*/
+            value = value.replace(re, '$1')
+            if (isNaN(value * 1)) {
+              return this.price
+            }
             this.price = value
-            break
+            return value
           }
           case 'activeStock': {
             this.stock = value
@@ -237,13 +242,38 @@
           }
         }
       },
+      _checkSaveInfo () {
+        // 日期
+        if (new Date(this.endDate) - new Date(this.startDate) < 1000 * 60 * 60 * 24 * 60) {
+          this.$refs.toast.show('活动时间不能小于60天')
+          return false
+        }
+        // 价格
+        let re = /([0-9]+\.[0-9])[0-9]*|^([1-9][0-9]*)$/
+        if (isNaN(this.price * 1)) {
+          this.$refs.toast.show('请输入正确的价格')
+          return false
+        } else if (!re.test('' + this.price)) {
+          this.$refs.toast.show('请输入正确的价格')
+          return false
+        }
+        return true
+      },
+      formSubmit (e) {
+        if (!this._checkSaveInfo()) return
+        let formId = e.mp.detail.formId
+        let data = {'form_ids': [formId]}
+        api.homeCollectFormId(data)
+      },
       saveHandler () {
         switch (this.model) {
           case 0 : {
+            if (!this._checkSaveInfo()) return
             this._rqCreateActive(this._packData())
             break
           }
           case 1: {
+            if (!this._checkSaveInfo()) return
             this._rqUpdateActive(this._packData())
             break
           }
@@ -279,7 +309,6 @@
         }
       },
       _resolveReqData (json) {
-        console.log(json)
         let res = json.data
         this.name = res.name
         this.startDate = res.start_at
@@ -341,10 +370,10 @@
         return this.model === 0
       },
       todayStartDate () {
-        return this.startDate
+        return util.formatTimeYMD(util.now + 1000 * 60 * 60 * 24)
       },
       endStartDate () {
-        return this.endDate
+        return util.formatTimeYMD(util.now + 1000 * 60 * 60 * 24 * 61)
       }
     },
     components: {

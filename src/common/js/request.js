@@ -62,7 +62,7 @@ function checkCode (res) {
   // 凭证失效
   if (res.data && (res.data.code === TOKEN_OUT)) {
     // token失效返回登录页面
-    const url = `/pages/loading/loading?resCode=${TOKEN_OUT}`
+    const url = `/pages/home/home?resCode=${TOKEN_OUT}`
     console.log(url, '++++++++++')
     wx.reLaunch({url})
     // console.warn(res.msg)

@@ -1,6 +1,6 @@
 <template>
   <div class="employee">
-    <div class="em-list">
+    <div :class="emListStyle">
       <div class="em-list-await">
         <div class="em-list-await-title">待处理申请</div>
         <div class="await-list-item">
@@ -57,24 +57,29 @@
         </div>
       </div>
     </div>
-    <div class="floorAdd" v-if="btnSta === 0 || btnSta === 1 ">
+    <form class="floorAdd" v-if="btnSta === 0 " @submit="formSubmit" report-submit='true'>
       <div class="addEmployee">
-        <div class="change" v-if="btnSta === 1" @tap="changeCoupon">
-          <img class="img" v-if="imageUrl" :src="imageUrl+'/defaults/ipc-shopping/common/icon-union_yhj@2x.png'">
-          <div class="txt">更换优惠券</div>
-        </div>
-        <div class="refuse" v-if="btnSta === 0 || btnSta === 1" @tap="refuse">拒绝</div>
-        <div class="pass" v-if="btnSta === 0" @tap="remind">提醒(添加优惠券)</div>
-        <div class="pass" v-if="btnSta === 1" @tap="accept">通过</div>
+        <button class="refuse" @tap="refuse" form-type="submit">拒绝</button>
+        <button class="pass" @tap="remind" form-type="submit">提醒(添加优惠券)</button>
       </div>
-    </div>
-    <confirm-msg :show.sync="show" :title.sync="title" v-on:confirm="confirm" v-on:cancel="cancel"></confirm-msg>
+    </form>
+    <form class="floorAdd" v-if="btnSta === 1 " @submit="formSubmit" report-submit='true'>
+      <div class="addEmployee">
+        <button class="change btn-1" @tap="changeCoupon" form-type="submit">
+          <img class="img btn-1" v-if="imageUrl" :src="imageUrl+'/defaults/ipc-shopping/common/icon-union_yhj@2x.png'">
+          <div class="txt">更换优惠券</div>
+        </button>
+        <button class="refuse btn-1" @tap="refuse" form-type="submit">拒绝</button>
+        <button class="pass" @tap="accept" form-type="submit">通过</button>
+      </div>
+    </form>
+    <!--<confirm-msg :show.sync="show" :title.sync="title" v-on:confirm="confirm" v-on:cancel="cancel"></confirm-msg>-->
     <toast ref="toast"></toast>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import ConfirmMsg from 'components/confirm-msg/confirm-msg'
+  // import ConfirmMsg from 'components/confirm-msg/confirm-msg'
   import Coupon from 'components/coupon-item/coupon-item'
   import { baseURL, ERR_OK } from 'api/config'
   import Toast from '@/components/toast/toast'
@@ -98,14 +103,16 @@
         couponInfo: {},
         show: false,
         title: '',
-        btnSta: 0,
+        btnSta: 1,
         currentCheckId: null
       }
+    },
+    onShow () {
+      // this._init()
     },
     created () {
     },
     beforeMount () {
-      this._init()
     },
     mounted () {
     },
@@ -114,9 +121,14 @@
     methods: {
       _init () {
         this.currentActiveId = this.$root.$mp.query.checkId
-        this.btnSta = this.$root.$mp.query.tabFlag
+        this.btnSta = this.$root.$mp.query.tabFlag * 1
         wx.setNavigationBarTitle({title: BTN[this.btnSta]})
         this._rqGetDetail({id: this.currentActiveId})
+      },
+      formSubmit (e) {
+        let formId = e.mp.detail.formId
+        let data = {'form_ids': [formId]}
+        api.homeCollectFormId(data)
       },
       _rqGetDetail (data, loading) {
         api.uckGetCheckDetail(data, loading)
@@ -148,6 +160,9 @@
           this.couponInfo.scope = `限${res.merchant_data.shop_name}使用`
           this.couponInfo.useLife = `有效期:${res.promotion.start_at}至${res.promotion.end_at}`
           this.couponInfo.image_url = res.promotion.image_url
+          this.couponInfo.appId = res.promotion.appid
+          this.couponInfo.appPath = res.promotion.path
+          this.couponInfo.merchantId = res.promotion.merchant_id
         }
       },
       _rqCheckApply (data, loading) {
@@ -163,27 +178,30 @@
             console.info(err)
           })
       },
-      _navToMp (json) {
-        json = {
-          appId: '',
-          path: 'pages/index/index?id=123',
-          extraData: {
-            foo: 'bar'
-          },
-          envVersion: 'develop',
-          success (res) {
-            // 打开成功
-          }
-        }
-        wx.navigateToMiniProgram(json)
-      },
       _formatReq (flag) {
         // 1通过 2拒绝 3替换 4提醒
         return {check_status: flag, apply_id: this.currentCheckId}
       },
+      // 跳C端预览
+      _toMpC (json) {
+        wx.navigateToMiniProgram({
+          appId: json.appId,
+          path: json.path,
+          extraData: {},
+          envVersion: baseURL.jumpVersion,
+          success (res) {
+            // 打开成功
+            console.log(res)
+          }
+        })
+      },
+      // 查看跳C端
       lookOverHandler (obj) {
-        // this._navToMp(obj)
-        console.log(666)
+        const id = obj.id
+        const appId = obj.appId
+        const merchantId = obj.merchantId
+        const path = `${obj.appPath}?type=1&id=${id}&currentMerchant=${merchantId}`
+        this._toMpC({appId, path})
       },
       changeCoupon () {
         let data = this._formatReq(3)
@@ -201,13 +219,18 @@
         // this.$refs.toast.show('已接受')
       },
       remind () {
-        let data = this._formatReq(4)
+        let data = this._formatReq(3)
         this._rqCheckApply(data)
         // this.$refs.toast.show('已提醒')
       }
     },
+    computed: {
+      emListStyle () {
+        return this.btnSta === 2 ? 'em-list em-list-2' : 'em-list'
+      }
+    },
     components: {
-      ConfirmMsg,
+      // ConfirmMsg,
       Coupon,
       Toast
     }
@@ -225,6 +248,8 @@
 
   .em-list
     padding-bottom: 65px
+    &.em-list-2
+      padding-bottom: 0px
     .em-list-await
       padding-left: 15px
       background-color: $color-background-ff
@@ -302,16 +327,21 @@
       .change
         width: 78px
         height: 100%
+        border-radius: 3px 0 0 0
         cut-off-rule-top()
         layout()
         justify-content: space-between
         align-items: center
         box-sizing: border-box
         padding-top: 9.5px
+        &.btn-1
+          border: none
         .img
           width: 17.5px
           height: 12.5px
           margin-bottom: 5px
+          &.btn-1
+            margin-bottom: 0
         .txt
           font-family: $font-family-light
           font-size: $font-size-small-s
@@ -325,6 +355,9 @@
         color: $color-background-ff
         letter-spacing: 0.64px
         background-color: $color-assist-27
+        border-radius: 3px 0 0 0
+        &.btn-1
+          border-radius: 0
       .pass
         text-align center
         flex: 1
@@ -334,6 +367,7 @@
         color: $color-background-ff
         letter-spacing: 0.64px
         background-color: $color-assist-34
+        border-radius: 0 3px 0 0
 
 
 </style>

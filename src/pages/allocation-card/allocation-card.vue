@@ -1,82 +1,88 @@
 <template>
   <div class="card-box">
     <div class="box-top">
-      <active-card :useType="1" @previewHandler="test"></active-card>
+      <active-card :useType="1" @previewHandler="test" :cardInfo="info"></active-card>
     </div>
-    <div class="merchant-box">
+    <div class="merchant-box" @tap="showBox()">
       <div class="box-left">
-        <img :src="image + '/defaults/ipc-shopping/activitydata/timg.jpg'" v-if="image" class="box-img">
-        <div class="text">国颐堂店铺</div>
+        <img :src="merchant.logo_image" class="box-img">
+        <div class="text">{{merchant.shop_name}}</div>
       </div>
       <div class="box-right">
-        <div class="text">100</div>
+        <div class="text">
+          <text v-if="merchant.sale_count !== 0">{{merchant.sale_count}}/</text>
+          {{merchant.stock}}
+        </div>
         <img :src="image + '/defaults/ipc-shopping/aliance/icon-union_j@2x.png'" v-if="image" class="box-img">
       </div>
     </div>
-    <div class="staff-box">
-      <div class="staff-list">
-        <div class="box-left">
-          <img :src="image + '/defaults/ipc-shopping/activitydata/timg.jpg'" v-if="image" class="box-img">
-          <div class="text">国颐堂店铺</div>
-        </div>
-        <div class="box-right">
-          <div class="text">100</div>
-          <img :src="image + '/defaults/ipc-shopping/aliance/icon-union_j@2x.png'" v-if="image" class="box-img">
-        </div>
+    <div class="merchant-box" @tap="showBox(item, 0)"  v-for="(item, index) in staffList" v-bind:key="index">
+      <div class="box-left">
+        <img :src="item.logo_image" class="box-img">
+        <div class="text">{{item.shop_name}}</div>
       </div>
-      <div class="staff-list">
-        <div class="box-left">
-          <img :src="image + '/defaults/ipc-shopping/activitydata/timg.jpg'" v-if="image" class="box-img">
-          <div class="text">国颐堂店铺</div>
+      <div class="box-right">
+        <div class="text">
+          <text v-if="item.sale_count !== 0">{{item.sale_count}}/</text>
+          {{item.stock}}
         </div>
-        <div class="box-right">
-          <div class="text">100</div>
-          <img :src="image + '/defaults/ipc-shopping/aliance/icon-union_j@2x.png'" v-if="image" class="box-img">
-        </div>
-      </div>
-      <div class="staff-list">
-        <div class="box-left">
-          <img :src="image + '/defaults/ipc-shopping/activitydata/timg.jpg'" v-if="image" class="box-img">
-          <div class="text">国颐堂店铺</div>
-        </div>
-        <div class="box-right">
-          <div class="text">100</div>
-          <img :src="image + '/defaults/ipc-shopping/aliance/icon-union_j@2x.png'" v-if="image" class="box-img">
-        </div>
+        <img :src="image + '/defaults/ipc-shopping/aliance/icon-union_j@2x.png'" v-if="image" class="box-img">
+        <div class="show-model" @tap="showBox(item, 0)"></div>
       </div>
     </div>
+    <div class="staff-box" v-for="(item, index) in staffList" v-bind:key="index">
+      <div class="staff-list">
+        <div class="box-left">
+          <img :src="item.avatar_url" v-if="image" class="box-img">
+          <div class="text">{{item.nickname}}</div>
+        </div>
+        <div class="box-right">
+          <div class="text">
+            <text v-if="item.sale_count !== 0">{{item.sale_count}}/</text>
+            {{item.stock}}
+          </div>
+          <img :src="image + '/defaults/ipc-shopping/aliance/icon-union_j@2x.png'" v-if="image" class="box-img">
+        </div>
+      </div>
+      <div class="show-model" @tap="showBox(item, 1)"></div>
+    </div>
     <div class="model-box" v-if="modelCon">
+      <div class="model-bgbtn" @tap="cancel"></div>
       <div class="model-con">
         <div class="model-top">
-          <div class="top-title">陈晨晨</div>
+          <div class="top-title">{{upName}}</div>
           <div class="add-number">
             <div class="text">数量</div>
             <div class="calculate-box">
-              <div class="subtract">-</div>
-              <input type="number" class="number">
-              <div class="add">+</div>
+              <div class="subtract" @tap="subtract">-</div>
+              <input type="number" class="number" v-model="upNumber">
+              <div :class="['add',upNumber >= info.store ?  'add-noselet' : '']" @tap="add">+</div>
             </div>
           </div>
         </div>
-        <div class="model-bg">数量超过范围</div>
+        <div class="model-bg">
+          <div v-if="upNumber > info.store">数量超过范围</div>
+        </div>
         <div class="bottom-btn">
-          <div class="btn">取消</div>
-          <div class="btn">保存</div>
+          <div class="btn" @tap="cancel">取消</div>
+          <div class="btn" @tap="sumbit">保存</div>
         </div>
       </div>
     </div>
     <div class="page-bg"></div>
+    <toast ref="toast"></toast>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import {baseURL} from 'api/config'
+  import {baseURL, ERR_OK} from 'api/config'
   import ActiveCard from 'components/active-card-item/active-card-item'
   import api from 'api'
   import * as wechat from 'common/js/wechat'
   import {mapGetters} from 'vuex'
   import {ROLE} from 'common/js/contants'
   import wx from 'wx'
+  import Toast from '@/components/toast/toast'
 
   export default {
     data() {
@@ -84,12 +90,35 @@
         image: baseURL.image,
         modelCon: false,
         dataId: {
-          activity_alliance_id: 2
+          activity_alliance_id: 1
+        },
+        upName: 'eleven',
+        upId: 0,
+        stockNumber: 3,
+        upNumber: 0,
+        preNumber: 0,
+        sumbitType: 0,
+        staffList: [],
+        merchantList: [],
+        merchant: {
+          shop_name: 'eleven',
+          logo_image: 'https://img.jerryf.cn/defaults/ipc-shopping/activitydata/timg.jpg',
+          stock: 100,
+          sale_count: 0
+        },
+        info: {
+          title: 'eleven',
+          endDate: '2018-10-10',
+          store: 3
         }
       }
     },
     mounted() {
-      this.getAllocation()
+      this.dataId.activity_alliance_id = this.$root.$mp.query.id
+      if (!this.dataId.activity_alliance_id) {
+        this.dataId.activity_alliance_id = 1
+      }
+      this.getAllotDetals()
     },
     beforeMount() {
       this._init()
@@ -101,23 +130,93 @@
         // this.currentRole = role
         // this.currentRole = role
         // 伪代码
+        this._test()
         this.currentRole = ROLE.UNION_ID
         // wx.setStorageSync('merchantId', merchantId)
         wx.setStorageSync('userType', ROLE.UNION_ID)
         console.log(this.currentRole)
       },
+      _test() {
+        wx.setStorageSync('token', ROLE.testToken)
+      },
       showRules() {
         this.showRule = !this.showRule
       },
+      getAllotDetals() {
+        api.merManageDetails(this.dataId.activity_alliance_id).then(res => {
+          if (res.error === ERR_OK) {
+            console.log(res)
+            this.info.title = res.data.name
+            this.info.endDate = res.data.end_at
+            this.info.store = res.data.stock
+            this.getAllocation()
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+        })
+      },
       getAllocation() {
         api.merAllotList(this.dataId).then(res => {
+          if (res.error === ERR_OK) {
+            this.merchantList = res.data.merchant
+            for (var i = 0; i < res.data.merchant.length; i++) {
+              this.info.store = this.info.store - res.data.merchant[i].stock
+            }
+            this.staffList = res.data.employees
+            for (var s = 0; s < res.data.employees.length; s++) {
+              this.info.store = this.info.store - res.data.employees[s].stock
+            }
+          } else {
+            this.$refs.toast.show(res.message)
+          }
           wechat.hideLoading()
           console.log(res)
+        })
+      },
+      showBox(item, index) {
+        this.sumbitType = index
+        // let number = item.stock - item.sale_count
+        // this.upId = item.customer_id
+        // this.upName = item.nickname
+        // this.upNumber = number
+        // this.preNumber = number
+        this.modelCon = !this.modelCon
+      },
+      cancel() {
+        this.modelCon = !this.modelCon
+      },
+      subtract() {
+        if (parseInt(this.upNumber) <= 1) {
+          return
+        }
+        this.upNumber--
+      },
+      add() {
+        if (this.upNumber >= this.info.store) return
+        this.upNumber++
+      },
+      // 提交分配
+      sumbit() {
+        if (this.upNumber > this.info.store) {
+          this.$refs.toast.show('数量超过范围')
+          return
+        }
+        let number = this.upNumber - this.preScene
+        api.merAllotStock(this.dataId.activity_alliance_id, this.upId, number).then(res => {
+          console.log(res)
+          if (res.error === ERR_OK) {
+            this.$refs.toast.show('分配成功')
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+          wechat.hideLoading()
+          this.modelCon = !this.modelCon
         })
       }
     },
     components: {
-      ActiveCard
+      ActiveCard,
+      Toast
     }
   }
 </script>
@@ -144,6 +243,7 @@
     justify-content: space-between
     align-items: center
     padding: 0 15px
+    position: relative
     .box-left
       layout(row)
       align-items: center
@@ -171,10 +271,18 @@
         height: 15px
         display: block
 
+    .show-model
+      position: absolute
+      right: 0
+      height: 100%
+      top: 0
+      width: 40%
+
   .staff-box
     margin-top: 10px
     padding-left: 15px
     background: $color-background-ff
+    position: relative
     .staff-list
       layout(row)
       height: 54px
@@ -212,6 +320,13 @@
           height: 15px
           display: block
 
+    .show-model
+      position: absolute
+      right: 0
+      height: 100%
+      top: 0
+      width: 40%
+
   .model-box
     position: fixed
     width: 100%
@@ -219,12 +334,21 @@
     left: 0
     top: 0
     z-index: 2
-    background: rgba(0, 0, 0, .7)
+    .model-bgbtn
+      position: absolute
+      width: 100%
+      height: 100%
+      left: 0
+      bottom: 0
+      z-index: 3
+      background: rgba(0, 0, 0, .7)
+      opacity: 0.7
     .model-con
       position: absolute
       width: 100%
       left: 0
       bottom: 0
+      z-index: 4
       .model-top
         background: $color-background-ff
         padding-left: 15px
@@ -278,6 +402,9 @@
               line-height: 22px
               background: #3460EC
               border-radius: 1px
+            .add-noselet
+              background: #959DBD
+              border: 0px
       .model-bg
         padding-right: 15px
         padding-top: 9.5px

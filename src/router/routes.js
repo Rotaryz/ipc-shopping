@@ -8,6 +8,13 @@ module.exports = [
   //   }
   // },
   {
+    path: '/pages/home/home', // 首页
+    name: 'Home',
+    config: {
+      navigationBarTitleText: '异业联盟'
+    }
+  },
+  {
     path: '/pages/loading/loading', // loading
     name: 'Loading',
     config: {
@@ -18,11 +25,6 @@ module.exports = [
       navigationBarBackgroundColor: '#1A1D3D',
       disableScroll: true
     }
-  },
-  {
-    path: '/pages/home/home', // 首页
-    name: 'Home',
-    config: {}
   },
   {
     path: '/pages/union-manage/union-manage', // 联盟管理
@@ -196,7 +198,8 @@ module.exports = [
     config: {
       navigationBarTitleText: '活动管理',
       navigationBarBackgroundColor: '#1A1D3D',
-      navigationBarTextStyle: 'white'
+      navigationBarTextStyle: 'white',
+      enablePullDownRefresh: true
     }
   },
   {

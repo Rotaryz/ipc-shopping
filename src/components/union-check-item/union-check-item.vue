@@ -1,6 +1,6 @@
 <template>
   <div class="check-status-bar-item">
-    <article class="wrap" @tap="lookOverHandler">
+    <article class="wrap" @tap="lookOverHandler(shopItem)">
       <section class="w-top">
         <div class="logo" :style="shopImg"></div>
         <article class="info">
@@ -27,7 +27,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {baseURL} from 'api/config'
+  import { baseURL } from 'api/config'
   import source from 'common/source'
 
   // const OBJ = {
@@ -58,18 +58,18 @@
         default: CHECK_CONST_OBJ
       }
     },
-    data() {
+    data () {
       return {
         imageUri: baseURL.image
       }
     },
     methods: {
-      lookOverHandler() {
-        this.$emit('lookOverHandler')
+      lookOverHandler (shopItem) {
+        this.$emit('lookOverHandler', shopItem)
       }
     },
     computed: {
-      statusMsg() {
+      statusMsg () {
         switch (this.shopItem.statusCode) {
           case this.constObj.APPLYING :
             return `待添加优惠券`
@@ -81,14 +81,14 @@
             return `已退款` || `排队中`
         }
       },
-      shopImg() {
+      shopImg () {
         const img = this.shopItem.shopImg
         return `background-image:url(${img})`
       },
-      arrowRightImg() {
+      arrowRightImg () {
         return source.imgArrowRightA4()
       },
-      backgroundMapImg() {
+      backgroundMapImg () {
         return source.imgMapIcon()
       }
     }
