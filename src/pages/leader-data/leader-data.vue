@@ -113,7 +113,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {baseURL} from 'api/config'
+  import {baseURL, ERR_OK} from 'api/config'
   import * as wechat from 'common/js/wechat'
   import {mapGetters} from 'vuex'
   import {ROLE} from 'common/js/contants'
@@ -229,14 +229,17 @@
       // 商家总榜数据
       _getAllfShop() {
         api.dataAllShop(this.activeId, this.allfShopPage).then(res => {
-          console.log(res)
-          this.allShopList.push(...res.data)
-          console.log(this.allShopList, '```````````2222')
-          console.log(res.data, '```````````22223332222')
+          if (res.error === ERR_OK) {
+            this.allShopList.push(...res.data)
+            wechat.hideLoading()
+            this._isAllALLShop(res)
+            console.log(this.isAllSelfShop)
+            this.allfShopPage++
+          } else {
+            this.$refs.toast.show(res.message)
+          }
           wechat.hideLoading()
-          this._isAllALLShop(res)
-          console.log(this.isAllSelfShop)
-          this.allfShopPage++
+          console.log(res)
         })
       },
       scrollAllShop() {
@@ -250,6 +253,11 @@
       },
       _getCake() {
         api.dataCake(this.activeId).then(res => {
+          if (res.error === ERR_OK) {
+            this.ec.options.series.data = res.data.detail
+          } else {
+            this.$refs.toast.show(res.message)
+          }
           console.log(res)
           wechat.hideLoading()
         })
@@ -257,10 +265,14 @@
       // 商家员工总榜数据
       _getAllfStaff() {
         api.dataAllStaff(this.activeId, this.allfStaffPage).then(res => {
-          this.allStaffList = res.data.slice(0, 3)
-          this.allStaffTwoList = res.data.slice(3)
-          console.log(this.allStaffList)
-          console.log(this.allStaffTwoList)
+          if (res.error === ERR_OK) {
+            this.allStaffList = res.data.slice(0, 3)
+            this.allStaffTwoList = res.data.slice(3)
+            console.log(this.allStaffList)
+            console.log(this.allStaffTwoList)
+          } else {
+            this.$refs.toast.show(res.message)
+          }
           wechat.hideLoading()
         })
       }
