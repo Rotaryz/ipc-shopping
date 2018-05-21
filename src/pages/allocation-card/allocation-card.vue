@@ -1,7 +1,7 @@
 <template>
   <div class="card-box">
     <div class="box-top">
-      <active-card :useType="1" @previewHandler="test" :cardInfo="info"></active-card>
+      <active-card :useType="1" @previewHandler="jumpPreview" :cardInfo="info"></active-card>
     </div>
     <div class="merchant-box" @tap="showBox()">
       <div class="box-left">
@@ -16,7 +16,7 @@
         <img :src="image + '/defaults/ipc-shopping/aliance/icon-union_j@2x.png'" v-if="image" class="box-img">
       </div>
     </div>
-    <div class="merchant-box" @tap="showBox(item, 0)"  v-for="(item, index) in staffList" v-bind:key="index">
+    <div class="merchant-box" @tap="showBox(item, 'shop')" v-for="(item, index) in staffList" v-bind:key="index">
       <div class="box-left">
         <img :src="item.logo_image" class="box-img">
         <div class="text">{{item.shop_name}}</div>
@@ -27,7 +27,7 @@
           {{item.stock}}
         </div>
         <img :src="image + '/defaults/ipc-shopping/aliance/icon-union_j@2x.png'" v-if="image" class="box-img">
-        <div class="show-model" @tap="showBox(item, 0)"></div>
+        <div class="show-model" @tap="showBox(item, 'shop')"></div>
       </div>
     </div>
     <div class="staff-box" v-for="(item, index) in staffList" v-bind:key="index">
@@ -44,7 +44,7 @@
           <img :src="image + '/defaults/ipc-shopping/aliance/icon-union_j@2x.png'" v-if="image" class="box-img">
         </div>
       </div>
-      <div class="show-model" @tap="showBox(item, 1)"></div>
+      <div class="show-model" @tap="showBox(item, 'customer')"></div>
     </div>
     <div class="model-box" v-if="modelCon">
       <div class="model-bgbtn" @tap="cancel"></div>
@@ -93,11 +93,12 @@
           activity_alliance_id: 1
         },
         upName: 'eleven',
-        upId: 0,
+        upCustomerId: 0,
+        upShopId: 0,
         stockNumber: 3,
         upNumber: 0,
         preNumber: 0,
-        sumbitType: 0,
+        sumbitType: 'shop',
         staffList: [],
         merchantList: [],
         merchant: {
@@ -175,11 +176,18 @@
       },
       showBox(item, index) {
         this.sumbitType = index
-        // let number = item.stock - item.sale_count
-        // this.upId = item.customer_id
-        // this.upName = item.nickname
-        // this.upNumber = number
-        // this.preNumber = number
+        let number
+        if (this.sumbitType === 'shop') {
+          number = item.stock - item.sale_count
+          this.upShopId = item.shop_id
+          this.upName = item.shop_name
+        } else {
+          number = item.stock - item.sale_count
+          this.upCustomerId = item.customer_id
+          this.upName = item.nickname
+        }
+        this.upNumber = number
+        this.preNumber = number
         this.modelCon = !this.modelCon
       },
       cancel() {
@@ -201,8 +209,14 @@
           this.$refs.toast.show('数量超过范围')
           return
         }
-        let number = this.upNumber - this.preScene
-        api.merAllotStock(this.dataId.activity_alliance_id, this.upId, number).then(res => {
+        let number = this.upNumber - this.preNumber
+        // 判断是商家分配还是员工分配
+        if (this.sumbitType === 'shop') {
+          this.upCustomerId = 0
+        } else {
+          this.upShopId = 0
+        }
+        api.merAllotStock(this.dataId.activity_alliance_id, this.upCustomerId, number, this.upShopId).then(res => {
           console.log(res)
           if (res.error === ERR_OK) {
             this.$refs.toast.show('分配成功')
@@ -212,6 +226,12 @@
           wechat.hideLoading()
           this.modelCon = !this.modelCon
         })
+      },
+      jumpPreview(cardInfo) {
+        console.log(cardInfo.id)
+        const url = `/pages/activity-detail/activity-detail?activityId=${cardInfo.id}`
+        console.log(url)
+        this.$router.push(url)
       }
     },
     components: {

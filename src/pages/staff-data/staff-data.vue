@@ -131,7 +131,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {baseURL} from 'api/config'
+  import {baseURL, DEVICE_INFO, ERR_OK} from 'api/config'
   import * as wechat from 'common/js/wechat'
   import {mapGetters} from 'vuex'
   import {ROLE} from 'common/js/contants'
@@ -246,6 +246,11 @@
       }
     },
     mounted() {
+      let system = DEVICE_INFO.system
+      this.ios = system.search('iOS') !== -1
+      if (!this.ios) {
+        this.ecBra.options.xAxis[0].axisLabel.rotate = 0
+      }
       this.activeId = this.$root.$mp.query.id
       this._getSelfStaff()
       this._getBar()
@@ -276,12 +281,16 @@
       // 商家单店员工数据
       _getSelfStaff() {
         api.dataSelfStaff(this.activeId, this.selfStaffPage).then(res => {
+          if (res.error === ERR_OK) {
+            this.selfStaffList.push(...res.data)
+            wechat.hideLoading()
+            this._isAllSelfStaff(res)
+            console.log(this.isAllselfStaff)
+            this.selfStaffPage++
+          } else {
+            this.$refs.toast.show(res.message)
+          }
           console.log(res)
-          this.selfStaffList.push(...res.data)
-          wechat.hideLoading()
-          this._isAllSelfStaff(res)
-          console.log(this.isAllselfStaff)
-          this.selfStaffPage++
         })
       },
       scrollSelfStaff() {
@@ -295,17 +304,27 @@
       },
       _getBar() {
         api.dataBar(this.activeId).then(res => {
-          console.log(res)
+          if (res.error === ERR_OK) {
+            console.log(this.ecBra.options.xAxis[0].data, '11111111111`````````````')
+            this.ecBra.options.xAxis[0].data = res.data.shop_names
+            this.ecBra.options.series[0].data = res.data.verification_counts
+          } else {
+            this.$refs.toast.show(res.message)
+          }
           wechat.hideLoading()
         })
       },
       // 商家员工总榜数据
       _getAllfStaff() {
         api.dataAllStaff(this.activeId, this.allfStaffPage).then(res => {
-          this.allStaffList = res.data.slice(0, 3)
-          this.allStaffTwoList = res.data.slice(3)
-          console.log(this.allStaffList)
-          console.log(this.allStaffTwoList)
+          if (res.error === ERR_OK) {
+            this.allStaffList = res.data.slice(0, 3)
+            this.allStaffTwoList = res.data.slice(3)
+            console.log(this.allStaffList)
+            console.log(this.allStaffTwoList)
+          } else {
+            this.$refs.toast.show(res.message)
+          }
           wechat.hideLoading()
         })
       }

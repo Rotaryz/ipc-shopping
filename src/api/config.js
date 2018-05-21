@@ -1,3 +1,5 @@
+import wx from 'wx'
+
 const env = process.env.NODE_ENV
 const version = '/v1'
 // const DEV = {
@@ -33,3 +35,14 @@ export const ERR_OK = 0
 export const TOKEN_OUT = 10000 // token 失效
 export const TIME_OUT = 10000
 export const ERR_NO = -404
+
+let info = null
+try {
+  info = wx.getSystemInfoSync()
+} catch (e) {
+  // Do something when catch error
+}
+
+export const DEVICE_INFO = info
+
+console.log(DEVICE_INFO)

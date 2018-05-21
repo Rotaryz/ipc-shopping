@@ -23,15 +23,15 @@
           </div>
           <div class="data-content">
             <scroll-view class="content-scroll" @scrolltolower="scrollSelfShop" scroll-y="true">
-              <div class="data-all"  v-if="selfShopList.length !== 0">
-                <div class="self-merchant-list" v-for="(item, index) in selfShopList"  v-bind:key="index">
+              <div class="data-all" v-if="selfShopList.length !== 0">
+                <div class="self-merchant-list" v-for="(item, index) in selfShopList" v-bind:key="index">
                   <div class="selft-merchant-list-box">{{item.date}}</div>
                   <div class="selft-merchant-list-box">{{item.sale_count}}</div>
                   <div class="selft-merchant-list-box">{{item.other_verification}}</div>
                   <div class="selft-merchant-list-box">{{item.alliance_power}}</div>
                 </div>
               </div>
-              <div class="data-null"  v-if="selfShopList.length === 0">暂无数据～</div>
+              <div class="data-null" v-if="selfShopList.length === 0">暂无数据～</div>
             </scroll-view>
             <div class="all-box">
               <div class="text">总计</div>
@@ -62,15 +62,16 @@
           </div>
           <div class="data-content">
             <scroll-view class="content-scroll" @scrolltolower="scrollAllShop" scroll-y="true">
-              <div class="data-all"   v-if="allShopList.length !== 0">
-                <div class="self-merchant-list"  v-for="(item, index) in allShopList"  v-bind:key="index" @tap="test(item)">
+              <div class="data-all" v-if="allShopList.length !== 0">
+                <div class="self-merchant-list" v-for="(item, index) in allShopList" v-bind:key="index"
+                     @tap="test(item)">
                   <div class="selft-merchant-list-box">{{item.merchant_id}}</div>
                   <div class="selft-merchant-list-box">{{item.sale_count}}/{{item.init_stock}}</div>
                   <div class="selft-merchant-list-box">{{item.other_verification}}</div>
                   <div class="selft-merchant-list-box">{{item.alliance_power}}</div>
                 </div>
               </div>
-              <div class="data-null"  v-if="allShopList.length === 0">暂无数据～</div>
+              <div class="data-null" v-if="allShopList.length === 0">暂无数据～</div>
             </scroll-view>
           </div>
         </div>
@@ -104,8 +105,8 @@
           </div>
           <div class="data-content">
             <scroll-view class="content-scroll" @scrolltolower="scrollSelfStaff" scroll-y="true">
-              <div class="data-all"   v-if="selfStaffList.length !== 0">
-                <div class="self-merchant-list" v-for="(item, index) in selfStaffList"  v-bind:key="index">
+              <div class="data-all" v-if="selfStaffList.length !== 0">
+                <div class="self-merchant-list" v-for="(item, index) in selfStaffList" v-bind:key="index">
                   <div class="self-staff-list-box user-box">
                     <div class="number">{{index + 1}}</div>
                     <img class="img" :src="item.avatar_url" v-if="image">
@@ -118,7 +119,7 @@
                   </div>
                 </div>
               </div>
-              <div class="data-null"  v-if="selfStaffList.length === 0">暂无数据～</div>
+              <div class="data-null" v-if="selfStaffList.length === 0">暂无数据～</div>
             </scroll-view>
           </div>
         </div>
@@ -218,16 +219,18 @@
       </div>
     </div>
     <div class="page-bg"></div>
+    <toast ref="toast"></toast>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import {baseURL} from 'api/config'
+  import {baseURL, DEVICE_INFO, ERR_OK} from 'api/config'
   import * as wechat from 'common/js/wechat'
   import {mapGetters} from 'vuex'
   import {ROLE} from 'common/js/contants'
   import wx from 'wx'
   import api from 'api'
+  import Toast from '@/components/toast/toast'
 
   const options = {
     // color: ['#8941AF', '#A740AE', '#AE4077', '#B16544', '#B44343', '#5EAD83', '#40A1AE', '#4778C0', '#2843C3', '#57876E', '#128787', '#728AEC', '#1B6FBD', '#8941AF', '#A740AE', '#AE4077', '#B16544', '#B44343', '#5EAD83', '#40A1AE', '#4778C0', '#2843C3', '#57876E', '#128787', '#728AEC', '#1B6FBD'],
@@ -285,12 +288,6 @@
   }
   const Baroptions = {
     color: ['#40A1AE'],
-    // tooltip: {
-    //   trigger: 'axis',
-    //   axisPointer: {
-    //     type: 'line'
-    //   }
-    // },
     dataZoom: [{
       type: 'inside',
       throttle: '30',
@@ -394,6 +391,12 @@
       }
     },
     mounted() {
+      let system = DEVICE_INFO.system
+      this.ios = system.search('iOS') !== -1
+      if (!this.ios) {
+        this.ecBra.options.xAxis[0].axisLabel.rotate = 0
+      }
+      console.log(this.ecBra.options.xAxis[0].axisLabel.rotate)
       this.activeId = this.$root.$mp.query.id
       this._getSelfShop()
       this._getAllotMoney()
@@ -477,19 +480,26 @@
       // 商家单店数据
       _getSelfShop() {
         api.dataSelfShop(this.activeId, this.selfShopPage).then(res => {
-          console.log(res)
-          this.selfShopList.push(...res.data)
-          console.log(this.selfShopList, '```````')
-          wechat.hideLoading()
-          this._isAllSelfShop(res)
-          console.log(this.isAllSelfShop)
-          this.selfShopPage++
+          console.log(res, '商家单店数据```````````')
+          if (res.error === ERR_OK) {
+            this.selfShopList.push(...res.data)
+            wechat.hideLoading()
+            this._isAllSelfShop(res)
+            console.log(this.isAllSelfShop)
+            this.selfShopPage++
+          } else {
+            this.$refs.toast.show(res.message)
+          }
         })
       },
       _getSelfShopAll() {
         api.dataSelfShopAllData(this.activeId).then(res => {
           console.log(res)
-          this.selfListAll = res.data
+          if (res.error === ERR_OK) {
+            this.selfListAll = res.data
+          } else {
+            this.$refs.toast.show(res.message)
+          }
           wechat.hideLoading()
         })
       },
@@ -505,21 +515,28 @@
       _getAllotMoney() {
         api.dataAllotMoney(this.activeId).then(res => {
           console.log(res)
-          this.allotMoney = res.data.share_money
+          if (res.error === ERR_OK) {
+            this.allotMoney = res.data.share_money
+          } else {
+            this.$refs.toast.show(res.message)
+          }
           wechat.hideLoading()
         })
       },
       // 商家总榜数据
       _getAllfShop() {
         api.dataAllShop(this.activeId, this.allfShopPage).then(res => {
-          console.log(res)
-          this.allShopList.push(...res.data)
-          console.log(this.allShopList, '```````````2222')
-          console.log(res.data, '```````````22223332222')
+          console.log(res, '````````商家总榜数据')
+          if (res.error === ERR_OK) {
+            this.allShopList.push(...res.data)
+            wechat.hideLoading()
+            this._isAllALLShop(res)
+            console.log(this.isAllSelfShop)
+            this.allfShopPage++
+          } else {
+            this.$refs.toast.show(res.message)
+          }
           wechat.hideLoading()
-          this._isAllALLShop(res)
-          console.log(this.isAllSelfShop)
-          this.allfShopPage++
         })
       },
       scrollAllShop() {
@@ -533,6 +550,11 @@
       },
       _getCake() {
         api.dataCake(this.activeId).then(res => {
+          if (res.error === ERR_OK) {
+            this.ec.options.series.data = res.data.detail
+          } else {
+            this.$refs.toast.show(res.message)
+          }
           console.log(res)
           wechat.hideLoading()
         })
@@ -541,11 +563,16 @@
       _getSelfStaff() {
         api.dataSelfStaff(this.activeId, this.selfStaffPage).then(res => {
           console.log(res)
-          this.selfStaffList.push(...res.data)
+          if (res.error === ERR_OK) {
+            this.selfStaffList.push(...res.data)
+            wechat.hideLoading()
+            this._isAllSelfStaff(res)
+            console.log(this.isAllselfStaff)
+            this.selfStaffPage++
+          } else {
+            this.$refs.toast.show(res.message)
+          }
           wechat.hideLoading()
-          this._isAllSelfStaff(res)
-          console.log(this.isAllselfStaff)
-          this.selfStaffPage++
         })
       },
       scrollSelfStaff() {
@@ -559,20 +586,33 @@
       },
       _getBar() {
         api.dataBar(this.activeId).then(res => {
-          console.log(res)
+          if (res.error === ERR_OK) {
+            console.log(this.ecBra.options.xAxis[0].data, '11111111111`````````````')
+            this.ecBra.options.xAxis[0].data = res.data.shop_names
+            this.ecBra.options.series[0].data = res.data.verification_counts
+          } else {
+            this.$refs.toast.show(res.message)
+          }
           wechat.hideLoading()
         })
       },
       // 商家员工总榜数据
       _getAllfStaff() {
         api.dataAllStaff(this.activeId, this.allfStaffPage).then(res => {
-          this.allStaffList = res.data.slice(0, 3)
-          this.allStaffTwoList = res.data.slice(3)
-          console.log(this.allStaffList)
-          console.log(this.allStaffTwoList)
+          if (res.error === ERR_OK) {
+            this.allStaffList = res.data.slice(0, 3)
+            this.allStaffTwoList = res.data.slice(3)
+            console.log(this.allStaffList)
+            console.log(this.allStaffTwoList)
+          } else {
+            this.$refs.toast.show(res.message)
+          }
           wechat.hideLoading()
         })
       }
+    },
+    components: {
+      Toast
     }
   }
 </script>
@@ -1082,6 +1122,7 @@
               font-family: $font-family-light
               color: $color-background-ff
               font-size: 9px
+
   .data-null
     text-align: center
     font-family: $font-family-light
