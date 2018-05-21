@@ -11,7 +11,8 @@
           <div class="await-list-right">
             <label for="btn-1" class="right-refuse" v-on:click="refuse(item,index)">拒绝</label>
             <button id="btn-1" class="btn-form-id" form-type="submit"></button>
-            <div class="right-accept" v-on:click="accept(item,index)">接受</div>
+            <label for="btn-2" class="right-accept" v-on:click="accept(item,index)">接受</label>
+            <button id="btn-2" class="btn-form-id" form-type="submit"></button>
           </div>
         </div>
       </div>
@@ -22,7 +23,8 @@
             <div class="left-name">{{item.name}}</div>
           </div>
           <div class="await-list-right">
-            <div class="right-del" v-on:click="del(item,index)">删除</div>
+            <label class="right-del" v-on:click="del(item,index)">删除</label>
+            <button id="btn-3" class="btn-form-id" form-type="submit"></button>
           </div>
         </div>
       </div>
@@ -48,8 +50,8 @@
     data () {
       return {
         showBgnull: true,
-        awaitList: [],
-        acceptList: [],
+        awaitList: [1],
+        acceptList: [1],
         show: false,
         title: '',
         dataTmp: {},

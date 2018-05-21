@@ -46,7 +46,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-  // import { ROLE } from 'common/js/contants'
   import source from 'common/source'
   import { ERR_OK, baseURL } from 'api/config'
   import { mapGetters } from 'vuex'
