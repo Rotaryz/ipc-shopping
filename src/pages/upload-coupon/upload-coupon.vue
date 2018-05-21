@@ -1,5 +1,5 @@
 <template>
-  <div class="coupon-box">
+  <form class="coupon-box" @submit="formSubmit" report-submit='true'>
     <div class="coupon-con">
       <div class="title" v-if="couponList.length !== 0">可报名服务</div>
       <div class="list-data" v-if="couponList.length !== 0">
@@ -14,10 +14,10 @@
         <div class="text">暂无活动</div>
       </div>
     </div>
-    <footer :class="['btn',selectId !== 0? '' : 'no-select']" @tap='upCoupon'>保存</footer>
+    <button :class="['btn',selectId !== 0? '' : 'no-select']" @tap='upCoupon' form-type="submit">保存</button>
     <div class="page-bg"></div>
     <toast ref="toast"></toast>
-  </div>
+  </form>
 </template>
 
 <script type="text/ecmascript-6">
@@ -86,6 +86,11 @@
         // wx.setStorageSync('merchantId', merchantId)
         wx.setStorageSync('userType', ROLE.UNION_ID)
         console.log(this.currentRole)
+      },
+      formSubmit (e) {
+        let formId = e.mp.detail.formId
+        let data = {'form_ids': [formId]}
+        api.homeCollectFormId(data)
       },
       _rqManageDetails() {
         api.merCouponList(this.couponData).then(res => {

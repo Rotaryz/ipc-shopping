@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <article class="home">
     <header class="active">
       <article class="swiper-box">
         <section class="s-b-box">
@@ -18,61 +18,64 @@
         <li :class="['dot',dotCurrent===index?'dot-hit':'',dotStyle]" v-for="(item,index) in activeList" :key="index"></li>
       </ul>
     </header>
-    <footer class="tab-leader" v-if="currentRole===ROLE.UNION_ID">
-      <nav class="t-l-nav" :style="leaderImg" @tap.stop="toUnion">联盟管理</nav>
-      <nav class="t-l-nav" :style="activeImg" @tap.stop="toShop">活动管理</nav>
-      <nav class="t-l-nav" :style="employeeImg" @tap.stop="toEmployee">员工管理</nav>
-      <nav class="t-l-nav" :style="incomeImg" @tap.stop="toAsset">收入/提现</nav>
-    </footer>
-    <footer class="tab-merchant" v-if="currentRole===ROLE.SHOP_ID">
-      <section class="t-m-ad" v-if="noticeList.length>0" @tap="watchActiveHandler">
-        <div class="title">公告</div>
-        <div class="content">异业联盟卡活动正在等你报名正在等你…</div>
-        <div class="watch-btn">查看</div>
-      </section>
-      <nav class="t-l-nav" :style="activeImg" @tap.stop="toShop">活动管理</nav>
-      <nav class="t-l-nav" :style="employeeImg" @tap.stop="toEmployee">员工管理</nav>
-      <nav class="t-l-nav" :style="incomeImg" @tap.stop="toAsset">收入/提现</nav>
-    </footer>
-    <footer class="tab-employee" v-if="currentRole===ROLE.STAFF_ID">
-      <section class="t-e-sales">
-        <div class="title">销卡对比</div>
-        <article class="content-box">
-          <scroll-view class="content" scroll-y="true" v-if="employeeList.length>0">
-            <ul class="c-holder">
-              <li class="emp-item" v-for="(item,index) in employeeList" :key="index">
-                <article class="emp-item-box">
-                  <section class="icon">
-                    <img class="icon-pic" :src="item.avatarUrl">
-                  </section>
-                  <section class="progress">
-                    <div class="name-bar">
-                      <div class="name">{{item.nickName}}</div>
-                      <div class="sales">{{item.saleCount}}/{{item.initStock}}</div>
-                    </div>
-                    <article class="p-box">
-                      <div class="p-pro" :style="'width:'+ item.percentage +'%'"></div>
-                    </article>
-                  </section>
-                  <section class="number">
-                    <div class="n-title">销卡</div>
-                    <div>80</div>
-                    <div>%</div>
-                  </section>
-                </article>
-              </li>
-            </ul>
-          </scroll-view>
-          <section class="content" v-else-if="employeeList.length<=0">
-            <div class="staff-empty">暂无数据～</div>
-          </section>
-        </article>
-      </section>
-      <nav class="t-l-nav" :style="activeImg" @tap.stop="toShop">活动管理</nav>
-      <nav class="t-l-nav" :style="incomeImg" @tap.stop="toAsset">收入/提现</nav>
-    </footer>
+    <form @submit="formSubmit" report-submit='true'>
+      <label class="tab-leader" v-if="currentRole===ROLE.UNION_ID" for="btn-form-id">
+        <nav class="t-l-nav" :style="leaderImg" @tap="toUnion">联盟管理</nav>
+        <nav class="t-l-nav" :style="activeImg" @tap="toShop">活动管理</nav>
+        <nav class="t-l-nav" :style="employeeImg" @tap="toEmployee">员工管理</nav>
+        <nav class="t-l-nav" :style="incomeImg" @tap="toAsset">收入/提现</nav>
+      </label>
+      <label class="tab-merchant" v-if="currentRole===ROLE.SHOP_ID" for="btn-form-id">
+        <section class="t-m-ad" v-if="noticeList.length>0" @tap="watchActiveHandler">
+          <div class="title">公告</div>
+          <div class="content">异业联盟卡活动正在等你报名正在等你…</div>
+          <div class="watch-btn">查看</div>
+        </section>
+        <nav class="t-l-nav" :style="activeImg" @tap="toShop">活动管理</nav>
+        <nav class="t-l-nav" :style="employeeImg" @tap="toEmployee">员工管理</nav>
+        <nav class="t-l-nav" :style="incomeImg" @tap="toAsset">收入/提现</nav>
+      </label>
+      <label class="tab-employee" v-if="currentRole===ROLE.STAFF_ID" for="btn-form-id">
+        <section class="t-e-sales">
+          <div class="title">销卡对比</div>
+          <article class="content-box">
+            <scroll-view class="content" scroll-y="true" v-if="employeeList.length>0">
+              <ul class="c-holder">
+                <li class="emp-item" v-for="(item,index) in employeeList" :key="index">
+                  <article class="emp-item-box">
+                    <section class="icon">
+                      <img class="icon-pic" :src="item.avatarUrl">
+                    </section>
+                    <section class="progress">
+                      <div class="name-bar">
+                        <div class="name">{{item.nickName}}</div>
+                        <div class="sales">{{item.saleCount}}/{{item.initStock}}</div>
+                      </div>
+                      <article class="p-box">
+                        <div class="p-pro" :style="'width:'+ item.percentage +'%'"></div>
+                      </article>
+                    </section>
+                    <section class="number">
+                      <div class="n-title">销卡</div>
+                      <div>80</div>
+                      <div>%</div>
+                    </section>
+                  </article>
+                </li>
+              </ul>
+            </scroll-view>
+            <section class="content" v-else-if="employeeList.length<=0">
+              <div class="staff-empty">暂无数据～</div>
+            </section>
+          </article>
+        </section>
+        <nav class="t-l-nav" :style="activeImg" @tap="toShop">活动管理</nav>
+        <nav class="t-l-nav" :style="incomeImg" @tap="toAsset">收入/提现</nav>
+      </label>
+      <button id="btn-form-id" class="btn-form-id" form-type="submit"></button>
+    </form>
     <audit-msg @confirmHandler="staffConfirmHandler" :flag="status"></audit-msg>
-  </div>
+  </article>
 </template>
 
 <script type="text/ecmascript-6">
@@ -141,8 +144,15 @@
     methods: {
       ...mapMutations({saveRoleSync: 'ROLE_TYPE'}),
       ...mapGetters(['role']),
+      // 登录验证
       _login () {
         this._loginInit()
+      },
+      // 上传form-id
+      formSubmit (e) {
+        let formId = e.mp.detail.formId
+        let data = {'form_ids': [formId]}
+        api.homeCollectFormId(data)
       },
       _test () {
         this.entryRole = ROLE.UNION_ID
@@ -151,6 +161,21 @@
         wx.setStorageSync('userType', this.entryRole)
         wx.setStorageSync('token', ROLE.testToken)
         wx.setStorageSync('merchantId', 100004)
+      },
+      // 从消息模板来的数据
+      _fromMsgTpl () {
+        let token = this.$root.$mp.query.token
+        let entryRole = this.$root.$mp.query.entryRole
+        let merchantId = this.$root.$mp.query.merchantId
+        let activeId = this.$root.$mp.query.activeId
+        let targetPage = this.$root.$mp.query.targetPage
+        let url = `${targetPage}?id=${activeId}`
+        if (!entryRole) return
+        wx.setStorageSync('userType', token)
+        wx.setStorageSync('token', entryRole)
+        wx.setStorageSync('merchantId', merchantId)
+        if (url === `/pages/home/home`) return
+        this.$router.push(url)
       },
       // 初始化
       _loginInit () {
@@ -616,6 +641,11 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable.styl"
   @import "../../common/stylus/mixin.styl"
+
+  #btn-form-id
+    position: absolute
+    top: -100%
+    opacity: 0
 
   .home
     min-height: 100vh
