@@ -17,9 +17,8 @@
       </article>
       <scroll-view class="scroll" scroll-y v-if="!isEmpty" @scrolltolower="getMoreList">
         <ul class="box">
-          <li class="box-item" v-for="(item, index) in cardInfoList" :key="item.title+index">
+          <li class="box-item" v-for="(item, index) in cardInfoList" :key="index">
             <union-card
-              :cardInfo="item"
               :useType="0"
               @previewHandler="previewHandler"
               @checkHandler="checkHandler"
@@ -66,7 +65,7 @@
         currentRole: null,
         tabFlag: 0,
         model: null,
-        cardInfoList: [],
+        cardInfoList: new Array(15),
         isAll: false,
         page: 1,
         limit: LIMIT_DEF,
@@ -78,7 +77,7 @@
       }
     },
     onShow () {
-      this._init()
+      // this._init()
     },
     beforeMount () {
     },

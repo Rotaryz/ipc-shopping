@@ -1,11 +1,13 @@
 <template>
   <article class="union-card-item">
     <section class="wrap">
-      <div class="box" :style="backgroundImg">
+      <div class="box">
+        <img class="box-bg" src="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1526915338&di=38e8e88f7285e1288d92170e8dd864f6&src=http://www.zcool.com.cn/community/037576e55debc4c0000015995cf3cdc.jpg"/>
         <article class="b-top">
           <div class="b-top-box">
             <section class="icon">
-              <div class="icon-pic" :style="iconImg"></div>
+              <div class="icon-pic" :style="iconImg">
+              </div>
             </section>
             <artilce class="info-box">
               <section class="title">{{cardInfo.title}}</section>
@@ -42,7 +44,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import { baseURL } from 'api/config'
+  import {baseURL} from 'api/config'
   import source from 'common/source'
 
   // 状态常量默认值
@@ -60,15 +62,15 @@
     shopApplying: 11 // 活动2
   }
 
-  // // 卡券信息的默认值-盟主管理
-  // const DEFAULT_CARD_INFO_UNION = {
-  //   title: '异业联盟卡',
-  //   endDate: '2018-01-17到期',
-  //   sales: '100', // 销量
-  //   chargeOff: '60', // 核销
-  //   statusCode: DEFAULT_CONST_STATUS.applying,
-  //   statusStr: '已上架'
-  // }
+  // 卡券信息的默认值-盟主管理
+  const DEFAULT_CARD_INFO_UNION = {
+    title: '异业联盟卡',
+    endDate: '2018-01-17到期',
+    sales: '100', // 销量
+    chargeOff: '60', // 核销
+    statusCode: DEFAULT_CONST_STATUS.applying,
+    statusStr: '已上架'
+  }
   //
   // // 卡券信息的默认值-盟主审核
   // const DEFAULT_CARD_INFO_APPLYING = {
@@ -82,7 +84,7 @@
     props: {
       cardInfo: {
         type: Object,
-        default: {}
+        default: DEFAULT_CARD_INFO_UNION
       },
       constStatus: {
         type: Object,
@@ -97,74 +99,68 @@
         default: DEFAULT_USE_TYPE
       }
     },
-    data () {
+    data() {
       return {
         imageUri: baseURL.image,
         bgImgType: this.useType // 背景图片类型
       }
     },
-    beforeMount () {
+    beforeMount() {
       // console.log(this.cardInfo)
     },
-    mounted () {
+    mounted() {
       // console.log(this.useType)
     },
     methods: {
-      previewHandler (cardInfo) {
+      previewHandler(cardInfo) {
         this.$emit('previewHandler', cardInfo)
       },
-      editorHandler (cardInfo) {
+      editorHandler(cardInfo) {
         this.$emit('editorHandler', cardInfo)
       },
-      totalHandler (cardInfo) {
+      totalHandler(cardInfo) {
         this.$emit('totalHandler', cardInfo)
       },
-      deleteHandler (cardInfo) {
+      deleteHandler(cardInfo) {
         this.$emit('deleteHandler', cardInfo)
       },
-      checkHandler (cardInfo) {
+      checkHandler(cardInfo) {
         this.$emit('checkHandler', cardInfo)
       },
-      sortHandler (cardInfo) {
+      sortHandler(cardInfo) {
         this.$emit('sortHandler', cardInfo)
       },
-      upperHandler (cardInfo) {
+      upperHandler(cardInfo) {
         this.$emit('upperHandler', cardInfo)
       }
     },
     computed: {
-      backgroundImg () {
-        switch (this.bgImgType) {
-          case DEFAULT_USE_TYPE.unionApplying:
-          case DEFAULT_USE_TYPE.union: {
-            return `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/pic-union_b@2x.png)` || ''
-          }
-          case DEFAULT_USE_TYPE.shop: {
-            return `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/pic-activity_cardp@2x.png)` || ''
-          }
-          default: {
-            return ''
-          }
-        }
+      backgroundImg() {
+        // let img = `pic-union_b@2x.png`
+        // // return `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/${img})` || ''
+        // return `${this.imageUri}/defaults/ipc-shopping/aliance/${img}`
+        return ``
       },
-      iconImg () {
+      iconImg() {
         switch (this.bgImgType) {
           case DEFAULT_USE_TYPE.unionApplying:
           case DEFAULT_USE_TYPE.union: {
-            return `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/pic-union_b2@2x.png)` || ''
+            let img = `pic-union_b2@2x.png`
+            return `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/${img})` || ''
           }
           case 1: {
-            return `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/pic-activity_cardp2@2x.png)` || ''
+            let img = `pic-activity_cardp2@2x.png`
+            return `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/${img})` || ''
           }
           default: {
             return ''
           }
         }
       },
-      arrowImg () {
+      arrowImg() {
         return source.imgArrowRight()
       },
-      shopImg () {
+      shopImg() {
         return source.imgShopIcon()
       }
     }
@@ -186,11 +182,20 @@
       height: 0
       padding-top: 39.855072463768%
       .box
+        position: relative
         layout()
         fill-box()
         background-repeat: no-repeat
         background-size: contain
         background-position: center center
+        .box-bg
+          position: absolute
+          width: 100%
+          height: 100%
+          left: 0
+          right: 0
+          bottom: 0
+          top: 0
         .b-top
           position: relative
           height: 0
