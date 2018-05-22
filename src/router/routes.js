@@ -221,5 +221,14 @@ module.exports = [
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTextStyle: 'white'
     }
+  },
+  {
+    path: '/pages/activity-detail/activity-detail', // 异业卡活动详情
+    name: 'ActivityDetail',
+    config: {
+      navigationBarTitleText: '活动详情',
+      navigationBarBackgroundColor: '#1A1D3D',
+      navigationBarTextStyle: 'white'
+    }
   }
 ]

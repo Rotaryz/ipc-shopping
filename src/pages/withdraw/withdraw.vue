@@ -87,7 +87,6 @@
       Toast
     },
     mounted () {
-      console.log(12)
       // this.getInfo()
     },
     onShow () {
@@ -109,13 +108,6 @@
           this.canUse = res.data.remaining
           this.canWithdrawal = res.data.can_withdrawal
           let info = res.data.withdrawal_info
-          // let info = {
-          //   id: 7,
-          //   image_url: 'https://img.jerryf.cn/defaults/b-image/page/pic-ny.png',
-          //   user_name: '122',
-          //   bank: '农业银行',
-          //   withdrawal_card: '32523552352'
-          // }
           if (info.id) {
             let tmp = info.withdrawal_card.substring(info.withdrawal_card.length - 4, info.withdrawal_card.length)
             this.bankCard = ` ${info.bank} 尾号 ${tmp}`

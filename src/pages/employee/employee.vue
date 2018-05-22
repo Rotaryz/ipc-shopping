@@ -76,7 +76,6 @@
     },
     onShow () {
       this.getInfo()
-      console.log(`--${this.compName}--mounted`)
     },
     methods: {
       formSubmit (e) {
