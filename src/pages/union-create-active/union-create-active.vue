@@ -175,8 +175,8 @@
       _init () {
         this.model = this.$root.$mp.query.model * 1
         this.name = `异业联盟活动`
-        this.startDate = util.formatTimeYMD(util.now + 1000 * 60 * 60 * 24)
-        this.endDate = util.formatTimeYMD(util.now + 1000 * 60 * 60 * 24 * 61)
+        this.startDate = this.todayStartDate
+        this.endDate = this.endStartDate
         this.address = `广州市白云区市桥商圈`
         this.price = 100
         this.stock = 1000
@@ -244,8 +244,8 @@
       },
       _checkSaveInfo () {
         // 日期
-        if (new Date(this.endDate) - new Date(this.startDate) < 1000 * 60 * 60 * 24 * 60) {
-          this.$refs.toast.show('活动时间不能小于60天')
+        if (new Date(this.endDate) - new Date(this.startDate) <= 0) {
+          this.$refs.toast.show('结束时间不能小于开始时间')
           return false
         }
         // 价格
@@ -373,7 +373,7 @@
         return util.formatTimeYMD(util.now + 1000 * 60 * 60 * 24)
       },
       endStartDate () {
-        return util.formatTimeYMD(util.now + 1000 * 60 * 60 * 24 * 61)
+        return util.formatTimeYMD(util.now + 1000 * 60 * 60 * 24 * 2)
       }
     },
     components: {
