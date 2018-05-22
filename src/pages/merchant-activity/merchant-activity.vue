@@ -15,7 +15,7 @@
           <div class="canvas-text">
             <div class="title">
               <div class="tilte-left">{{activityData.name}}</div>
-              <div class="tilte-right">
+              <div class="tilte-right" @tap="jumpPreview">
                 <div class="text">预览活动</div>
                 <img :src="image + '/defaults/ipc-shopping/home/icon-union_j@2x.png'" class="right" v-if="image">
               </div>
@@ -216,6 +216,10 @@
               console.info(err)
             })
         })
+      },
+      jumpPreview() {
+        const url = `/pages/activity-detail/activity-detail?activityId=${this.activeId}`
+        this.$router.push(url)
       },
       // 获取商家活动详情
       _rqManageDetails (id) {
