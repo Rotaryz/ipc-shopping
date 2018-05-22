@@ -271,34 +271,13 @@
       // 预览按钮
       previewHandler (obj) {
         const activityId = obj.id
-        const employeesId = 0
-        const appId = obj.appId
-        const path = `${obj.appPath}?activityId=${activityId}&employeesId=${employeesId}`
-        // let url = `/pages/activity-detail/activity-detail?activityId='活动id'&employeesId='员工id,无员工id默认0'`
-        // console.log(activityId)
-        if (+obj.statusCode === 1) {
-          this.$refs.toast.show('活动还未上线')
-        } else {
-          this._toMpC({appId, path})
-        }
+        const url = `/pages/activity-detai/activity-detai?activityId=${activityId}`
+        this.$root.push(url)
       },
       // 编辑
       editorHandler (obj) {
         const url = `/pages/union-create-active/union-create-active?model=1&activeId=${obj.id}`
         this.$router.push(url)
-      },
-      // 跳C端预览
-      _toMpC (json) {
-        wx.navigateToMiniProgram({
-          appId: json.appId,
-          path: json.path,
-          extraData: {},
-          envVersion: baseURL.jumpVersion,
-          success (res) {
-            // 打开成功
-            console.log(res)
-          }
-        })
       },
       // tab栏切换
       changeTab (flag) {
