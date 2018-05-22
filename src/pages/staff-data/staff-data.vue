@@ -14,8 +14,8 @@
         </div>
         <div class="data-content">
           <scroll-view class="content-scroll" @scrolltolower="scrollSelfStaff" scroll-y="true">
-            <div class="data-all"   v-if="selfStaffList.length !== 0">
-              <div class="self-merchant-list" v-for="(item, index) in selfStaffList"  v-bind:key="index">
+            <div class="data-all" v-if="selfStaffList.length !== 0">
+              <div class="self-merchant-list" v-for="(item, index) in selfStaffList" v-bind:key="index">
                 <div class="self-staff-list-box user-box">
                   <div class="number">{{index + 1}}</div>
                   <img class="img" :src="item.avatar_url" v-if="image">
@@ -28,7 +28,7 @@
                 </div>
               </div>
             </div>
-            <div class="data-null"  v-if="selfStaffList.length === 0">暂无数据～</div>
+            <div class="data-null" v-if="selfStaffList.length === 0">暂无数据～</div>
           </scroll-view>
         </div>
       </div>
@@ -39,15 +39,15 @@
         <div class="ecbra-box">
           <div class="ecbra-text">
             <div class="text">售卡数</div>
-            <div class="number">10</div>
+            <div class="number">{{barDetails.sale_count}}</div>
           </div>
           <div class="ecbra-text">
             <div class="text">本店核销数</div>
-            <div class="number">10</div>
+            <div class="number">{{barDetails.self_verification}}</div>
           </div>
           <div class="ecbra-text">
             <div class="text">异业核销数</div>
-            <div class="number">10</div>
+            <div class="number">{{barDetails.other_verification}}</div>
           </div>
         </div>
         <div class="ecbra-bottom">向左图表滑动查看更多数据</div>
@@ -73,7 +73,7 @@
               <div class="name">{{allStaffList[1].nickname}}</div>
             </div>
             <div class="rank-two-bottom">
-              <div class="left-text">核销力</div>
+              <div class="left-text">总收益</div>
               <div class="right-text">{{allStaffList[1].sale_count}}</div>
             </div>
           </div>
@@ -89,7 +89,7 @@
               <div class="name first-name">{{allStaffList[0].nickname}}</div>
             </div>
             <div class="rank-two-bottom">
-              <div class="left-text">核销力</div>
+              <div class="left-text">总收益</div>
               <div class="right-text">{{allStaffList[0].sale_count}}</div>
             </div>
           </div>
@@ -105,7 +105,7 @@
               <div class="name thr-name">{{allStaffList[0].nickname}}</div>
             </div>
             <div class="rank-two-bottom">
-              <div class="left-text">核销力</div>
+              <div class="left-text">总收益</div>
               <div class="right-text">{{allStaffList[2].sale_count}}</div>
             </div>
           </div>
@@ -131,9 +131,9 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {baseURL, DEVICE_INFO, ERR_OK} from 'api/config'
+  import { baseURL, DEVICE_INFO, ERR_OK } from 'api/config'
   import * as wechat from 'common/js/wechat'
-  import {mapGetters} from 'vuex'
+  import { mapGetters } from 'vuex'
   import api from 'api'
 
   const Baroptions = {
@@ -225,12 +225,17 @@
         selfStaffList: [], // 商店员工参数
         selfStaffPage: 1,
         isAllselfStaff: false,
+        barDetails: {
+          sale_count: 0,
+          self_verification: 0,
+          other_verification: 0
+        },
         allStaffList: [], // 商店总榜总榜数据参数
         allStaffTwoList: [],
         fristAllStaff: false
       }
     },
-    onPullDownRefresh() {
+    onPullDownRefresh () {
       if (this.staffScene === 2) {
         this.selfStaffPage = 1
         this.selfStaffList = []
@@ -243,7 +248,7 @@
         this._getAllfStaff()
       }
     },
-    mounted() {
+    mounted () {
       let system = DEVICE_INFO.system
       this.ios = system.search('iOS') !== -1
       if (!this.ios) {
@@ -255,7 +260,7 @@
     },
     methods: {
       ...mapGetters(['role']),
-      _init() {
+      _init () {
         let role = this.role()
         this.currentRole = role
       },
@@ -271,7 +276,7 @@
         }
       },
       // 商家单店员工数据
-      _getSelfStaff() {
+      _getSelfStaff () {
         api.dataSelfStaff(this.activeId, this.selfStaffPage).then(res => {
           if (res.error === ERR_OK) {
             this.selfStaffList.push(...res.data)
@@ -285,21 +290,22 @@
           console.log(res)
         })
       },
-      scrollSelfStaff() {
+      scrollSelfStaff () {
         if (this.isAllselfStaff) return
         this._getAllfShop()
       },
-      _isAllSelfStaff(res) {
+      _isAllSelfStaff (res) {
         if (this.selfStaffList.length >= res.meta.total * 1) {
           this.isAllselfStaff = true
         }
       },
-      _getBar() {
+      _getBar () {
         api.dataBar(this.activeId).then(res => {
           if (res.error === ERR_OK) {
             console.log(this.ecBra.options.xAxis[0].data, '11111111111`````````````')
             this.ecBra.options.xAxis[0].data = res.data.shop_names
             this.ecBra.options.series[0].data = res.data.verification_counts
+            this.barDetails = res.data.detail
           } else {
             this.$refs.toast.show(res.message)
           }
@@ -307,7 +313,7 @@
         })
       },
       // 商家员工总榜数据
-      _getAllfStaff() {
+      _getAllfStaff () {
         api.dataAllStaff(this.activeId, this.allfStaffPage).then(res => {
           if (res.error === ERR_OK) {
             this.allStaffList = res.data.slice(0, 3)
@@ -643,6 +649,7 @@
               font-family: $font-family-light
               color: $color-background-ff
               font-size: 9px
+
   .data-null
     text-align: center
     font-family: $font-family-light

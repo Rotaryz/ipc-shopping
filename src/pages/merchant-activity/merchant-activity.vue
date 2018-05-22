@@ -5,7 +5,7 @@
       <div class="detail-money">
         <div class="money">
           <div class="icnon">¥</div>
-          <div class="number">10000</div>
+          <div class="number">{{allotMoney || 0}}</div>
         </div>
         <div class="text">正在等待抢钱</div>
       </div>
@@ -115,7 +115,7 @@
         <div class="box-text">sorry，因为这次报名商家过多，您的活动申请无法通过。您可以申请退款或者申请排队，不退款申请排队的商家，下次活动拥有优先通过的权利！</div>
       </div>
     </div>
-    <button class="btn" v-if="status === 0" @tap="appSubmit" form-type="submit">报名(支付{{activityData.price * addNumber}}元）</button>
+    <button class="btn" v-if="status === 0" @tap="appSubmit" form-type="submit">报名(支付{{activityData.apply_price * addNumber}}元）</button>
     <footer class="btn" v-if="status === 1 || status === 3" @tap="chooseCoupon">{{couponText}}</footer>
     <footer class="btn no-select" v-if="status === 2 || status === 4 || status > 5">{{btnText}}</footer>
     <footer class="btn-box" v-if="status === 5">
@@ -130,16 +130,16 @@
 
 <script type="text/ecmascript-6">
   import api from 'api'
-  import {baseURL, ERR_OK} from 'api/config'
+  import { baseURL, ERR_OK } from 'api/config'
   import Coupon from 'components/coupon-item/coupon-item'
   import model from 'components/confirm-msg/confirm-msg'
   import * as wechat from 'common/js/wechat'
-  import {mapGetters} from 'vuex'
+  import { mapGetters } from 'vuex'
   import wx from 'wx'
   import Toast from '@/components/toast/toast'
 
   export default {
-    data() {
+    data () {
       return {
         image: baseURL.image,
         showRule: false,
@@ -154,17 +154,18 @@
         showTitle: false,
         modelNumber: null,
         applyId: null,
-        acitiveId: 1
+        activeId: 1,
+        allotMoney: null
       }
     },
-    onShow() {
+    onShow () {
       this._getFromMsgTpl()
       this.addNumber = 1
-      this.acitiveId = this.$root.$mp.query.id
-      console.log(this.acitiveId, '```````````````')
-      this._rqManageDetails(this.acitiveId)
+      this.activeId = this.$root.$mp.query.id
+      console.log(this.activeId, '```````````````')
+      this._rqManageDetails(this.activeId)
     },
-    beforeMount() {
+    beforeMount () {
       this._init()
     },
     methods: {
@@ -179,9 +180,20 @@
           merchantId && wx.setStorageSync('merchantId', merchantId)
         }
       },
-      _init() {
+      _init () {
         let role = this.role()
         this.currentRole = role
+      },
+      _getAllotMoney () {
+        api.dataAllotMoney(this.activeId).then(res => {
+          console.log(res)
+          if (res.error === ERR_OK) {
+            this.allotMoney = res.data.share_money
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+          wechat.hideLoading()
+        })
       },
       formSubmit (e) {
         let formId = e.mp.detail.formId
@@ -189,11 +201,24 @@
         api.homeCollectFormId(data)
       },
       // 显示规则
-      showRules() {
+      showRules () {
         this.showRule = !this.showRule
       },
+      // 获取临时登录凭证code
+      _getCode () {
+        return new Promise(resolve => {
+          wechat.login()
+            .then(res => {
+              wx.setStorageSync('code', res.code)
+              resolve(res.code)
+            })
+            .catch(err => {
+              console.info(err)
+            })
+        })
+      },
       // 获取商家活动详情
-      _rqManageDetails(id) {
+      _rqManageDetails (id) {
         api.merManageDetails(id).then(res => {
           console.log(res.data)
           if (res.error === ERR_OK) {
@@ -247,16 +272,16 @@
           wechat.hideLoading()
         })
       },
-      subtract() {
+      subtract () {
         if (parseInt(this.addNumber) <= 1) {
           return
         }
         this.addNumber--
       },
-      add() {
+      add () {
         this.addNumber++
       },
-      appSubmit() {
+      appSubmit () {
         // 下单调取支付
         if (!this.addNumber) return
         if (this.applyLock) return
@@ -295,27 +320,27 @@
           wechat.hideLoading()
         })
       },
-      chooseCoupon() {
+      chooseCoupon () {
         let activityId = this.applyId
         let selectId = this.coupon.id
         let url = `/pages/upload-coupon/upload-coupon?activityId=${activityId}&selectId=${selectId}`
         this.$router.push(url)
         console.log(url)
       },
-      applyRefund() {
+      applyRefund () {
         this.showTitle = true
         this.title = '确定退款？'
         this.modelNumber = 1
       },
-      applyLine() {
+      applyLine () {
         this.showTitle = true
         this.title = '确定排队？'
         this.modelNumber = 2
       },
-      applyCancel() {
+      applyCancel () {
         this.showTitle = false
       },
-      applyConfirm() {
+      applyConfirm () {
         if (this.modelNumber === 1) {
           // 报名申请退款
           api.merRefund().then(res => {

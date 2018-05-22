@@ -19,7 +19,7 @@
             <div class="text">时间</div>
             <div class="text">售卡数</div>
             <div class="text">他店核销数</div>
-            <div class="text">联盟力</div>
+            <div class="text">核销力</div>
           </div>
           <div class="data-content">
             <scroll-view class="content-scroll" @scrolltolower="scrollSelfShop" scroll-y="true">
@@ -58,7 +58,7 @@
             <div class="text">门店</div>
             <div class="text">售卡数/总数</div>
             <div class="text">他店核销数</div>
-            <div class="text">联盟力</div>
+            <div class="text">核销力</div>
           </div>
           <div class="data-content">
             <scroll-view class="content-scroll" @scrolltolower="scrollAllShop" scroll-y="true">
@@ -130,15 +130,15 @@
           <div class="ecbra-box">
             <div class="ecbra-text">
               <div class="text">售卡数</div>
-              <div class="number">10</div>
+              <div class="number">{{barDetails.sale_count}}</div>
             </div>
             <div class="ecbra-text">
               <div class="text">本店核销数</div>
-              <div class="number">10</div>
+              <div class="number">{{barDetails.self_verification}}</div>
             </div>
             <div class="ecbra-text">
               <div class="text">异业核销数</div>
-              <div class="number">10</div>
+              <div class="number">{{barDetails.other_verification}}</div>
             </div>
           </div>
           <div class="ecbra-bottom">向左图表滑动查看更多数据</div>
@@ -164,7 +164,7 @@
                 <div class="name">{{allStaffList[1].nickname}}</div>
               </div>
               <div class="rank-two-bottom">
-                <div class="left-text">核销力</div>
+                <div class="left-text">总收益</div>
                 <div class="right-text">{{allStaffList[1].sale_count}}</div>
               </div>
             </div>
@@ -180,7 +180,7 @@
                 <div class="name first-name">{{allStaffList[0].nickname}}</div>
               </div>
               <div class="rank-two-bottom">
-                <div class="left-text">核销力</div>
+                <div class="left-text">总收益</div>
                 <div class="right-text">{{allStaffList[0].sale_count}}</div>
               </div>
             </div>
@@ -196,7 +196,7 @@
                 <div class="name thr-name">{{allStaffList[0].nickname}}</div>
               </div>
               <div class="rank-two-bottom">
-                <div class="left-text">核销力</div>
+                <div class="left-text">总收益</div>
                 <div class="right-text">{{allStaffList[2].sale_count}}</div>
               </div>
             </div>
@@ -384,6 +384,11 @@
         selfStaffPage: 1,
         isAllselfStaff: false,
         fristselfStaff: false,
+        barDetails: {
+          sale_count: 0,
+          self_verification: 0,
+          other_verification: 0
+        },
         allStaffList: [], // 商店总榜总榜数据参数
         allStaffTwoList: [],
         fristAllStaff: false
@@ -583,6 +588,7 @@
             console.log(this.ecBra.options.xAxis[0].data, '11111111111`````````````')
             this.ecBra.options.xAxis[0].data = res.data.shop_names
             this.ecBra.options.series[0].data = res.data.verification_counts
+            this.barDetails = res.data.detail
           } else {
             this.$refs.toast.show(res.message)
           }

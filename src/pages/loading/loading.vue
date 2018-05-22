@@ -10,69 +10,69 @@
         <div class="cover-top-txt">是为了更好的服务你</div>
       </article>
       <article class="btn-box">
-        <button open-type="getUserInfo" @getuserinfo="wxGetUserInfo" lang="zh_CN" class="btn">
+        <button class="btn" open-type="getUserInfo" lang="zh_CN" @getuserinfo="wxGetUserInfo">
           <div class="wx-img"></div>
           <div class="wx-login-txt">微信快捷登录</div>
         </button>
       </article>
     </section>
     <toast ref="toast"></toast>
-    <!--<audit-msg @confirmHandler="confirmHandler" :flag="status"></audit-msg>-->
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import Toast from 'components/toast/toast'
   import api from 'api'
-  import {baseURL, ERR_OK} from 'api/config'
+  import { baseURL, ERR_OK } from 'api/config'
   import * as wechat from 'common/js/wechat'
   import wx from 'wx'
-  import {mapActions, mapMutations} from 'vuex'
-  import {ROLE} from 'common/js/contants'
-  import AuditMsg from 'components/audit-msg/audit-msg'
+  import { mapActions, mapMutations } from 'vuex'
+  import { ROLE } from 'common/js/contants'
 
   console.info(baseURL.jumpVersion)
   export default {
-    data() {
+    data () {
       return {
         authorizationCount: 1,
         entryRole: ROLE.STAFF_ID,
-        status: -1
+        status: -1,
+        userInfo: null
       }
     },
-    beforeCreate() {
+    beforeCreate () {
     },
-    created() {
+    created () {
     },
-    onShow() {
-      this._init()
+    onShow () {
+      this._getCode()
     },
-    beforeMount() {
+    beforeMount () {
     },
-    mounted() {
+    mounted () {
     },
-    beforeDestroy() {
+    beforeDestroy () {
     },
     methods: {
       ...mapActions(['saveRole']),
       ...mapMutations({saveRoleSync: 'ROLE_TYPE'}),
       // 微信获取用户信息btn
-      wxGetUserInfo(event) {
+      wxGetUserInfo (event) {
         const e = event.mp
         if (e.detail.errMsg !== 'getUserInfo:ok') {
           return
         }
+        this.userInfo = e
         if (this.authorizationCount === 0) {
           this._getCode()
             .then(() => {
-              this._getToken(e)
+              this._getToken()
             })
         } else {
-          this._getToken(e)
+          this._getToken()
         }
       },
       // 获取临时登录凭证code
-      _getCode() {
+      _getCode () {
         return new Promise(resolve => {
           wechat.login()
             .then(res => {
@@ -85,19 +85,19 @@
         })
       },
       // 获取token
-      _getToken(e) {
+      _getToken () {
         const code = wx.getStorageSync('code')
         const data = {
           code,
-          iv: e.detail.iv,
-          encryptedData: e.detail.encryptedData
+          iv: this.userInfo.detail.iv,
+          encryptedData: this.userInfo.detail.encryptedData
         }
+        console.log(data)
         this.authorizationCount++
         api.userAuthorise(data)
           .then(Json => {
-            wechat.hideLoading()
             if (Json.error !== ERR_OK && this.authorizationCount <= 5) {
-              return this._getToken(data)
+              return this._getToken()
             } else if (Json.error !== ERR_OK && this.authorizationCount > 5) {
               this.authorizationCount = 0
               return this.$refs.toast.show('登录失败,请重新登录.')
@@ -106,6 +106,7 @@
             const res = Json.data
             let token = res.access_token
             if (token) {
+              wechat.hideLoading()
               wx.setStorageSync('token', token)
               wx.setStorageSync('userType', ROLE.STAFF_ID)
               this.saveRoleSync(ROLE.STAFF_ID)
@@ -119,14 +120,13 @@
           })
       },
       // 页面路由
-      _navTo() {
+      _navTo () {
         const url = `/pages/home/home`
         this.$router.replace(url)
       }
     },
     components: {
-      Toast,
-      AuditMsg
+      Toast
     }
   }
 </script>

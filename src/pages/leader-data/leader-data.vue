@@ -15,22 +15,22 @@
         </div>
         <div class="data-content">
           <scroll-view class="content-scroll" @scrolltolower="scrollAllShop" scroll-y="true">
-            <div class="data-all"   v-if="allShopList.length !== 0">
-              <div class="self-merchant-list"  v-for="(item, index) in allShopList"  v-bind:key="index">
+            <div class="data-all" v-if="allShopList.length !== 0">
+              <div class="self-merchant-list" v-for="(item, index) in allShopList" v-bind:key="index">
                 <div class="selft-merchant-list-box">{{item.merchant_id}}</div>
                 <div class="selft-merchant-list-box">{{item.sale_count}}/{{item.init_stock}}</div>
                 <div class="selft-merchant-list-box">{{item.other_verification}}</div>
                 <div class="selft-merchant-list-box">{{item.alliance_power}}</div>
               </div>
             </div>
-            <div class="data-null"  v-if="allShopList.length === 0">暂无数据～</div>
+            <div class="data-null" v-if="allShopList.length === 0">暂无数据～</div>
           </scroll-view>
         </div>
       </div>
       <div class="data-pie">
         <div class="pie-title">
           <div class="icon">¥</div>
-          <div class="money">2000</div>
+          <div class="money">{{allotMoney || 0}}</div>
           <div class="text">正在等待分钱</div>
         </div>
         <div class="ec-box">
@@ -55,7 +55,7 @@
               <div class="name">{{allStaffList[1].nickname}}</div>
             </div>
             <div class="rank-two-bottom">
-              <div class="left-text">核销力</div>
+              <div class="left-text">总收益</div>
               <div class="right-text">{{allStaffList[1].sale_count}}</div>
             </div>
           </div>
@@ -71,7 +71,7 @@
               <div class="name first-name">{{allStaffList[0].nickname}}</div>
             </div>
             <div class="rank-two-bottom">
-              <div class="left-text">核销力</div>
+              <div class="left-text">总收益</div>
               <div class="right-text">{{allStaffList[0].sale_count}}</div>
             </div>
           </div>
@@ -87,7 +87,7 @@
               <div class="name thr-name">{{allStaffList[0].nickname}}</div>
             </div>
             <div class="rank-two-bottom">
-              <div class="left-text">核销力</div>
+              <div class="left-text">总收益</div>
               <div class="right-text">{{allStaffList[2].sale_count}}</div>
             </div>
           </div>
@@ -113,9 +113,9 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {baseURL, ERR_OK} from 'api/config'
+  import { baseURL, ERR_OK } from 'api/config'
   import * as wechat from 'common/js/wechat'
-  import {mapGetters} from 'vuex'
+  import { mapGetters } from 'vuex'
   import api from 'api'
 
   const options = {
@@ -173,7 +173,7 @@
     }]
   }
   export default {
-    data() {
+    data () {
       return {
         ec: {
           // 传 options
@@ -182,6 +182,7 @@
         image: baseURL.image,
         bigBtn: 'merchant',
         activeId: 1,
+        allotMoney: null,
         allShopList: [], // 商店总榜数据参数
         allfShopPage: 1,
         isAllShop: false,
@@ -191,7 +192,7 @@
         fristAllStaff: false
       }
     },
-    onPullDownRefresh() {
+    onPullDownRefresh () {
       if (this.staffScene === 2) {
         this.selfStaffPage = 1
         this.selfStaffList = []
@@ -204,22 +205,22 @@
         this._getAllfStaff()
       }
     },
-    mounted() {
+    mounted () {
       this.activeId = this.$root.$mp.query.id
       this._getAllfShop()
       this._getCake()
     },
     methods: {
       ...mapGetters(['role']),
-      _init() {
+      _init () {
         let role = this.role()
         this.currentRole = role
       },
-      clickTab(value) {
+      clickTab (value) {
         this.bigBtn = value
       },
       // 商家总榜数据
-      _getAllfShop() {
+      _getAllfShop () {
         api.dataAllShop(this.activeId, this.allfShopPage).then(res => {
           if (res.error === ERR_OK) {
             this.allShopList.push(...res.data)
@@ -234,16 +235,16 @@
           console.log(res)
         })
       },
-      scrollAllShop() {
+      scrollAllShop () {
         if (this.isAllShop) return
         this._getAllfShop()
       },
-      _isAllALLShop(res) {
+      _isAllALLShop (res) {
         if (this.allShopList.length >= res.meta.total * 1) {
           this.isAllShop = true
         }
       },
-      _getCake() {
+      _getCake () {
         api.dataCake(this.activeId).then(res => {
           if (res.error === ERR_OK) {
             this.ec.options.series.data = res.data.detail
@@ -254,8 +255,19 @@
           wechat.hideLoading()
         })
       },
+      _getAllotMoney () {
+        api.dataAllotMoney(this.activeId).then(res => {
+          console.log(res)
+          if (res.error === ERR_OK) {
+            this.allotMoney = res.data.share_money
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+          wechat.hideLoading()
+        })
+      },
       // 商家员工总榜数据
-      _getAllfStaff() {
+      _getAllfStaff () {
         api.dataAllStaff(this.activeId, this.allfStaffPage).then(res => {
           if (res.error === ERR_OK) {
             this.allStaffList = res.data.slice(0, 3)
