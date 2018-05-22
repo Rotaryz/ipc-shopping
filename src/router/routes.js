@@ -63,7 +63,9 @@ module.exports = [
     name: 'Employee',
     config: {
       navigationBarTitleText: '员工管理',
-      onReachBottomDistance: 50
+      onReachBottomDistance: 50,
+      backgroundColor: '#f6f7fa',
+      enablePullDownRefresh: true
     }
   },
   {

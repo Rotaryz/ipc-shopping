@@ -56,7 +56,8 @@
         title: '',
         dataTmp: {},
         dataIndex: '',
-        isAwait: ''
+        isAwait: '',
+        page: 1
       }
     },
     components: {
@@ -68,8 +69,13 @@
     onReachBottom () {
       console.log('上拉刷新....')
     },
-    mounted () {
-      // this.getInfo()
+    // 下拉加载
+    onPullDownRefresh () {
+      this.page = 1
+      this.getInfo()
+    },
+    onShow () {
+      this.getInfo()
       console.log(`--${this.compName}--mounted`)
     },
     methods: {
