@@ -20,7 +20,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {baseURL} from 'api/config'
+  import { baseURL } from 'api/config'
 
   const PATH = `/defaults/ipc-shopping/common/`
   const IMGARRAY = [
@@ -35,23 +35,25 @@
         default: 0
       }
     },
-    data() {
+    data () {
       return {
-        imageUrlHead: baseURL.image + PATH,
-        showToast: this.flag >= 0
+        imageUrlHead: baseURL.image + PATH
       }
     },
     methods: {
-      _hack() {
+      _hack () {
         // 防止报错
       },
-      confirm() {
+      confirm () {
         this.showToast = false
         this.$emit('confirmHandler')
       }
     },
     computed: {
-      content() {
+      showToast () {
+        return this.flag >= 0
+      },
+      content () {
         return IMGARRAY[this.flag]
       }
     }

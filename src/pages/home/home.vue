@@ -191,6 +191,7 @@
                   } else {
                     this.status = status
                   }
+                  console.log(status, '99999', this.status)
                 })
             } else {
               this._init()
@@ -577,6 +578,9 @@
       }
     },
     computed: {
+      staffStatus () {
+        return this.status + 0
+      },
       dotStyle () {
         return this.activeList.length <= 1 ? 'd-op' : ''
       },
