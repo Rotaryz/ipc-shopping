@@ -33,14 +33,8 @@
     methods: {
       ...mapGetters(['role']),
       _init() {
-        // let role = this.role()
-        // this.currentRole = role
-        // this.currentRole = role
-        // 伪代码
-        this.currentRole = ROLE.STAFF_ID
-        // wx.setStorageSync('merchantId', merchantId)
-        wx.setStorageSync('userType', ROLE.STAFF_ID)
-        console.log(this.currentRole)
+        let role = this.role()
+        this.currentRole = role
       },
       getStaffCode() {
         api.merStaffActiveQrcode().then(res => {

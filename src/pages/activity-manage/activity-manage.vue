@@ -139,21 +139,11 @@
     methods: {
       ...mapGetters(['role']),
       _init() {
-        // let role = this.role()
-        // this.currentRole = role
-        // this.currentRole = role
-        // 伪代码
-        this._test()
-        this.currentRole = ROLE.UNION_ID
-        // wx.setStorageSync('merchantId', merchantId)
-        wx.setStorageSync('userType', ROLE.UNION_ID)
-        console.log(this.currentRole)
+        let role = this.role()
+        this.currentRole = role
       },
       changeTab(flag) {
         this.tabFlag = flag
-      },
-      _test() {
-        wx.setStorageSync('token', ROLE.testToken)
       },
       // 获得活动池的活动
       _rqGetActiveList() {
