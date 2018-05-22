@@ -134,8 +134,6 @@
   import {baseURL, DEVICE_INFO, ERR_OK} from 'api/config'
   import * as wechat from 'common/js/wechat'
   import {mapGetters} from 'vuex'
-  import {ROLE} from 'common/js/contants'
-  import wx from 'wx'
   import api from 'api'
 
   const Baroptions = {

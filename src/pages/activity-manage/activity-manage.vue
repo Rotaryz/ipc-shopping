@@ -73,7 +73,6 @@
   import ActiveCard from 'components/active-card-item/active-card-item'
   import * as wechat from 'common/js/wechat'
   import {mapGetters} from 'vuex'
-  import {ROLE} from 'common/js/contants'
   import wx from 'wx'
   import Toast from '@/components/toast/toast'
 
