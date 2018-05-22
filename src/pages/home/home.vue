@@ -135,6 +135,7 @@
     },
     onShow () {
       this._login()
+      console.log(this.$root.$mp, '++++++++++++++++++++++++')
     },
     beforeMount () {
       // this._init()

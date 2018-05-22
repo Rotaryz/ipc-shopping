@@ -66,7 +66,7 @@
         currentRole: null,
         tabFlag: 0,
         model: null,
-        cardInfoList: new Array(15),
+        cardInfoList: [],
         isAll: false,
         page: 1,
         limit: LIMIT_DEF,
