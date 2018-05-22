@@ -1,8 +1,8 @@
 <template>
   <div class="center">
-    <div class="max-modal" v-for="item in infoTop" v-bind:key="index">
-      <div v-for="items in item" v-bind:key="index1">
-        <div class="max-modal-title" v-if="index1===0">{{types[items.goods_type]}}</div>
+    <div class="max-modal" v-for="(item,index1) in infoTop" v-bind:key="index">
+      <div v-for="(items, index2) in item" v-bind:key="index1">
+        <div class="max-modal-title" v-if="index2===0">{{types[items.goods_type]}}</div>
         <div class="modal-item">
           <div class="modal-item-img">
             <img :src="items.goods_detail.url" />
@@ -23,7 +23,7 @@
         <div class="max-modal-title" v-if="index===0">{{types[item.goods_type]}}</div>
         <div class="modal-item" >
           <div class="modal-item-img">
-            <image src="{{item.goods_detail.url}}"></image>
+            <img :src="item.goods_detail.url" />
             <div class="item-img-txt">{{item.shop_name}}</div>
           </div>
           <div class="modal-item-right">
@@ -40,38 +40,22 @@
         <img v-if="imageUri && !hideFlag" :src="imageUri + '/defaults/ipc-shopping/page/icon-deploy@2x.png'" />
       </div>
     </div>
-    <!--<div class="bottom-order" v-if="infoBottom.length > 0">-->
-    <!--<div class="bot-title">-->
-    <!--<div class="left">{{title}}</div>-->
-    <!--<div class="right">{{price}}-->
-    <!--<div class="yuan">元</div></div>-->
-    <!--</div>-->
-    <!--<div class="bot-number">-->
-    <!--<div class="left">数量</div>-->
-    <!--<div class="right">-->
-    <!--<div class="number-control">-->
-    <!--<div class="desc" @tap.stop="descCount">-</div>-->
-    <!--<div class="number">{{count}}</div>-->
-    <!--<div class="add" @tap.stop="addCount">+</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="bot-total border-top-1px">-->
-    <!--<div class="left">订单总价</div>-->
-    <!--<div class="right">{{price * count}}<div class="yuan">元</div></div>-->
-    <!--</div>-->
-    <!--<div class="bot-order" @tap="postOrder">提交订单</div>-->
-    <!--</div>-->
-    <!--<phone-test @isPhoneOk.user="getSymbol" :industry.sync="industry"></phone-test>-->
-    <toast></toast>
+    <toast ref="toast"></toast>
   </div>
 </template>
 
-<script>
+<script type="text/ecmascript-6">
+  import { baseURL, ERR_OK } from 'api/config'
+  import Toast from '@/components/toast/toast'
+  import api from 'api'
+  import * as wechat from 'common/js/wechat'
   export default {
+    components: {
+      Toast
+    },
     data() {
       return {
-        imageUri: URIS.image,
+        imageUri: baseURL.image,
         types: [
           '代金券',
           '优惠券',
@@ -98,55 +82,51 @@
       await this._getActivityCoupon(options)
       await this.heightFun()
     },
-    async heightFun() {
-      this.height = this.infoBottom.length * 100 + 45 + 'px'
-      this.$apply()
-    },
-    async _getActivity (options) {
-      if (options) {
-        this.promotioId = options.activityId
-      }
-      if (options) {
-        this.employeesId = options.employeesId
-      }
-      let data = {employee_id: this.employeesId}
-      let res = await Merchants.linkDetails(this.promotioId, data)
-      this.loaded()
-      let shop = []
-      let dai = []
-      if (res.error !== ERR_OK) {
-        this.$invoke('toast', 'show', res.message)
-        return
-      }
-      res.data.goods.map(item => {
-        if (item.goods_type === 0) {
-          dai.push(item)
-        } else {
-          shop.push(item)
-        }
-      })
-      this.infoTop.push(shop)
-      this.infoTop.push(dai)
-      this.title = res.data.name
-      this.price = res.data.price
-      this.stock = res.data.stock
-      this.$apply()
-    },
-    async _getActivityCoupon (options) {
-      if (options) {
-        this.promotioId = options.activityId
-      }
-      let res = await Merchants.linkCouponDetails(this.promotioId)
-      this.loaded()
-      if (res.error !== ERR_OK) {
-        this.$invoke('toast', 'show', res.message)
-        return
-      }
-      this.infoBottom.push(...res.data)
-
-      this.$apply()
-    },
     methods: {
+      async heightFun() {
+        this.height = this.infoBottom.length * 100 + 45 + 'px'
+        this.$apply()
+      },
+      async _getActivity (options) {
+        if (options) {
+          this.promotioId = options.activityId
+        }
+        let res = await api.merLinkDetails(this.promotioId)
+        wechat.hideLoading()
+        let shop = []
+        let dai = []
+        if (res.error !== ERR_OK) {
+          this.$refs.toast.show(res.message)
+          return
+        }
+        res.data.goods.map(item => {
+          if (item.goods_type === 0) {
+            dai.push(item)
+          } else {
+            shop.push(item)
+          }
+        })
+        this.infoTop.push(shop)
+        this.infoTop.push(dai)
+        this.title = res.data.name
+        this.price = res.data.price
+        this.stock = res.data.stock
+        this.$apply()
+      },
+      async _getActivityCoupon (options) {
+        if (options) {
+          this.promotioId = options.activityId
+        }
+        let res = await api.merLinkCouponDetails(this.promotioId)
+        wechat.hideLoading()
+        if (res.error !== ERR_OK) {
+          this.$refs.toast.show(res.message)
+          return
+        }
+        this.infoBottom.push(...res.data)
+
+        this.$apply()
+      },
       hideFun () {
         let item = this.infoBottom.length
         this.hideFlag = !this.hideFlag
@@ -156,39 +136,6 @@
           this.height = item * 100 + 45 + 'px'
         }
         console.log(this.hideFlag)
-        this.$apply()
-      },
-      async postOrder () {
-        if (this.stock <= 0) {
-          return
-        }
-        const isAuthorise = await this.isAuthorise()
-        this.loaded()
-        if (!isAuthorise) {
-          this.$invoke('phone-test', 'show', '')
-          return
-        }
-        this.submit('')
-      },
-      descCount() {
-        if (this.count <= 1) {
-          this.count = 1
-        } else {
-          this.count -= 1
-        }
-        this.total = (this.count * this.price).toFixed(2)
-        this.$apply()
-      },
-      addCount() {
-        console.log(1)
-        if (this.stock !== -1) {
-          if (this.count < this.stock) {
-            this.count += 1
-          }
-        } else {
-          this.count += 1
-        }
-        this.total = (this.count * this.price).toFixed(2)
         this.$apply()
       }
     }

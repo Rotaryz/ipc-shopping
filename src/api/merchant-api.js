@@ -148,5 +148,23 @@ export default {
   merCloseOrder(id, data) {
     const url = `api/alliances/merchant/close-order/${id}`
     return request.get(url, data, true)
+  },
+  /**
+   * 异业活动详情
+   * @param data 状态
+   * @returns {Promise.<*>}
+   */
+  merLinkDetails(id) {
+    const url = `/api/alliances/shop-promotion/${id}`
+    return request.get(url)
+  },
+  /**
+   * 异业活动优惠券详情
+   * @param data 状态
+   * @returns {Promise.<*>}
+   */
+  merLinkCouponDetails(id) {
+    const url = `/api/alliances/approved/${id}`
+    return request.get(url)
   }
 }
