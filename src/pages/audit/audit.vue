@@ -171,9 +171,9 @@
           this.couponInfo.scope = `限${res.merchant_data.shop_name}使用`
           this.couponInfo.useLife = `有效期:${res.promotion.start_at}至${res.promotion.end_at}`
           this.couponInfo.image_url = res.promotion.image_url
-          this.couponInfo.appId = res.promotion.appid
-          this.couponInfo.appPath = res.promotion.path
-          this.couponInfo.merchantId = res.promotion.merchant_id
+          this.couponInfo.appId = res.app_id
+          this.couponInfo.appPath = res.path
+          this.couponInfo.merchantId = res.merchant_id
         }
       },
       _rqCheckApply (data, loading) {

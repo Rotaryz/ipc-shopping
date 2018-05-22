@@ -138,9 +138,9 @@
               useLife: `有效期:${item.start_at}至${item.end_at}`,
               image_url: item.promotion.image_url,
               sortType: 10,
-              appId: res.promotion.appid,
-              appPath: res.promotion.path,
-              merchantId: res.promotion.merchant_id
+              appId: res.app_id,
+              appPath: res.path,
+              merchantId: res.merchant_id
             })
           }
         })
