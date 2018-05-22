@@ -180,7 +180,7 @@
       },
       jumpPreview(cardInfo) {
         console.log(cardInfo.id)
-        const url = `/pages/activity-detail/activity-detail?activityId=${cardInfo.id}`
+        const url = `/pages/activity-detai/activity-detai?activityId=${cardInfo.id}`
         console.log(url)
         this.$router.push(url)
       },

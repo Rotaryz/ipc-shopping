@@ -217,8 +217,8 @@
             })
         })
       },
-      jumpPreview() {
-        const url = `/pages/activity-detail/activity-detail?activityId=${this.activeId}`
+      jumpPreview () {
+        const url = `/pages/activity-detai/activity-detai?activityId=${this.activeId}`
         this.$router.push(url)
       },
       // 获取商家活动详情
@@ -249,7 +249,7 @@
                   this.status = 2
                 } else if (res.data.alliance_merchant_apply.check_status * 1 === 1) {
                   this.status = 4
-                  this.couponText = '报名成功'
+                  this.btnText = '报名成功'
                 } else if (res.data.alliance_merchant_apply.check_status * 1 === 3) {
                   this.status = 3
                   this.couponText = '更换优惠卷'
@@ -258,13 +258,13 @@
                     this.status = 5
                   } else if (res.data.alliance_merchant_apply.refund_status * 1 === 1) {
                     this.status = 6
-                    this.couponText = '退款成功'
+                    this.btnText = '退款成功'
                   } else if (res.data.alliance_merchant_apply.refund_status * 1 === 2) {
                     this.status = 7
-                    this.couponText = '退款失败'
+                    this.btnText = '退款失败'
                   } else if (res.data.alliance_merchant_apply.refund_status * 1 === 3) {
                     this.status = 8
-                    this.couponText = '排队中'
+                    this.btnText = '排队中'
                   }
                 }
                 console.log(this.status)

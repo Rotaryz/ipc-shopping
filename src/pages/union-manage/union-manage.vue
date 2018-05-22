@@ -272,7 +272,7 @@
       previewHandler (obj) {
         const activityId = obj.id
         const url = `/pages/activity-detai/activity-detai?activityId=${activityId}`
-        this.$root.push(url)
+        this.$router.push(url)
       },
       // 编辑
       editorHandler (obj) {
