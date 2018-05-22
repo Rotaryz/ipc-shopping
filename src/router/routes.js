@@ -160,6 +160,7 @@ module.exports = [
       navigationBarTitleText: '活动管理',
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTextStyle: 'white',
+      backgroundTextStyle: 'light',
       enablePullDownRefresh: true
     }
   },
@@ -191,6 +192,7 @@ module.exports = [
       navigationBarTitleText: '上传优惠劵',
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTextStyle: 'white',
+      backgroundTextStyle: 'light',
       enablePullDownRefresh: true
     }
   },
@@ -201,6 +203,7 @@ module.exports = [
       navigationBarTitleText: '活动管理',
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTextStyle: 'white',
+      backgroundTextStyle: 'light',
       enablePullDownRefresh: true
     }
   },

@@ -104,7 +104,7 @@
         show: false,
         title: '',
         btnSta: 1,
-        currentCheckId: null
+        currentActiveId: null
       }
     },
     onShow () {
@@ -191,7 +191,7 @@
       },
       _formatReq (flag) {
         // 1通过 2拒绝 3替换 4提醒
-        return {check_status: flag, apply_id: this.currentCheckId}
+        return {check_status: flag, apply_id: this.currentActiveId}
       },
       // 跳C端预览
       _toMpC (json) {

@@ -125,10 +125,11 @@
         noticeList: [], // 公告列表
         currentActiveId: null, // 当前活动id
         entryRole: ROLE.STAFF_ID, // 进入来的角色
-        onShowCount: 0, // 首页on-show的次数
+        // onShowCount: 0, // 首页on-show的次数
         currentToken: null, // 当前token
         status: -1, // 员工状态
-        backCount: 0 // 回退b端的次数
+        backCount: 0, // 回退b端的次数,
+        lastEntryRole: null
       }
     },
     created () {
@@ -138,7 +139,6 @@
       console.log(this.$root.$mp, '++++++++++++++++++++++++')
     },
     beforeMount () {
-      // this._init()
     },
     mounted () {
     },
@@ -147,7 +147,7 @@
       ...mapGetters(['role']),
       // 登录验证
       _login () {
-        wechat.showLoading()
+        // wechat.showLoading()
         this._loginInit()
       },
       // 上传form-id
@@ -203,6 +203,7 @@
       },
       // 检查角色
       _checkRole () {
+        this.lastEntryRole = wx.getStorageSync('userType')
         this.entryRole = ROLE.STAFF_ID
         const entryRole = this.$root.$mp.query.entryRole
         entryRole && (this.entryRole = entryRole)
@@ -233,9 +234,11 @@
         let token = null
         if (this.entryRole === ROLE.STAFF_ID) {
           token = wx.getStorageSync('token')
-          if (!token) {
+          if (!token && this.lastEntryRole === ROLE.STAFF_ID) {
             let url = `/pages/loading/loading`
             this.$router.replace(url)
+          } else {
+            this._backToB()
           }
         } else {
           token = this.$root.$mp.query.token
@@ -300,9 +303,9 @@
       },
       // 项目初始化
       _init () {
-        console.log(this.onShowCount)
-        if (this.onShowCount > 0) return
-        this.onShowCount++
+        // console.log(this.onShowCount)
+        // if (this.onShowCount > 0) return
+        // this.onShowCount++
         let code = wx.getStorageSync('code')
         this.setNavTitle({wx_code: code})
         switch (this.currentRole) {

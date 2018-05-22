@@ -34,7 +34,8 @@
           <div class="text">正在等待分钱</div>
         </div>
         <div class="ec-box">
-          <ec-canvas class="canvas" id="mychart-dom-bar" canvas-id="mychart-bar" :ec="ec"></ec-canvas>
+          <div class="ec-null" v-if="!isOffline">正在等待分钱</div>
+          <ec-canvas class="canvas" id="mychart-dom-bar" canvas-id="mychart-bar" :ec="ec" v-if="isOffline"></ec-canvas>
         </div>
       </div>
     </div>
@@ -187,6 +188,7 @@
         allfShopPage: 1,
         isAllShop: false,
         fristAllShop: false,
+        isOffline: false,
         allStaffList: [], // 商店总榜总榜数据参数
         allStaffTwoList: [],
         fristAllStaff: false
@@ -248,6 +250,7 @@
         api.dataCake(this.activeId).then(res => {
           if (res.error === ERR_OK) {
             this.ec.options.series.data = res.data.detail
+            this.isOffline = res.data.is_offline
           } else {
             this.$refs.toast.show(res.message)
           }
@@ -522,7 +525,19 @@
 
   .ec-box
     height: 207.5px
+    .ec-null
+      line-height: 207.5px
+      text-align: center
+      font-family: $font-family-light
+      font-size: $font-size-small
+      color: #959DBD
     ec-canvas
       width: 400px
       height: 179px
+  .data-null
+    text-align: center
+    font-family: $font-family-light
+    font-size: $font-size-small
+    color: #959DBD
+    line-height: 128.5px
 </style>
