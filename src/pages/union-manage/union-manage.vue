@@ -78,7 +78,7 @@
       }
     },
     onShow () {
-      // this._init()
+      this._init()
     },
     beforeMount () {
     },
