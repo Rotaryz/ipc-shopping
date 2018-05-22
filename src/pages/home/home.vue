@@ -147,7 +147,7 @@
       ...mapGetters(['role']),
       // 登录验证
       _login () {
-        wechat.showLoading()
+        // wechat.showLoading()
         this._loginInit()
       },
       // 上传form-id
