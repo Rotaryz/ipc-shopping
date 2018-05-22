@@ -15,7 +15,7 @@
         <div class="empty-pic" :style="emptyImg"/>
         <div class="empty-txt">暂无活动</div>
       </article>
-      <scroll-view class="scroll" scroll-y v-if="!isEmpty" @scrolltolower="getMoreList">
+      <article class="scroll" v-if="!isEmpty" >
         <div class="ad-box" v-if="showAd">
           <div class="txt">{{adMsg}}</div>
           <div class="close-icon" :style="closeIcon" @tap="closeAd"></div>
@@ -25,7 +25,7 @@
             <union-check :shopItem="item" @lookOverHandler="lookOverHandler"></union-check>
           </li>
         </ul>
-      </scroll-view>
+      </article>
     </section>
   </article>
 </template>
@@ -70,6 +70,9 @@
           this._isAll(json)
           wx.stopPullDownRefresh()
         })
+    },
+    onReachBottom () {
+      this.getMoreList()
     },
     methods: {
       changeTab (flag) {
@@ -243,6 +246,7 @@
       font-family: $font-family-light
       font-size: $font-size-medium
       color: $color-text-95
+      z-index :9
       .t-item
         position: relative
         height: $nav-height

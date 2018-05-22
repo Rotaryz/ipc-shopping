@@ -15,12 +15,12 @@
         <div class="empty-pic" :style="emptyImg"/>
         <div class="empty-txt">暂无活动</div>
       </article>
-      <scroll-view class="scroll" scroll-y v-if="!isEmpty" @scrolltolower="getMoreList">
+      <article class="scroll" v-if="!isEmpty">
         <ul class="box">
-          <li class="box-item" v-for="(item, index) in cardInfoList" :key="item.title+index">
+          <li class="box-item" v-for="(item, index) in cardInfoList" :key="index">
             <union-card
-              :cardInfo="item"
               :useType="0"
+              :cardInfo="item"
               @previewHandler="previewHandler"
               @checkHandler="checkHandler"
               @sortHandler="sortHandler"
@@ -31,7 +31,7 @@
             ></union-card>
           </li>
         </ul>
-      </scroll-view>
+      </article>
     </section>
     <footer class="btn" @tap.stop="toCreateActive(0)">新建</footer>
     <toast ref="toast"></toast>
@@ -66,7 +66,7 @@
         currentRole: null,
         tabFlag: 0,
         model: null,
-        cardInfoList: [],
+        cardInfoList: new Array(15),
         isAll: false,
         page: 1,
         limit: LIMIT_DEF,
@@ -78,7 +78,7 @@
       }
     },
     onShow () {
-      this._init()
+      // this._init()
     },
     beforeMount () {
     },
@@ -97,6 +97,9 @@
           wx.stopPullDownRefresh()
         })
     },
+    onReachBottom () {
+      this.getMoreList()
+    },
     methods: {
       ...mapGetters(['role']),
       // test () {
@@ -109,7 +112,6 @@
       _init () {
         let role = this.role()
         this.currentRole = role
-        // this.test()
         this._resetConfig()
         let data = this._formatReq()
         this._rqGetActiveList(data)
@@ -351,6 +353,7 @@
       height: $nav-height
       padding: 0 40px
       box-sizing: border-box
+      z-index: 9
       layout(row)
       justify-content: space-between
       align-items: center
@@ -392,6 +395,7 @@
         height: 100%
         .box
           box-sizing: border-box
+          padding-bottom: 45px
           .box-item
             padding: 10px 15px
             &:last-child
@@ -404,6 +408,7 @@
       bottom: 0
       normal-button-default()
       border-radius: 3px 3px 0 0
+      z-index: 9
 
 
 </style>

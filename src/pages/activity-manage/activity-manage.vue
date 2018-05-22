@@ -7,7 +7,7 @@
     <div class="manage-list" v-if="tabFlag === 0">
       <div class="list-data" v-if="activeList.length !== 0">
         <div class="box-list" v-for="(iteam, index) in activeList" v-bind:key="index">
-          <active-card :useType="0" @buyHandler="resetBuy" @allocHandler="jumpAllot" @applyHandler="jumpApply"
+          <active-card :useType="0" @buyHandler="resetBuy" @allocHandler="jumpAllot" @applyHandler="jumpApply" @previewHandler="jumpPreview"
                        :cardInfo="iteam"></active-card>
         </div>
       </div>
@@ -20,7 +20,7 @@
     <div class="manage-list" v-if="tabFlag === 2">
       <div class="list-data" v-if="pondList.length !== 0">
         <div class="box-list" v-for="(iteam, index) in pondList" v-bind:key="index">
-          <active-card :useType="0" :cardInfo="iteam" @applyHandler="jumpApply"></active-card>
+          <active-card :useType="0" :cardInfo="iteam" @applyHandler="jumpApply" @previewHandler="jumpPreview"></active-card>
         </div>
       </div>
       <div class="list-null" v-if="pondList.length === 0">
@@ -101,15 +101,7 @@
         curId: 1
       }
     },
-    mounted() {
-      wx.getSystemInfo({
-        success: function(res) {
-          console.log(res.system)
-          this.ios = res.system.search('iOS') !== -1
-          console.log(this.ios, '````````')
-        }
-      })
-    },
+    mounted() {},
     onShow() {
       this._init()
       this.ActiveData.page = 1
@@ -194,6 +186,12 @@
       jumpAllot(cardInfo) {
         console.log(cardInfo.id)
         const url = `/pages/allocation-card/allocation-card?id=${cardInfo.id}`
+        console.log(url)
+        this.$router.push(url)
+      },
+      jumpPreview(cardInfo) {
+        console.log(cardInfo.id)
+        const url = `/pages/activity-detail/activity-detail?activityId=${cardInfo.id}`
         console.log(url)
         this.$router.push(url)
       },

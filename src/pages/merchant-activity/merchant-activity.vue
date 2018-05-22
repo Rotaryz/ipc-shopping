@@ -1,5 +1,5 @@
 <template>
-  <div class="activity-content">
+  <form class="activity-content" @submit="formSubmit" report-submit='true'>
     <div class="activity-detail">
       <img :src="image + '/defaults/ipc-shopping/merchant/pic-activity_banner02@2x.png'" class="detail-bg" v-if="image">
       <div class="detail-money">
@@ -115,7 +115,7 @@
         <div class="box-text">sorry，因为这次报名商家过多，您的活动申请无法通过。您可以申请退款或者申请排队，不退款申请排队的商家，下次活动拥有优先通过的权利！</div>
       </div>
     </div>
-    <footer class="btn" v-if="status === 0" @tap="appSubmit">报名(支付{{activityData.price * addNumber}}元）</footer>
+    <button class="btn" v-if="status === 0" @tap="appSubmit" form-type="submit">报名(支付{{activityData.price * addNumber}}元）</button>
     <footer class="btn" v-if="status === 1 || status === 3" @tap="chooseCoupon">{{couponText}}</footer>
     <footer class="btn no-select" v-if="status === 2 || status === 4 || status > 5">{{btnText}}</footer>
     <footer class="btn-box" v-if="status === 5">
@@ -125,7 +125,7 @@
     <model :show="showTitle" :title="title" @confirm="applyConfirm" @cancel="applyCancel"></model>
     <div class="page-bg"></div>
     <toast ref="toast"></toast>
-  </div>
+  </form>
 </template>
 
 <script type="text/ecmascript-6">
@@ -179,6 +179,11 @@
         // wx.setStorageSync('merchantId', merchantId)
         wx.setStorageSync('userType', ROLE.UNION_ID)
         console.log(this.currentRole)
+      },
+      formSubmit (e) {
+        let formId = e.mp.detail.formId
+        let data = {'form_ids': [formId]}
+        api.homeCollectFormId(data)
       },
       _test() {
         wx.setStorageSync('token', ROLE.testToken)

@@ -65,10 +65,10 @@
     </form>
     <form class="floorAdd" v-if="btnSta === 1 " @submit="formSubmit" report-submit='true'>
       <div class="addEmployee">
-        <button class="change btn-1" @tap="changeCoupon" form-type="submit">
-          <img class="img btn-1" v-if="imageUrl" :src="imageUrl+'/defaults/ipc-shopping/common/icon-union_yhj@2x.png'">
+        <article class="change btn-1" @tap="changeCoupon" form-type="submit">
+          <img class="img" v-if="imageUrl" :src="imageUrl+'/defaults/ipc-shopping/common/icon-union_yhj@2x.png'">
           <div class="txt">更换优惠券</div>
-        </button>
+        </article>
         <button class="refuse btn-1" @tap="refuse" form-type="submit">拒绝</button>
         <button class="pass" @tap="accept" form-type="submit">通过</button>
       </div>
@@ -103,12 +103,13 @@
         couponInfo: {},
         show: false,
         title: '',
-        btnSta: 0,
+        btnSta: 1,
         currentCheckId: null
       }
     },
     onShow () {
-      // this._init()
+      this._getFromMsgTpl()
+      this._init()
     },
     created () {
     },
@@ -119,6 +120,16 @@
     beforeUpdate () {
     },
     methods: {
+      _getFromMsgTpl () {
+        if (this.$root.$mp.appOptions.scene === 1014) {
+          let token = this.$root.$mp.query.token
+          let entryRole = this.$root.$mp.query.entryRole
+          let merchantId = this.$root.$mp.query.merchantId
+          token && wx.setStorageSync('userType', token)
+          entryRole && wx.setStorageSync('token', entryRole)
+          merchantId && wx.setStorageSync('merchantId', merchantId)
+        }
+      },
       _init () {
         this.currentActiveId = this.$root.$mp.query.checkId
         this.btnSta = this.$root.$mp.query.tabFlag * 1
