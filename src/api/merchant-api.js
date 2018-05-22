@@ -146,7 +146,7 @@ export default {
    * @returns {Promise.<*>}
    */
   merCloseOrder(id, data) {
-    const url = `api/alliances/merchant/close-order/${id}`
+    const url = `/api/alliances/merchant/close-order/${id}`
     return request.get(url, data, true)
   },
   /**
