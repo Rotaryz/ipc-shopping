@@ -138,7 +138,6 @@
       console.log(this.$root.$mp, '++++++++++++++++++++++++')
     },
     beforeMount () {
-      // this._init()
     },
     mounted () {
     },
