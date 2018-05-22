@@ -156,14 +156,14 @@
         let data = {'form_ids': [formId]}
         api.homeCollectFormId(data)
       },
-      _test () {
-        this.entryRole = ROLE.UNION_ID
-        this.currentRole = this.entryRole
-        this.$root.$mp.query.token = ROLE.testToken
-        wx.setStorageSync('userType', this.entryRole)
-        wx.setStorageSync('token', ROLE.testToken)
-        wx.setStorageSync('merchantId', 100004)
-      },
+      // _test () {
+      //   this.entryRole = ROLE.UNION_ID
+      //   this.currentRole = this.entryRole
+      //   this.$root.$mp.query.token = ROLE.testToken
+      //   wx.setStorageSync('userType', this.entryRole)
+      //   wx.setStorageSync('token', ROLE.testToken)
+      //   wx.setStorageSync('merchantId', 100004)
+      // },
       // 从消息模板来的数据
       _getFromMsgTpl () {
         if (+this.$root.$mp.appOptions.scene === 1014) {
