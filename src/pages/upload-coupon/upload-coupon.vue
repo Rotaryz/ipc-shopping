@@ -25,7 +25,6 @@
   import Coupon from 'components/coupon-item/coupon-item'
   import * as wechat from 'common/js/wechat'
   import {mapGetters} from 'vuex'
-  import {ROLE} from 'common/js/contants'
   import wx from 'wx'
   import api from 'api'
   import Toast from '@/components/toast/toast'

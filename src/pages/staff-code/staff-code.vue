@@ -9,10 +9,8 @@
 <script type="text/ecmascript-6">
   import {baseURL, ERR_OK} from 'api/config'
   import {mapGetters} from 'vuex'
-  import {ROLE} from 'common/js/contants'
   import api from 'api'
   import * as wechat from 'common/js/wechat'
-  import wx from 'wx'
   import Toast from '@/components/toast/toast'
 
   export default {
