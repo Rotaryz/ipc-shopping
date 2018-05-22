@@ -47,7 +47,7 @@
 
 <script type="text/ecmascript-6">
   import source from 'common/source'
-  import { ERR_OK, baseURL } from 'api/config'
+  import { ERR_OK } from 'api/config'
   import { mapGetters } from 'vuex'
   import wx from 'wx'
   import api from 'api'
