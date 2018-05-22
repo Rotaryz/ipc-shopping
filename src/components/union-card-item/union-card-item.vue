@@ -60,13 +60,13 @@
     shopApplying: 11 // 活动2
   }
 
-  // 卡券信息的默认值-盟主管理
+  // // 卡券信息的默认值-盟主管理
   // const DEFAULT_CARD_INFO_UNION = {
   //   title: '异业联盟卡',
   //   endDate: '2018-01-17到期',
   //   sales: '100', // 销量
   //   chargeOff: '60', // 核销
-  //   statusCode: DEFAULT_CONST_STATUS.apply,
+  //   statusCode: DEFAULT_CONST_STATUS.applying,
   //   statusStr: '已上架'
   // }
   //
