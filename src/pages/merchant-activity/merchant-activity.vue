@@ -303,7 +303,7 @@
               signType,
               paySign,
               'success': function (res) {
-                this.$router.back(1)
+                this.$router.go(-1)
               },
               'fail': function (res) {
                 // 支付失败关闭订单
