@@ -159,6 +159,7 @@
       }
     },
     onShow() {
+      this._getFromMsgTpl()
       this.addNumber = 1
       this.acitiveId = this.$root.$mp.query.id
       console.log(this.acitiveId, '```````````````')
@@ -169,24 +170,24 @@
     },
     methods: {
       ...mapGetters(['role']),
+      _getFromMsgTpl () {
+        if (this.$root.$mp.appOptions.scene === 1014) {
+          let token = this.$root.$mp.query.token
+          let entryRole = this.$root.$mp.query.entryRole
+          let merchantId = this.$root.$mp.query.merchantId
+          token && wx.setStorageSync('userType', token)
+          entryRole && wx.setStorageSync('token', entryRole)
+          merchantId && wx.setStorageSync('merchantId', merchantId)
+        }
+      },
       _init() {
-        // let role = this.role()
-        // this.currentRole = role
-        // this.currentRole = role
-        // 伪代码
-        this.currentRole = ROLE.UNION_ID
-        this._test()
-        // wx.setStorageSync('merchantId', merchantId)
-        wx.setStorageSync('userType', ROLE.UNION_ID)
-        console.log(this.currentRole)
+        let role = this.role()
+        this.currentRole = role
       },
       formSubmit (e) {
         let formId = e.mp.detail.formId
         let data = {'form_ids': [formId]}
         api.homeCollectFormId(data)
-      },
-      _test() {
-        wx.setStorageSync('token', ROLE.testToken)
       },
       // 显示规则
       showRules() {
