@@ -125,7 +125,7 @@
         noticeList: [], // 公告列表
         currentActiveId: null, // 当前活动id
         entryRole: ROLE.STAFF_ID, // 进入来的角色
-        onShowCount: 0, // 首页on-show的次数
+        // onShowCount: 0, // 首页on-show的次数
         currentToken: null, // 当前token
         status: -1, // 员工状态
         backCount: 0, // 回退b端的次数,
@@ -303,9 +303,9 @@
       },
       // 项目初始化
       _init () {
-        console.log(this.onShowCount)
-        if (this.onShowCount > 0) return
-        this.onShowCount++
+        // console.log(this.onShowCount)
+        // if (this.onShowCount > 0) return
+        // this.onShowCount++
         let code = wx.getStorageSync('code')
         this.setNavTitle({wx_code: code})
         switch (this.currentRole) {
