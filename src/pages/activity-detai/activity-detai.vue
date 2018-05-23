@@ -1,7 +1,7 @@
 <template>
   <div class="center">
-    <div class="max-modal" v-for="(item,index1) in infoTop" v-bind:key="index">
-      <div v-for="(items, index2) in item" v-bind:key="index1">
+    <div class="max-modal" v-for="(item,index1) in infoTop" v-bind:key="index1">
+      <div v-for="(items, index2) in item" v-bind:key="index2">
         <div class="max-modal-title" v-if="index2===0">{{types[items.goods_type]}}</div>
         <div class="modal-item">
           <div class="modal-item-img">
@@ -16,7 +16,6 @@
           </div>
         </div>
       </div>
-
     </div>
     <div v-if="infoBottom.length > 0" class="max-modal max-modal-y" :class="{hide: hideFlag}" v-bind:style="{height: height}">
       <block v-for="item in infoBottom" v-bind:key="index">
@@ -78,6 +77,8 @@
       }
     },
     async onShow (options) {
+      // let id = this.$root.$mp.
+      console.log(options)
       await this._getActivity(options)
       await this._getActivityCoupon(options)
       await this.heightFun()
@@ -92,7 +93,9 @@
           this.promotioId = options.activityId
         }
         let res = await api.merLinkDetails(this.promotioId)
+        console.log(res)
         wechat.hideLoading()
+        this.infoTop = []
         let shop = []
         let dai = []
         if (res.error !== ERR_OK) {

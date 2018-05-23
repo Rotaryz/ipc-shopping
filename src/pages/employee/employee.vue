@@ -20,7 +20,7 @@
         <div class="await-list-item" v-for="item in acceptList" :key="index">
           <div class="await-list-left">
             <img class="left-image" src=""/>
-            <div class="left-name">{{item.name}}</div>
+            <div class="left-name">{{item.nickname}}</div>
           </div>
           <div class="await-list-right">
             <label class="right-del" v-on:click="del(item,index)">删除</label>
