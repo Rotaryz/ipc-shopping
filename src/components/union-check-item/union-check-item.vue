@@ -79,9 +79,9 @@
           case this.constObj.PASS :
             return `已通过`
           case this.constObj.REFUSE :
-            return `已退款`
-          case this.constObj.RANK :
-            return `排队中`
+            if (this.shopItem.refundStatus === 0) return `退款中`
+            if (this.shopItem.refundStatus === 1) return `退款成功`
+            if (this.shopItem.refundStatus === 2) return `排队中`
         }
       },
       shopImg () {

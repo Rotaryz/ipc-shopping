@@ -188,7 +188,9 @@
             location: item.merchant_data.address,
             sales: item.count,
             money: item.total,
-            statusCode: this.tabFlag
+            statusCode: this.tabFlag,
+            checkStatus: item.check_status * 1,
+            refundStatus: item.refund_status
           })
         })
         return arr
