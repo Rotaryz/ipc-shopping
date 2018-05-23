@@ -37,14 +37,15 @@
   //   location: '广州市白云区黄石路万达广场',
   //   sales: 60,
   //   money: 6000,
-  //   statusCode: 0
+  //   statusCode: 4
   // }
 
   const CHECK_CONST_OBJ = {
     APPLYING: 0,
     CHECKING: 1,
     PASS: 2,
-    REFUSE: 3
+    REFUSE: 3,
+    RANK: 4
   }
 
   export default {
@@ -78,7 +79,9 @@
           case this.constObj.PASS :
             return `已通过`
           case this.constObj.REFUSE :
-            return `已退款` || `排队中`
+            return `已退款`
+          case this.constObj.RANK :
+            return `排队中`
         }
       },
       shopImg () {
@@ -161,8 +164,15 @@
                 layout(row)
                 align-items: flex-end
                 .m-icon
+                  display: inline-block
                   font-family: $font-family-light
                   font-size: $font-size-small-s
+                  height: $font-size-small-s
+                  margin-right: 2px
+                .m-num
+                  font-family: $font-family-light
+                  font-size: $font-size-small
+                  height: $font-size-small
       .w-bottom
         layout(row)
         flex: 1
