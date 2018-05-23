@@ -5,7 +5,7 @@
         <section class="s-b-box">
           <section class="bg-box">
           </section>
-          <swiper class="home-swiper" @change="swiperChange" :current="sliderCurrent">
+          <swiper class="home-swiper" @change="swiperChange" :current="sliderCurrent" previous-margin="10px" next-margin="10px">
             <block v-for="(item, index) in activeList" :key="index+item.title">
               <swiper-item class="home-swiper-item">
                 <h-slider-item :item="item" @lookTotalHandler="lookTotalHandler"></h-slider-item>
