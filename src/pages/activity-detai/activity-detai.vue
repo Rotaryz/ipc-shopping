@@ -135,7 +135,7 @@
   @import '../../common/stylus/variable'
   @import '../../common/stylus/mixin'
   .center
-    padding-bottom: 238px
+    // padding-bottom: 238px
     .max-modal.hide
       transition: all .5s
     .max-modal-y
