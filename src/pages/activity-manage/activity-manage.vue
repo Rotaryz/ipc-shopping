@@ -237,7 +237,8 @@
             verification_power: item.alliance_merchant_report.verification_power,
             status: status,
             statusStr: statusStr,
-            id: item.activity_alliance_id
+            id: item.activity_alliance_id,
+            apply_price: item.apply_price
           })
         })
         return arr

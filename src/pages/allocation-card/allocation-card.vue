@@ -16,7 +16,7 @@
         <img :src="image + '/defaults/ipc-shopping/aliance/icon-union_j@2x.png'" v-if="image" class="box-img">
       </div>
     </div>
-    <div class="merchant-box" @tap="showBox(item, 'shop')" v-for="(item, index) in staffList" v-bind:key="index">
+    <div class="merchant-box" @tap="showBox(item, 'shop')" v-for="(item, index) in merchantList" v-bind:key="index">
       <div class="box-left">
         <img :src="item.logo_image" class="box-img">
         <div class="text">{{item.shop_name}}</div>
