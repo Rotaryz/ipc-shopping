@@ -194,7 +194,7 @@
       },
       // 检查角色
       _checkRole () {
-        this.lastEntryRole = wx.getStorageSync('userType')
+        this.lastEntryRole = wx.getStorageSync('userType') || ROLE.STAFF_ID
         this.entryRole = this.lastEntryRole
         const entryRole = this.$root.$mp.query.entryRole
         entryRole && (this.entryRole = entryRole)
