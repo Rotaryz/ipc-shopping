@@ -230,7 +230,7 @@
           if (!token && this.lastEntryRole === ROLE.STAFF_ID) {
             let url = `/pages/loading/loading`
             this.$router.replace(url)
-          } else {
+          } else if (!token) {
             this._backToB()
           }
         } else {
