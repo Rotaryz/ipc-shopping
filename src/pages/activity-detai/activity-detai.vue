@@ -77,7 +77,8 @@
       }
     },
     async onShow (options) {
-      // let id = this.$root.$mp.
+      let id = this.$root
+      console.log(id)
       console.log(options)
       await this._getActivity(options)
       await this._getActivityCoupon(options)
@@ -120,6 +121,7 @@
         if (options) {
           this.promotioId = options.activityId
         }
+        this.infoBottom = []
         let res = await api.merLinkCouponDetails(this.promotioId)
         wechat.hideLoading()
         if (res.error !== ERR_OK) {
