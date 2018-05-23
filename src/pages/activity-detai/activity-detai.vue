@@ -173,9 +173,10 @@
           height: 70px
           width: 70px
           border-1px($color-row-line-f0, 2px)
-          image
+          img
             width: 100%
             height: 100%
+            border-radius: 2px
           .item-img-txt
             width:100%
             height:18px
@@ -230,7 +231,7 @@
         background-color: $color-background-ff
         cut-off-rule-top(0,0,$color-row-line-f0)
         transition: all .5s
-        image
+        img
           width: 12px
           height: 7px
           border-radius: 2px
