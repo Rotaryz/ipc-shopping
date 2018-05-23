@@ -143,18 +143,18 @@
     .max-modal
       transition: all .5s
       overflow: hidden
-      cut-off-rule-bottom(0,0,$color-col-line)
-      background-color: $color-white
+      cut-off-rule-bottom(0,0,$color-row-line-f0)
+      background-color: $color-background-ff
       margin-top: 10px
       padding-left: 10px
-      cut-off-rule-top(0,0,$color-col-line)
+      cut-off-rule-top(0,0,$color-row-line-f0)
       .max-modal-title
         height: 45px
         display: flex
         align-items: center
         font-family: $font-family-meddle
         font-size: $font-size-medium
-        color: $color-text
+        color: $color-text-46
         padding-left: 8px
         vertical-line()
       .modal-item
@@ -162,11 +162,11 @@
         display: flex
         flex-direction: row
         align-items: center
-        cut-off-rule-top(0,0,$color-col-line)
+        cut-off-rule-top(0,0,$color-row-line-f0)
         .modal-item-img
           height: 70px
           width: 70px
-          border-1px($color-col-line, 2px)
+          border-1px($color-row-line-f0, 2px)
           image
             width: 100%
             height: 100%
@@ -177,7 +177,7 @@
             text-align:center
             font-family: $font-family-light
             font-size: $font-size-small-s
-            color:$color-white
+            color: $color-background-ff
             background: rgba(0,0,0,0.5)
             position:absolute
             left:0
@@ -197,17 +197,17 @@
             .name
               font-family: $font-family-meddle
               font-size: $font-size-medium
-              color: $color-text
+              color: $color-text-46
               line-height: 18px
             .number
               font-family: $font-family-meddle
               font-size: $font-size-small
-              color: $color-text
+              color: $color-text-46
               line-height: 18px
           .right-bottom
             font-family: $font-family-light
             font-size: $font-size-medium
-            color: $color-text
+            color: $color-text-46
             letter-spacing: 0
             line-height: 18px
       .max-modal-hide
@@ -221,99 +221,11 @@
         width: 100%
         bottom: 1px
         z-index: 2
-        background-color: $color-white
-        cut-off-rule-top(0,0,$color-col-line)
+        background-color: $color-background-ff
+        cut-off-rule-top(0,0,$color-row-line-f0)
         transition: all .5s
         image
           width: 12px
           height: 7px
           border-radius: 2px
-    .bottom-order
-      height: 228px
-      display: flex
-      flex-direction: column
-      position: fixed
-      bottom: 0px
-      z-index: 2
-      background-color: $color-background
-      width: 100vw
-      .bot-title,.bot-number,.bot-total
-        background-color: $color-white
-        height: 40px
-        padding: 0px 10px
-        display: flex
-        align-items: center
-        justify-content space-between
-        .right
-          display: flex
-          flex-direction: row
-          align-items: flex-end
-          .yuan
-            font-family: $font-family-regular
-            font-size: $font-size-small-s
-            margin-bottom: 2px
-            color: $color-text
-        .left
-          font-family: $font-family-light
-          font-size: $font-size-medium
-          color: $color-text
-      .bot-title
-        cut-off-rule-top(0,0,$color-col-line)
-        .right
-          font-family: $font-family-regular
-          font-size: $font-size-medium
-          color: $color-text
-      .bot-number
-        cut-off-rule-top(0,0,$color-col-line)
-        .number-control
-          display: flex
-          height: 22px
-          .desc
-            width: 22px
-            height: 22px
-            text-align: center
-            line-height: 22px
-            border-1px($color-col-line, 2px)
-            color: $color-button
-          .number
-            width: 48px
-            height: 22px
-            margin: 0 2.5px
-            text-align: center
-            line-height: 22px
-            border-1px($color-col-line, 2px)
-            color: $color-text
-          .add
-            width: 22px
-            height: 22px
-            text-align: center
-            line-height: 22px
-            border-radius: 2px
-            border-1px($color-button, 2px)
-            color: $color-white
-            background-color: $color-button
-      .bot-total
-        cut-off-rule-top(0,0,$color-col-line)
-        .right
-          font-family: $font-family-meddle
-          font-size: $font-size-large
-          color: $color-ktv-theme
-          .yuan
-            font-family: $font-family-regular
-            font-size: $font-size-small-s
-            margin-bottom: 2px
-            color: $color-ktv-theme
-      .bot-order
-        height: 45px
-        background: $color-main
-        line-height: 45px
-        text-align: center
-        position: absolute
-        width: 100%
-        bottom: 0px
-        color: $color-white
-        font-family: $font-family-regular
-        font-size: $font-size-medium
-        letter-spacing: 0.56px
-
 </style>
