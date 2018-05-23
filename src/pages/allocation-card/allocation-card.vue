@@ -3,7 +3,7 @@
     <div class="box-top">
       <active-card :useType="1" @previewHandler="jumpPreview" :cardInfo="info"></active-card>
     </div>
-    <div class="merchant-box" @tap="showBox(item, 'shop')" v-for="(item, index) in merchantList" v-bind:key="index">
+    <div class="merchant-box" v-for="(item, index) in merchantList" v-bind:key="index">
       <div class="box-left">
         <img :src="item.logo_image" class="box-img">
         <div class="text">{{item.shop_name}}</div>
@@ -193,6 +193,7 @@
         } else {
           this.upShopId = 0
         }
+        console.log(this.dataId.activity_alliance_id, this.upCustomerId, number, this.upShopId, '````````````````````')
         api.merAllotStock(this.dataId.activity_alliance_id, this.upCustomerId, number, this.upShopId).then(res => {
           console.log(res)
           if (res.error === ERR_OK) {
