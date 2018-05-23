@@ -147,7 +147,7 @@ fill-box()
   left: 0
 
 // 竖线
-vertical-line()
+vertical-line($line-color = $color-assist-34)
   position: relative
   &:before
     content: ''
@@ -156,7 +156,7 @@ vertical-line()
     height: 14px
     width: 2px
     box-sizing: border-box
-    background-color: $color-assist-34
+    background-color: $line-color
     top: 50%
     transform: translateY(-50%)
 
