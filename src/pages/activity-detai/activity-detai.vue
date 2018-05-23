@@ -151,12 +151,12 @@
       overflow: hidden
       cut-off-rule-bottom(0,0,$color-row-line-f0)
       background-color: $color-background-ff
-      margin-top: 10px
+      margin-bottom: 10px
       padding-left: 10px
       cut-off-rule-top-s(0,0,$color-row-line-f0)
       .max-modal-title
         height: 45px
-        display: flexK
+        display: flex
         align-items: center
         font-family: $font-family-meddle
         font-size: $font-size-medium
