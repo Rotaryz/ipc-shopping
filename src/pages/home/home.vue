@@ -127,8 +127,7 @@
         entryRole: ROLE.STAFF_ID, // 进入来的角色
         // onShowCount: 0, // 首页on-show的次数
         currentToken: null, // 当前token
-        status: 0, // 员工状态
-        isShow: false, // 是否显示员工状态栏
+        status: -1, // 员工状态
         backCount: 0, // 回退b端的次数,
         lastEntryRole: null
       }
@@ -208,6 +207,7 @@
       _backToB () {
         if (this.backCount > 0) return
         this.backCount++
+        console.log('!!!!!!!!!!!!!!!!!!')
         wechat.showLoading()
         let appId = SHOP_HELPER.APPID
         let path = SHOP_HELPER.PATH
