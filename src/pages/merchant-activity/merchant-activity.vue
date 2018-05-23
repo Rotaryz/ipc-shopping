@@ -132,16 +132,16 @@
 
 <script type="text/ecmascript-6">
   import api from 'api'
-  import {baseURL, ERR_OK} from 'api/config'
+  import { baseURL, ERR_OK } from 'api/config'
   import Coupon from 'components/coupon-item/coupon-item'
   import model from 'components/confirm-msg/confirm-msg'
   import * as wechat from 'common/js/wechat'
-  import {mapGetters} from 'vuex'
+  import { mapGetters } from 'vuex'
   import wx from 'wx'
   import Toast from '@/components/toast/toast'
 
   export default {
-    data() {
+    data () {
       return {
         image: baseURL.image,
         showRule: false,
@@ -160,19 +160,19 @@
         allotMoney: null
       }
     },
-    onShow() {
+    onShow () {
       this._getFromMsgTpl()
       this.addNumber = 1
       this.activeId = this.$root.$mp.query.id
       console.log(this.activeId, '```````````````')
       this._rqManageDetails(this.activeId)
     },
-    beforeMount() {
+    beforeMount () {
       this._init()
     },
     methods: {
       ...mapGetters(['role']),
-      _getFromMsgTpl() {
+      _getFromMsgTpl () {
         if (this.$root.$mp.appOptions.scene === 1014) {
           let token = this.$root.$mp.query.token
           let entryRole = this.$root.$mp.query.entryRole
@@ -182,11 +182,11 @@
           merchantId && wx.setStorageSync('merchantId', merchantId)
         }
       },
-      _init() {
+      _init () {
         let role = this.role()
         this.currentRole = role
       },
-      _getAllotMoney() {
+      _getAllotMoney () {
         api.dataAllotMoney(this.activeId).then(res => {
           console.log(res)
           if (res.error === ERR_OK) {
@@ -197,21 +197,21 @@
           wechat.hideLoading()
         })
       },
-      formSubmit(e) {
+      formSubmit (e) {
         let formId = e.mp.detail.formId
         let data = {'form_ids': [formId]}
         api.homeCollectFormId(data)
       },
       // 显示规则
-      showRules() {
+      showRules () {
         this.showRule = !this.showRule
       },
-      jumpPreview() {
+      jumpPreview () {
         const url = `/pages/activity-detai/activity-detai?activityId=${this.activeId}`
         this.$router.push(url)
       },
       // 获取商家活动详情
-      _rqManageDetails(id) {
+      _rqManageDetails (id) {
         api.merManageDetails(id).then(res => {
           console.log(res.data)
           if (res.error === ERR_OK) {
@@ -265,16 +265,16 @@
           wechat.hideLoading()
         })
       },
-      subtract() {
+      subtract () {
         if (parseInt(this.addNumber) <= 1) {
           return
         }
         this.addNumber--
       },
-      add() {
+      add () {
         this.addNumber++
       },
-      appSubmit() {
+      appSubmit () {
         // 下单调取支付
         if (!this.addNumber) return
         if (this.applyLock) return
@@ -282,7 +282,7 @@
         setTimeout(() => {
           this.applyLock = false
         }, 3000)
-        wx.login().then(res => {
+        wechat.login().then(res => {
           let code = res.code
           // 调起支付
           api.merApplyPay(this.addNumber, this.activityData.id, code).then(res => {
@@ -315,27 +315,27 @@
           })
         })
       },
-      chooseCoupon() {
+      chooseCoupon () {
         let activityId = this.applyId
         let selectId = this.coupon.id
         let url = `/pages/upload-coupon/upload-coupon?activityId=${activityId}&selectId=${selectId}`
         this.$router.push(url)
         console.log(url)
       },
-      applyRefund() {
+      applyRefund () {
         this.showTitle = true
         this.title = '确定退款？'
         this.modelNumber = 1
       },
-      applyLine() {
+      applyLine () {
         this.showTitle = true
         this.title = '确定排队？'
         this.modelNumber = 2
       },
-      applyCancel() {
+      applyCancel () {
         this.showTitle = false
       },
-      applyConfirm() {
+      applyConfirm () {
         if (this.modelNumber === 1) {
           // 报名申请退款
           api.merRefund().then(res => {
