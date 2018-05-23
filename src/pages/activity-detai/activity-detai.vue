@@ -144,10 +144,9 @@
     }
   }
 </script>
-
-<style lang="stylus">
-  @import "../../common/stylus/variable.styl"
-  @import "../../common/stylus/mixin.styl"
+<style scoped lang="stylus" rel="stylesheet/stylus">
+  @import '../../common/stylus/variable'
+  @import '../../common/stylus/mixin'
   .center
     padding-bottom: 238px
     .max-modal.hide
