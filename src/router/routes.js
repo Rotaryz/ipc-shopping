@@ -64,7 +64,8 @@ module.exports = [
     config: {
       navigationBarTitleText: '员工管理',
       onReachBottomDistance: 50,
-      backgroundColor: '#f6f7fa',
+      backgroundTextStyle: 'light',
+      backgroundColor: '#1A1D3D',
       enablePullDownRefresh: true
     }
   },
@@ -118,6 +119,8 @@ module.exports = [
       navigationBarTitleText: '活动数据',
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTextStyle: 'white',
+      backgroundTextStyle: 'light',
+      backgroundColor: '#1A1D3D',
       enablePullDownRefresh: true,
       // 这儿添加要用的小程序组件
       usingComponents: {
@@ -132,6 +135,8 @@ module.exports = [
       navigationBarTitleText: '活动数据',
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTextStyle: 'white',
+      backgroundTextStyle: 'light',
+      backgroundColor: '#1A1D3D',
       enablePullDownRefresh: true,
       // 这儿添加要用的小程序组件
       usingComponents: {
@@ -146,6 +151,8 @@ module.exports = [
       navigationBarTitleText: '活动数据',
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTextStyle: 'white',
+      backgroundTextStyle: 'light',
+      backgroundColor: '#1A1D3D',
       enablePullDownRefresh: true,
       // 这儿添加要用的小程序组件
       usingComponents: {
@@ -161,6 +168,7 @@ module.exports = [
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTextStyle: 'white',
       backgroundTextStyle: 'light',
+      backgroundColor: '#1A1D3D',
       enablePullDownRefresh: true
     }
   },
@@ -195,6 +203,7 @@ module.exports = [
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTextStyle: 'white',
       backgroundTextStyle: 'light',
+      backgroundColor: '#1A1D3D',
       enablePullDownRefresh: true
     }
   },
@@ -206,6 +215,7 @@ module.exports = [
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTextStyle: 'white',
       backgroundTextStyle: 'light',
+      backgroundColor: '#1A1D3D',
       enablePullDownRefresh: true
     }
   },
