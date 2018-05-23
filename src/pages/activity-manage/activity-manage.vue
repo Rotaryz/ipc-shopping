@@ -271,34 +271,37 @@
         setTimeout(() => {
           this.applyLock = false
         }, 3000)
-        const code = wx.getStorageSync('code')
-        api.merApplyPay(this.upNumber, this.curId, code).then(res => {
-          console.log(res.data)
-          if (res.error === ERR_OK) {
-            let orderId = res.data.order_id
-            const {timestamp, nonceStr, signType, paySign} = res.data.pay_info
-            wx.requestPayment({
-              timeStamp: timestamp,
-              nonceStr,
-              package: res.data.pay_info.package,
-              signType,
-              paySign,
-              'success': function (res) {
-                this.$refs.toast.show('复购成功')
-              },
-              'fail': function (res) {
-                // 支付失败关闭订单
-                console.log(res, '支付失败关闭订单``````')
-                api.merCloseOrder(orderId).then(res => {
-                  console.log(res)
-                })
-                wechat.hideLoading()
-              }
-            })
-          } else {
-            this.$refs.toast.show(res.message)
-          }
-          wechat.hideLoading()
+        wx.login().then(res => {
+          let code = res.code
+          api.merApplyPay(this.upNumber, this.curId, code).then(res => {
+            console.log(res.data)
+            if (res.error === ERR_OK) {
+              let orderId = res.data.order_id
+              const {timestamp, nonceStr, signType, paySign} = res.data.pay_info
+              wx.requestPayment({
+                timeStamp: timestamp,
+                nonceStr,
+                package: res.data.pay_info.package,
+                signType,
+                paySign,
+                'success': function (res) {
+                  this.$refs.toast.show('复购成功')
+                },
+                'fail': function (res) {
+                  // 支付失败关闭订单
+                  console.log(res, '支付失败关闭订单``````')
+                  api.merCloseOrder(orderId).then(res => {
+                    console.log(res)
+                  })
+                  wechat.hideLoading()
+                }
+              })
+            } else {
+              this.$refs.toast.show(res.message)
+            }
+            wechat.hideLoading()
+          })
+          // 调起支付
         })
       },
       resetBuy (cardInfo) {
