@@ -9,18 +9,18 @@ export default {
    * @param data
    * @returns {Promise.<*>}
    */
-  empGetEmployeeList() {
+  empGetEmployeeList(data, loads) {
     const url = `/api/alliances/employee/wait-index`
-    return request.get(url)
+    return request.get(url, data, loads)
   },
   /**
    * 获取接受员工列表 accept
    * @param data
    * @returns {Promise.<*>}
    */
-  empGetAcceptList(data) {
+  empGetAcceptList(data, loads) {
     const url = `/api/alliances/employee/employee-message`
-    return request.get(url, data)
+    return request.get(url, data, loads)
   },
   /**
    * 审核员工 accept

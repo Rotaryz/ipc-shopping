@@ -88,7 +88,7 @@
         width: 230px
         height: 230px
         margin: 20px auto
-        border: 1px solid $color-text-a4
+        // border: 1px solid $color-text-a4
         position: relative
         .max-img
           position: absolute
