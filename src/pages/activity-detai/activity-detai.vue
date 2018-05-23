@@ -5,7 +5,8 @@
         <div class="max-modal-title" v-if="index2===0">{{types[items.goods_type]}}</div>
         <div class="modal-item">
           <div class="modal-item-img">
-            <img :src="items.goods_detail.url" />
+            <img v-if="index1 === 0" :src="imageUri + '/defaults/ipc-shopping/page/shop.png'" /> <!-- 商品 -->
+            <img v-else :src="imageUri + '/defaults/ipc-shopping/page/dai.png'" /> <!-- 代金券 -->
           </div>
           <div class="modal-item-right">
             <div class="right-top">
