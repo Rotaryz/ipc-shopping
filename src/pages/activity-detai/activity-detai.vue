@@ -76,25 +76,18 @@
         heightItem: 100
       }
     },
-    async onShow (options) {
-      let id = this.$root
-      console.log(id)
-      console.log(options)
-      await this._getActivity(options)
-      await this._getActivityCoupon(options)
+    async onShow () {
+      this.promotioId = this.$root.$mp.query.activityId
+      await this._getActivity()
+      await this._getActivityCoupon()
       await this.heightFun()
     },
     methods: {
       async heightFun() {
         this.height = this.infoBottom.length * 100 + 45 + 'px'
-        this.$apply()
       },
-      async _getActivity (options) {
-        if (options) {
-          this.promotioId = options.activityId
-        }
+      async _getActivity () {
         let res = await api.merLinkDetails(this.promotioId)
-        console.log(res)
         wechat.hideLoading()
         this.infoTop = []
         let shop = []
@@ -115,12 +108,8 @@
         this.title = res.data.name
         this.price = res.data.price
         this.stock = res.data.stock
-        this.$apply()
       },
-      async _getActivityCoupon (options) {
-        if (options) {
-          this.promotioId = options.activityId
-        }
+      async _getActivityCoupon () {
         this.infoBottom = []
         let res = await api.merLinkCouponDetails(this.promotioId)
         wechat.hideLoading()
@@ -129,8 +118,6 @@
           return
         }
         this.infoBottom.push(...res.data)
-
-        this.$apply()
       },
       hideFun () {
         let item = this.infoBottom.length
@@ -140,8 +127,6 @@
         } else {
           this.height = item * 100 + 45 + 'px'
         }
-        console.log(this.hideFlag)
-        this.$apply()
       }
     }
   }
