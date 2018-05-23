@@ -223,10 +223,10 @@
               }
             }
           }
-          if (item.status === 2) {
+          if (item.activity_alliance.status === 2) {
             status = 10
             statusStr = '已上架'
-          } else if (item.status === 3) {
+          } else if (item.activity_alliance.status === 3) {
             status = 11
             statusStr = '已下架'
           }
