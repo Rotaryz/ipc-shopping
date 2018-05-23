@@ -147,7 +147,7 @@
       background-color: $color-background-ff
       margin-top: 10px
       padding-left: 10px
-      cut-off-rule-top(0,0,$color-row-line-f0)
+      cut-off-rule-top-s(0,0,$color-row-line-f0)
       .max-modal-title
         height: 45px
         display: flex
