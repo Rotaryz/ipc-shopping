@@ -5,8 +5,8 @@
         <div class="max-modal-title" v-if="index2===0">{{types[items.goods_type]}}</div>
         <div class="modal-item">
           <div class="modal-item-img">
-            <img v-if="index1 === 0" :src="imageUri + '/defaults/ipc-shopping/page/shop.png'" /> <!-- 商品 -->
-            <img v-else :src="imageUri + '/defaults/ipc-shopping/page/dai.png'" /> <!-- 代金券 -->
+            <img v-if="index1 === 0" :src="imageUri + '/defaults/ipc-shopping/page/shop.png'"/> <!-- 商品 -->
+            <img v-else :src="imageUri + '/defaults/ipc-shopping/page/dai.png'"/> <!-- 代金券 -->
           </div>
           <div class="modal-item-right">
             <div class="right-top">
@@ -21,9 +21,9 @@
     <div v-if="infoBottom.length > 0" class="max-modal max-modal-y" :class="{hide: hideFlag}" v-bind:style="{height: height}">
       <block v-for="item in infoBottom" v-bind:key="index">
         <div class="max-modal-title" v-if="index===0">{{types[item.goods_type]}}</div>
-        <div class="modal-item" >
+        <div class="modal-item">
           <div class="modal-item-img">
-            <img :src="item.goods_detail.url" />
+            <img :src="item.goods_detail.url"/>
             <div class="item-img-txt">{{item.shop_name}}</div>
           </div>
           <div class="modal-item-right">
@@ -36,8 +36,8 @@
         </div>
       </block>
       <div class="max-modal-hide" @tap.stop="hideFun">
-        <img v-if="imageUri && hideFlag" :src="imageUri + '/defaults/ipc-shopping/page/icon-packup@2x.png'" />
-        <img v-if="imageUri && !hideFlag" :src="imageUri + '/defaults/ipc-shopping/page/icon-deploy@2x.png'" />
+        <img v-if="imageUri && hideFlag" :src="imageUri + '/defaults/ipc-shopping/page/icon-packup@2x.png'"/>
+        <img v-if="imageUri && !hideFlag" :src="imageUri + '/defaults/ipc-shopping/page/icon-deploy@2x.png'"/>
       </div>
     </div>
     <toast ref="toast"></toast>
@@ -49,11 +49,12 @@
   import Toast from '@/components/toast/toast'
   import api from 'api'
   import * as wechat from 'common/js/wechat'
+
   export default {
     components: {
       Toast
     },
-    data() {
+    data () {
       return {
         imageUri: baseURL.image,
         types: [
@@ -85,7 +86,7 @@
       await this.heightFun()
     },
     methods: {
-      async heightFun() {
+      async heightFun () {
         this.height = this.infoBottom.length * 100 + 45 + 'px'
       },
       async _getActivity (id) {
@@ -141,6 +142,7 @@
     position: relative
     padding-top: 10px
     min-height: 100vh
+    box-sizing: border-box
     background-color: $color-background-f9
     overflow: hidden
     .max-modal.hide
@@ -150,14 +152,14 @@
     .max-modal
       transition: all .5s
       overflow: hidden
-      cut-off-rule-bottom(0,0,$color-row-line-f0)
+      cut-off-rule-bottom(0, 0, $color-row-line-f0)
       background-color: $color-background-ff
-      margin-top: 10px
+      margin-bottom: 10px
       padding-left: 10px
-      cut-off-rule-top-s(0,0,$color-row-line-f0)
+      cut-off-rule-top-s(0, 0, $color-row-line-f0)
       .max-modal-title
         height: 45px
-        display: flexK
+        display: flex
         align-items: center
         font-family: $font-family-meddle
         font-size: $font-size-medium
@@ -169,7 +171,7 @@
         display: flex
         flex-direction: row
         align-items: center
-        cut-off-rule-top(0,0,$color-row-line-f0)
+        cut-off-rule-top(0, 0, $color-row-line-f0)
         .modal-item-img
           height: 70px
           width: 70px
@@ -179,17 +181,17 @@
             height: 100%
             border-radius: 2px
           .item-img-txt
-            width:100%
-            height:18px
-            line-height:18px
-            text-align:center
+            width: 100%
+            height: 18px
+            line-height: 18px
+            text-align: center
             font-family: $font-family-light
             font-size: $font-size-small-s
             color: $color-background-ff
-            background: rgba(0,0,0,0.5)
-            position:absolute
-            left:0
-            bottom:0
+            background: rgba(0, 0, 0, 0.5)
+            position: absolute
+            left: 0
+            bottom: 0
 
         .modal-item-right
           flex: 1
@@ -230,7 +232,7 @@
         bottom: 1px
         z-index: 2
         background-color: $color-background-ff
-        cut-off-rule-top(0,0,$color-row-line-f0)
+        cut-off-rule-top(0, 0, $color-row-line-f0)
         transition: all .5s
         img
           width: 12px

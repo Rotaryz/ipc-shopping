@@ -148,6 +148,7 @@
       // 登录验证
       _login () {
         // wechat.showLoading()
+        wx.setStorageSync('scene', this.$root.$mp.appOptions.scene)
         this._loginInit()
       },
       // 上传form-id

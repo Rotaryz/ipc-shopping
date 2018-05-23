@@ -99,8 +99,26 @@
     data () {
       return {
         imageUrl: baseURL.image,
-        awaitList: {},
-        couponInfo: {},
+        awaitList: {
+          shop_name: '',
+          shop_type: '',
+          address: '',
+          price: '',
+          count: '',
+          money: ''
+        },
+        couponInfo: {
+          id: '',
+          type: '',
+          name: '',
+          shopName: '',
+          scope: '',
+          useLife: '',
+          image_url: '',
+          appId: '',
+          appPath: '',
+          merchantId: ''
+        },
         show: false,
         title: '',
         btnSta: 1,
@@ -175,6 +193,7 @@
           this.couponInfo.appPath = res.path
           this.couponInfo.merchantId = res.merchant_id
         }
+        console.log(this.awaitList, '------------')
       },
       _rqCheckApply (data, loading) {
         api.uckCheckApply(data, loading)

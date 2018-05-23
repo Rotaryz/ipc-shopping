@@ -59,8 +59,9 @@
       this.couponData.page = 1
       this.couponList = []
       this.isAll = false
+      wechat.hideLoading()
       this.selectId = this.$root.$mp.query.selectId
-      if (!this.selectId) {
+      if (isNaN(this.selectId * 1)) {
         this.selectId = 0
       }
       this.objId.id = this.selectId
@@ -90,11 +91,15 @@
       },
       _rqManageDetails () {
         api.merCouponList(this.couponData).then(res => {
+          if (res.error === ERR_OK) {
+            this.couponList.push(...res.data)
+            this.clickSelect(this.objId)
+            this._isAllActive(res)
+            this.couponData.page++
+          } else {
+            this.$refs.toast.show(res.message)
+          }
           console.log(res.data)
-          this.couponList.push(...res.data)
-          this.clickSelect(this.objId)
-          this._isAllActive(res)
-          this.couponData.page++
           wechat.hideLoading()
         })
       },
