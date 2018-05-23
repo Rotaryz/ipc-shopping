@@ -266,6 +266,9 @@
       sumbit () {
         // console.log(wx.requestPayment)
         if (!this.upNumber) return
+        if (this.upNumber < 1) {
+          return this.$refs.toast.show('数量不小于1')
+        }
         if (this.applyLock) return
         this.applyLock = true
         setTimeout(() => {

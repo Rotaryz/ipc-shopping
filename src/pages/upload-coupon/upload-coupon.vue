@@ -90,11 +90,15 @@
       },
       _rqManageDetails () {
         api.merCouponList(this.couponData).then(res => {
+          if (res.error === ERR_OK) {
+            this.couponList.push(...res.data)
+            this.clickSelect(this.objId)
+            this._isAllActive(res)
+            this.couponData.page++
+          } else {
+            this.$refs.toast.show(res.message)
+          }
           console.log(res.data)
-          this.couponList.push(...res.data)
-          this.clickSelect(this.objId)
-          this._isAllActive(res)
-          this.couponData.page++
           wechat.hideLoading()
         })
       },

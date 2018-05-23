@@ -280,6 +280,9 @@
       appSubmit () {
         // 下单调取支付
         if (!this.addNumber) return
+        if (this.addNumber < 1) {
+          return this.$refs.toast.show('数量不小于1')
+        }
         if (this.applyLock) return
         this.applyLock = true
         setTimeout(() => {
