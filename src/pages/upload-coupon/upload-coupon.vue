@@ -59,8 +59,9 @@
       this.couponData.page = 1
       this.couponList = []
       this.isAll = false
+      wechat.hideLoading()
       this.selectId = this.$root.$mp.query.selectId
-      if (!this.selectId) {
+      if (isNaN(this.selectId * 1)) {
         this.selectId = 0
       }
       this.objId.id = this.selectId

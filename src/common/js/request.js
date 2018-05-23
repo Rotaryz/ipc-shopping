@@ -7,6 +7,7 @@ import { ROLE } from './contants'
 const COMMON_HEADER = () => {
   const token = wx.getStorageSync('token')
   const merchantId = wx.getStorageSync('merchantId')
+  const scene = wx.getStorageSync('scene')
   let userType = wx.getStorageSync('userType')
   if (userType === ROLE.UNION_ID || userType === ROLE.SHOP_ID) {
     userType = 'merchant'
@@ -17,7 +18,8 @@ const COMMON_HEADER = () => {
     {'X-Requested-With': 'XMLHttpRequest'},
     {'Current-merchant': merchantId},
     {'Authorization': token},
-    {'User-type': userType}
+    {'User-type': userType},
+    {'Scene': scene}
   )
 }
 

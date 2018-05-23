@@ -175,6 +175,7 @@
           this.couponInfo.appPath = res.path
           this.couponInfo.merchantId = res.merchant_id
         }
+        console.log(this.awaitList, '------------')
       },
       _rqCheckApply (data, loading) {
         api.uckCheckApply(data, loading)
