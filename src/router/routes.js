@@ -170,7 +170,9 @@ module.exports = [
     config: {
       navigationBarTitleText: '活动管理',
       navigationBarBackgroundColor: '#1A1D3D',
-      navigationBarTextStyle: 'white'
+      navigationBarTextStyle: 'white',
+      backgroundColor: '#1A1D3D',
+      backgroundTextStyle: 'light'
     }
   },
   {
