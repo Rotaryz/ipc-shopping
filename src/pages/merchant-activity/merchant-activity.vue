@@ -469,6 +469,7 @@
                 width: 15px
           .cavas-list
             layout(row)
+            align-items: center
             margin-top: 18px
             &:first-child
               margin-top: 15px
@@ -484,9 +485,15 @@
               color: $color-background-ff
               align-items: flex-end
               .icon
-                font-size: 9px
+                font-size: $font-size-small-ss
+                height: $font-size-small-ss
+                font-family: $font-family-light
+                line-height: 7px
               .number
-                line-height: 1
+                font-size: $font-size-medium
+                font-family: $font-family-light
+                line-height: $font-size-medium
+                height: $font-size-medium
 
   .activity-box
     padding: 0 15px 60px
