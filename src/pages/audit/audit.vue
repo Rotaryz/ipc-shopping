@@ -99,8 +99,26 @@
     data () {
       return {
         imageUrl: baseURL.image,
-        awaitList: {},
-        couponInfo: {},
+        awaitList: {
+          shop_name: '',
+          shop_type: '',
+          address: '',
+          price: '',
+          count: '',
+          money: ''
+        },
+        couponInfo: {
+          id: '',
+          type: '',
+          name: '',
+          shopName: '',
+          scope: '',
+          useLife: '',
+          image_url: '',
+          appId: '',
+          appPath: '',
+          merchantId: ''
+        },
         show: false,
         title: '',
         btnSta: 1,
