@@ -5,7 +5,7 @@
         <div class="max-modal-title" v-if="index2===0">{{types[items.goods_type]}}</div>
         <div class="modal-item">
           <div class="modal-item-img">
-            <img :src="items.goods_detail.url" />
+            <img :src="items.goods_detail.url"/>
           </div>
           <div class="modal-item-right">
             <div class="right-top">
@@ -20,9 +20,9 @@
     <div v-if="infoBottom.length > 0" class="max-modal max-modal-y" :class="{hide: hideFlag}" v-bind:style="{height: height}">
       <block v-for="item in infoBottom" v-bind:key="index">
         <div class="max-modal-title" v-if="index===0">{{types[item.goods_type]}}</div>
-        <div class="modal-item" >
+        <div class="modal-item">
           <div class="modal-item-img">
-            <img :src="item.goods_detail.url" />
+            <img :src="item.goods_detail.url"/>
             <div class="item-img-txt">{{item.shop_name}}</div>
           </div>
           <div class="modal-item-right">
@@ -35,8 +35,8 @@
         </div>
       </block>
       <div class="max-modal-hide" @tap.stop="hideFun">
-        <img v-if="imageUri && hideFlag" :src="imageUri + '/defaults/ipc-shopping/page/icon-packup@2x.png'" />
-        <img v-if="imageUri && !hideFlag" :src="imageUri + '/defaults/ipc-shopping/page/icon-deploy@2x.png'" />
+        <img v-if="imageUri && hideFlag" :src="imageUri + '/defaults/ipc-shopping/page/icon-packup@2x.png'"/>
+        <img v-if="imageUri && !hideFlag" :src="imageUri + '/defaults/ipc-shopping/page/icon-deploy@2x.png'"/>
       </div>
     </div>
     <toast ref="toast"></toast>
@@ -48,11 +48,12 @@
   import Toast from '@/components/toast/toast'
   import api from 'api'
   import * as wechat from 'common/js/wechat'
+
   export default {
     components: {
       Toast
     },
-    data() {
+    data () {
       return {
         imageUri: baseURL.image,
         types: [
@@ -77,14 +78,15 @@
       }
     },
     async onShow (options) {
-      // let id = this.$root.$mp.
+      // let id = this.$root.$mp.query.id
+      console.log(this.$root.$mp)
       console.log(options)
       await this._getActivity(options)
       await this._getActivityCoupon(options)
       await this.heightFun()
     },
     methods: {
-      async heightFun() {
+      async heightFun () {
         this.height = this.infoBottom.length * 100 + 45 + 'px'
         this.$apply()
       },
@@ -156,11 +158,11 @@
     .max-modal
       transition: all .5s
       overflow: hidden
-      cut-off-rule-bottom(0,0,$color-col-line)
+      cut-off-rule-bottom(0, 0, $color-col-line)
       background-color: $color-white
       margin-top: 10px
       padding-left: 10px
-      cut-off-rule-top(0,0,$color-col-line)
+      cut-off-rule-top(0, 0, $color-col-line)
       .max-modal-title
         height: 45px
         display: flex
@@ -175,7 +177,7 @@
         display: flex
         flex-direction: row
         align-items: center
-        cut-off-rule-top(0,0,$color-col-line)
+        cut-off-rule-top(0, 0, $color-col-line)
         .modal-item-img
           height: 70px
           width: 70px
@@ -184,17 +186,17 @@
             width: 100%
             height: 100%
           .item-img-txt
-            width:100%
-            height:18px
-            line-height:18px
-            text-align:center
+            width: 100%
+            height: 18px
+            line-height: 18px
+            text-align: center
             font-family: $font-family-light
             font-size: $font-size-small-s
-            color:$color-white
-            background: rgba(0,0,0,0.5)
-            position:absolute
-            left:0
-            bottom:0
+            color: $color-white
+            background: rgba(0, 0, 0, 0.5)
+            position: absolute
+            left: 0
+            bottom: 0
 
         .modal-item-right
           flex: 1
@@ -235,7 +237,7 @@
         bottom: 1px
         z-index: 2
         background-color: $color-white
-        cut-off-rule-top(0,0,$color-col-line)
+        cut-off-rule-top(0, 0, $color-col-line)
         transition: all .5s
         image
           width: 12px
@@ -250,7 +252,7 @@
       z-index: 2
       background-color: $color-background
       width: 100vw
-      .bot-title,.bot-number,.bot-total
+      .bot-title, .bot-number, .bot-total
         background-color: $color-white
         height: 40px
         padding: 0px 10px
@@ -271,13 +273,13 @@
           font-size: $font-size-medium
           color: $color-text
       .bot-title
-        cut-off-rule-top(0,0,$color-col-line)
+        cut-off-rule-top(0, 0, $color-col-line)
         .right
           font-family: $font-family-regular
           font-size: $font-size-medium
           color: $color-text
       .bot-number
-        cut-off-rule-top(0,0,$color-col-line)
+        cut-off-rule-top(0, 0, $color-col-line)
         .number-control
           display: flex
           height: 22px
@@ -306,7 +308,7 @@
             color: $color-white
             background-color: $color-button
       .bot-total
-        cut-off-rule-top(0,0,$color-col-line)
+        cut-off-rule-top(0, 0, $color-col-line)
         .right
           font-family: $font-family-meddle
           font-size: $font-size-large

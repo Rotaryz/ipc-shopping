@@ -21,17 +21,17 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {baseURL, ERR_OK} from 'api/config'
+  import { baseURL, ERR_OK } from 'api/config'
   import Coupon from 'components/coupon-item/coupon-item'
   import * as wechat from 'common/js/wechat'
-  import {mapGetters} from 'vuex'
+  import { mapGetters } from 'vuex'
   import wx from 'wx'
   import api from 'api'
   import Toast from '@/components/toast/toast'
 
   const LIMIT_DEF = 10
   export default {
-    data() {
+    data () {
       return {
         image: baseURL.image,
         couponList: [],
@@ -48,14 +48,15 @@
         isAll: false
       }
     },
-    onPullDownRefresh() {
+    onPullDownRefresh () {
       this.couponData.page = 1
       this.couponList = []
       this.isAll = false
       this._rqManageDetails()
       wx.stopPullDownRefresh()
     },
-    mounted() {
+    mounted () {
+      this.couponData.page = 1
       this.selectId = this.$root.$mp.query.selectId
       if (!this.selectId) {
         this.selectId = 0
@@ -67,16 +68,16 @@
       console.log(this.$root.$mp.query.activityId, '---------')
       this._rqManageDetails()
     },
-    onReachBottom() {
+    onReachBottom () {
       if (this.isAll) return
       this._rqManageDetails()
     },
-    beforeMount() {
+    beforeMount () {
       this._init()
     },
     methods: {
       ...mapGetters(['role']),
-      _init() {
+      _init () {
         let role = this.role()
         this.currentRole = role
       },
@@ -85,7 +86,7 @@
         let data = {'form_ids': [formId]}
         api.homeCollectFormId(data)
       },
-      _rqManageDetails() {
+      _rqManageDetails () {
         api.merCouponList(this.couponData).then(res => {
           console.log(res.data)
           this.couponList.push(...res.data)
@@ -95,7 +96,7 @@
           wechat.hideLoading()
         })
       },
-      clickSelect(obj) {
+      clickSelect (obj) {
         console.log(obj.id, '-------')
         let index = this.couponList.findIndex(val => val.id === obj.id)
         if (this.preIdx === index) return
@@ -106,12 +107,12 @@
         this.preIdx = index
         this.selectId = obj.id
       },
-      _isAllActive(res) {
+      _isAllActive (res) {
         if (this.couponList.length >= res.meta.total * 1) {
           this.isAll = true
         }
       },
-      upCoupon() {
+      upCoupon () {
         if (!this.selectId) return
         let data = {}
         data.promotion_id = this.selectId

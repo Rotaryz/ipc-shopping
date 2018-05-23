@@ -212,6 +212,7 @@
       },
       // 获取商家活动详情
       _rqManageDetails (id) {
+        this.showRule = false
         api.merManageDetails(id).then(res => {
           console.log(res.data)
           if (res.error === ERR_OK) {
@@ -223,6 +224,7 @@
               this.applyId = res.data.alliance_merchant_apply.id
               if (parseInt(res.data.alliance_merchant_apply.promotion_id) === 0) {
                 this.status = 1
+                this.couponText = '添加优惠卷'
               } else {
                 api.merCouponDetails(res.data.alliance_merchant_apply.promotion_id).then(res => {
                   console.log(res)
@@ -236,6 +238,7 @@
                 })
                 if (res.data.alliance_merchant_apply.check_status * 1 === 0) {
                   this.status = 2
+                  this.btnText = '审核中'
                 } else if (res.data.alliance_merchant_apply.check_status * 1 === 1) {
                   this.status = 4
                   this.btnText = '报名成功'
