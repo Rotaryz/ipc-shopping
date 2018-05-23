@@ -78,17 +78,18 @@
       }
     },
     async onShow () {
-      this.promotioId = this.$root.$mp.query.activityId
-      await this._getActivity()
-      await this._getActivityCoupon()
+      let id = this.$root.$mp.query.activityId
+      console.log(id)
+      await this._getActivity(id)
+      await this._getActivityCoupon(id)
       await this.heightFun()
     },
     methods: {
       async heightFun() {
         this.height = this.infoBottom.length * 100 + 45 + 'px'
       },
-      async _getActivity () {
-        let res = await api.merLinkDetails(this.promotioId)
+      async _getActivity (id) {
+        let res = await api.merLinkDetails(id)
         wechat.hideLoading()
         this.infoTop = []
         let shop = []
@@ -110,9 +111,9 @@
         this.price = res.data.price
         this.stock = res.data.stock
       },
-      async _getActivityCoupon () {
+      async _getActivityCoupon (id) {
         this.infoBottom = []
-        let res = await api.merLinkCouponDetails(this.promotioId)
+        let res = await api.merLinkCouponDetails(id)
         wechat.hideLoading()
         if (res.error !== ERR_OK) {
           this.$refs.toast.show(res.message)
