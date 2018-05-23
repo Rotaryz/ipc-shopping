@@ -271,7 +271,7 @@
         setTimeout(() => {
           this.applyLock = false
         }, 3000)
-        wx.login().then(res => {
+        wechat.login().then(res => {
           let code = res.code
           api.merApplyPay(this.upNumber, this.curId, code).then(res => {
             console.log(res.data)
