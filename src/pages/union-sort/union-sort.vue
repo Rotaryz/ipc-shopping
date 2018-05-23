@@ -88,9 +88,10 @@
           this.couponList[0].sortType = 11
         }
       },
+      // 获取审查列表优惠券
       _rqGetCheckList (data, loading) {
         return new Promise(resolve => {
-          api.uckGetCheckList(data, loading)
+          api.umgGetCheckList(data, loading)
             .then(json => {
               wechat.hideLoading()
               if (json.error !== ERR_OK) {
@@ -115,9 +116,9 @@
       },
       _formatReq () {
         let data = {
-          'check_status': 1,
-          'has_promotion': 1,
-          'activity_alliance_id': this.currentActiveId,
+          // 'check_status': 1,
+          // 'has_promotion': 1,
+          id: this.currentActiveId,
           limit: this.limit,
           page: this.page
         }
@@ -128,18 +129,18 @@
         let arr = []
         let res = json.data
         res.map(item => {
-          if (item.promotion.id) {
+          if (item.goods_detail.id) {
             arr.push({
-              id: item.promotion.id,
-              type: item.promotion.promotion_type_cn,
-              name: item.promotion.title,
+              id: item.goods_detail.id,
+              type: item.goods_type * 1 === 0 ? '代金券' : '套餐券',
+              name: item.goods_detail.title,
               shopName: item.shop_name,
               scope: `限${item.shop_name}使用`,
-              useLife: `有效期:${item.start_at}至${item.end_at}`,
-              image_url: item.promotion.image_url,
+              useLife: `有效期:${item.goods_detai.start_at}至${item.goods_detai.end_at}`,
+              image_url: item.goods_detail.image_url,
               sortType: 10,
-              appId: res.app_id,
-              appPath: res.path,
+              appId: res.goods_detai.app_id,
+              appPath: res.goods_detai.path,
               merchantId: res.merchant_id
             })
           }
@@ -169,7 +170,7 @@
           arr.push({id: item.id})
         })
         let str = JSON.stringify(arr)
-        return {apply_array: str}
+        return {alliance_goods_array: str}
       },
       // 跳C端预览
       _toMpC (json) {

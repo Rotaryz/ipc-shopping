@@ -19,7 +19,16 @@ export default {
    * @returns {Promise.<*>}
    */
   umgSortList(data, loading = true) {
-    const url = `/api/alliances/sort-apply`
+    const url = `/api/alliances/alliance-goods-sort`
+    return request.post(url, data, loading)
+  },
+  /**
+   * 盟主审核列表的排序列表（联盟管理，商家活动池）
+   * @param data 状态
+   * @returns {Promise.<*>}
+   */
+  umgGetCheckList(data, loading = true) {
+    const url = `/api/alliances/alliance-goods-list/${data.id}`
     return request.post(url, data, loading)
   },
   /**
