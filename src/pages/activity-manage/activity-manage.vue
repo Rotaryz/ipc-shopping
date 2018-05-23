@@ -7,8 +7,7 @@
     <div class="manage-list" v-if="tabFlag === 0">
       <div class="list-data" v-if="activeList.length !== 0">
         <div class="box-list" v-for="(iteam, index) in activeList" v-bind:key="index">
-          <active-card :useType="0" @buyHandler="resetBuy" @allocHandler="jumpAllot" @applyHandler="jumpApply" @previewHandler="jumpPreview"
-                       :cardInfo="iteam"></active-card>
+          <active-card :useType="0" @buyHandler="resetBuy" @allocHandler="jumpAllot" @applyHandler="jumpApply" @previewHandler="jumpPreview" @totalHandler="jumpData" :cardInfo="iteam"></active-card>
         </div>
       </div>
       <div class="list-null" v-if="activeList.length === 0">
@@ -36,7 +35,7 @@
           <div class="top-title">
             <div class="left">{{resetName}}</div>
             <div class="right">
-              <text>100</text>
+              <text>{{resetMoney}}</text>
               <text class="money">元</text>
             </div>
           </div>
@@ -181,6 +180,12 @@
       jumpPreview (cardInfo) {
         console.log(cardInfo.id)
         const url = `/pages/activity-detai/activity-detai?activityId=${cardInfo.id}`
+        console.log(url)
+        this.$router.push(url)
+      },
+      jumpData (cardInfo) {
+        console.log(cardInfo.id)
+        const url = `/pages/merchant-data/merchant-data?id=${cardInfo.id}`
         console.log(url)
         this.$router.push(url)
       },

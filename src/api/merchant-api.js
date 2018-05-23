@@ -126,6 +126,15 @@ export default {
     return request.get(url, data, true)
   },
   /**
+     * 商家分配卡活动详情
+   * @param data 状态
+   * @returns {Promise.<*>}
+   */
+  merAllotDetail(id, data) {
+    const url = `/api/alliances/merchant/activities/${id}`
+    return request.get(url, data, true)
+  },
+  /**
    * 分销卡列表调整
    * @param data 状态
    * @returns {Promise.<*>}

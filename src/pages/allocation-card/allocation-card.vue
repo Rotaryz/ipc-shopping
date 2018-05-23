@@ -3,19 +3,6 @@
     <div class="box-top">
       <active-card :useType="1" @previewHandler="jumpPreview" :cardInfo="info"></active-card>
     </div>
-    <div class="merchant-box" @tap="showBox()">
-      <div class="box-left">
-        <img :src="merchant.logo_image" class="box-img">
-        <div class="text">{{merchant.shop_name}}</div>
-      </div>
-      <div class="box-right">
-        <div class="text">
-          <text v-if="merchant.sale_count !== 0">{{merchant.sale_count}}/</text>
-          {{merchant.stock}}
-        </div>
-        <img :src="image + '/defaults/ipc-shopping/aliance/icon-union_j@2x.png'" v-if="image" class="box-img">
-      </div>
-    </div>
     <div class="merchant-box" @tap="showBox(item, 'shop')" v-for="(item, index) in merchantList" v-bind:key="index">
       <div class="box-left">
         <img :src="item.logo_image" class="box-img">
@@ -132,12 +119,12 @@
         this.showRule = !this.showRule
       },
       getAllotDetals() {
-        api.merManageDetails(this.dataId.activity_alliance_id).then(res => {
+        api.merAllotDetail(this.dataId.activity_alliance_id).then(res => {
           if (res.error === ERR_OK) {
             console.log(res)
-            this.info.title = res.data.name
-            this.info.endDate = res.data.end_at
-            this.info.store = res.data.stock
+            this.info.title = res.data.activity_alliance.name
+            this.info.endDate = res.data.activity_alliance.end_at
+            this.info.store = res.data.activity_alliance.stock
             this.getAllocation()
           } else {
             this.$refs.toast.show(res.message)
@@ -163,6 +150,8 @@
         })
       },
       showBox(item, index) {
+        console.log(item, '`````````````')
+        console.log(index, '`````````````')
         this.sumbitType = index
         let number
         if (this.sumbitType === 'shop') {
