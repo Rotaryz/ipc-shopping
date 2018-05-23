@@ -136,6 +136,7 @@
   @import '../../common/stylus/mixin'
   .center
     // padding-bottom: 238px
+    background-color: $color-background-f9
     .max-modal.hide
       transition: all .5s
     .max-modal-y
