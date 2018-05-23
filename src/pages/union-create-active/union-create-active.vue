@@ -337,7 +337,6 @@
       _rqCreateActive (data) {
         api.uctCreateActive(data)
           .then(json => {
-            console.log(json)
             wechat.hideLoading()
             if (json.error !== ERR_OK) {
               this.$refs.toast.show(json.message)

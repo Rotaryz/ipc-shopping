@@ -179,11 +179,12 @@
       _rqCheckApply (data, loading) {
         api.uckCheckApply(data, loading)
           .then(json => {
+            wechat.hideLoading()
             if (json.error !== ERR_OK) {
               this.$refs.toast.show(json.message)
               return
             }
-            this.$refs.toast.show('操作成功')
+            this.$refs.toast.show('操作成功!')
           })
           .catch(err => {
             console.info(err)
