@@ -158,10 +158,10 @@
               .m-txt
                 margin-right: 6px
               .m-num-box
-                layout(row, inline, no-wrap)
+                layout(row)
                 align-items: flex-end
                 .m-icon
-                  align-self: center
+                  font-family: $font-family-light
                   font-size: $font-size-small-s
       .w-bottom
         layout(row)
@@ -172,9 +172,9 @@
         font-size: $font-size-small
         color: $color-text-2d
         .arrow-right
-          width: 5px
-          height: 8px
-          background-size: 100%
+          width: 12px
+          height: 12px
+          background-size: 100% 100%
           margin-right: 15px
           background-repeat: no-repeat
           background-position: center

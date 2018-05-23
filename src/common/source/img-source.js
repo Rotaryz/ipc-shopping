@@ -26,7 +26,7 @@ export default {
     const img = `icon-union_jt2@2x.png`
     switch (type) {
       case 'background': {
-        return `background-image:url(${baseUrl}/common/${img}` || ''
+        return `background-image:url(${baseUrl}/common/${img})` || ''
       }
       case 'img': {
         return `${baseUrl}/common/${img}` || ''
@@ -58,7 +58,7 @@ export default {
     const img = `icon-union_map@2x.png`
     switch (type) {
       case 'background': {
-        return `background-image:url(${baseUrl}/common/${img}` || ''
+        return `background-image:url(${baseUrl}/common/${img})` || ''
       }
       default :
         return ''
@@ -73,7 +73,7 @@ export default {
     const img = `pic-union_empty@2x.png`
     switch (type) {
       case 'background': {
-        return `background-image:url(${baseUrl}/common/${img}` || ''
+        return `background-image:url(${baseUrl}/common/${img})` || ''
       }
       default :
         return ''
@@ -88,7 +88,7 @@ export default {
     const img = `icon-union_close@2x.png`
     switch (type) {
       case 'background': {
-        return `background-image:url(${baseUrl}/common/${img}` || ''
+        return `background-image:url(${baseUrl}/common/${img})` || ''
       }
       default :
         return ''

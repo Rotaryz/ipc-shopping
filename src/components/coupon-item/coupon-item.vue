@@ -187,7 +187,7 @@
         height: 70px
         width: 70px
         box-sizing: border-box
-        background-size: contain
+        background-size: cover
         background-repeat: no-repeat
         background-position: center center
         border-radius: 2px

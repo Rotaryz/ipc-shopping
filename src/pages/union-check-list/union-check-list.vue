@@ -15,7 +15,7 @@
         <div class="empty-pic" :style="emptyImg"/>
         <div class="empty-txt">暂无活动</div>
       </article>
-      <article class="scroll" v-if="!isEmpty" >
+      <article class="scroll" v-if="!isEmpty">
         <div class="ad-box" v-if="showAd">
           <div class="txt">{{adMsg}}</div>
           <div class="close-icon" :style="closeIcon" @tap="closeAd"></div>
@@ -246,7 +246,7 @@
       font-family: $font-family-light
       font-size: $font-size-medium
       color: $color-text-95
-      z-index :9
+      z-index: 9
       .t-item
         position: relative
         height: $nav-height
