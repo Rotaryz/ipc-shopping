@@ -19,7 +19,7 @@
       <div class="em-list-succeed" v-if="acceptList.length > 0">
         <div class="await-list-item" v-for="item in acceptList" :key="index">
           <div class="await-list-left">
-            <img class="left-image" src=""/>
+            <img class="left-image" :src="item.avatar_url"/>
             <div class="left-name">{{item.nickname}}</div>
           </div>
           <div class="await-list-right">

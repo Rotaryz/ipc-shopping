@@ -138,6 +138,7 @@
   .center
     // padding-bottom: 238px
     position: relative
+    padding-top: 10px
     min-height: 100vh
     background-color: $color-background-f9
     .max-modal.hide
@@ -154,7 +155,7 @@
       cut-off-rule-top-s(0,0,$color-row-line-f0)
       .max-modal-title
         height: 45px
-        display: flex
+        display: flexK
         align-items: center
         font-family: $font-family-meddle
         font-size: $font-size-medium
