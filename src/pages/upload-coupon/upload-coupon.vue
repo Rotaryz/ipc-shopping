@@ -57,6 +57,8 @@
     },
     mounted () {
       this.couponData.page = 1
+      this.couponList = []
+      this.isAll = false
       this.selectId = this.$root.$mp.query.selectId
       if (!this.selectId) {
         this.selectId = 0
