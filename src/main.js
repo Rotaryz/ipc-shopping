@@ -18,10 +18,11 @@ export default {
     window: {
       backgroundTextStyle: 'light',
       backgroundColor: '#F9F9F9',
-      backgroundColorTop: '#fff',
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTitleText: '',
-      navigationBarTextStyle: 'white'
+      navigationBarTextStyle: 'white',
+      backgroundColorTop: '#1A1D3D',
+      backgroundColorBottom: '1A1D3D'
     }
   }
 }
