@@ -9,7 +9,7 @@
         <div class="text">{{item.shop_name}}</div>
       </div>
       <div class="box-right">
-        <div class="text">
+        <div class="text" v-if="item.stock > 0">
           <text v-if="item.sale_count !== 0">{{item.sale_count}}/</text>
           {{item.stock}}
         </div>
@@ -24,7 +24,7 @@
           <div class="text">{{item.nickname}}</div>
         </div>
         <div class="box-right">
-          <div class="text">
+          <div class="text" v-if="item.stock > 0">
             <text v-if="item.sale_count !== 0">{{item.sale_count}}/</text>
             {{item.stock}}
           </div>
@@ -156,7 +156,7 @@
         let number
         if (this.sumbitType === 'shop') {
           number = item.stock - item.sale_count
-          this.upShopId = item.shop_id
+          this.upShopId = item.id
           this.upName = item.shop_name
         } else {
           number = item.stock - item.sale_count
