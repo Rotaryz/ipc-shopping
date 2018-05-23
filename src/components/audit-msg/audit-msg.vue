@@ -26,13 +26,14 @@
   const IMGARRAY = [
     {img: 'pic-yhome_01@2x.png', title: '您的身份正在审核中', msg: '请耐心等待结果'},
     {img: 'pic-yhome_02@2x.png', title: '您的身份审核通过', msg: '开始赚钱吧'},
-    {img: 'pic-yhome_03@2x.png', title: '您的身份审核未通过', msg: '问问老板吧'}
+    {img: 'pic-yhome_03@2x.png', title: '您的身份审核未通过', msg: '问问老板吧'},
+    {}
   ]
   export default {
     props: {
       flag: {
         type: Number,
-        default: 0
+        default: -1
       }
     },
     data () {
@@ -45,7 +46,7 @@
         // 防止报错
       },
       confirm () {
-        this.showToast = false
+        this.flag = -1
         this.$emit('confirmHandler')
       }
     },
@@ -54,7 +55,9 @@
         return this.flag >= 0
       },
       content () {
-        return IMGARRAY[this.flag]
+        let flag = this.flag
+        flag = Math.max(0, flag)
+        return IMGARRAY[flag]
       }
     }
   }

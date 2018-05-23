@@ -127,7 +127,8 @@
         entryRole: ROLE.STAFF_ID, // 进入来的角色
         // onShowCount: 0, // 首页on-show的次数
         currentToken: null, // 当前token
-        status: -1, // 员工状态
+        status: 0, // 员工状态
+        isShow: false, // 是否显示员工状态栏
         backCount: 0, // 回退b端的次数,
         lastEntryRole: null
       }
@@ -177,8 +178,8 @@
               this._rqCustomerStatus()
                 .then(json => {
                   wechat.hideLoading()
-                  let status = json.data.status * 1
-                  if (isNaN(status)) {
+                  let status = json.data.status
+                  if (status === null || status === 'null') {
                     this.status = -1
                   } else {
                     this.status = status
@@ -569,9 +570,6 @@
       }
     },
     computed: {
-      staffStatus () {
-        return this.status + 0
-      },
       dotStyle () {
         return this.activeList.length <= 1 ? 'd-op' : ''
       },
