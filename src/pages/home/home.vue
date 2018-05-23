@@ -182,7 +182,6 @@
                   } else {
                     this.status = status
                   }
-                  console.log(status, '99999', this.status)
                 })
             } else {
               this._init()
