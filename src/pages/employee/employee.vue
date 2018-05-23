@@ -40,6 +40,7 @@
 
 <script type="text/ecmascript-6">
   import { ERR_OK } from 'api/config'
+  import wx from 'wx'
   import Bgnull from 'components/bgnull/bgnull'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
   import api from 'api'
@@ -57,7 +58,8 @@
         dataTmp: {},
         dataIndex: '',
         isAwait: '',
-        page: 1
+        page: 1,
+        loads: true
       }
     },
     components: {
@@ -71,9 +73,12 @@
     },
     // 下拉加载
     onPullDownRefresh () {
+      this.loads = false
       this.getInfo()
+      wx.stopPullDownRefresh()
     },
     onShow () {
+      this.loads = true
       this.getInfo()
     },
     methods: {
@@ -89,7 +94,7 @@
       },
       _getEmployee () { // 获取待处理员工
         let data = {}
-        api.empGetEmployeeList(data).then(res => {
+        api.empGetEmployeeList(data, this.loads).then(res => {
           if (res.error !== ERR_OK) return
           this.awaitList = res.data
         }).catch(err => {
@@ -98,7 +103,7 @@
       },
       _getAccept () { // 获取接受的员工
         let data = {}
-        api.empGetAcceptList(data).then(res => {
+        api.empGetAcceptList(data, this.loads).then(res => {
           if (res.error !== ERR_OK) return
           this.acceptList = res.data
         }).catch(err => {
