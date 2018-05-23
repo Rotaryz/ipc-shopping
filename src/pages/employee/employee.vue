@@ -71,7 +71,6 @@
     },
     // 下拉加载
     onPullDownRefresh () {
-      this.page = 1
       this.getInfo()
     },
     onShow () {
