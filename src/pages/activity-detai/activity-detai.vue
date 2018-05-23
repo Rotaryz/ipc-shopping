@@ -142,6 +142,7 @@
     padding-top: 10px
     min-height: 100vh
     background-color: $color-background-f9
+    overflow: hidden
     .max-modal.hide
       transition: all .5s
     .max-modal-y
