@@ -230,6 +230,7 @@ module.exports = [
     name: 'ActivityDetai',
     config: {
       navigationBarTitleText: '活动详情',
+      backgroundColor: '#f9f9f9',
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTextStyle: 'white'
     }
