@@ -195,7 +195,7 @@
       // 检查角色
       _checkRole () {
         this.lastEntryRole = wx.getStorageSync('userType')
-        this.entryRole = ROLE.STAFF_ID
+        this.entryRole = this.lastEntryRole
         const entryRole = this.$root.$mp.query.entryRole
         entryRole && (this.entryRole = entryRole)
         this.saveRoleSync(this.entryRole)
