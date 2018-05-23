@@ -144,7 +144,6 @@
     min-height: 100vh
     box-sizing: border-box
     background-color: $color-background-f9
-    overflow: hidden
     .max-modal.hide
       transition: all .5s
     .max-modal-y
