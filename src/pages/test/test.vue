@@ -77,7 +77,7 @@
         return `pages/home/home?entryRole=${ROLE.STAFF_ID}&merchantId=${this.merchantId}`
       },
       pathTxt2 () {
-        return `pages/activity-detail/activity-detail?m=${this.merchantId}&e=${this.eId}&a=${this.activeId}`
+        return `pages/activity/activity?m=${this.merchantId}&e=${this.eId}&a=${this.activeId}&type=y`
       }
     }
   }
