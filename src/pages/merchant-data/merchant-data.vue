@@ -83,7 +83,8 @@
           </div>
           <div class="ec-box">
             <div class="ec-null" v-if="!isOffline">正在等待分钱</div>
-            <ec-canvas class="canvas" id="mychart-dom-bar" canvas-id="mychart-bar" :ec="ec" v-if="isOffline"></ec-canvas>
+            <ec-canvas class="canvas" id="mychart-dom-bar" canvas-id="mychart-bar" :ec="ec"
+                       v-if="isOffline"></ec-canvas>
           </div>
         </div>
       </div>
@@ -150,58 +151,58 @@
       </div>
       <div class="all-staff" v-if="staffBtn === 'all'">
         <div class="all-staff-box">
-          <!--<div class="rank-list">-->
-            <!--<img v-if="image" :src="image + '/defaults/ipc-shopping/activitydata/bg-activity_lizi@2x.png'"-->
-                 <!--class="rank-bg" mode="widthFix">-->
-            <!--<div class="rank-box rank-two">-->
-              <!--<div class="rank-two-hard">-->
-                <!--<img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_second@2x.png'" v-if="image"-->
-                     <!--class="hard-img-crown">-->
-                <!--<img :src="allStaffList[1].avatar_url" v-if="image" class="hard-img">-->
-              <!--</div>-->
-              <!--<div class="rank-two-text">-->
-                <!--<img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_second2@2x.png'" v-if="image"-->
-                     <!--class="img">-->
-                <!--<div class="name">{{allStaffList[1].nickname}}</div>-->
-              <!--</div>-->
-              <!--<div class="rank-two-bottom">-->
-                <!--<div class="left-text">总收益</div>-->
-                <!--<div class="right-text">{{allStaffList[1].sale_count}}</div>-->
-              <!--</div>-->
-            <!--</div>-->
-            <!--<div class="rank-box rank-two rank-one">-->
-              <!--<div class="rank-two-hard">-->
-                <!--<img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_first@2x.png'" v-if="image"-->
-                     <!--class="hard-img-crown">-->
-                <!--<img :src="allStaffList[0].avatar_url" v-if="image" class="hard-img">-->
-              <!--</div>-->
-              <!--<div class="rank-two-text">-->
-                <!--<img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_first1@2x.png'" v-if="image"-->
-                     <!--class="img">-->
-                <!--<div class="name first-name">{{allStaffList[0].nickname}}</div>-->
-              <!--</div>-->
-              <!--<div class="rank-two-bottom">-->
-                <!--<div class="left-text">总收益</div>-->
-                <!--<div class="right-text">{{allStaffList[0].sale_count}}</div>-->
-              <!--</div>-->
-            <!--</div>-->
-            <!--<div class="rank-box rank-two">-->
-              <!--<div class="rank-two-hard">-->
-                <!--<img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_third@2x.png'" v-if="image"-->
-                     <!--class="hard-img-crown">-->
-                <!--<img :src="allStaffList[2].avatar_url" v-if="image" class="hard-img">-->
-              <!--</div>-->
-              <!--<div class="rank-two-text">-->
-                <!--<img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_third3@2x.png'" v-if="image"-->
-                     <!--class="img">-->
-                <!--<div class="name thr-name">{{allStaffList[0].nickname}}</div>-->
-              <!--</div>-->
-              <!--<div class="rank-two-bottom">-->
-                <!--<div class="left-text">总收益</div>-->
-                <!--<div class="right-text">{{allStaffList[2].sale_count}}</div>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</div>-->
+          <div class="rank-list">
+            <img v-if="image" :src="image + '/defaults/ipc-shopping/activitydata/bg-activity_lizi@2x.png'"
+                 class="rank-bg" mode="widthFix">
+            <div class="rank-box rank-two">
+              <div class="rank-two-hard">
+                <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_second@2x.png'" v-if="image"
+                     class="hard-img-crown">
+                <img :src="allStaffList[1].avatar_url" v-if="image" class="hard-img">
+              </div>
+              <div class="rank-two-text">
+                <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_second2@2x.png'" v-if="image"
+                     class="img">
+                <div class="name">{{allStaffList[1].nickname}}</div>
+              </div>
+              <div class="rank-two-bottom">
+                <div class="left-text">总收益</div>
+                <div class="right-text">{{allStaffList[1].sale_count}}</div>
+              </div>
+            </div>
+            <div class="rank-box rank-two rank-one">
+              <div class="rank-two-hard">
+                <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_first@2x.png'" v-if="image"
+                     class="hard-img-crown">
+                <img :src="allStaffList[0].avatar_url" v-if="image" class="hard-img">
+              </div>
+              <div class="rank-two-text">
+                <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_first1@2x.png'" v-if="image"
+                     class="img">
+                <div class="name first-name">{{allStaffList[0].nickname}}</div>
+              </div>
+              <div class="rank-two-bottom">
+                <div class="left-text">总收益</div>
+                <div class="right-text">{{allStaffList[0].sale_count}}</div>
+              </div>
+            </div>
+            <div class="rank-box rank-two">
+              <div class="rank-two-hard">
+                <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_third@2x.png'" v-if="image"
+                     class="hard-img-crown">
+                <img :src="allStaffList[2].avatar_url" v-if="image" class="hard-img">
+              </div>
+              <div class="rank-two-text">
+                <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_third3@2x.png'" v-if="image"
+                     class="img">
+                <div class="name thr-name">{{allStaffList[2].nickname}}</div>
+              </div>
+              <div class="rank-two-bottom">
+                <div class="left-text">总收益</div>
+                <div class="right-text">{{allStaffList[2].sale_count}}</div>
+              </div>
+            </div>
+          </div>
           <div class="data-content">
             <div class="self-merchant-list" v-for="(item, index) in allStaffTwoList" v-bind:key="index">
               <div class="self-staff-list-box user-box">
@@ -391,7 +392,23 @@
           self_verification: 0,
           other_verification: 0
         },
-        allStaffList: [], // 商店总榜总榜数据参数
+        allStaffList: [
+          {
+            avatar_url: null,
+            sale_count: null,
+            nickname: null
+          },
+          {
+            avatar_url: null,
+            sale_count: null,
+            nickname: null
+          },
+          {
+            avatar_url: null,
+            sale_count: null,
+            nickname: null
+          }
+        ], // 商店总榜总榜数据参数
         allStaffTwoList: [],
         fristAllStaff: false
       }
