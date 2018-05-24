@@ -78,6 +78,8 @@
         this._rqGetCheckList(data)
           .then(json => {
             let list = this._formatResData(json)
+            console.log(list, '------')
+            console.log(json, '++++++++++')
             this.couponList = list
             this._adjustList()
             this._isAll(json)
@@ -97,6 +99,7 @@
               if (json.error !== ERR_OK) {
                 return ''
               }
+              console.log(json, '++++++====++++获取优惠券')
               resolve(json)
             })
             .catch(err => {
