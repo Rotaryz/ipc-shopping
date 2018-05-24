@@ -51,21 +51,22 @@
         }
       },
       _goToIpc () {
-        let appId = `wx4e95ce94436c4d29`
-        let path = `pages/home/home?entryRole=${ROLE.STAFF_ID}&merchantId=${this.merchantId}`
-        wx.navigateToMiniProgram({
-          appId,
-          path,
-          extraData: {},
-          envVersion: baseURL.jumpVersion,
-          success (res) {
-            // 打开成功
-            console.log(res)
-          }
-        })
+        // let appId = `wx4e95ce94436c4d29`
+        let path = `/pages/home/home?entryRole=${ROLE.STAFF_ID}&merchantId=${this.merchantId}`
+        this.$router.replace(path)
+        // wx.navigateToMiniProgram({
+        //   appId,
+        //   path,
+        //   extraData: {},
+        //   envVersion: baseURL.jumpVersion,
+        //   success (res) {
+        //     // 打开成功
+        //     console.log(res)
+        //   }
+        // })
       },
       _goToC () {
-        let appId = `wx530de41bfdae9695`
+        let appId = `wxa721ed0b76403077`
         let path = `pages/activity-detail/activity-detail?m=${this.merchantId}&e=${this.eId}&a=${this.activeId}`
         wx.navigateToMiniProgram({
           appId,
