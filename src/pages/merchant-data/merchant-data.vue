@@ -150,58 +150,58 @@
       </div>
       <div class="all-staff" v-if="staffBtn === 'all'">
         <div class="all-staff-box">
-          <div class="rank-list">
-            <img v-if="image" :src="image + '/defaults/ipc-shopping/activitydata/bg-activity_lizi@2x.png'"
-                 class="rank-bg" mode="widthFix">
-            <div class="rank-box rank-two">
-              <div class="rank-two-hard">
-                <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_second@2x.png'" v-if="image"
-                     class="hard-img-crown">
-                <img :src="allStaffList[1].avatar_url" v-if="image" class="hard-img">
-              </div>
-              <div class="rank-two-text">
-                <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_second2@2x.png'" v-if="image"
-                     class="img">
-                <div class="name">{{allStaffList[1].nickname}}</div>
-              </div>
-              <div class="rank-two-bottom">
-                <div class="left-text">总收益</div>
-                <div class="right-text">{{allStaffList[1].sale_count}}</div>
-              </div>
-            </div>
-            <div class="rank-box rank-two rank-one">
-              <div class="rank-two-hard">
-                <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_first@2x.png'" v-if="image"
-                     class="hard-img-crown">
-                <img :src="allStaffList[0].avatar_url" v-if="image" class="hard-img">
-              </div>
-              <div class="rank-two-text">
-                <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_first1@2x.png'" v-if="image"
-                     class="img">
-                <div class="name first-name">{{allStaffList[0].nickname}}</div>
-              </div>
-              <div class="rank-two-bottom">
-                <div class="left-text">总收益</div>
-                <div class="right-text">{{allStaffList[0].sale_count}}</div>
-              </div>
-            </div>
-            <div class="rank-box rank-two">
-              <div class="rank-two-hard">
-                <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_third@2x.png'" v-if="image"
-                     class="hard-img-crown">
-                <img :src="allStaffList[2].avatar_url" v-if="image" class="hard-img">
-              </div>
-              <div class="rank-two-text">
-                <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_third3@2x.png'" v-if="image"
-                     class="img">
-                <div class="name thr-name">{{allStaffList[0].nickname}}</div>
-              </div>
-              <div class="rank-two-bottom">
-                <div class="left-text">总收益</div>
-                <div class="right-text">{{allStaffList[2].sale_count}}</div>
-              </div>
-            </div>
-          </div>
+          <!--<div class="rank-list">-->
+            <!--<img v-if="image" :src="image + '/defaults/ipc-shopping/activitydata/bg-activity_lizi@2x.png'"-->
+                 <!--class="rank-bg" mode="widthFix">-->
+            <!--<div class="rank-box rank-two">-->
+              <!--<div class="rank-two-hard">-->
+                <!--<img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_second@2x.png'" v-if="image"-->
+                     <!--class="hard-img-crown">-->
+                <!--<img :src="allStaffList[1].avatar_url" v-if="image" class="hard-img">-->
+              <!--</div>-->
+              <!--<div class="rank-two-text">-->
+                <!--<img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_second2@2x.png'" v-if="image"-->
+                     <!--class="img">-->
+                <!--<div class="name">{{allStaffList[1].nickname}}</div>-->
+              <!--</div>-->
+              <!--<div class="rank-two-bottom">-->
+                <!--<div class="left-text">总收益</div>-->
+                <!--<div class="right-text">{{allStaffList[1].sale_count}}</div>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="rank-box rank-two rank-one">-->
+              <!--<div class="rank-two-hard">-->
+                <!--<img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_first@2x.png'" v-if="image"-->
+                     <!--class="hard-img-crown">-->
+                <!--<img :src="allStaffList[0].avatar_url" v-if="image" class="hard-img">-->
+              <!--</div>-->
+              <!--<div class="rank-two-text">-->
+                <!--<img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_first1@2x.png'" v-if="image"-->
+                     <!--class="img">-->
+                <!--<div class="name first-name">{{allStaffList[0].nickname}}</div>-->
+              <!--</div>-->
+              <!--<div class="rank-two-bottom">-->
+                <!--<div class="left-text">总收益</div>-->
+                <!--<div class="right-text">{{allStaffList[0].sale_count}}</div>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="rank-box rank-two">-->
+              <!--<div class="rank-two-hard">-->
+                <!--<img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_third@2x.png'" v-if="image"-->
+                     <!--class="hard-img-crown">-->
+                <!--<img :src="allStaffList[2].avatar_url" v-if="image" class="hard-img">-->
+              <!--</div>-->
+              <!--<div class="rank-two-text">-->
+                <!--<img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_third3@2x.png'" v-if="image"-->
+                     <!--class="img">-->
+                <!--<div class="name thr-name">{{allStaffList[0].nickname}}</div>-->
+              <!--</div>-->
+              <!--<div class="rank-two-bottom">-->
+                <!--<div class="left-text">总收益</div>-->
+                <!--<div class="right-text">{{allStaffList[2].sale_count}}</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
           <div class="data-content">
             <div class="self-merchant-list" v-for="(item, index) in allStaffTwoList" v-bind:key="index">
               <div class="self-staff-list-box user-box">
@@ -604,8 +604,9 @@
           if (res.error === ERR_OK) {
             this.allStaffList = res.data.slice(0, 3)
             this.allStaffTwoList = res.data.slice(3)
-            console.log(this.allStaffList)
-            console.log(this.allStaffTwoList)
+            console.log('商家员工总榜数据``````````````````')
+            console.log(this.allStaffList, 'allStaffList`````````````')
+            console.log(this.allStaffTwoList, 'allStaffTwoList222222222')
           } else {
             this.$refs.toast.show(res.message)
           }
