@@ -277,7 +277,6 @@
         .b-bottom
           flex: 1
           padding: 0 10px
-          height: 100%
           layout(row, block, no-wrap)
           align-items: center
           overflow: hidden

@@ -66,7 +66,7 @@
         currentRole: null,
         tabFlag: 0,
         model: null,
-        cardInfoList: new Array(6),
+        cardInfoList: [],
         isAll: false,
         page: 1,
         limit: LIMIT_DEF,
@@ -78,7 +78,7 @@
       }
     },
     onShow () {
-      // this._init()
+      this._init()
     },
     beforeMount () {
     },
