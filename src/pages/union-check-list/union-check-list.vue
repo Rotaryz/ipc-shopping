@@ -109,9 +109,12 @@
         }
       },
       _init () {
+        console.log(this.$root.$mp.query.activeId, 'check-list')
+        if (!(this.currentActiveId * 1 === this.$root.$mp.query.activeId * 1)) {
+          this.tabFlag = 0
+          this._resetConfig()
+        }
         this.currentActiveId = this.$root.$mp.query.activeId
-        this.tabFlag = 0
-        this._resetConfig()
         let data = this._formatReq()
         this._rqGetCheckList(data)
           .then(json => {

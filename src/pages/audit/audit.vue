@@ -204,6 +204,7 @@
               return
             }
             this.$refs.toast.show('操作成功!')
+            this.$router.back()
           })
           .catch(err => {
             console.info(err)

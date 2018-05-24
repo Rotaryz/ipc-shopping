@@ -9,7 +9,7 @@ export default {
    * @param data 状态
    * @returns {Promise.<*>}
    */
-  umgGetActiveList(data, loading = true) {
+  umgGetActiveList (data, loading = true) {
     const url = `/api/alliances/alliance-activities`
     return request.get(url, data, loading)
   },
@@ -18,7 +18,7 @@ export default {
    * @param data 状态
    * @returns {Promise.<*>}
    */
-  umgSortList(data, loading = true) {
+  umgSortList (data, loading = true) {
     const url = `/api/alliances/alliance-goods-sort`
     return request.post(url, data, loading)
   },
@@ -27,16 +27,16 @@ export default {
    * @param data 状态
    * @returns {Promise.<*>}
    */
-  umgGetCheckList(data, loading = true) {
+  umgGetCheckList (data, loading = true) {
     const url = `/api/alliances/alliance-goods-list/${data.id}`
-    return request.post(url, data, loading)
+    return request.get(url, data, loading)
   },
   /**
    * 盟主活动上架
    * @param data 状态
    * @returns {Promise.<*>}
    */
-  umgActiveOnline(data, loading = true) {
+  umgActiveOnline (data, loading = true) {
     const url = `/api/alliances/online`
     return request.get(url, data, loading)
   }
