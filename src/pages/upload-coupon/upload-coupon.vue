@@ -14,7 +14,7 @@
         <div class="text">暂无活动</div>
       </div>
     </div>
-    <button :class="['btn',selectId !== 0? '' : 'no-select']" @tap='upCoupon' form-type="submit">保存</button>
+    <button :class="['btn',btnColor !== 0? '' : 'no-select']" @tap='upCoupon' form-type="submit">保存</button>
     <div class="page-bg"></div>
     <toast ref="toast"></toast>
   </form>
@@ -38,6 +38,7 @@
         preIdx: -1,
         selectId: null,
         activityId: null,
+        btnColor: 0,
         objId: {
           id: null
         },
@@ -56,21 +57,19 @@
       wx.stopPullDownRefresh()
     },
     mounted () {
+      this.btnColor = 0
       this.couponData.page = 1
       this.couponList = []
+      this.preIdx = -1
       this.isAll = false
       wechat.hideLoading()
-      this.selectId = this.$root.$mp.query.selectId
-      if (isNaN(this.selectId * 1)) {
-        this.selectId = 0
-      } else {
-        this.objId.id = this.selectId
-        this.clickSelect(this.objId)
-      }
-      console.log(this.objId, '重选')
-      console.log(this.$root.$mp.query.selectId, '---------')
+      // this.selectId = this.$root.$mp.query.selectId
+      // if (isNaN(this.selectId * 1)) {
+      //   this.selectId = 0
+      // } else {
+      //   this.objId.id = this.selectId
+      // }
       this.activityId = this.$root.$mp.query.activityId
-      console.log(this.$root.$mp.query.activityId, '---------')
       this._rqManageDetails()
     },
     onShow() {
@@ -98,20 +97,20 @@
         api.merCouponList(this.couponData).then(res => {
           if (res.error === ERR_OK) {
             this.couponList.push(...res.data)
-            this.clickSelect(this.objId)
             this._isAllActive(res)
             this.couponData.page++
           } else {
             this.$refs.toast.show(res.message)
           }
-          console.log(res.data)
           wechat.hideLoading()
         })
       },
       clickSelect (obj) {
-        console.log(obj.id, '-------')
+        console.log(123456, obj)
+        this.btnColor = 1
         let index = this.couponList.findIndex(val => val.id === obj.id)
         if (this.preIdx === index) return
+        if (this.couponList.length === 0) return
         if (this.preIdx > -1) {
           this.couponList[this.preIdx].isCheck = false
         }
@@ -135,7 +134,6 @@
           } else {
             this.$refs.toast.show(res.message)
           }
-          console.log(res.data)
           wechat.hideLoading()
         })
       }
