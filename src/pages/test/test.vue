@@ -1,17 +1,19 @@
 <template>
   <div class="test">
+    <div>测试页面</div>
     路径:
     <div class="path">{{pathTxt}}</div>
-    商家id:<input class="t-input" type="text" @input="inputHandler" id="merchant" value="请输入">
+    商家id:<input class="t-input" type="text" @input="inputHandler" id="merchant" placeholder="请输入">
     <div @tap="_goToIpc" class="btn">员工去异业联盟</div>
     <div class="mar"></div>
     路径:
     <div class="path">{{pathTxt2}}</div>
-    商家id:<input class="t-input" type="text" @input="inputHandler" id="m-id" value="请输入">
-    员工id:<input class="t-input" type="text" @input="inputHandler" id="e-id" value="请输入">
-    活动id:<input class="t-input" type="text" @input="inputHandler" id="a-id" value="请输入">
+    商家id:<input class="t-input" type="text" @input="inputHandler" id="m-id" placeholder="请输入">
+    员工id:<input class="t-input" type="text" @input="inputHandler" id="e-id" placeholder="请输入">
+    活动id:<input class="t-input" type="text" @input="inputHandler" id="a-id" placeholder="请输入">
     <div @tap="_goToC" class="btn">去C端购买</div>
   </div>
+
 </template>
 
 <script type="text/ecmascript-6">
@@ -51,23 +53,13 @@
         }
       },
       _goToIpc () {
-        // let appId = `wx4e95ce94436c4d29`
-        let path = `/pages/home/home?entryRole=${ROLE.STAFF_ID}&merchantId=${this.merchantId}`
-        this.$router.replace(path)
-        // wx.navigateToMiniProgram({
-        //   appId,
-        //   path,
-        //   extraData: {},
-        //   envVersion: baseURL.jumpVersion,
-        //   success (res) {
-        //     // 打开成功
-        //     console.log(res)
-        //   }
-        // })
+        wx.setStorageSync('merchantId', this.merchantId)
+        wx.setStorageSync('userType', ROLE.STAFF_ID)
+        this.$router.back()
       },
       _goToC () {
         let appId = `wxa721ed0b76403077`
-        let path = `pages/activity-detail/activity-detail?m=${this.merchantId}&e=${this.eId}&a=${this.activeId}`
+        let path = `pages/activity/activity?m=${this.merchantId}&e=${this.eId}&a=${this.activeId}&type=y`
         wx.navigateToMiniProgram({
           appId,
           path,
@@ -110,5 +102,4 @@
       height: 50px
     .btn
       normal-button-default()
-
 </style>

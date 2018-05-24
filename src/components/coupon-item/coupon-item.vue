@@ -27,7 +27,7 @@
           <div class="name">{{couponInfo.name}}</div>
         </div>
         <div class="scope">{{couponInfo.scope}}</div>
-        <div class="e-box"></div>
+        <!--<div class="e-box"></div>-->
         <div class="date">{{couponInfo.useLife}}</div>
         <div class="look-over">
           <div class="txt" :style="backgroundLookOverImg" @tap="lookOverHandler(couponInfo)">查看</div>

@@ -8,14 +8,12 @@
       </div>
       <div class="code-hint">扫码绑定加入{{shopName}}</div>
     </div>
-    <test></test>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import * as wechat from 'common/js/wechat'
   import api from 'api'
-  import test from 'components/test-btn/test-btn'
 
   export default {
     data () {
@@ -55,7 +53,6 @@
       }
     },
     components: {
-      test
     }
   }
 </script>

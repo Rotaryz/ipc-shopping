@@ -15,6 +15,13 @@ module.exports = [
     }
   },
   {
+    path: '/pages/test/test', // test
+    name: 'Test',
+    config: {
+      navigationBarTitleText: 'test'
+    }
+  },
+  {
     path: '/pages/loading/loading', // loading
     name: 'Loading',
     config: {

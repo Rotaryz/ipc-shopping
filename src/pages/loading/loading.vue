@@ -17,6 +17,7 @@
       </article>
     </section>
     <toast ref="toast"></toast>
+    <navigator url="/pages/test/test" class="test-btn">测试专用</navigator>
   </div>
 </template>
 
@@ -92,7 +93,6 @@
           iv: this.userInfo.detail.iv,
           encryptedData: this.userInfo.detail.encryptedData
         }
-        console.log(data)
         this.authorizationCount++
         api.userAuthorise(data)
           .then(Json => {
@@ -133,6 +133,13 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import '../../common/stylus/variable'
   @import '../../common/stylus/mixin'
+
+  .test-btn
+    position: fixed
+    top: 0
+    left: 0
+    right: 0
+    normal-button-default()
 
   .content
     height: 100vh
