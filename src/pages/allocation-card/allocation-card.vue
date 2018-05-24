@@ -96,7 +96,8 @@
           title: 'eleven',
           endDate: '2018-10-10',
           store: 3
-        }
+        },
+        bigStore: 0
       }
     },
     mounted() {
@@ -165,6 +166,7 @@
           this.upCustomerId = item.customer_id
           this.upName = item.nickname
         }
+        this.bigStore = number + this.info.store
         this.upNumber = number
         this.preNumber = number
         this.modelCon = !this.modelCon
@@ -179,12 +181,12 @@
         this.upNumber--
       },
       add() {
-        if (this.upNumber >= this.info.store) return
+        if (this.upNumber >= this.bigStore) return
         this.upNumber++
       },
       // 提交分配
       sumbit() {
-        if (this.upNumber > this.info.store) {
+        if (this.upNumber > this.bigStore) {
           this.$refs.toast.show('数量超过范围')
           return
         }

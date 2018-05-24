@@ -280,6 +280,7 @@
         setTimeout(() => {
           this.applyLock = false
         }, 3000)
+        let that = this
         wechat.login().then(res => {
           let code = res.code
           api.merApplyPay(this.upNumber, this.curId, code).then(res => {
@@ -294,9 +295,9 @@
                 signType,
                 paySign,
                 'success': function (res) {
-                  this.$refs.toast.show('复购成功')
-                  this.modelCon = !this.modelCon
-                  console.log(this.modelCon, '```````````````````')
+                  that.$refs.toast.show('复购成功')
+                  that.modelCon = !this.modelCon
+                  console.log(that.modelCon, '```````````````````')
                 },
                 'fail': function (res) {
                   // 支付失败关闭订单
