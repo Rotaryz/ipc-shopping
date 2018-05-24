@@ -22,12 +22,12 @@
         shopName: ''
       }
     },
-    mounted() {
+    mounted () {
       this.getInfo()
       console.log(this.$route.query.key)
       console.log(`--${this.compName}--mounted`)
     },
-    beforeUpdate() {
+    beforeUpdate () {
       console.log(`--${this.compName}--beforeUpdate`)
     },
     methods: {
@@ -48,9 +48,11 @@
       }
     },
     computed: {
-      ss() {
+      ss () {
         console.log('...')
       }
+    },
+    components: {
     }
   }
 </script>

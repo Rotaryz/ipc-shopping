@@ -78,8 +78,6 @@
         this._rqGetCheckList(data)
           .then(json => {
             let list = this._formatResData(json)
-            console.log(list, '------处理')
-            console.log(json, '++++++++++处理2')
             this.couponList = list
             this._adjustList()
             this._isAll(json)
@@ -99,7 +97,6 @@
               if (json.error !== ERR_OK) {
                 return ''
               }
-              console.log(json, '++++++====++++获取优惠券')
               resolve(json)
             })
             .catch(err => {
@@ -131,23 +128,21 @@
       _formatResData (json) {
         let arr = []
         let res = json.data
-        console.log(res, '处理前')
         res.map(item => {
-          if (item.goods_detail.id) {
-            arr.push({
-              id: item.goods_detail.id,
-              type: item.goods_type * 1 === 0 ? '代金券' : '套餐券',
-              name: item.goods_detail.title,
-              shopName: item.shop_name,
-              scope: `限${item.shop_name}使用`,
-              useLife: `有效期:${item.goods_detai.start_at}至${item.goods_detai.end_at}`,
-              image_url: item.goods_detail.image_url,
-              sortType: 10,
-              appId: res.goods_detai.app_id,
-              appPath: res.goods_detai.path,
-              merchantId: res.merchant_id
-            })
-          }
+          arr.push({
+            id: item.goods_detail.id,
+            type: item.goods_type * 1 === 0 ? '代金券' : '套餐券',
+            name: item.goods_detail.title,
+            shopName: item.shop_name,
+            scope: `限${item.shop_name}使用`,
+            useLife: `有效期:${item.goods_detail.start_at.split(' ')[0]}至${item.goods_detail.end_at.split(' ')[0]}`,
+            image_url: item.goods_detail.url,
+            sortType: 10,
+            appId: item.goods_detail.appid,
+            appPath: item.goods_detail.path,
+            merchantId: item.merchant_id,
+            listId: item.id
+          })
         })
         return arr
       },
@@ -171,8 +166,9 @@
       _packData () {
         let arr = []
         this.couponList.map(item => {
-          arr.push({id: item.id})
+          arr.push({id: item.listId})
         })
+        console.log(arr, '=======排序===========')
         return {alliance_goods_array: arr}
       },
       // 跳C端预览

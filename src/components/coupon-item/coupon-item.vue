@@ -27,6 +27,7 @@
           <div class="name">{{couponInfo.name}}</div>
         </div>
         <div class="scope">{{couponInfo.scope}}</div>
+        <!--<div class="e-box"></div>-->
         <div class="date">{{couponInfo.useLife}}</div>
         <div class="look-over">
           <div class="txt" :style="backgroundLookOverImg" @tap="lookOverHandler(couponInfo)">查看</div>
@@ -131,7 +132,7 @@
       isNormal () {
         return this.useType === this.constUseType.normal
       },
-      backgroundLogoImg() {
+      backgroundLogoImg () {
         const img = this.couponInfo.image_url || `${this.imageUri}/defaults/ipc-shopping/common/icon-activity_select@2x.png`
         return `background-image:url(${img})`
       },
@@ -215,7 +216,7 @@
         .title
           layout(row, inline, no-wrap)
           margin-bottom: 27.5px
-          align-items: flex-end
+          align-items: center
           .type
             font-family: $font-family-light
             font-size: $font-size-small-ss
@@ -228,6 +229,8 @@
             color: $color-text-2d
             line-height: $font-size-medium
             no-wrap()
+        .e-box
+          height: 5px
         .scope
           font-family: $font-family-light
           color: $color-text-2d

@@ -234,8 +234,8 @@
             this._backToB()
           }
         } else {
-          // token = wx.getStorageSync('token')
-          token = this.$root.$mp.query.token
+          // token = this.$root.$mp.query.token
+          token = wx.getStorageSync('token')
           if (!token) {
             this._backToB()
           }
