@@ -231,7 +231,7 @@
                 api.merCouponDetails(res.data.alliance_merchant_apply.promotion_id).then(res => {
                   console.log(res)
                   this.coupon = {
-                    image_url: res.data.promotion_detail_image_data[0].image_url,
+                    image_url: res.data.promotion_image_data[0].image_url,
                     promotion_type_cn: res.data.promotion_type_cn,
                     title: res.data.title,
                     end_at: res.data.end_at,
@@ -292,6 +292,7 @@
         }, 3000)
         wechat.login().then(res => {
           let code = res.code
+          let that = this
           // 调起支付
           api.merApplyPay(this.addNumber, this.activityData.id, code).then(res => {
             console.log(res.data)
@@ -305,7 +306,7 @@
                 signType,
                 paySign,
                 'success': function (res) {
-                  this.$router.go(-1)
+                  that.$router.go(-1)
                 },
                 'fail': function (res) {
                   // 支付失败关闭订单

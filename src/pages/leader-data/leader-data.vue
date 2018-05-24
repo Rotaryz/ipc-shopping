@@ -114,9 +114,9 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import { baseURL, ERR_OK } from 'api/config'
+  import {baseURL, ERR_OK} from 'api/config'
   import * as wechat from 'common/js/wechat'
-  import { mapGetters } from 'vuex'
+  import {mapGetters} from 'vuex'
   import api from 'api'
 
   const options = {
@@ -174,7 +174,7 @@
     }]
   }
   export default {
-    data () {
+    data() {
       return {
         ec: {
           // 传 options
@@ -189,12 +189,28 @@
         isAllShop: false,
         fristAllShop: false,
         isOffline: false,
-        allStaffList: [], // 商店总榜总榜数据参数
+        allStaffList: [
+          {
+            avatar_url: null,
+            sale_count: null,
+            nickname: null
+          },
+          {
+            avatar_url: null,
+            sale_count: null,
+            nickname: null
+          },
+          {
+            avatar_url: null,
+            sale_count: null,
+            nickname: null
+          }
+        ], // 商店总榜总榜数据参数
         allStaffTwoList: [],
         fristAllStaff: false
       }
     },
-    onPullDownRefresh () {
+    onPullDownRefresh() {
       if (this.staffScene === 2) {
         this.selfStaffPage = 1
         this.selfStaffList = []
@@ -207,22 +223,30 @@
         this._getAllfStaff()
       }
     },
-    mounted () {
+    mounted() {
+      this._dataInit()
       this.activeId = this.$root.$mp.query.id
       this._getAllfShop()
       this._getCake()
     },
     methods: {
       ...mapGetters(['role']),
-      _init () {
+      _init() {
         let role = this.role()
         this.currentRole = role
       },
-      clickTab (value) {
+      _dataInit() {
+        this.selfStaffPage = 1
+        this.selfStaffList = []
+        this.isAllselfStaff = false
+        this.allStaffList = []
+        this.allStaffTwoList = []
+      },
+      clickTab(value) {
         this.bigBtn = value
       },
       // 商家总榜数据
-      _getAllfShop () {
+      _getAllfShop() {
         api.dataAllShop(this.activeId, this.allfShopPage).then(res => {
           if (res.error === ERR_OK) {
             this.allShopList.push(...res.data)
@@ -237,16 +261,16 @@
           console.log(res)
         })
       },
-      scrollAllShop () {
+      scrollAllShop() {
         if (this.isAllShop) return
         this._getAllfShop()
       },
-      _isAllALLShop (res) {
+      _isAllALLShop(res) {
         if (this.allShopList.length >= res.meta.total * 1) {
           this.isAllShop = true
         }
       },
-      _getCake () {
+      _getCake() {
         api.dataCake(this.activeId).then(res => {
           if (res.error === ERR_OK) {
             this.ec.options.series.data = res.data.detail
@@ -258,7 +282,7 @@
           wechat.hideLoading()
         })
       },
-      _getAllotMoney () {
+      _getAllotMoney() {
         api.dataAllotMoney(this.activeId).then(res => {
           console.log(res)
           if (res.error === ERR_OK) {
@@ -270,7 +294,7 @@
         })
       },
       // 商家员工总榜数据
-      _getAllfStaff () {
+      _getAllfStaff() {
         api.dataAllStaff(this.activeId, this.allfStaffPage).then(res => {
           if (res.error === ERR_OK) {
             this.allStaffList = res.data.slice(0, 3)
@@ -534,6 +558,7 @@
     ec-canvas
       width: 400px
       height: 179px
+
   .data-null
     text-align: center
     font-family: $font-family-light
