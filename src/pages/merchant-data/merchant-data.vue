@@ -65,7 +65,7 @@
               <div class="data-all" v-if="allShopList.length !== 0">
                 <div class="self-merchant-list" v-for="(item, index) in allShopList" v-bind:key="index"
                      @tap="test(item)">
-                  <div class="selft-merchant-list-box">{{item.merchant_id}}</div>
+                  <div class="selft-merchant-list-box">{{item.merchant_data.shop_name}}</div>
                   <div class="selft-merchant-list-box">{{item.sale_count}}/{{item.init_stock}}</div>
                   <div class="selft-merchant-list-box">{{item.other_verification}}</div>
                   <div class="selft-merchant-list-box">{{item.alliance_power}}</div>
