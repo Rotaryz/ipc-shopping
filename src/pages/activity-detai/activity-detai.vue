@@ -174,7 +174,7 @@
         .modal-item-img
           height: 70px
           width: 70px
-          border-1px($color-row-line-f0, 2px)
+          position: relative
           img
             width: 100%
             height: 100%
