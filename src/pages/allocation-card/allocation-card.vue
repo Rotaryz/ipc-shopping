@@ -100,6 +100,8 @@
       }
     },
     mounted() {
+      this.staffList = []
+      this.merchantList = []
       this.dataId.activity_alliance_id = this.$root.$mp.query.id
       if (!this.dataId.activity_alliance_id) {
         this.dataId.activity_alliance_id = 1
@@ -124,7 +126,7 @@
             console.log(res)
             this.info.title = res.data.activity_alliance.name
             this.info.endDate = res.data.activity_alliance.end_at
-            this.info.store = res.data.activity_alliance.stock
+            this.info.store = res.data.alliance_merchant_report.stock
             this.getAllocation()
           } else {
             this.$refs.toast.show(res.message)
@@ -171,7 +173,7 @@
         this.modelCon = !this.modelCon
       },
       subtract() {
-        if (parseInt(this.upNumber) <= 1) {
+        if (parseInt(this.upNumber) <= 0) {
           return
         }
         this.upNumber--
@@ -198,6 +200,7 @@
           console.log(res)
           if (res.error === ERR_OK) {
             this.$refs.toast.show('分配成功')
+            this.getAllotDetals()
           } else {
             this.$refs.toast.show(res.message)
           }

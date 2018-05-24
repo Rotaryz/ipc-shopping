@@ -346,7 +346,7 @@
       applyConfirm () {
         if (this.modelNumber === 1) {
           // 报名申请退款
-          api.merRefund().then(res => {
+          api.merRefund(this.applyId).then(res => {
             console.log(res, '报名申请退款`````')
             if (res.error === ERR_OK) {
               this.$refs.toast.show('申请退款成功')

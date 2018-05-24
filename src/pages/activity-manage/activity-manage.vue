@@ -202,7 +202,7 @@
               verification_power: 0
             }
           }
-          if (item.promotion_id === 0) {
+          if (item.promotion_id === 0 && item.check_status !== 2) {
             status = 0
           } else {
             if (item.check_status === 0) {
@@ -295,6 +295,8 @@
                 paySign,
                 'success': function (res) {
                   this.$refs.toast.show('复购成功')
+                  this.modelCon = !this.modelCon
+                  console.log(this.modelCon, '```````````````````')
                 },
                 'fail': function (res) {
                   // 支付失败关闭订单

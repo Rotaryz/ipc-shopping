@@ -94,7 +94,10 @@ export default {
    * @param data 状态
    * @returns {Promise.<*>}
    */
-  merRefund(data) {
+  merRefund(apply_id = 0) {
+    let data = {
+      apply_id
+    }
     const url = `/api/alliances/merchant/refund`
     return request.post(url, data, true)
   },
