@@ -118,7 +118,7 @@
         ROLE, // 角色定义常量值
         currentRole: null, // 当前角色
         imageUri: baseURL.image, // 图片路径
-        activeList: [...ACTIVE_DEF, ...ACTIVE_DEF], // 活动列表
+        activeList: ACTIVE_DEF, // 活动列表
         employeeList: [], // 员工列表
         dotCurrent: 0, // dot指示器下标
         sliderCurrent: 0, // swiper指示器下标
@@ -180,6 +180,7 @@
                   let status = json.data.status
                   if (status === null || status === 'null') {
                     this.status = -1
+                    this._init()
                   } else {
                     this.status = status
                   }
@@ -207,7 +208,6 @@
       _backToB () {
         if (this.backCount > 0) return
         this.backCount++
-        console.log('!!!!!!!!!!!!!!!!!!')
         wechat.showLoading()
         let appId = SHOP_HELPER.APPID
         let path = SHOP_HELPER.PATH

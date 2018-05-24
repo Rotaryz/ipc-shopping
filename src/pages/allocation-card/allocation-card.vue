@@ -38,17 +38,21 @@
       <div class="model-con">
         <div class="model-top">
           <div class="top-title">{{upName}}</div>
+          <div class="add-number top-line">
+            <div class="text">已锁定数/已销售数/总数</div>
+            <div class="text">{{blockStore}}/{{sellStore}}/{{allStore}}</div>
+          </div>
           <div class="add-number">
             <div class="text">数量</div>
             <div class="calculate-box">
               <div class="subtract" @tap="subtract">-</div>
               <input type="number" class="number" v-model="upNumber">
-              <div :class="['add',upNumber >= bigStore ?  'add-noselet' : '']" @tap="add">+</div>
+              <div :class="['add',upNumber * 1 + blockStore >= bigStore ?  'add-noselet' : '']" @tap="add">+</div>
             </div>
           </div>
         </div>
         <div class="model-bg">
-          <div v-if="upNumber > bigStore">数量超过范围</div>
+          <div v-if="upNumber * 1 + blockStore > bigStore">数量超过范围</div>
         </div>
         <div class="bottom-btn">
           <div class="btn" @tap="cancel">取消</div>
@@ -62,15 +66,15 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {baseURL, ERR_OK} from 'api/config'
+  import { baseURL, ERR_OK } from 'api/config'
   import ActiveCard from 'components/active-card-item/active-card-item'
   import api from 'api'
   import * as wechat from 'common/js/wechat'
-  import {mapGetters} from 'vuex'
+  import { mapGetters } from 'vuex'
   import Toast from '@/components/toast/toast'
 
   export default {
-    data() {
+    data () {
       return {
         image: baseURL.image,
         modelCon: false,
@@ -95,12 +99,16 @@
         info: {
           title: 'eleven',
           endDate: '2018-10-10',
-          store: 3
+          store: ''
         },
+        store: 0,
+        blockStore: 0,
+        sellStore: 0,
+        allStore: 0,
         bigStore: 0
       }
     },
-    mounted() {
+    mounted () {
       this.staffList = []
       this.merchantList = []
       this.dataId.activity_alliance_id = this.$root.$mp.query.id
@@ -109,32 +117,34 @@
       }
       this.getAllotDetals()
     },
-    beforeMount() {
+    beforeMount () {
       this._init()
     },
     methods: {
       ...mapGetters(['role']),
-      _init() {
+      _init () {
         let role = this.role()
         this.currentRole = role
       },
-      showRules() {
+      showRules () {
         this.showRule = !this.showRule
       },
-      getAllotDetals() {
+      getAllotDetals () {
         api.merAllotDetail(this.dataId.activity_alliance_id).then(res => {
           if (res.error === ERR_OK) {
             console.log(res)
             this.info.title = res.data.activity_alliance.name
             this.info.endDate = res.data.activity_alliance.end_at
             this.info.store = res.data.alliance_merchant_report.stock
+            this.store = res.data.alliance_merchant_report.stock
             this.getAllocation()
           } else {
             this.$refs.toast.show(res.message)
           }
         })
       },
-      getAllocation() {
+      getAllocation () {
+        this.store = this.info.store
         api.merAllotList(this.dataId).then(res => {
           if (res.error === ERR_OK) {
             this.merchantList = res.data.merchant
@@ -152,7 +162,7 @@
           console.log(res)
         })
       },
-      showBox(item, index) {
+      showBox (item, index) {
         console.log(item, '`````````````')
         console.log(index, '`````````````')
         this.sumbitType = index
@@ -161,36 +171,42 @@
           number = item.stock - item.sale_count
           this.upShopId = item.id
           this.upName = item.shop_name
+          this.blockStore = item.blocked_stock
+          this.sellStore = item.sale_count
+          this.allStore = item.stock
         } else {
           number = item.stock - item.sale_count
           this.upCustomerId = item.customer_id
           this.upName = item.nickname
+          this.blockStore = item.blocked_stock
+          this.sellStore = item.sale_count
+          this.allStore = item.stock
         }
         this.bigStore = number + this.info.store
-        this.upNumber = number
+        this.upNumber = number - this.blockStore
         this.preNumber = number
         this.modelCon = !this.modelCon
       },
-      cancel() {
+      cancel () {
         this.modelCon = !this.modelCon
       },
-      subtract() {
+      subtract () {
         if (parseInt(this.upNumber) <= 0) {
           return
         }
         this.upNumber--
       },
-      add() {
-        if (this.upNumber >= this.bigStore) return
+      add () {
+        if (this.upNumber * 1 + this.blockStore >= this.bigStore) return
         this.upNumber++
       },
       // 提交分配
-      sumbit() {
-        if (this.upNumber > this.bigStore) {
+      sumbit () {
+        if (this.upNumber * 1 + this.blockStore > this.bigStore) {
           this.$refs.toast.show('数量超过范围')
           return
         }
-        let number = this.upNumber - this.preNumber
+        let number = this.upNumber * 1 - this.preNumber + this.blockStore
         // 判断是商家分配还是员工分配
         if (this.sumbitType === 'shop') {
           this.upCustomerId = 0
@@ -210,7 +226,7 @@
           this.modelCon = !this.modelCon
         })
       },
-      jumpPreview(cardInfo) {
+      jumpPreview (cardInfo) {
         console.log(cardInfo.id)
         const url = `/pages/activity-detail/activity-detail?activityId=${cardInfo.id}`
         console.log(url)
@@ -362,6 +378,8 @@
           cut-off-rule-bottom()
           line-height: 45px
           height: 45px
+        .top-line
+          cut-off-rule-bottom()
         .add-number
           height: 45px
           border-radius: 3px
