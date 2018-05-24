@@ -48,7 +48,7 @@
           </div>
         </div>
         <div class="model-bg">
-          <div v-if="upNumber > info.store">数量超过范围</div>
+          <div v-if="upNumber > bigStore">数量超过范围</div>
         </div>
         <div class="bottom-btn">
           <div class="btn" @tap="cancel">取消</div>
