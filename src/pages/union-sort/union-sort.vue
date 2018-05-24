@@ -169,8 +169,7 @@
         this.couponList.map(item => {
           arr.push({id: item.id})
         })
-        let str = JSON.stringify(arr)
-        return {alliance_goods_array: str}
+        return {alliance_goods_array: arr}
       },
       // 跳C端预览
       _toMpC (json) {

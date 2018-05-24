@@ -555,7 +555,12 @@
       },
       // 去活动管理
       toShop () {
-        const url = `/pages/activity-manage/activity-manage`
+        let url = ``
+        if (this.currentRole === ROLE.STAFF_ID) {
+          url = `/pages/staff-activity/staff-activity`
+        } else {
+          url = `/pages/activity-manage/activity-manage`
+        }
         this.$router.push(url)
       },
       // 去员工管理

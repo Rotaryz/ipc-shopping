@@ -60,15 +60,15 @@
     shopApplying: 11 // 活动2
   }
 
-  // // 卡券信息的默认值-盟主管理
-  // const DEFAULT_CARD_INFO_UNION = {
-  //   title: '异业联盟卡',
-  //   endDate: '2018-01-17到期',
-  //   sales: '100', // 销量
-  //   chargeOff: '60', // 核销
-  //   statusCode: DEFAULT_CONST_STATUS.applying,
-  //   statusStr: '已上架'
-  // }
+  // 卡券信息的默认值-盟主管理
+  const DEFAULT_CARD_INFO_UNION = {
+    title: '异业联盟卡',
+    endDate: '2018-01-17到期',
+    sales: '100', // 销量
+    chargeOff: '60', // 核销
+    statusCode: DEFAULT_CONST_STATUS.apply,
+    statusStr: '已上架'
+  }
   //
   // // 卡券信息的默认值-盟主审核
   // const DEFAULT_CARD_INFO_APPLYING = {
@@ -82,7 +82,7 @@
     props: {
       cardInfo: {
         type: Object,
-        default: {}
+        default: DEFAULT_CARD_INFO_UNION
       },
       constStatus: {
         type: Object,
@@ -277,6 +277,7 @@
         .b-bottom
           flex: 1
           padding: 0 10px
+          height: 100%
           layout(row, block, no-wrap)
           align-items: center
           overflow: hidden
@@ -286,7 +287,7 @@
             font-size: $font-size-small
             color: $color-text-2d
           .btn
-            margin-left: 10px
+            margin: 10px 0px 10px 10px
           .delete, .editor
             function-button()
           .total, .check

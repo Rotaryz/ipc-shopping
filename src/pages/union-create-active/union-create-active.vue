@@ -302,7 +302,7 @@
           address: this.address,
           price: this.price,
           stock: this.stock,
-          attach: JSON.stringify(this.activeInfo),
+          attach: this.activeInfo,
           award_note: awardNote(this.activeInfo.item0, this.activeInfo.item1),
           claim_note: claimNote(this.activeInfo.item2),
           detail_note: detailNote(this.address)
