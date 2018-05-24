@@ -100,6 +100,8 @@
       }
     },
     mounted() {
+      this.staffList = []
+      this.merchantList = []
       this.dataId.activity_alliance_id = this.$root.$mp.query.id
       if (!this.dataId.activity_alliance_id) {
         this.dataId.activity_alliance_id = 1
