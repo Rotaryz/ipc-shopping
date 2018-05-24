@@ -8,12 +8,14 @@
       </div>
       <div class="code-hint">扫码绑定加入{{shopName}}</div>
     </div>
+    <test></test>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import * as wechat from 'common/js/wechat'
   import api from 'api'
+  import test from 'components/test-btn/test-btn'
 
   export default {
     data () {
@@ -22,12 +24,12 @@
         shopName: ''
       }
     },
-    mounted() {
+    mounted () {
       this.getInfo()
       console.log(this.$route.query.key)
       console.log(`--${this.compName}--mounted`)
     },
-    beforeUpdate() {
+    beforeUpdate () {
       console.log(`--${this.compName}--beforeUpdate`)
     },
     methods: {
@@ -48,9 +50,12 @@
       }
     },
     computed: {
-      ss() {
+      ss () {
         console.log('...')
       }
+    },
+    components: {
+      test
     }
   }
 </script>

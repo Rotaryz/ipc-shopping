@@ -3,6 +3,7 @@
     <img :src="image + '/defaults/ipc-shopping/aliance/pic-activity_er@2x.png'" class="card-img" v-if="image" mode="widthFix">
     <img :src="codeImage" class="card-code" v-if="image" mode="widthFix">
     <toast ref="toast"></toast>
+    <test></test>
   </div>
 </template>
 
@@ -12,6 +13,7 @@
   import api from 'api'
   import * as wechat from 'common/js/wechat'
   import Toast from '@/components/toast/toast'
+  import test from 'components/test-btn/test-btn'
 
   export default {
     data() {
@@ -47,7 +49,8 @@
       }
     },
     components: {
-      Toast
+      Toast,
+      test
     }
   }
 </script>

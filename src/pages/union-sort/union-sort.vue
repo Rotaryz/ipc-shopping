@@ -133,6 +133,7 @@
         let res = json.data
         console.log(res, '处理前===========')
         res.map(item => {
+          console.log(item.goods_detail.id, '===id')
           if (item.goods_detail.id) {
             arr.push({
               id: item.goods_detail.id,
