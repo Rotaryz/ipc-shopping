@@ -261,7 +261,7 @@
                     this.btnText = '排队中'
                   }
                 }
-                console.log(this.status)
+                console.log(this.status, '当前页面的状态')
               }
             }
           } else {
@@ -306,7 +306,7 @@
                 signType,
                 paySign,
                 'success': function (res) {
-                  that.$router.go(-1)
+                  that.$router.go(-2)
                 },
                 'fail': function (res) {
                   // 支付失败关闭订单
