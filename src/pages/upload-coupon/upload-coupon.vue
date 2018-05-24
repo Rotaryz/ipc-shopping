@@ -63,13 +63,18 @@
       this.selectId = this.$root.$mp.query.selectId
       if (isNaN(this.selectId * 1)) {
         this.selectId = 0
+      } else {
+        this.objId.id = this.selectId
+        this.clickSelect(this.objId)
       }
-      this.objId.id = this.selectId
-      console.log(this.objId)
+      console.log(this.objId, '重选')
       console.log(this.$root.$mp.query.selectId, '---------')
       this.activityId = this.$root.$mp.query.activityId
       console.log(this.$root.$mp.query.activityId, '---------')
       this._rqManageDetails()
+    },
+    onShow() {
+      wechat.hideLoading()
     },
     onReachBottom () {
       if (this.isAll) return
