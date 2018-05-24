@@ -78,8 +78,8 @@
         this._rqGetCheckList(data)
           .then(json => {
             let list = this._formatResData(json)
-            console.log(list, '------')
-            console.log(json, '++++++++++')
+            console.log(list, '------处理')
+            console.log(json, '++++++++++处理2')
             this.couponList = list
             this._adjustList()
             this._isAll(json)
@@ -131,6 +131,7 @@
       _formatResData (json) {
         let arr = []
         let res = json.data
+        console.log(res, '处理前')
         res.map(item => {
           if (item.goods_detail.id) {
             arr.push({
