@@ -292,6 +292,7 @@
         }, 3000)
         wechat.login().then(res => {
           let code = res.code
+          let that = this
           // 调起支付
           api.merApplyPay(this.addNumber, this.activityData.id, code).then(res => {
             console.log(res.data)
@@ -305,7 +306,7 @@
                 signType,
                 paySign,
                 'success': function (res) {
-                  this.$router.go(-1)
+                  that.$router.go(-1)
                 },
                 'fail': function (res) {
                   // 支付失败关闭订单

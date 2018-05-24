@@ -414,6 +414,7 @@
       }
     },
     mounted() {
+      this._dataInit()
       let system = DEVICE_INFO.system
       this.ios = system.search('iOS') !== -1
       if (!this.ios) {
@@ -457,6 +458,19 @@
       _init() {
         let role = this.role()
         this.currentRole = role
+      },
+      _dataInit() {
+        this.selfShopPage = 1
+        this.selfShopList = []
+        this.isAllSelfShop = false
+        this.allfShopPage = 1
+        this.allShopList = []
+        this.isAllShop = false
+        this.selfStaffPage = 1
+        this.selfStaffList = []
+        this.isAllselfStaff = false
+        this.allStaffList = []
+        this.allStaffTwoList = []
       },
       clickTab(value) {
         this.bigBtn = value

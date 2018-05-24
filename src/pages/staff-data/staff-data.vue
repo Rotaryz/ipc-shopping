@@ -1,7 +1,8 @@
 <template>
   <div class="data-box">
     <div class="merchant-title">
-      <div class="merchant-title-tab" :class="staffBtn === 'self' ? 'active' : '' " @tap="clickStaffTab('self')">国颐堂榜</div>
+      <div class="merchant-title-tab" :class="staffBtn === 'self' ? 'active' : '' " @tap="clickStaffTab('self')">国颐堂榜
+      </div>
       <div class="merchant-title-tab" :class="staffBtn === 'all' ? 'active' : '' " @tap="clickStaffTab('all')">总榜</div>
     </div>
     <div class="self-staff" v-if="staffBtn === 'self'">
@@ -131,9 +132,9 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import { baseURL, DEVICE_INFO, ERR_OK } from 'api/config'
+  import {baseURL, DEVICE_INFO, ERR_OK} from 'api/config'
   import * as wechat from 'common/js/wechat'
-  import { mapGetters } from 'vuex'
+  import {mapGetters} from 'vuex'
   import api from 'api'
 
   const Baroptions = {
@@ -212,7 +213,7 @@
     ]
   }
   export default {
-    data () {
+    data() {
       return {
         ecBra: {
           // 传 options
@@ -230,12 +231,28 @@
           self_verification: 0,
           other_verification: 0
         },
-        allStaffList: [], // 商店总榜总榜数据参数
+        allStaffList: [
+          {
+            avatar_url: null,
+            sale_count: null,
+            nickname: null
+          },
+          {
+            avatar_url: null,
+            sale_count: null,
+            nickname: null
+          },
+          {
+            avatar_url: null,
+            sale_count: null,
+            nickname: null
+          }
+        ], // 商店总榜总榜数据参数
         allStaffTwoList: [],
         fristAllStaff: false
       }
     },
-    onPullDownRefresh () {
+    onPullDownRefresh() {
       if (this.staffScene === 2) {
         this.selfStaffPage = 1
         this.selfStaffList = []
@@ -248,7 +265,8 @@
         this._getAllfStaff()
       }
     },
-    mounted () {
+    mounted() {
+      this._dataInit()
       let system = DEVICE_INFO.system
       this.ios = system.search('iOS') !== -1
       if (!this.ios) {
@@ -260,11 +278,18 @@
     },
     methods: {
       ...mapGetters(['role']),
-      _init () {
+      _init() {
         let role = this.role()
         this.currentRole = role
       },
-      clickStaffTab (value) {
+      _dataInit() {
+        this.selfStaffPage = 1
+        this.selfStaffList = []
+        this.isAllselfStaff = false
+        this.allStaffList = []
+        this.allStaffTwoList = []
+      },
+      clickStaffTab(value) {
         this.staffBtn = value
         if (this.staffBtn === 'all') {
           this.staffScene = 3
@@ -276,7 +301,7 @@
         }
       },
       // 商家单店员工数据
-      _getSelfStaff () {
+      _getSelfStaff() {
         api.dataSelfStaff(this.activeId, this.selfStaffPage).then(res => {
           if (res.error === ERR_OK) {
             this.selfStaffList.push(...res.data)
@@ -290,16 +315,16 @@
           console.log(res)
         })
       },
-      scrollSelfStaff () {
+      scrollSelfStaff() {
         if (this.isAllselfStaff) return
         this._getAllfShop()
       },
-      _isAllSelfStaff (res) {
+      _isAllSelfStaff(res) {
         if (this.selfStaffList.length >= res.meta.total * 1) {
           this.isAllselfStaff = true
         }
       },
-      _getBar () {
+      _getBar() {
         api.dataBar(this.activeId).then(res => {
           if (res.error === ERR_OK) {
             console.log(this.ecBra.options.xAxis[0].data, '11111111111`````````````')
@@ -313,7 +338,7 @@
         })
       },
       // 商家员工总榜数据
-      _getAllfStaff () {
+      _getAllfStaff() {
         api.dataAllStaff(this.activeId, this.allfStaffPage).then(res => {
           if (res.error === ERR_OK) {
             this.allStaffList = res.data.slice(0, 3)
