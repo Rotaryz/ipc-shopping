@@ -164,7 +164,7 @@
         font-size: $font-size-medium
         color: $color-text-46
         padding-left: 8px
-        vertical-line($color-ktv-theme)
+        vertical-line()
       .modal-item
         height: 100px
         display: flex
