@@ -296,8 +296,10 @@
                 paySign,
                 'success': function (res) {
                   that.$refs.toast.show('复购成功')
-                  that.modelCon = !this.modelCon
-                  console.log(that.modelCon, '```````````````````')
+                  that.modelCon = false
+                  console.log(that.modelCon, '```````````2222````````')
+                  console.log(res, '```````````2222````````')
+                  console.log(that, '```````````33````````')
                 },
                 'fail': function (res) {
                   // 支付失败关闭订单

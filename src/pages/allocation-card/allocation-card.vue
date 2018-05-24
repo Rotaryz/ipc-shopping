@@ -43,7 +43,7 @@
             <div class="calculate-box">
               <div class="subtract" @tap="subtract">-</div>
               <input type="number" class="number" v-model="upNumber">
-              <div :class="['add',upNumber >= info.store ?  'add-noselet' : '']" @tap="add">+</div>
+              <div :class="['add',upNumber >= bigStore ?  'add-noselet' : '']" @tap="add">+</div>
             </div>
           </div>
         </div>
