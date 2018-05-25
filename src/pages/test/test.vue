@@ -25,8 +25,8 @@
   export default {
     data () {
       return {
-        merchantId: wx.getStorageSync('merchantId'),
-        merchantId2: wx.getStorageSync('merchantId'),
+        merchantId: '',
+        merchantId2: '',
         eId: 0,
         activeId: 0,
         add: null
@@ -70,7 +70,7 @@
       },
       _goToC () {
         let appId = `wxa721ed0b76403077`
-        let path = `pages/activity/activity?m=${this.merchantId}&e=${this.eId}&a=${this.activeId}&type=y`
+        let path = `pages/activity/activity?m=${this.merchantId2}&e=${this.eId}&a=${this.activeId}&type=y`
         wx.navigateToMiniProgram({
           appId,
           path,
@@ -88,7 +88,7 @@
         return `pages/home/home?entryRole=${ROLE.STAFF_ID}&merchantId=${this.merchantId}&add=${this.add}`
       },
       pathTxt2 () {
-        return `pages/activity/activity?m=${this.merchantId}&e=${this.eId}&a=${this.activeId}&type=y`
+        return `pages/activity/activity?m=${this.merchantId2}&e=${this.eId}&a=${this.activeId}&type=y`
       }
     }
   }
