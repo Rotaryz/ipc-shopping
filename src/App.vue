@@ -23,9 +23,9 @@
     mounted () {
     },
     onLuanch () {
-      this._init()
     },
     onShow () {
+      this._init()
     },
     onHide () {
     },
@@ -62,7 +62,6 @@
         // token检查
         if (!this.token) {
           this._switchPage()
-          console.log(this.$router)
           return
         }
         // 检查商家ID
@@ -78,15 +77,15 @@
           // return
         }
         // 跳转首页
-        // let url = `/pages/home/home`
-        // this.$router.replace(url)
+        let url = `/pages/home/home`
+        this.$router.replace(url)
       },
       // 分流
       _switchPage () {
         switch (this.entryRole) {
           case ROLE.STAFF_ID : {
             let url = `/pages/login/login`
-            wx.reLaunch({url})
+            this.$router.replace(url)
             break
           }
           case ROLE.UNION_ID :
@@ -109,7 +108,7 @@
           envVersion: baseURL.jumpVersion,
           success (res) {
             // 打开成功
-            console.log(res)
+            console.info(res)
           }
         })
       },

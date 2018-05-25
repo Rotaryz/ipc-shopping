@@ -123,13 +123,16 @@
         sliderCurrent: 0, // swiper指示器下标
         noticeList: [], // 公告列表
         currentActiveId: null, // 当前活动id
-        status: -1 // 员工状态
+        status: 3 // 员工状态
       }
     },
     created () {
     },
     onShow () {
       this._checkStatus()
+    },
+    onHide () {
+      this.status = 3
     },
     beforeMount () {
     },
@@ -153,25 +156,24 @@
                 // 审核中，已拒绝
                 case 0:
                 case 2: {
-                  this.status = status
                   break
                 }
                 // 已通过
                 case 1: {
-                  let isOk = wx.getStorageSync('isOk')
-                  isOk && (this.status = 3)
                   this._init()
                   break
                 }
                 // 被删除
                 case 3: {
-                  this.status = status
                   wx.removeStorage({'isOk': 'isOk'})
                   this.$refs.toast.show('您的员工身份已解除！')
                   this._init()
                   break
                 }
               }
+              let isOk = wx.getStorageSync('isOk')
+              this.status = status
+              isOk && (this.status = 3)
               wechat.hideLoading()
             })
             .catch(err => {
