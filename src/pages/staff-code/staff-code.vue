@@ -1,7 +1,7 @@
 <template>
   <div class="card-box">
     <img :src="image + '/defaults/ipc-shopping/aliance/pic-activity_er@2x.png'" class="card-img" v-if="image" mode="widthFix">
-    <img :src="codeImage" class="card-code" v-if="image" mode="widthFix">
+    <img :src="codeImage" class="card-code" v-if="codeImage" mode="widthFix">
     <toast ref="toast"></toast>
   </div>
 </template>
@@ -35,12 +35,11 @@
         this.currentRole = role
       },
       getStaffCode() {
-        api.merStaffActiveQrcode().then(res => {
+        api.merStaffActiveQrcode(this.acitiveId).then(res => {
           if (res.error === ERR_OK) {
-            console.log(res)
             this.codeImage = res.data.qrcode_image
           } else {
-            this.$ref.toast.show(res.message)
+            this.$refs.toast.show(res.message)
           }
         })
         wechat.hideLoading()

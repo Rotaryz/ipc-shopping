@@ -106,9 +106,9 @@ export default {
    * @param data 状态
    * @returns {Promise.<*>}
    */
-  merStaffList(data) {
+  merStaffList(data, loading = true) {
     const url = `/api/alliances/employees/activities`
-    return request.get(url, data, true)
+    return request.get(url, data, loading)
   },
   /**
    * 员工活动二维码

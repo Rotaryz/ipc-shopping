@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="list-box"  v-if="staffList.length !== 0">
-      <div class="box-top" v-for="(item, index) in pageList" v-bind:key="index">
+    <div class="list-box" v-if="staffList.length !== 0">
+      <div class="box-top" v-for="(item, index) in staffList" v-bind:key="index">
         <active-card :useType="100" @addHandCode="jumpCode" @addHandData="jumpData" :cardInfo="item"></active-card>
       </div>
     </div>
@@ -22,6 +22,7 @@
   import api from 'api'
   import * as wechat from 'common/js/wechat'
   import Toast from '@/components/toast/toast'
+  import wx from 'wx'
 
   export default {
     data() {
@@ -44,7 +45,8 @@
     onPullDownRefresh() {
       this.isAllActive = false
       this.pageList.page = 1
-      this._getNewStaff(this.pageList)
+      this._getNewStaff(this.pageList, false)
+      wx.stopPullDownRefresh()
     },
     onReachBottom() {
       if (this.isAllActive) return
@@ -56,8 +58,8 @@
         let role = this.role()
         this.currentRole = role
       },
-      _getNewStaff(data) {
-        api.merStaffList(data).then(res => {
+      _getNewStaff(data, loading) {
+        api.merStaffList(data, loading).then(res => {
           if (res.error === ERR_OK) {
             this.staffList = this._formatRqData(res)
             this._isAllActive(res)
@@ -97,9 +99,9 @@
             name: item.activity_alliance.name,
             end_at: item.activity_alliance.end_at,
             store: item.stock,
-            // status: status,
             statusStr: statusStr,
-            statusCode: status
+            statusCode: status,
+            id: item.activity_alliance_id
           })
         })
         return arr
@@ -111,6 +113,7 @@
         }
       },
       jumpCode(cardInfo) {
+        console.log(cardInfo)
         const url = `/pages/staff-code/staff-code?id=${cardInfo.id}`
         this.$router.push(url)
       },
