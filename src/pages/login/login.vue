@@ -42,8 +42,8 @@
       }
     },
     onShow () {
+      this.add = this.$route.query.add
       this._getCode()
-      this.add = this.$root.$mp.appOptions.query.add
     },
     methods: {
       ...mapActions(['saveRole']),
