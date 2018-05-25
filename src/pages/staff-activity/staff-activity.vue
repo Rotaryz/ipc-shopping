@@ -56,8 +56,8 @@
         let role = this.role()
         this.currentRole = role
       },
-      _getNewStaff() {
-        api.merStaffList().then(res => {
+      _getNewStaff(data) {
+        api.merStaffList(data).then(res => {
           if (res.error === ERR_OK) {
             this.staffList = this._formatRqData(res)
             this._isAllActive(res)
@@ -68,8 +68,8 @@
           wechat.hideLoading()
         })
       },
-      _getStaff() {
-        api.merStaffList().then(res => {
+      _getStaff(data) {
+        api.merStaffList(data).then(res => {
           if (res.error === ERR_OK) {
             this.staffList.push(...this._formatRqData(res))
             this._isAllActive(res)
