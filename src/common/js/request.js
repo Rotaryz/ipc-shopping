@@ -7,7 +7,6 @@ import { ROLE } from './contants'
 const COMMON_HEADER = () => {
   const token = wx.getStorageSync('token')
   const merchantId = wx.getStorageSync('merchantId')
-  const scene = wx.getStorageSync('scene')
   let userType = wx.getStorageSync('userType')
   if (userType === ROLE.UNION_ID || userType === ROLE.SHOP_ID) {
     userType = 'merchant'
@@ -18,8 +17,7 @@ const COMMON_HEADER = () => {
     {'X-Requested-With': 'XMLHttpRequest'},
     {'Current-merchant': merchantId},
     {'Authorization': token},
-    {'User-type': userType},
-    {'Scene': scene}
+    {'User-type': userType}
   )
 }
 
@@ -39,7 +37,7 @@ fly.interceptors.response.use((response) => {
 fly.config.baseURL = baseURL.api
 
 function checkStatus (response) {
-  // loading
+  // login
   // 如果http状态码正常，则直接返回数据
   if (response && (response.status === 200 || response.status === 304 || response.status === 422)) {
     return response
@@ -65,9 +63,7 @@ function checkCode (res) {
   if (res.data && (res.data.code === TOKEN_OUT)) {
     // token失效返回登录页面
     const url = `/pages/home/home?resCode=${TOKEN_OUT}`
-    console.log(url, '++++++++++')
     wx.reLaunch({url})
-    // console.warn(res.msg)
   }
   // 如果code异常(这里已经包括网络错误，服务器错误，后端抛出的错误)，可以弹出一个错误提示，告诉用户
   if (res.status === ERR_NO) {
