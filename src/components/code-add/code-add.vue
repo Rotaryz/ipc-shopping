@@ -5,7 +5,6 @@
       <div class="code-msg">享受“一次努力，赚两份钱！”</div>
       <div class="code-img">
         <img class="max-img" :src="maxImg" alt="">
-        <img class="min-img" :src="maxImg" alt="">
       </div>
       <div class="code-hint">扫码绑定加入国颐堂</div>
     </div>
@@ -68,7 +67,7 @@
         color: $color-text-2d
         line-height: 32px
       .code-img
-        width: 230px
+        width: 200px
         height: 230px
         margin: 20px auto
         border: 1px solid $color-text-a4
@@ -79,15 +78,6 @@
           left: 0px
           width: 100%
           height: 100%
-        .min-img
-          position: absolute
-          top: 0px
-          left: 0px
-          right: 0px
-          bottom: 0px
-          margin: auto
-          width: 47px
-          height: 47px
 
       .code-hint
         font-family: $font-family-light
