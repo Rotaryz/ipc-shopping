@@ -51,15 +51,13 @@
     },
     onPullDownRefresh () {
       this.couponData.page = 1
-      this.couponList = []
       this.isAll = false
-      this._rqManageDetails()
+      this._rqNewManageDetails()
       wx.stopPullDownRefresh()
     },
     mounted () {
       this.btnColor = 0
       this.couponData.page = 1
-      this.couponList = []
       this.preIdx = -1
       this.isAll = false
       wechat.hideLoading()
@@ -70,7 +68,7 @@
       //   this.objId.id = this.selectId
       // }
       this.activityId = this.$root.$mp.query.activityId
-      this._rqManageDetails()
+      this._rqNewManageDetails()
     },
     onShow() {
       wechat.hideLoading()
@@ -92,6 +90,18 @@
         let formId = e.mp.detail.formId
         let data = {'form_ids': [formId]}
         api.homeCollectFormId(data)
+      },
+      _rqNewManageDetails () {
+        api.merCouponList(this.couponData).then(res => {
+          if (res.error === ERR_OK) {
+            this.couponList = res.data
+            this._isAllActive(res)
+            this.couponData.page++
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+          wechat.hideLoading()
+        })
       },
       _rqManageDetails () {
         api.merCouponList(this.couponData).then(res => {

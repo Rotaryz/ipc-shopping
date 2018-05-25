@@ -315,6 +315,7 @@
                 justify-content: space-between
                 padding: 4.5px 0 6px
               .title
+                no-wrap()
                 font-family: $font-family-regular
                 font-size: $font-size-medium-x
                 line-height: $font-size-medium-x

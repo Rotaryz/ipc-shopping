@@ -36,16 +36,15 @@
       }
     },
     mounted() {
-      this._getStaff(this.pageList)
+      this._getNewStaff(this.pageList)
     },
     beforeMount() {
       this._init()
     },
     onPullDownRefresh() {
-      this.staffList = []
       this.isAllActive = false
       this.pageList.page = 1
-      this._getStaff(this.pageList)
+      this._getNewStaff(this.pageList)
     },
     onReachBottom() {
       if (this.isAllActive) return
@@ -57,6 +56,18 @@
         let role = this.role()
         this.currentRole = role
       },
+      _getNewStaff() {
+        api.merStaffList().then(res => {
+          if (res.error === ERR_OK) {
+            this.staffList = this._formatRqData(res)
+            this._isAllActive(res)
+            this.pageList.page++
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+          wechat.hideLoading()
+        })
+      },
       _getStaff() {
         api.merStaffList().then(res => {
           if (res.error === ERR_OK) {
@@ -66,7 +77,6 @@
           } else {
             this.$refs.toast.show(res.message)
           }
-          console.log(res)
           wechat.hideLoading()
         })
       },
@@ -101,15 +111,11 @@
         }
       },
       jumpCode(cardInfo) {
-        console.log(cardInfo.id)
         const url = `/pages/staff-code/staff-code?id=${cardInfo.id}`
-        console.log(url)
         this.$router.push(url)
       },
       jumpData(cardInfo) {
-        console.log(cardInfo.id)
         const url = `/pages/staff-data/staff-data?id=${cardInfo.id}`
-        console.log(url)
         this.$router.push(url)
       }
     },

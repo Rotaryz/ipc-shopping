@@ -158,48 +158,48 @@
               <div class="rank-two-hard">
                 <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_second@2x.png'" v-if="image"
                      class="hard-img-crown">
-                <img :src="allStaffList[1].avatar_url" v-if="image" class="hard-img">
+                <img v-if="allStaffList.length" :src="allStaffList[1].avatar_url"  class="hard-img">
               </div>
               <div class="rank-two-text">
                 <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_second2@2x.png'" v-if="image"
                      class="img">
-                <div class="name">{{allStaffList[1].nickname}}</div>
+                <div class="name"  v-if="allStaffList.length" >{{allStaffList[1].nickname}}</div>
               </div>
               <div class="rank-two-bottom">
                 <div class="left-text">总收益</div>
-                <div class="right-text">{{allStaffList[1].sale_count}}</div>
+                <div class="right-text"  v-if="allStaffList.length" >{{allStaffList[1].commission}}</div>
               </div>
             </div>
             <div class="rank-box rank-two rank-one">
               <div class="rank-two-hard">
                 <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_first@2x.png'" v-if="image"
                      class="hard-img-crown">
-                <img :src="allStaffList[0].avatar_url" v-if="image" class="hard-img">
+                <img  v-if="allStaffList.length" :src="allStaffList[0].avatar_url" class="hard-img">
               </div>
               <div class="rank-two-text">
                 <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_first1@2x.png'" v-if="image"
                      class="img">
-                <div class="name first-name">{{allStaffList[0].nickname}}</div>
+                <div class="name first-name"  v-if="allStaffList.length" >{{allStaffList[0].nickname}}</div>
               </div>
               <div class="rank-two-bottom">
                 <div class="left-text">总收益</div>
-                <div class="right-text">{{allStaffList[0].sale_count}}</div>
+                <div class="right-text"  v-if="allStaffList.length" >{{allStaffList[0].commission}}</div>
               </div>
             </div>
             <div class="rank-box rank-two">
               <div class="rank-two-hard">
                 <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_third@2x.png'" v-if="image"
                      class="hard-img-crown">
-                <img :src="allStaffList[2].avatar_url" v-if="image" class="hard-img">
+                <img  v-if="allStaffList.length" :src="allStaffList[2].avatar_url" class="hard-img">
               </div>
               <div class="rank-two-text">
                 <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_third3@2x.png'" v-if="image"
                      class="img">
-                <div class="name thr-name">{{allStaffList[2].nickname}}</div>
+                <div class="name thr-name"  v-if="allStaffList.length" >{{allStaffList[2].nickname}}</div>
               </div>
               <div class="rank-two-bottom">
                 <div class="left-text">总收益</div>
-                <div class="right-text">{{allStaffList[2].sale_count}}</div>
+                <div class="right-text"  v-if="allStaffList.length" >{{allStaffList[2].commission}}</div>
               </div>
             </div>
           </div>
@@ -207,7 +207,7 @@
             <div class="self-merchant-list" v-for="(item, index) in allStaffTwoList" v-bind:key="index">
               <div class="self-staff-list-box user-box">
                 <div class="number">{{index + 4}}</div>
-                <img class="img" :src="item.avatar_url" v-if="image">
+                <img class="img" :src="item.avatar_url" v-if="item">
               </div>
               <div class="self-staff-list-box">{{item.nickname}}</div>
               <div class="self-staff-list-box">{{item.sale_count}}</div>
@@ -246,37 +246,11 @@
       type: 'pie',
       center: ['50%', '50%'],
       radius: ['25%', '60%'],
-      data: [{
-        value: 55,
-        name: '锋味粉-55'
-      }, {
-        value: 20,
-        name: '海底捞-20'
-      }, {
-        value: 10,
-        name: '自然醉鹅-10'
-      }, {
-        value: 20,
-        name: '星巴克-20'
-      }, {
-        value: 38,
-        name: '牛肉火锅-38'
-      }, {
-        value: 58,
-        name: '太二酸菜鱼-58'
-      }, {
-        value: 28,
-        name: '旋转寿司-28'
-      }, {
-        value: 38,
-        name: '味千拉面-38'
-      }, {
-        value: 38,
-        name: '澄海烧鹅-38'
-      }, {
-        value: 38,
-        name: '鸡公煲-38'
-      }
+      data: [
+      //   {
+      //   value: 55,
+      //   name: '锋味粉-55'
+      // }
       ],
       itemStyle: {
         emphasis: {
@@ -306,7 +280,7 @@
     xAxis: [
       {
         type: 'category',
-        data: ['锋味粉', '海底捞', '自然醉鹅', '星巴克', '牛肉火锅', '太二酸菜鱼', '旋转寿司', '海底捞', '自然醉鹅', '星巴克', '牛肉火锅', '太二酸菜鱼', '旋转寿司', '海底捞', '自然醉鹅', '星巴克', '牛肉火锅', '太二酸菜鱼', '旋转寿司'],
+        data: [],
         axisTick: {
           alignWithLabel: true
         },
@@ -352,7 +326,7 @@
           }
         },
         barWidth: '15',
-        data: [20, 52, 20, 34, 39, 10, 52, 20, 334, 390, 10, 52, 20, 33, 30, 10, 52, 20, 34]
+        data: []
       }
     ]
   }
@@ -394,19 +368,19 @@
         },
         allStaffList: [
           {
-            avatar_url: null,
-            sale_count: null,
-            nickname: null
+            avatar_url: '',
+            commission: '',
+            nickname: ''
           },
           {
-            avatar_url: null,
-            sale_count: null,
-            nickname: null
+            avatar_url: '',
+            commission: '',
+            nickname: ''
           },
           {
-            avatar_url: null,
-            sale_count: null,
-            nickname: null
+            avatar_url: '',
+            commission: '',
+            nickname: ''
           }
         ], // 商店总榜总榜数据参数
         allStaffTwoList: [],
@@ -414,13 +388,13 @@
       }
     },
     mounted() {
+      console.log(this.allStaffList[0].avatar_url)
       this._dataInit()
       let system = DEVICE_INFO.system
       this.ios = system.search('iOS') !== -1
       if (!this.ios) {
         this.ecBra.options.xAxis[0].axisLabel.rotate = 0
       }
-      console.log(this.ecBra.options.xAxis[0].axisLabel.rotate)
       this.activeId = this.$root.$mp.query.id
       this._getSelfShop()
       this._getAllotMoney()
@@ -483,7 +457,6 @@
         } else {
           this.preScene = 0
         }
-        console.log(this.preScene)
       },
       clickMerchantTab(value) {
         this.merchantBtn = value
@@ -516,7 +489,6 @@
             this.selfShopList.push(...res.data)
             wechat.hideLoading()
             this._isAllSelfShop(res)
-            console.log(this.isAllSelfShop)
             this.selfShopPage++
           } else {
             this.$refs.toast.show(res.message)
@@ -525,7 +497,6 @@
       },
       _getSelfShopAll() {
         api.dataSelfShopAllData(this.activeId).then(res => {
-          console.log(res)
           if (res.error === ERR_OK) {
             this.selfListAll = res.data
           } else {
@@ -545,7 +516,6 @@
       },
       _getAllotMoney() {
         api.dataAllotMoney(this.activeId).then(res => {
-          console.log(res)
           if (res.error === ERR_OK) {
             this.allotMoney = res.data.share_money
           } else {
@@ -562,7 +532,6 @@
             this.allShopList.push(...res.data)
             wechat.hideLoading()
             this._isAllALLShop(res)
-            console.log(this.isAllSelfShop)
             this.allfShopPage++
           } else {
             this.$refs.toast.show(res.message)
@@ -587,19 +556,16 @@
           } else {
             this.$refs.toast.show(res.message)
           }
-          console.log(res)
           wechat.hideLoading()
         })
       },
       // 商家单店员工数据
       _getSelfStaff() {
         api.dataSelfStaff(this.activeId, this.selfStaffPage).then(res => {
-          console.log(res)
           if (res.error === ERR_OK) {
             this.selfStaffList.push(...res.data)
             wechat.hideLoading()
             this._isAllSelfStaff(res)
-            console.log(this.isAllselfStaff)
             this.selfStaffPage++
           } else {
             this.$refs.toast.show(res.message)
@@ -623,6 +589,8 @@
             this.ecBra.options.xAxis[0].data = res.data.shop_names
             this.ecBra.options.series[0].data = res.data.verification_counts
             this.barDetails = res.data.detail
+            console.log(this.ecBra.options.xAxis[0].data, '22222222')
+            console.log(this.ecBra.options.series[0].data, '22222222')
           } else {
             this.$refs.toast.show(res.message)
           }
