@@ -6,5 +6,6 @@ export const ROLE = {
 
 export const SHOP_HELPER = {
   APPID: `wxfeaab55a87916d33`,
-  PATH: `/pages/shop/shop`
+  // PATH: `/pages/shop/shop`,
+  PATH: `pages/logIn/logIn`
 }

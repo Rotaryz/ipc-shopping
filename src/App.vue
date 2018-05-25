@@ -1,35 +1,38 @@
 <script>
-  import {ROLE, SHOP_HELPER} from 'common/js/contants'
-  import {mapMutations} from 'vuex'
-  import {TOKEN_OUT, baseURL} from 'api/config'
+  import { ROLE, SHOP_HELPER } from 'common/js/contants'
+  import { mapMutations } from 'vuex'
+  import { baseURL } from 'api/config'
   import wx from 'wx'
   import * as wechat from 'common/js/wechat'
 
   export default {
     mpType: 'app',
-    data: {
-      lastToken: null,
-      lastMerchantId: null,
-      lastEntryRole: null,
-      token: null,
-      merchantId: null,
-      entryRole: null,
-      tokenOut: null,
-      isApply: null
+    data () {
+      return {
+        lastToken: null,
+        lastMerchantId: null,
+        lastEntryRole: null,
+        token: null,
+        merchantId: null,
+        entryRole: null,
+        add: null // 二维码添加员工
+      }
     },
-    created() {
+    created () {
     },
-    mounted() {
+    mounted () {
     },
-    onShow() {
+    onLuanch () {
       this._init()
     },
-    onHide() {
+    onShow () {
+    },
+    onHide () {
     },
     methods: {
       ...mapMutations({saveRoleSync: 'ROLE_TYPE'}),
       // 交换数据
-      _exchangeInfo() {
+      _exchangeInfo () {
         // 临时存储上次数据
         this.lastToken = wx.getStorageSync('token')
         this.lastMerchantId = wx.getStorageSync('merchantId')
@@ -39,12 +42,11 @@
         this.token = query.token || this.lastToken
         this.merchantId = query.merchantId || this.lastMerchantId
         this.entryRole = query.entryRole || this.lastEntryRole || ROLE.STAFF_ID
-        this.tokenOut = query.resCode
-        this.isApply = query.isApply // 是否申请员工
+        this.add = query.add// 是否申请员工
         // 存储数据
-        wx.setStorageSync('token', this.token)
-        wx.setStorageSync('merchantId', this.merchantId)
-        wx.setStorageSync('userType', this.entryRole)
+        this.token && wx.setStorageSync('token', this.token)
+        this.merchantId && wx.setStorageSync('merchantId', this.merchantId)
+        this.entryRole && wx.setStorageSync('userType', this.entryRole)
         this.saveRoleSync(this.entryRole)
         wechat.login()
           .then(res => {
@@ -56,10 +58,11 @@
           })
       },
       // 分流
-      _checkStatus() {
+      _checkStatus () {
         // token检查
         if (!this.token) {
           this._switchPage()
+          console.log(this.$router)
           return
         }
         // 检查商家ID
@@ -68,36 +71,35 @@
           this.$router.replace(url)
           return
         }
-        // 检查token是否过期
-        if (this.tokenOut * 1 === TOKEN_OUT) {
-          this._switchPage()
-          return
-        }
         // 是否申请进入
-        if (this.isApply * 1 === 1) {
-          let url = `/pages/login/login`
+        if (this.add * 1 === 1) {
+          let url = `/pages/login/login?add=${this.add}`
           this.$router.replace(url)
-          return
+          // return
         }
         // 跳转首页
-        let url = `/pages/home/home`
-        this.$router.replace(url)
+        // let url = `/pages/home/home`
+        // this.$router.replace(url)
       },
       // 分流
-      _switchPage() {
+      _switchPage () {
         switch (this.entryRole) {
           case ROLE.STAFF_ID : {
             let url = `/pages/login/login`
-            return this.$router.replace(url)
+            wx.reLaunch({url})
+            break
           }
           case ROLE.UNION_ID :
           case ROLE.SHOP_ID : {
-            return this._backToB()
+            this._backToB()
+            break
           }
+          default:
+            break
         }
       },
       // 返回B端
-      _backToB() {
+      _backToB () {
         let appId = SHOP_HELPER.APPID
         let path = SHOP_HELPER.PATH
         wx.navigateToMiniProgram({
@@ -105,17 +107,17 @@
           path: path,
           extraData: {},
           envVersion: baseURL.jumpVersion,
-          success(res) {
+          success (res) {
             // 打开成功
             console.log(res)
           }
         })
       },
       // 检查版本
-      _chekSDK() {
+      _chekSDK () {
       },
       // 初始化
-      _init() {
+      _init () {
         this._exchangeInfo()
         this._checkStatus()
       }

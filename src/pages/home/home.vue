@@ -44,7 +44,7 @@
                 <li class="emp-item" v-for="(item,index) in employeeList" :key="index">
                   <article class="emp-item-box">
                     <section class="icon">
-                      <img class="icon-pic" v-if="item.avatarUrl" :src="item.avatarUrl">
+                      <img class="icon-pic" v-if="item" :src="item.avatarUrl">
                     </section>
                     <section class="progress">
                       <div class="name-bar">
@@ -80,9 +80,9 @@
 
 <script type="text/ecmascript-6">
   import api from 'api'
-  import {baseURL, ERR_OK} from 'api/config'
-  import {mapGetters} from 'vuex'
-  import {ROLE} from 'common/js/contants'
+  import { baseURL, ERR_OK } from 'api/config'
+  import { mapGetters } from 'vuex'
+  import { ROLE } from 'common/js/contants'
   import HSliderItem from 'components/hSlider-item/hSlider-item'
   import wx from 'wx'
   import * as wechat from 'common/js/wechat'
@@ -112,7 +112,7 @@
   }]
 
   export default {
-    data() {
+    data () {
       return {
         ROLE, // 角色定义常量值
         currentRole: null, // 当前角色
@@ -126,25 +126,28 @@
         status: -1 // 员工状态
       }
     },
-    created() {
+    created () {
     },
-    onShow() {
+    onShow () {
       this._checkStatus()
     },
-    beforeMount() {
+    beforeMount () {
     },
-    mounted() {
+    mounted () {
     },
     methods: {
       ...mapGetters(['role']),
       // 检查状态
-      _checkStatus() {
+      _checkStatus () {
         // 获取身份
         this.currentRole = this.role()
         // 登录
         if (this.currentRole === ROLE.STAFF_ID) {
-          this._rqCustomerStatus()
+          api.homeCustomerStatus()
             .then(json => {
+              if (json.error !== ERR_OK) {
+                return
+              }
               let status = json.data.status * 1
               switch (status) {
                 // 审核中，已拒绝
@@ -169,68 +172,63 @@
                   break
                 }
               }
+              wechat.hideLoading()
+            })
+            .catch(err => {
+              console.info(err)
             })
         } else {
           this._init()
         }
       },
       // 上传form-id
-      formSubmit(e) {
+      formSubmit (e) {
         let formId = e.mp.detail.formId
         let data = {'form_ids': [formId]}
         api.homeCollectFormId(data)
       },
       // 从消息模板来的数据
-      _getFromMsgTpl() {
+      _getFromMsgTpl () {
         if (+this.$root.$mp.appOptions.scene === 1014) {
           let id = this.$root.$mp.query.id
           id && (this.currentActiveId = id)
         }
       },
       // 员工点确定后操作
-      staffConfirmHandler() {
+      staffConfirmHandler () {
         wx.setStorageSync('isOk', 'isOk') // 员工点击过确认
       },
-      // 查询员工状态
-      _rqCustomerStatus() {
-        return new Promise(resolve => {
-          api.homeCustomerStatus()
-            .then(json => {
-              if (json.error !== ERR_OK) {
-                // if (json.message === '凭证已失效') {
-                //   let url = `/pages/login/login`
-                //   this.$router.replace(url)
-                // }
-                return false
-              }
-              wechat.hideLoading()
-              resolve(json)
-            })
-            .catch(err => {
-              console.info(err)
-            })
-        })
-      },
       // 项目初始化
-      _init() {
+      _init () {
         let code = wx.getStorageSync('code')
         this.setNavTitle({wx_code: code})
         switch (this.currentRole) {
           case ROLE.UNION_ID: {
-            this._rqGetUnionAll()
+            api.homeGetUnion()
               .then(json => {
+                if (json.error !== ERR_OK) {
+                  return false
+                }
+                wechat.hideLoading()
                 let list = this._formatInfoData(json)
                 if (list.length > 0) {
                   this.activeList = list
                   this.currentActiveId = this.activeList[this.dotCurrent].activeId
                   this._getFromMsgTpl()
                 }
+              })
+              .catch(err => {
+                console.info(err)
               })
             break
           }
           case ROLE.SHOP_ID: {
-            this._rqGetShopAll()
+            api.homeGetShop()
               .then(json => {
+                if (json.error !== ERR_OK) {
+                  return false
+                }
+                wechat.hideLoading()
                 let list = this._formatInfoData(json)
                 if (list.length > 0) {
                   this.activeList = list
@@ -238,16 +236,30 @@
                   this._getFromMsgTpl()
                 }
               })
-            this._rqGetNotice()
+              .catch(err => {
+                console.info(err)
+              })
+            api.homeGetNotice()
               .then(json => {
+                if (json.error !== ERR_OK) {
+                  return false
+                }
+                wechat.hideLoading()
                 let arr = json.data
                 this.noticeList = arr
+              })
+              .catch(err => {
+                console.info(err)
               })
             break
           }
           case ROLE.STAFF_ID: {
-            this._rqGetStaffAll()
+            api.homeGetStaff()
               .then(json => {
+                if (json.error !== ERR_OK) {
+                  return false
+                }
+                wechat.hideLoading()
                 let list = this._formatInfoData(json)
                 if (list.length > 0) {
                   this.activeList = list
@@ -256,12 +268,17 @@
                   this._getStaffSale()
                 }
               })
+              .catch(err => {
+                console.info(err)
+              })
             break
           }
+          default:
+            break
         }
       },
       // 保存标题
-      setNavTitle(data) {
+      setNavTitle (data) {
         this._rqGetGolbalData(data)
           .then(json => {
             let title = json.data.merchant.shop_name
@@ -269,32 +286,8 @@
             wx.setNavigationBarTitle({title})
           })
       },
-      // 获取盟主所有活动信息
-      _rqGetUnionAll() {
-        return new Promise(resolve => {
-          api.homeGetUnion()
-            .then(json => {
-              if (json.error !== ERR_OK) {
-                return false
-              }
-              wechat.hideLoading()
-              resolve(json)
-            })
-            .catch(err => {
-              console.info(err)
-            })
-        })
-      },
-      // 格式化公告
-      _formatNotice(json) {
-        let arr = []
-        let res = json.data
-        res.map(item => {
-        })
-        return arr
-      },
       // 格式化活动信息
-      _formatInfoData(json) {
+      _formatInfoData (json) {
         let arr = []
         let res = json.data
         res.map(item => {
@@ -323,56 +316,8 @@
         })
         return arr
       },
-      // 请求商家信息
-      _rqGetShopAll() {
-        return new Promise(resolve => {
-          api.homeGetShop()
-            .then(json => {
-              if (json.error !== ERR_OK) {
-                return false
-              }
-              wechat.hideLoading()
-              resolve(json)
-            })
-            .catch(err => {
-              console.info(err)
-            })
-        })
-      },
-      // 请求员工信息
-      _rqGetStaffAll() {
-        return new Promise(resolve => {
-          api.homeGetStaff()
-            .then(json => {
-              if (json.error !== ERR_OK) {
-                return false
-              }
-              wechat.hideLoading()
-              resolve(json)
-            })
-            .catch(err => {
-              console.info(err)
-            })
-        })
-      },
-      // 请求公告信息
-      _rqGetNotice() {
-        return new Promise(resolve => {
-          api.homeGetNotice()
-            .then(json => {
-              if (json.error !== ERR_OK) {
-                return false
-              }
-              wechat.hideLoading()
-              resolve(json)
-            })
-            .catch(err => {
-              console.info(err)
-            })
-        })
-      },
       // 请求员工销卡对比信息
-      _rqGetStaffSales(data) {
+      _rqGetStaffSales (data) {
         return new Promise(resolve => {
           api.homeGetStaffSale(data)
             .then(json => {
@@ -388,7 +333,7 @@
         })
       },
       // 获取全局数据
-      _rqGetGolbalData(data) {
+      _rqGetGolbalData (data) {
         return new Promise(resolve => {
           api.homeGetGlobalData(data)
             .then(json => {
@@ -404,7 +349,7 @@
         })
       },
       // 获取员工销卡比信息
-      _getStaffSale() {
+      _getStaffSale () {
         if (this.currentRole !== ROLE.STAFF_ID) return
         let data = {activity_alliance_id: this.currentActiveId}
         this._rqGetStaffSales(data)
@@ -414,7 +359,7 @@
           })
       },
       // 格式化员工销卡比信息
-      _formatStaffData(json) {
+      _formatStaffData (json) {
         let arr = []
         let res = json.data
         res.map(item => {
@@ -430,7 +375,7 @@
         return arr
       },
       // 查看统计
-      lookTotalHandler(obj) {
+      lookTotalHandler (obj) {
         let url = ''
         let id = obj.activeId
         switch (this.currentRole) {
@@ -450,12 +395,12 @@
         url && this.$router.push(url)
       },
       // 查看商家活动管理
-      watchActiveHandler() {
+      watchActiveHandler () {
         const url = `/pages/activity-manage/activity-manage`
         this.$router.push(url)
       },
       // swiper滑动块
-      swiperChange(e) {
+      swiperChange (e) {
         let index = e.mp.detail.current
         this.dotCurrent = index
         this.sliderCurrent = index
@@ -463,12 +408,12 @@
         this._getStaffSale()
       },
       // 去联盟管理
-      toUnion() {
+      toUnion () {
         const url = `/pages/union-manage/union-manage`
         this.$router.push(url)
       },
       // 去活动管理
-      toShop() {
+      toShop () {
         let url = ``
         if (this.currentRole === ROLE.STAFF_ID) {
           url = `/pages/staff-activity/staff-activity`
@@ -478,24 +423,24 @@
         this.$router.push(url)
       },
       // 去员工管理
-      toEmployee() {
+      toEmployee () {
         const url = `/pages/employee/employee`
         this.$router.push(url)
       },
       // 去收入、提现
-      toAsset() {
+      toAsset () {
         const url = `/pages/asset/asset`
         this.$router.push(url)
       }
     },
     computed: {
-      dotStyle() {
+      dotStyle () {
         return this.activeList.length <= 1 ? 'd-op' : ''
       },
-      leaderImg() {
+      leaderImg () {
         return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-mhome_union@2x.png)` || ''
       },
-      activeImg() {
+      activeImg () {
         switch (this.currentRole) {
           case ROLE.UNION_ID: {
             return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-mhome_activity@2x.png)` || ''
@@ -511,7 +456,7 @@
           }
         }
       },
-      employeeImg() {
+      employeeImg () {
         switch (this.currentRole) {
           case ROLE.UNION_ID: {
             return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-mhome_staff@2x.png)` || ''
@@ -524,7 +469,7 @@
           }
         }
       },
-      incomeImg() {
+      incomeImg () {
         switch (this.currentRole) {
           case ROLE.UNION_ID: {
             return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-mhome_income@2x.png)` || ''

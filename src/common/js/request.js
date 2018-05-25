@@ -2,7 +2,7 @@ import wx from 'wx'
 import Fly from 'flyio'
 import { showLoading, hideLoading } from './wechat'
 import { baseURL, TIME_OUT, ERR_OK, ERR_NO, TOKEN_OUT } from 'api/config'
-import { ROLE } from './contants'
+import { ROLE, SHOP_HELPER } from './contants'
 
 const COMMON_HEADER = () => {
   const token = wx.getStorageSync('token')
@@ -53,6 +53,21 @@ function checkStatus (response) {
   }
 }
 
+function _backToB () {
+  let appId = SHOP_HELPER.APPID
+  let path = SHOP_HELPER.PATH
+  wx.navigateToMiniProgram({
+    appId: appId,
+    path: path,
+    extraData: {},
+    envVersion: baseURL.jumpVersion,
+    success (res) {
+      // 打开成功
+      console.log(res)
+    }
+  })
+}
+
 /**
  * 检查状态吗
  * @param res
@@ -61,9 +76,21 @@ function checkStatus (response) {
 function checkCode (res) {
   // 凭证失效
   if (res.data && (res.data.code === TOKEN_OUT)) {
-    // token失效返回登录页面
-    const url = `/pages/home/home?resCode=${TOKEN_OUT}`
-    wx.reLaunch({url})
+    let entryRole = wx.getStorageSync('userType')
+    switch (entryRole) {
+      case ROLE.STAFF_ID : {
+        let url = `/pages/login/login`
+        wx.reLaunch({url})
+        break
+      }
+      case ROLE.UNION_ID :
+      case ROLE.SHOP_ID : {
+        _backToB()
+        break
+      }
+      default:
+        break
+    }
   }
   // 如果code异常(这里已经包括网络错误，服务器错误，后端抛出的错误)，可以弹出一个错误提示，告诉用户
   if (res.status === ERR_NO) {

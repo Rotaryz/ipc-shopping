@@ -1,12 +1,4 @@
 module.exports = [
-  // {
-  //   path: '/pages/example/example',
-  //   name: 'Example',
-  //   config: {
-  //     enablePullDownRefresh: true,
-  //     navigationBarTitleText: '示例'
-  //   }
-  // },
   {
     path: '/pages/home/home', // 首页
     name: 'Home',

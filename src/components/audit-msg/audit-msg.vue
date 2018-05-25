@@ -5,10 +5,10 @@
         <div class="content-wrapper">
           <div class="content">
             <div class="danger-wrapper">
-              <img :src="imageUrlHead + content.img" class="full-image"/>
+              <img v-if="content" :src="imageUrlHead + content.img" class="full-image"/>
             </div>
-            <div class="font title" v-if="content.title">{{content.title}}</div>
-            <div class="font" v-if="content.msg">{{content.msg}}</div>
+            <div class="font title" v-if="content">{{content.title}}</div>
+            <div class="font" v-if="content">{{content.msg}}</div>
           </div>
         </div>
         <div class="btn-group border-top-1px" v-if="flag === 1">

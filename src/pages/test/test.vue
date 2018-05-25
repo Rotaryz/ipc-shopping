@@ -4,6 +4,7 @@
     路径:
     <div class="path">{{pathTxt}}</div>
     商家id:<input class="t-input" type="text" @input="inputHandler" id="merchant" placeholder="请输入">
+    添加员工输入1:<input class="t-input" type="text" @input="inputHandler" id="add" placeholder="请输入">
     <div @tap="_goToIpc" class="btn">模拟商家添加员工的二维码</div>
     <div class="mar"></div>
     路径:
@@ -27,7 +28,8 @@
         merchantId: wx.getStorageSync('merchantId'),
         merchantId2: wx.getStorageSync('merchantId'),
         eId: 0,
-        activeId: 0
+        activeId: 0,
+        add: null
       }
     },
     methods: {
@@ -51,12 +53,19 @@
             this.activeId = val
             break
           }
+          case 'add' : {
+            this.add = val
+            break
+          }
+          default:
+            break
         }
       },
       _goToIpc () {
         wx.setStorageSync('merchantId', this.merchantId)
         wx.setStorageSync('userType', ROLE.STAFF_ID)
-        this.$router.back()
+        let url = `/pages/login/login?add=${this.add}`
+        this.$router.replace(url)
       },
       _goToC () {
         let appId = `wxa721ed0b76403077`
@@ -75,7 +84,7 @@
     },
     computed: {
       pathTxt () {
-        return `pages/home/home?entryRole=${ROLE.STAFF_ID}&merchantId=${this.merchantId}`
+        return `pages/home/home?entryRole=${ROLE.STAFF_ID}&merchantId=${this.merchantId}&add=${this.add}`
       },
       pathTxt2 () {
         return `pages/activity/activity?m=${this.merchantId}&e=${this.eId}&a=${this.activeId}&type=y`
