@@ -288,6 +288,7 @@
         this.isAllselfStaff = false
         this.allStaffList = []
         this.allStaffTwoList = []
+        this.fristAllStaff = false
       },
       clickStaffTab(value) {
         this.staffBtn = value

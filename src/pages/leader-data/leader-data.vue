@@ -208,11 +208,20 @@
         this.selfStaffPage = 1
         this.selfStaffList = []
         this.isAllselfStaff = false
+        this.fristAllStaff = false
         this.allStaffList = []
         this.allStaffTwoList = []
       },
       clickTab(value) {
         this.bigBtn = value
+        if (this.bigBtn === 'staff') {
+          this.staffScene = 3
+          if (this.fristAllStaff) return
+          this._getAllfStaff()
+          this.fristAllStaff = true
+        } else {
+          this.staffScene = 2
+        }
       },
       // 商家总榜数据
       _getAllfShop() {

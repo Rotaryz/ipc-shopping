@@ -445,6 +445,9 @@
         this.isAllselfStaff = false
         this.allStaffList = []
         this.allStaffTwoList = []
+        this.fristselfStaff = false
+        this.fristAllShop = false
+        this.fristAllStaff = false
       },
       clickTab(value) {
         this.bigBtn = value
