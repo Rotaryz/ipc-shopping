@@ -7,7 +7,8 @@
     <div class="manage-list" v-if="tabFlag === 0">
       <div class="list-data" v-if="activeList.length !== 0">
         <div class="box-list" v-for="(iteam, index) in activeList" v-bind:key="index">
-          <active-card :useType="0" @buyHandler="resetBuy" @allocHandler="jumpAllot" @applyHandler="jumpApply" @previewHandler="jumpPreview" @totalHandler="jumpData" :cardInfo="iteam"></active-card>
+          <active-card :useType="0" @buyHandler="resetBuy" @allocHandler="jumpAllot" @applyHandler="jumpApply"
+                       @previewHandler="jumpPreview" @totalHandler="jumpData" :cardInfo="iteam"></active-card>
         </div>
       </div>
       <div class="list-null" v-if="activeList.length === 0">
@@ -19,7 +20,8 @@
     <div class="manage-list" v-if="tabFlag === 2">
       <div class="list-data" v-if="pondList.length !== 0">
         <div class="box-list" v-for="(iteam, index) in pondList" v-bind:key="index">
-          <active-card :useType="0" :cardInfo="iteam" @applyHandler="jumpApply" @previewHandler="jumpPreview"></active-card>
+          <active-card :useType="0" :cardInfo="iteam" @applyHandler="jumpApply"
+                       @previewHandler="jumpPreview"></active-card>
         </div>
       </div>
       <div class="list-null" v-if="pondList.length === 0">
@@ -68,16 +70,16 @@
 
 <script type="text/ecmascript-6">
   import api from 'api'
-  import { baseURL, ERR_OK } from 'api/config'
+  import {baseURL, ERR_OK} from 'api/config'
   import ActiveCard from 'components/active-card-item/active-card-item'
   import * as wechat from 'common/js/wechat'
-  import { mapGetters } from 'vuex'
+  import {mapGetters} from 'vuex'
   import wx from 'wx'
   import Toast from '@/components/toast/toast'
 
   const LIMIT_DEF = 10
   export default {
-    data () {
+    data() {
       return {
         image: baseURL.image,
         tabFlag: 0,
@@ -99,98 +101,123 @@
         curId: 1
       }
     },
-    mounted () {},
-    onShow () {
+    onShow() {
       this._init()
       this.ActiveData.page = 1
-      this.activeList = []
       this.isAllActive = false
       this.PondPage = 1
-      this.pondList = []
       this.isAllPond = false
-      this._rqGetActiveList()
-      this._rqManageGetActiveList()
+      this._rqGetNewActiveList()
+      this._rqManageGetNewActiveList()
     },
-    onPullDownRefresh () {
+    onPullDownRefresh() {
       if (this.tabFlag === 0) {
         this.ActiveData.page = 1
-        this.activeList = []
         this.isAllActive = false
-        this._rqManageGetActiveList()
+        this._rqManageGetNewActiveList(false)
       } else {
         this.PondPage = 1
-        this.pondList = []
         this.isAllPond = false
-        this._rqGetActiveList()
+        this._rqGetNewActiveList()
       }
       wx.stopPullDownRefresh()
     },
-    onReachBottom () {
+    onReachBottom() {
       if (this.tabFlag === 0) {
-        console.log(1111)
+        if (this.isAllActive) return
+        this._rqManageGetActiveList()
       } else {
         if (this.isAllPond) return
         this._rqGetActiveList()
-        console.log(22)
       }
     },
     methods: {
       ...mapGetters(['role']),
-      _init () {
+      _init() {
         let role = this.role()
         this.currentRole = role
       },
-      changeTab (flag) {
+      changeTab(flag) {
         this.tabFlag = flag
       },
       // 获得活动池的活动
-      _rqGetActiveList () {
+      _rqGetNewActiveList() {
         api.merPondActiveList(this.PondPage, this.PondLimt).then(res => {
-          console.log(res)
-          this.pondList.push(...res.data)
-          this._isAllPond(res)
-          console.log(this.isAllPond)
-          this.PondPage++
+          if (res.error === ERR_OK) {
+            this.pondList = res.data
+            this._isAllPond(res)
+            this.PondPage++
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+          wechat.hideLoading()
+        })
+      },
+      // 获得活动池的活动
+      _rqGetActiveList() {
+        api.merPondActiveList(this.PondPage, this.PondLimt).then(res => {
+          if (res.error === ERR_OK) {
+            this.pondList = res.data
+            this._isAllPond(res)
+            this.PondPage++
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+          wechat.hideLoading()
+        })
+      },
+      // 第一次获得管理列表的数据
+      _rqManageGetNewActiveList(loading) {
+        api.merManageActiveList(this.ActiveData, loading).then(res => {
+          if (res.error === ERR_OK) {
+            this.activeList = this._formatRqData(res)
+            this._isAllActive(res)
+            this.ActiveData.page++
+          } else {
+            this.$refs.toast.show(res.message)
+          }
           wechat.hideLoading()
         })
       },
       // 检查是管理列表的数据
-      _rqManageGetActiveList () {
+      _rqManageGetActiveList() {
         api.merManageActiveList(this.ActiveData).then(res => {
-          console.log(res)
-          this.activeList.push(...this._formatRqData(res))
-          console.log(this.activeList)
-          this._isAllActive(res)
-          console.log(this.isAllActive)
+          if (res.error === ERR_OK) {
+            this.activeList.push(...this._formatRqData(res))
+            this._isAllActive(res)
+            this.ActiveData.page++
+          } else {
+            this.$refs.toast.show(res.message)
+          }
           wechat.hideLoading()
         })
       },
-      jumpApply (cardInfo) {
+      jumpApply(cardInfo) {
         console.log(cardInfo.id)
         const url = `/pages/merchant-activity/merchant-activity?id=${cardInfo.id}`
         console.log(url)
         this.$router.push(url)
       },
-      jumpAllot (cardInfo) {
+      jumpAllot(cardInfo) {
         console.log(cardInfo.id)
         const url = `/pages/allocation-card/allocation-card?id=${cardInfo.id}`
         console.log(url)
         this.$router.push(url)
       },
-      jumpPreview (cardInfo) {
+      jumpPreview(cardInfo) {
         console.log(cardInfo.id)
         const url = `/pages/activity-detai/activity-detai?activityId=${cardInfo.id}`
         console.log(url)
         this.$router.push(url)
       },
-      jumpData (cardInfo) {
+      jumpData(cardInfo) {
         console.log(cardInfo.id)
         const url = `/pages/merchant-data/merchant-data?id=${cardInfo.id}`
         console.log(url)
         this.$router.push(url)
       },
       // 格式化服务器数据
-      _formatRqData (res) {
+      _formatRqData(res) {
         if (res.data && res.data.length === 0) return []
         let arr = []
         res.data.map(item => {
@@ -249,27 +276,27 @@
         return arr
       },
       // 检查是否已经查询完毕
-      _isAllActive (res) {
+      _isAllActive(res) {
         if (this.activeList.length >= res.meta.total * 1) {
           this.isAllActive = true
         }
       },
       // 检查是否已经查询完毕
-      _isAllPond (res) {
+      _isAllPond(res) {
         if (this.pondList.length >= res.meta.total * 1) {
           this.isAllPond = true
         }
       },
-      subtract () {
+      subtract() {
         if (parseInt(this.upNumber) <= 1) {
           return
         }
         this.upNumber--
       },
-      add () {
+      add() {
         this.upNumber++
       },
-      sumbit () {
+      sumbit() {
         // console.log(wx.requestPayment)
         if (!this.upNumber) return
         if (this.upNumber < 1) {
@@ -318,14 +345,14 @@
           // 调起支付
         })
       },
-      resetBuy (cardInfo) {
+      resetBuy(cardInfo) {
         console.log(cardInfo)
         this.modelCon = !this.modelCon
         this.resetName = cardInfo.name
         this.resetMoney = cardInfo.apply_price
         this.curId = cardInfo.id
       },
-      colseModel () {
+      colseModel() {
         this.modelCon = !this.modelCon
       }
     },
