@@ -23,9 +23,9 @@ export default {
    * @param data 状态
    * @returns {Promise.<*>}
    */
-  merManageActiveList(data, limit) {
+  merManageActiveList(data, loading = true) {
     const url = `/api/alliances/merchant/activities`
-    return request.get(url, data, true)
+    return request.get(url, data, loading)
   },
   /**
    * 商家报名

@@ -17,7 +17,7 @@
               <div class="tilte-left">{{activityData.name}}</div>
               <div class="tilte-right" @tap="jumpPreview">
                 <div class="text">预览活动</div>
-                <img :src="image + '/defaults/ipc-shopping/home/icon-union_j@2x.png'" class="right" v-if="image">
+                <img :src="image + '/defaults/ipc-shopping/home/icon-mhome_j@2x.png'" class="right" v-if="image">
               </div>
             </div>
             <div class="cavas-list">

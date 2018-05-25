@@ -44,5 +44,3 @@ try {
 }
 
 export const DEVICE_INFO = info
-
-console.log(DEVICE_INFO)

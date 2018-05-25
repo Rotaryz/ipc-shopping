@@ -33,7 +33,7 @@
     props: {
       flag: {
         type: Number,
-        default: -1
+        default: 3
       }
     },
     data () {
@@ -46,18 +46,16 @@
         // 防止报错
       },
       confirm () {
-        this.flag = -1
+        this.flag = 3
         this.$emit('confirmHandler')
       }
     },
     computed: {
       showToast () {
-        return this.flag >= 0
+        return this.flag < 3
       },
       content () {
-        let flag = this.flag
-        flag = Math.max(0, flag)
-        return IMGARRAY[flag]
+        return IMGARRAY[this.flag]
       }
     }
   }

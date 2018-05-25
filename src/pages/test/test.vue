@@ -4,14 +4,14 @@
     路径:
     <div class="path">{{pathTxt}}</div>
     商家id:<input class="t-input" type="text" @input="inputHandler" id="merchant" placeholder="请输入">
-    <div @tap="_goToIpc" class="btn">员工去异业联盟</div>
+    <div @tap="_goToIpc" class="btn">模拟商家添加员工的二维码</div>
     <div class="mar"></div>
     路径:
     <div class="path">{{pathTxt2}}</div>
     商家id:<input class="t-input" type="text" @input="inputHandler" id="m-id" placeholder="请输入">
     员工id:<input class="t-input" type="text" @input="inputHandler" id="e-id" placeholder="请输入">
     活动id:<input class="t-input" type="text" @input="inputHandler" id="a-id" placeholder="请输入">
-    <div @tap="_goToC" class="btn">去C端购买</div>
+    <div @tap="_goToC" class="btn">模拟员工展示二维码去C端活动页面</div>
   </div>
 
 </template>
@@ -25,6 +25,7 @@
     data () {
       return {
         merchantId: wx.getStorageSync('merchantId'),
+        merchantId2: wx.getStorageSync('merchantId'),
         eId: 0,
         activeId: 0
       }
@@ -39,7 +40,7 @@
             break
           }
           case 'm-id': {
-            this.merchantId = val
+            this.merchantId2 = val
             break
           }
           case 'e-id': {
@@ -77,7 +78,7 @@
         return `pages/home/home?entryRole=${ROLE.STAFF_ID}&merchantId=${this.merchantId}`
       },
       pathTxt2 () {
-        return `pages/activity-detail/activity-detail?m=${this.merchantId}&e=${this.eId}&a=${this.activeId}`
+        return `pages/activity/activity?m=${this.merchantId}&e=${this.eId}&a=${this.activeId}&type=y`
       }
     }
   }
