@@ -214,7 +214,7 @@ module.exports = [
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTextStyle: 'white',
       backgroundTextStyle: 'light',
-      backgroundColor: '#1A1D3D',
+      backgroundColor: '#f6f7fa',
       enablePullDownRefresh: true
     }
   },

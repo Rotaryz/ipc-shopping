@@ -136,6 +136,7 @@
   import * as wechat from 'common/js/wechat'
   import {mapGetters} from 'vuex'
   import api from 'api'
+  import wx from 'wx'
 
   const Baroptions = {
     color: ['#40A1AE'],
@@ -264,6 +265,7 @@
         this.allStaffTwoList = []
         this._getAllfStaff()
       }
+      wx.stopPullDownRefresh()
     },
     mounted() {
       this._dataInit()

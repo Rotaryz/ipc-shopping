@@ -64,7 +64,7 @@
               <section class="info">
                 <!--<div class="i-item">销量 {{cardInfo.sale_count}}</div>-->
                 <!--<div class="i-item">核销力 {{cardInfo.verification_power}}</div>-->
-                <div class="i-item staff-item">{{cardInfo.store}} 10</div>
+                <div class="i-item staff-item">可销售数量 {{cardInfo.store}}</div>
               </section>
             </artilce>
             <section class="look-over">

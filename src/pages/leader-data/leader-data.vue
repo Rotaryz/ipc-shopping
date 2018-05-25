@@ -118,6 +118,7 @@
   import * as wechat from 'common/js/wechat'
   import {mapGetters} from 'vuex'
   import api from 'api'
+  import wx from 'wx'
 
   const options = {
     // color: ['#8941AF', '#A740AE', '#AE4077', '#B16544', '#B44343', '#5EAD83', '#40A1AE', '#4778C0', '#2843C3', '#57876E', '#128787', '#728AEC', '#1B6FBD', '#8941AF', '#A740AE', '#AE4077', '#B16544', '#B44343', '#5EAD83', '#40A1AE', '#4778C0', '#2843C3', '#57876E', '#128787', '#728AEC', '#1B6FBD'],
@@ -191,6 +192,7 @@
         this.allStaffTwoList = []
         this._getAllfStaff()
       }
+      wx.stopPullDownRefresh()
     },
     mounted() {
       this._dataInit()
