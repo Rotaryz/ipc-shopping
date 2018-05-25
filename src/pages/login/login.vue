@@ -164,6 +164,7 @@
       .bc-img
         position: absolute
         width: 100%
+        height: 100%
     .cover
       position: absolute
       width: 100%

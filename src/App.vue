@@ -23,9 +23,9 @@
     mounted () {
     },
     onLuanch () {
-      this._init()
     },
     onShow () {
+      this._init()
     },
     onHide () {
     },
@@ -78,15 +78,15 @@
           // return
         }
         // 跳转首页
-        // let url = `/pages/home/home`
-        // this.$router.replace(url)
+        let url = `/pages/home/home`
+        this.$router.replace(url)
       },
       // 分流
       _switchPage () {
         switch (this.entryRole) {
           case ROLE.STAFF_ID : {
             let url = `/pages/login/login`
-            wx.reLaunch({url})
+            this.$router.replace(url)
             break
           }
           case ROLE.UNION_ID :

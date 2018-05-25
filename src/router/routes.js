@@ -1,5 +1,17 @@
 module.exports = [
   {
+    path: '/pages/login/login', // login
+    name: 'Login',
+    config: {
+      // navigationBarBackgroundColor: '#FFFFFF',
+      // navigationBarTextStyle: 'black'
+      navigationBarTitleText: '登录',
+      backgroundTextStyle: 'light',
+      navigationBarBackgroundColor: '#1A1D3D',
+      disableScroll: true
+    }
+  },
+  {
     path: '/pages/home/home', // 首页
     name: 'Home',
     config: {
@@ -11,18 +23,6 @@ module.exports = [
     name: 'Test',
     config: {
       navigationBarTitleText: 'test'
-    }
-  },
-  {
-    path: '/pages/login/login', // login
-    name: 'Login',
-    config: {
-      // navigationBarBackgroundColor: '#FFFFFF',
-      // navigationBarTextStyle: 'black'
-      navigationBarTitleText: '登录',
-      backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#1A1D3D',
-      disableScroll: true
     }
   },
   {
