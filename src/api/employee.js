@@ -36,8 +36,8 @@ export default {
    * @param data
    * @returns {Promise.<*>}
    */
-  empDel(data) {
-    const url = `/api/alliances/employee/employee-message/${data.customer_id}`
+  empDel(id, data) {
+    const url = `/api/alliances/employee/employee-message/${id}`
     return request.delete(url, data)
   },
   /**
