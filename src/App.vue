@@ -62,7 +62,6 @@
         // token检查
         if (!this.token) {
           this._switchPage()
-          console.log(this.$router)
           return
         }
         // 检查商家ID
@@ -109,7 +108,7 @@
           envVersion: baseURL.jumpVersion,
           success (res) {
             // 打开成功
-            console.log(res)
+            console.info(res)
           }
         })
       },

@@ -42,10 +42,7 @@
       }
     },
     onShow () {
-      console.log(1)
       this._getCode()
-      wx.setStorageSync('userType', ROLE.STAFF_ID)
-      this.saveRoleSync(ROLE.STAFF_ID)
       this.add = this.$root.$mp.appOptions.query.add
     },
     methods: {
@@ -129,6 +126,8 @@
       },
       // 页面路由
       _navTo () {
+        wx.setStorageSync('userType', ROLE.STAFF_ID)
+        this.saveRoleSync(ROLE.STAFF_ID)
         const url = `/pages/home/home`
         this.$router.replace(url)
       }
