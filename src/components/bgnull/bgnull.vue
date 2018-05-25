@@ -47,6 +47,7 @@
   .bgnull
     position: relative
     width: 100vw
+    display: block
     height: 100%
     background-color: $color-background-f6
     .center

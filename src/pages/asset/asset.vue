@@ -225,6 +225,8 @@
       background: $color-background-f6
       flex: 1
       display flex
+      position: relative
+      height: 100%
       .head
         height: 54px
         display: flex
