@@ -2,7 +2,7 @@
   <div>
     <div class="list-box" v-if="staffList.length !== 0">
       <div class="box-top" v-for="(item, index) in staffList" v-bind:key="index">
-        <active-card :useType="100" @addHandCode="jumpCode" @addHandData="jumpData" :cardInfo="item"></active-card>
+        <active-card :useType="100" @addHandCode="jumpCode" @previewHandler="jumpPreview" @addHandData="jumpData" :cardInfo="item"></active-card>
       </div>
     </div>
     <div class="list-null" v-if="staffList.length === 0">
@@ -115,6 +115,11 @@
       jumpCode(cardInfo) {
         console.log(cardInfo)
         const url = `/pages/staff-code/staff-code?id=${cardInfo.id}`
+        this.$router.push(url)
+      },
+      jumpPreview(cardInfo) {
+        console.log(cardInfo)
+        const url = `/pages/activity-detail/activity-detail?activityId=${cardInfo.id}`
         this.$router.push(url)
       },
       jumpData(cardInfo) {

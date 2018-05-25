@@ -209,7 +209,7 @@
         this.showRule = !this.showRule
       },
       jumpPreview () {
-        const url = `/pages/activity-detai/activity-detai?activityId=${this.activeId}`
+        const url = `/pages/activity-detail/activity-detail?activityId=${this.activeId}`
         this.$router.push(url)
       },
       // 获取商家活动详情
