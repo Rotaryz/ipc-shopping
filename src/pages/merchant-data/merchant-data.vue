@@ -434,6 +434,9 @@
         this.currentRole = role
       },
       _dataInit() {
+        this.bigBtn = 'merchant'
+        this.merchantBtn = 'self'
+        this.staffBtn = 'self'
         this.selfShopPage = 1
         this.selfShopList = []
         this.isAllSelfShop = false
@@ -443,8 +446,6 @@
         this.selfStaffPage = 1
         this.selfStaffList = []
         this.isAllselfStaff = false
-        this.allStaffList = []
-        this.allStaffTwoList = []
         this.fristselfStaff = false
         this.fristAllShop = false
         this.fristAllStaff = false

@@ -205,12 +205,11 @@
         this.currentRole = role
       },
       _dataInit() {
+        this.bigBtn = 'merchant'
         this.selfStaffPage = 1
         this.selfStaffList = []
         this.isAllselfStaff = false
         this.fristAllStaff = false
-        this.allStaffList = []
-        this.allStaffTwoList = []
       },
       clickTab(value) {
         this.bigBtn = value

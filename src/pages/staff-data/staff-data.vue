@@ -286,9 +286,8 @@
         this.selfStaffPage = 1
         this.selfStaffList = []
         this.isAllselfStaff = false
-        this.allStaffList = []
-        this.allStaffTwoList = []
         this.fristAllStaff = false
+        this.staffBtn = 'self'
       },
       clickStaffTab(value) {
         this.staffBtn = value
