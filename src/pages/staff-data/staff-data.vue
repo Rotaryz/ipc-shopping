@@ -66,48 +66,48 @@
             <div class="rank-two-hard">
               <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_second@2x.png'" v-if="image"
                    class="hard-img-crown">
-              <img :src="allStaffList[1].avatar_url" v-if="image" class="hard-img">
+              <img v-if="allStaffList.length" :src="allStaffList[1].avatar_url"  class="hard-img">
             </div>
             <div class="rank-two-text">
               <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_second2@2x.png'" v-if="image"
                    class="img">
-              <div class="name">{{allStaffList[1].nickname}}</div>
+              <div class="name"  v-if="allStaffList.length" >{{allStaffList[1].nickname}}</div>
             </div>
             <div class="rank-two-bottom">
               <div class="left-text">总收益</div>
-              <div class="right-text">{{allStaffList[1].sale_count}}</div>
+              <div class="right-text"  v-if="allStaffList.length" >{{allStaffList[1].commission}}</div>
             </div>
           </div>
           <div class="rank-box rank-two rank-one">
             <div class="rank-two-hard">
               <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_first@2x.png'" v-if="image"
                    class="hard-img-crown">
-              <img :src="allStaffList[0].avatar_url" v-if="image" class="hard-img">
+              <img  v-if="allStaffList.length" :src="allStaffList[0].avatar_url" class="hard-img">
             </div>
             <div class="rank-two-text">
               <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_first1@2x.png'" v-if="image"
                    class="img">
-              <div class="name first-name">{{allStaffList[0].nickname}}</div>
+              <div class="name first-name"  v-if="allStaffList.length" >{{allStaffList[0].nickname}}</div>
             </div>
             <div class="rank-two-bottom">
               <div class="left-text">总收益</div>
-              <div class="right-text">{{allStaffList[0].sale_count}}</div>
+              <div class="right-text"  v-if="allStaffList.length" >{{allStaffList[0].commission}}</div>
             </div>
           </div>
           <div class="rank-box rank-two">
             <div class="rank-two-hard">
               <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_third@2x.png'" v-if="image"
                    class="hard-img-crown">
-              <img :src="allStaffList[2].avatar_url" v-if="image" class="hard-img">
+              <img  v-if="allStaffList.length" :src="allStaffList[2].avatar_url" class="hard-img">
             </div>
             <div class="rank-two-text">
               <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_third3@2x.png'" v-if="image"
                    class="img">
-              <div class="name thr-name">{{allStaffList[0].nickname}}</div>
+              <div class="name thr-name"  v-if="allStaffList.length" >{{allStaffList[2].nickname}}</div>
             </div>
             <div class="rank-two-bottom">
               <div class="left-text">总收益</div>
-              <div class="right-text">{{allStaffList[2].sale_count}}</div>
+              <div class="right-text"  v-if="allStaffList.length" >{{allStaffList[2].commission}}</div>
             </div>
           </div>
         </div>
@@ -115,7 +115,7 @@
           <div class="self-merchant-list" v-for="(item, index) in allStaffTwoList" v-bind:key="index">
             <div class="self-staff-list-box user-box">
               <div class="number">{{index + 4}}</div>
-              <img class="img" :src="item.avatar_url" v-if="image">
+              <img class="img" :src="item.avatar_url" v-if="item">
             </div>
             <div class="self-staff-list-box">{{item.nickname}}</div>
             <div class="self-staff-list-box">{{item.sale_count}}</div>
@@ -162,7 +162,7 @@
     xAxis: [
       {
         type: 'category',
-        data: ['锋味粉', '海底捞', '自然醉鹅', '星巴克', '牛肉火锅', '太二酸菜鱼', '旋转寿司', '海底捞', '自然醉鹅', '星巴克', '牛肉火锅', '太二酸菜鱼', '旋转寿司', '海底捞', '自然醉鹅', '星巴克', '牛肉火锅', '太二酸菜鱼', '旋转寿司'],
+        data: [],
         axisTick: {
           alignWithLabel: true
         },
@@ -208,7 +208,7 @@
           }
         },
         barWidth: '15',
-        data: [20, 52, 20, 34, 39, 10, 52, 20, 334, 390, 10, 52, 20, 33, 30, 10, 52, 20, 34]
+        data: []
       }
     ]
   }
@@ -305,14 +305,12 @@
         api.dataSelfStaff(this.activeId, this.selfStaffPage).then(res => {
           if (res.error === ERR_OK) {
             this.selfStaffList.push(...res.data)
-            wechat.hideLoading()
             this._isAllSelfStaff(res)
-            console.log(this.isAllselfStaff)
             this.selfStaffPage++
           } else {
             this.$refs.toast.show(res.message)
           }
-          console.log(res)
+          wechat.hideLoading()
         })
       },
       scrollSelfStaff() {
@@ -327,7 +325,6 @@
       _getBar() {
         api.dataBar(this.activeId).then(res => {
           if (res.error === ERR_OK) {
-            console.log(this.ecBra.options.xAxis[0].data, '11111111111`````````````')
             this.ecBra.options.xAxis[0].data = res.data.shop_names
             this.ecBra.options.series[0].data = res.data.verification_counts
             this.barDetails = res.data.detail
@@ -343,8 +340,6 @@
           if (res.error === ERR_OK) {
             this.allStaffList = res.data.slice(0, 3)
             this.allStaffTwoList = res.data.slice(3)
-            console.log(this.allStaffList)
-            console.log(this.allStaffTwoList)
           } else {
             this.$refs.toast.show(res.message)
           }

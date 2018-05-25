@@ -48,48 +48,48 @@
             <div class="rank-two-hard">
               <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_second@2x.png'" v-if="image"
                    class="hard-img-crown">
-              <img :src="allStaffList[1].avatar_url" v-if="image" class="hard-img">
+              <img v-if="allStaffList.length" :src="allStaffList[1].avatar_url"  class="hard-img">
             </div>
             <div class="rank-two-text">
               <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_second2@2x.png'" v-if="image"
                    class="img">
-              <div class="name">{{allStaffList[1].nickname}}</div>
+              <div class="name"  v-if="allStaffList.length" >{{allStaffList[1].nickname}}</div>
             </div>
             <div class="rank-two-bottom">
               <div class="left-text">总收益</div>
-              <div class="right-text">{{allStaffList[1].sale_count}}</div>
+              <div class="right-text"  v-if="allStaffList.length" >{{allStaffList[1].commission}}</div>
             </div>
           </div>
           <div class="rank-box rank-two rank-one">
             <div class="rank-two-hard">
               <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_first@2x.png'" v-if="image"
                    class="hard-img-crown">
-              <img :src="allStaffList[0].avatar_url" v-if="image" class="hard-img">
+              <img  v-if="allStaffList.length" :src="allStaffList[0].avatar_url" class="hard-img">
             </div>
             <div class="rank-two-text">
               <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_first1@2x.png'" v-if="image"
                    class="img">
-              <div class="name first-name">{{allStaffList[0].nickname}}</div>
+              <div class="name first-name"  v-if="allStaffList.length" >{{allStaffList[0].nickname}}</div>
             </div>
             <div class="rank-two-bottom">
               <div class="left-text">总收益</div>
-              <div class="right-text">{{allStaffList[0].sale_count}}</div>
+              <div class="right-text"  v-if="allStaffList.length" >{{allStaffList[0].commission}}</div>
             </div>
           </div>
           <div class="rank-box rank-two">
             <div class="rank-two-hard">
               <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_third@2x.png'" v-if="image"
                    class="hard-img-crown">
-              <img :src="allStaffList[2].avatar_url" v-if="image" class="hard-img">
+              <img  v-if="allStaffList.length" :src="allStaffList[2].avatar_url" class="hard-img">
             </div>
             <div class="rank-two-text">
               <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_third3@2x.png'" v-if="image"
                    class="img">
-              <div class="name thr-name">{{allStaffList[0].nickname}}</div>
+              <div class="name thr-name"  v-if="allStaffList.length" >{{allStaffList[2].nickname}}</div>
             </div>
             <div class="rank-two-bottom">
               <div class="left-text">总收益</div>
-              <div class="right-text">{{allStaffList[2].sale_count}}</div>
+              <div class="right-text"  v-if="allStaffList.length" >{{allStaffList[2].commission}}</div>
             </div>
           </div>
         </div>
@@ -97,7 +97,7 @@
           <div class="self-merchant-list" v-for="(item, index) in allStaffTwoList" v-bind:key="index">
             <div class="self-staff-list-box user-box">
               <div class="number">{{index + 4}}</div>
-              <img class="img" :src="item.avatar_url" v-if="image">
+              <img class="img" :src="item.avatar_url" v-if="item">
             </div>
             <div class="self-staff-list-box">{{item.nickname}}</div>
             <div class="self-staff-list-box">{{item.sale_count}}</div>
@@ -132,38 +132,7 @@
       type: 'pie',
       center: ['50%', '50%'],
       radius: ['25%', '60%'],
-      data: [{
-        value: 55,
-        name: '锋味粉-55'
-      }, {
-        value: 20,
-        name: '海底捞-22'
-      }, {
-        value: 10,
-        name: '自然醉鹅-10'
-      }, {
-        value: 20,
-        name: '星巴克-20'
-      }, {
-        value: 38,
-        name: '牛肉火锅-38'
-      }, {
-        value: 58,
-        name: '太二酸菜鱼-58'
-      }, {
-        value: 28,
-        name: '旋转寿司-28'
-      }, {
-        value: 38,
-        name: '味千拉面-38'
-      }, {
-        value: 38,
-        name: '澄海烧鹅-38'
-      }, {
-        value: 38,
-        name: '鸡公煲-38'
-      }
-      ],
+      data: [],
       itemStyle: {
         emphasis: {
           shadowBlur: 20,
@@ -250,15 +219,12 @@
         api.dataAllShop(this.activeId, this.allfShopPage).then(res => {
           if (res.error === ERR_OK) {
             this.allShopList.push(...res.data)
-            wechat.hideLoading()
             this._isAllALLShop(res)
-            console.log(this.isAllSelfShop)
             this.allfShopPage++
           } else {
             this.$refs.toast.show(res.message)
           }
           wechat.hideLoading()
-          console.log(res)
         })
       },
       scrollAllShop() {
@@ -278,13 +244,11 @@
           } else {
             this.$refs.toast.show(res.message)
           }
-          console.log(res)
           wechat.hideLoading()
         })
       },
       _getAllotMoney() {
         api.dataAllotMoney(this.activeId).then(res => {
-          console.log(res)
           if (res.error === ERR_OK) {
             this.allotMoney = res.data.share_money
           } else {
@@ -299,8 +263,6 @@
           if (res.error === ERR_OK) {
             this.allStaffList = res.data.slice(0, 3)
             this.allStaffTwoList = res.data.slice(3)
-            console.log(this.allStaffList)
-            console.log(this.allStaffTwoList)
           } else {
             this.$refs.toast.show(res.message)
           }
