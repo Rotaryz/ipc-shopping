@@ -44,7 +44,7 @@
                 <li class="emp-item" v-for="(item,index) in employeeList" :key="index">
                   <article class="emp-item-box">
                     <section class="icon">
-                      <img class="icon-pic" :src="item.avatarUrl">
+                      <img class="icon-pic" v-if="item.avatarUrl" :src="item.avatarUrl">
                     </section>
                     <section class="progress">
                       <div class="name-bar">
