@@ -75,6 +75,7 @@
       <button id="btn-form-id" class="btn-form-id" form-type="submit"></button>
     </form>
     <audit-msg @confirmHandler="staffConfirmHandler" :flag="status"></audit-msg>
+    <toast ref="toast"></toast>
   </article>
 </template>
 
@@ -165,7 +166,7 @@
                 }
                 // 被删除
                 case 3: {
-                  wx.removeStorage({'isOk': 'isOk'})
+                  wx.removeStorageSync('isOk')
                   this.$refs.toast.show('您的员工身份已解除！')
                   this._init()
                   break
