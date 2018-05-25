@@ -65,7 +65,16 @@ export default {
    * @returns {Promise.<*>}
    */
   homeCustomerStatus(data, loading = true) {
-    const url = `/api/customer-status`
+    const url = `/api/alliances/customer-status`
+    return request.get(url, data, loading)
+  },
+  /**
+   *  申请成为员工
+   * @param data 入参
+   * @returns {Promise.<*>}
+   */
+  homeEmployeeApply(data, loading = true) {
+    const url = `/api/alliances/employee/employee-apply`
     return request.get(url, data, loading)
   },
   /**

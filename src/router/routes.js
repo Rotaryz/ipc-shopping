@@ -22,8 +22,8 @@ module.exports = [
     }
   },
   {
-    path: '/pages/loading/loading', // loading
-    name: 'Loading',
+    path: '/pages/login/login', // login
+    name: 'Login',
     config: {
       // navigationBarBackgroundColor: '#FFFFFF',
       // navigationBarTextStyle: 'black'

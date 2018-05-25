@@ -24,15 +24,15 @@
 <script type="text/ecmascript-6">
   import Toast from 'components/toast/toast'
   import api from 'api'
-  import { baseURL, ERR_OK } from 'api/config'
+  import {baseURL, ERR_OK} from 'api/config'
   import * as wechat from 'common/js/wechat'
   import wx from 'wx'
-  import { mapActions, mapMutations } from 'vuex'
-  import { ROLE } from 'common/js/contants'
+  import {mapActions, mapMutations} from 'vuex'
+  import {ROLE} from 'common/js/contants'
 
   console.info(baseURL.jumpVersion)
   export default {
-    data () {
+    data() {
       return {
         authorizationCount: 1,
         entryRole: ROLE.STAFF_ID,
@@ -40,24 +40,16 @@
         userInfo: null
       }
     },
-    beforeCreate () {
-    },
-    created () {
-    },
-    onShow () {
+    onShow() {
       this._getCode()
-    },
-    beforeMount () {
-    },
-    mounted () {
-    },
-    beforeDestroy () {
+      wx.setStorageSync('userType', ROLE.STAFF_ID)
+      this.saveRoleSync(ROLE.STAFF_ID)
     },
     methods: {
       ...mapActions(['saveRole']),
       ...mapMutations({saveRoleSync: 'ROLE_TYPE'}),
       // 微信获取用户信息btn
-      wxGetUserInfo (event) {
+      wxGetUserInfo(event) {
         const e = event.mp
         if (e.detail.errMsg !== 'getUserInfo:ok') {
           return
@@ -73,7 +65,7 @@
         }
       },
       // 获取临时登录凭证code
-      _getCode () {
+      _getCode() {
         return new Promise(resolve => {
           wechat.login()
             .then(res => {
@@ -86,7 +78,7 @@
         })
       },
       // 获取token
-      _getToken () {
+      _getToken() {
         const code = wx.getStorageSync('code')
         const data = {
           code,
@@ -108,9 +100,17 @@
             if (token) {
               wechat.hideLoading()
               wx.setStorageSync('token', token)
-              wx.setStorageSync('userType', ROLE.STAFF_ID)
-              this.saveRoleSync(ROLE.STAFF_ID)
-              this._navTo()
+              api.homeEmployeeApply()
+                .then(json => {
+                  if (json.error !== ERR_OK) {
+                    return this.$refs.toast.show('绑定商家失败')
+                  } else {
+                    this._navTo()
+                  }
+                })
+                .catch(err => {
+                  console.info(err)
+                })
             } else {
               this.$refs.toast.show('登录失败,请重新登录.')
             }
@@ -120,7 +120,7 @@
           })
       },
       // 页面路由
-      _navTo () {
+      _navTo() {
         const url = `/pages/home/home`
         this.$router.replace(url)
       }

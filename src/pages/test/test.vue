@@ -25,6 +25,7 @@
     data () {
       return {
         merchantId: wx.getStorageSync('merchantId'),
+        merchantId2: wx.getStorageSync('merchantId'),
         eId: 0,
         activeId: 0
       }
@@ -39,7 +40,7 @@
             break
           }
           case 'm-id': {
-            this.merchantId = val
+            this.merchantId2 = val
             break
           }
           case 'e-id': {
