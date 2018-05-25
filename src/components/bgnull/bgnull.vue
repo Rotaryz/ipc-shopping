@@ -49,6 +49,8 @@
     width: 100vw
     height: 100%
     background-color: $color-background-f6
+    box-sizing: border-box
+    border: 1px solid red
     .center
       width: 87px
       height: 99.5px
