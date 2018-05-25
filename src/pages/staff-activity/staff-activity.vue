@@ -37,6 +37,7 @@
       }
     },
     mounted() {
+      this.pageList.page = 1
       this._getNewStaff(this.pageList)
     },
     beforeMount() {

@@ -450,6 +450,7 @@
               font-size: $font-size-medium
             .icon
               font-family: $font-family-light
+              margin-right: 2px
               color: $color-background-ff
               font-size: 9px
 
@@ -515,6 +516,7 @@
         font-size: $font-size-medium
         .icon
           font-size: $font-size-small
+          margin-right: 2px
         .money
           font-size: $font-size-medium-x
           font-family: DINAlternate-Bold
