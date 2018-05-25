@@ -65,7 +65,8 @@
         wx.setStorageSync('merchantId', this.merchantId)
         wx.setStorageSync('userType', ROLE.STAFF_ID)
         let url = `/pages/login/login?add=${this.add}`
-        this.$router.replace(url)
+        console.log(url)
+        wx.reLaunch({url})
       },
       _goToC () {
         let appId = `wxa721ed0b76403077`

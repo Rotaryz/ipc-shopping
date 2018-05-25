@@ -22,10 +22,10 @@
     },
     mounted () {
     },
-    onLuanch () {
+    onLaunch () {
+      this._init()
     },
     onShow () {
-      this._init()
     },
     onHide () {
     },
@@ -74,7 +74,7 @@
         if (this.add * 1 === 1) {
           let url = `/pages/login/login?add=${this.add}`
           this.$router.replace(url)
-          // return
+          return
         }
         // 跳转首页
         let url = `/pages/home/home`

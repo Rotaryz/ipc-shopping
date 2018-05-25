@@ -271,7 +271,7 @@
       // 预览按钮
       previewHandler (obj) {
         const activityId = obj.id
-        const url = `/pages/activity-detai/activity-detai?activityId=${activityId}`
+        const url = `/pages/activity-detail/activity-detail?activityId=${activityId}`
         this.$router.push(url)
       },
       // 编辑

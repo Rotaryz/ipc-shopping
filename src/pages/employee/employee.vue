@@ -129,8 +129,9 @@
         wechat.hideLoading()
       },
       _empDel () { // 删除员工
-        let data = {customer_id: this.acceptList[this.dataIndex].id}
-        api.empDel(data).then(res => {
+        let id = this.acceptList[this.dataIndex].id
+        let data = {customer_id: this.acceptList[this.dataIndex].customer_id}
+        api.empDel(id, data).then(res => {
           if (res.error !== ERR_OK) {
             this.$refs.toast.show(res.message)
             return

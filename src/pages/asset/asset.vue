@@ -28,7 +28,7 @@
           </div>
           <div class="item-right">
             <text class="small">+</text>
-            {{item.merchant_amount}}
+            {{item.commission}}
           </div>
         </div>
       </scroll-view>
@@ -102,7 +102,7 @@
         }
         api.empAssetList(data).then(res => {
           if (res.error !== ERR_OK) return
-          this.redPackList.push(...res.data)
+          this.redPackList = res.data
           console.log(res)
         }).catch(err => {
           console.log(err)

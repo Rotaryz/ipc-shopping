@@ -57,7 +57,7 @@
                     </section>
                     <section class="number">
                       <div class="n-title">销卡</div>
-                      <div>80</div>
+                      <div>{{item.percentage}}</div>
                       <div>%</div>
                     </section>
                   </article>

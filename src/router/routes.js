@@ -237,8 +237,8 @@ module.exports = [
     }
   },
   {
-    path: '/pages/activity-detai/activity-detai', // 异业卡活动详情
-    name: 'ActivityDetai',
+    path: '/pages/activity-detail/activity-detail', // 异业卡活动详情
+    name: 'ActivityDetail',
     config: {
       navigationBarTitleText: '活动详情',
       backgroundColor: '#f9f9f9',
