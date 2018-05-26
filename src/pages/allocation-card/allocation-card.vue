@@ -134,6 +134,7 @@
           if (res.error === ERR_OK) {
             console.log(res)
             this.info.title = res.data.activity_alliance.name
+            this.info.id = res.data.activity_alliance_id
             this.info.endDate = res.data.activity_alliance.end_at
             this.info.store = res.data.alliance_merchant_report.stock
             this.store = res.data.alliance_merchant_report.stock
