@@ -73,7 +73,7 @@
       editBank (qu) {
         console.log(qu)
         this.bankFlag = false
-        this.withdrawal_card = qu.withdrawal_card_num
+        this.withdrawal_card = qu.withdrawal_card_num.replace(/[\s]/g, '').replace(/(\d{4})(?=\d)/g, '$1 ')
         this.depositBank = qu.bank
         this.name = qu.user_name
         this.id = qu.id
@@ -94,9 +94,11 @@
       },
       changeCard () {
         let value = this.withdrawal_card
+        console.log(value)
         if (/\S{5}/.test(value)) {
           value = value.replace(/\s/g, '').replace(/(.{4})/g, '$1 ')
         }
+        console.log(value)
         this.withdrawal_card = value
       },
       checkFormFun () {
@@ -147,7 +149,6 @@
       },
       withdrawal_card () {
         this.checkFormFun()
-        this.withdrawal_card = this.withdrawal_card.replace(/[\s]/g, '').replace(/(\d{4})(?=\d)/g, '$1 ')
       },
       depositBank () {
         this.checkFormFun()

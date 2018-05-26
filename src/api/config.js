@@ -5,12 +5,14 @@ const version = '/v1'
 const DEV = {
   image: 'https://img.jerryf.cn',
   login: 'https://dev.jike-jwt.jerryf.cn',
+  webview: 'https://h5.jkweixin.net',
   api: 'https://dev.jike-backend-api.jerryf.cn' + version,
   jumpVersion: 'develop'
 }
 // const DEV = {
 //   image: 'https://img.jkweixin.net',
 //   login: 'https://jwt.jkweixin.net',
+//   webview: 'https://h5.jkweixin.net',
 //   api: 'https://backend-api.jkweixin.net' + version,
 //   jumpVersion: 'trial'
 // }
@@ -18,6 +20,7 @@ const DEV = {
 const TEST = {
   image: 'https://img.jkweixin.net',
   login: 'https://jwt.jkweixin.net',
+  webview: 'https://h5.jkweixin.net',
   api: 'https://backend-api.jkweixin.net' + version,
   jumpVersion: 'trial'
 }
@@ -25,6 +28,7 @@ const TEST = {
 const PROD = {
   image: 'https://img.jkweixin.com',
   login: 'https://jwt.jkweixin.com',
+  webview: 'https://h5.jkweixin.com',
   api: 'https://backend-api.jkweixin.com' + version,
   jumpVersion: 'release'
 }
