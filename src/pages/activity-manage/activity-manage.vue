@@ -102,6 +102,10 @@
       }
     },
     onShow() {
+      if (wx.getStorageSync('pay') === 'success') {
+        this.tabFlag = 0
+        wx.setStorageSync('pay', 'no')
+      }
       this._init()
       this.ActiveData.page = 1
       this.isAllActive = false
@@ -157,7 +161,7 @@
       _rqGetActiveList() {
         api.merPondActiveList(this.PondPage, this.PondLimt).then(res => {
           if (res.error === ERR_OK) {
-            this.pondList = res.data
+            this.pondList.push(...res.data)
             this._isAllPond(res)
             this.PondPage++
           } else {
