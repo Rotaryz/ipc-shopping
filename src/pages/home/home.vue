@@ -20,12 +20,12 @@
     </header>
     <form @submit="formSubmit" report-submit='true'>
       <label class="tab-leader" v-if="currentRole===ROLE.UNION_ID" for="btn-form-id">
-        <!--<nav class="t-l-nav" :style="'background-image:url(https://img.jkweixin.net/defaults/ipc-shopping/home/icon-mhome_union@2x.png)'" @tap="toUnion">联盟管理</nav>-->
-        <nav class="t-l-nav" :style="'background-image:url('+IMGURL+'/defaults/ipc-shopping/home/icon-mhome_union@2x.png)'" @tap="toUnion">联盟管理</nav>
+        <nav class="t-l-nav" :style="'background-image:url('+IMGURL+'/defaults/ipc-shopping/home/icon-mhome_union@2x.png)'" @tap="toUnion">
+          <img class="t-l-nav-pic" v-if="imageUri" :src="imageUri + '/defaults/ipc-shopping/home/icon-mhome_union@2x.png'"/>联盟管理
+        </nav>
         <nav class="t-l-nav" :style="activeImg" @tap="toShop">活动管理</nav>
         <nav class="t-l-nav" :style="employeeImg" @tap="toEmployee">员工管理</nav>
         <nav class="t-l-nav" :style="incomeImg" @tap="toAsset">收入/提现</nav>
-        <img v-if="imageUri" :src="imageUri + '/defaults/ipc-shopping/home/icon-mhome_activity@2x.png'"/>
       </label>
       <label class="tab-merchant" v-if="currentRole===ROLE.SHOP_ID" for="btn-form-id">
         <section class="t-m-ad" v-if="noticeList.length>0" @tap="watchActiveHandler">
@@ -114,8 +114,6 @@
     }
   }]
 
-  const IMGURL = baseURL.image
-
   export default {
     data () {
       return {
@@ -128,8 +126,7 @@
         sliderCurrent: 0, // swiper指示器下标
         noticeList: [], // 公告列表
         currentActiveId: null, // 当前活动id
-        status: 3, // 员工状态,
-        IMGURL
+        status: 3 // 员工状态,
       }
     },
     created () {
@@ -446,9 +443,9 @@
       dotStyle () {
         return this.activeList.length <= 1 ? 'd-op' : ''
       },
-      leaderImg () {
-        return `background-image:url(${IMGURL}/defaults/ipc-shopping/home/icon-mhome_union@2x.png)`
-      },
+      // leaderImg () {
+      //   return `background-image:url(${IMGURL}/defaults/ipc-shopping/home/icon-mhome_union@2x.png)`
+      // },
       activeImg () {
         switch (this.currentRole) {
           case ROLE.UNION_ID: {
