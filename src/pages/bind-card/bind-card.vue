@@ -51,10 +51,7 @@
       return {
         imageUrl: baseURL.image,
         depositBank: '',
-        banks: [
-          {id: 1, name: '11'},
-          {id: 2, name: '21'}
-        ],
+        banks: [],
         name: '',
         withdrawal_card: '',
         checkForm: false,
@@ -65,17 +62,18 @@
     components: {
       Toast
     },
-    mounted() {
+    onShow() {
       this._empBankList()
       let qu = this.$root.$mp.query
-      if (qu.id) {
+      if (qu.bank) {
         this.editBank(qu)
       }
     },
     methods: {
       editBank (qu) {
+        console.log(qu)
         this.bankFlag = false
-        this.withdrawal_card = qu.withdrawal_card
+        this.withdrawal_card = qu.withdrawal_card_num
         this.depositBank = qu.bank
         this.name = qu.user_name
         this.id = qu.id
@@ -149,6 +147,7 @@
       },
       withdrawal_card () {
         this.checkFormFun()
+        this.withdrawal_card = this.withdrawal_card.replace(/[\s]/g, '').replace(/(\d{4})(?=\d)/g, '$1 ')
       },
       depositBank () {
         this.checkFormFun()

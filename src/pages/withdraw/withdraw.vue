@@ -13,7 +13,7 @@
       <div class="padding-left">
         <div class="top">
           <div class="left">账户余额</div>
-          <div class="right">{{canUse}}
+          <div class="right">{{remaining}}
             <text class="small">元</text>
           </div>
         </div>
@@ -69,7 +69,7 @@
     data () {
       return {
         imageUrl: baseURL.image,
-        canUse: '100',
+        remaining: '100',
         money: '',
         bankCard: '',
         withdrawFlag: false,
@@ -105,12 +105,12 @@
           if (res.error !== ERR_OK) {
             return
           }
-          this.canUse = res.data.remaining
+          this.remaining = res.data.remaining
           this.canWithdrawal = res.data.can_withdrawal
           let info = res.data.withdrawal_info
-          if (info.id) {
-            let tmp = info.withdrawal_card.substring(info.withdrawal_card.length - 4, info.withdrawal_card.length)
-            this.bankCard = ` ${info.bank} 尾号 ${tmp}`
+          if (info.bank) {
+            // let tmp = info.withdrawal_card.substring(info.withdrawal_card.length - 4, info.withdrawal_card.length)
+            this.bankCard = info.withdrawal_card // ` ${info.bank} 尾号 ${tmp}`
             this.bankCardIcon = info.image_url
             this.withdrawalInfo = info
             this.bankFlag = true
