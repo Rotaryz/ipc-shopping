@@ -247,7 +247,7 @@ module.exports = [
     }
   },
   {
-    path: '/pages/activity-detail/activity-detail-order', // 异业卡活动详情订单
+    path: '/pages/activity-detail-order/activity-detail-order', // 异业卡活动详情订单
     name: 'ActivityDetailOrder',
     config: {
       navigationBarTitleText: '活动详情',

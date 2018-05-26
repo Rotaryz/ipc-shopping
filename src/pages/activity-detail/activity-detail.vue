@@ -12,7 +12,7 @@
       }
     },
     async onLoad(option) {
-      this.webviewUrl = `${baseURL.webview}/index.html#/activity?a=${option.a}&e=${option.e}&m=${this.merchantId}`
+      this.webviewUrl = `${baseURL.webview}/index.html#/activity?a=${option.a}&e=${option.e}&m=y`
       this.$apply()
     }
   }
