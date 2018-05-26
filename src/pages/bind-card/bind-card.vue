@@ -71,8 +71,9 @@
     },
     methods: {
       editBank (qu) {
+        console.log(qu)
         this.bankFlag = false
-        this.withdrawal_card = qu.withdrawal_card
+        this.withdrawal_card = qu.withdrawal_card_num
         this.depositBank = qu.bank
         this.name = qu.user_name
         this.id = qu.id
@@ -146,6 +147,7 @@
       },
       withdrawal_card () {
         this.checkFormFun()
+        this.withdrawal_card = this.withdrawal_card.replace(/[\s]/g, '').replace(/(\d{4})(?=\d)/g, '$1 ')
       },
       depositBank () {
         this.checkFormFun()
