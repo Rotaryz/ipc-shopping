@@ -290,6 +290,7 @@
         this._rqGetGolbalData(data)
           .then(json => {
             let title = json.data.merchant.shop_name
+            title && wx.setStorageSync('shopName', title)
             this.currentRole === ROLE.STAFF_ID && (title = json.data.customer.nickname)
             wx.setNavigationBarTitle({title})
           })
