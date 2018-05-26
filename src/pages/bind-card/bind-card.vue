@@ -51,10 +51,7 @@
       return {
         imageUrl: baseURL.image,
         depositBank: '',
-        banks: [
-          {id: 1, name: '11'},
-          {id: 2, name: '21'}
-        ],
+        banks: [],
         name: '',
         withdrawal_card: '',
         checkForm: false,
@@ -65,10 +62,10 @@
     components: {
       Toast
     },
-    mounted() {
+    onShow() {
       this._empBankList()
       let qu = this.$root.$mp.query
-      if (qu.id) {
+      if (qu.bank) {
         this.editBank(qu)
       }
     },
