@@ -237,8 +237,18 @@ module.exports = [
     }
   },
   {
-    path: '/pages/activity-detail/activity-detail', // 异业卡活动详情
+    path: '/pages/activity-detail/activity-detail', // 异业卡活动详情预览
     name: 'ActivityDetail',
+    config: {
+      navigationBarTitleText: '活动预览',
+      backgroundColor: '#f9f9f9',
+      navigationBarBackgroundColor: '#1A1D3D',
+      navigationBarTextStyle: 'white'
+    }
+  },
+  {
+    path: '/pages/activity-detail-order/activity-detail-order', // 异业卡活动详情订单
+    name: 'ActivityDetailOrder',
     config: {
       navigationBarTitleText: '活动详情',
       backgroundColor: '#f9f9f9',

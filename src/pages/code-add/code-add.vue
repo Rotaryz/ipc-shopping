@@ -4,7 +4,7 @@
       <div class="code-title">欢迎你加入“异业联盟卡活动”</div>
       <div class="code-msg">享受“一次努力，赚两份钱！”</div>
       <div class="code-img">
-        <img class="max-img" :src="maxImg" alt="">
+        <img class="max-img" :src="maxImg" alt="" mode="widthFix">
       </div>
       <div class="code-hint">扫码绑定加入{{shopName}}</div>
     </div>
@@ -80,7 +80,7 @@
         font-size: $font-size-medium
         color: $color-text-2d
         line-height: 28px
-        margin-top: 50px
+        margin-top: 30px
       .code-msg
         font-family: $font-family-meddle
         font-size: $font-size-large
@@ -88,25 +88,10 @@
         line-height: 32px
       .code-img
         width: 230px
-        height: 230px
-        margin: 20px auto
+        margin: 20px auto 0px
         // border: 1px solid $color-text-a4
-        position: relative
         .max-img
-          position: absolute
-          top: 0px
-          left: 0px
           width: 100%
-          height: 100%
-        .min-img
-          position: absolute
-          top: 0px
-          left: 0px
-          right: 0px
-          bottom: 0px
-          margin: auto
-          width: 47px
-          height: 47px
 
       .code-hint
         font-family: $font-family-light

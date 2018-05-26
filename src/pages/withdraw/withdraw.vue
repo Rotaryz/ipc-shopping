@@ -128,11 +128,11 @@
       },
       moneyChange (e) {
         if (this.money * 1 > this.canUse * 1) {
-          this.money = this.canUse * 1
+          this.money = this.remaining * 1
         }
       },
       allIn () {
-        this.money = this.canUse * 1
+        this.money = this.remaining * 1
       },
       confirm() {
         let data = {money: this.money}
@@ -168,7 +168,7 @@
       },
       checkMoney () {
         let reg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/
-        return reg.test(this.money) && this.money * 1 <= this.canUse * 1 && this.money > 0
+        return reg.test(this.money) && this.money * 1 <= this.remaining * 1 && this.money > 0
       },
       _caculate () {
         const money = this.money
@@ -187,13 +187,13 @@
       },
       money: function (val) {
         let reg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/
-        if (val !== '' && val * 1 > 0 && reg.test(this.money)) {
-          if (val * 1 > this.canUse * 1) {
-            this.money = this.canUse * 1
+        if (val !== '' && val * 1 >= 1 && reg.test(this.money)) {
+          if (val * 1 > this.remaining * 1) {
+            this.money = this.remaining * 1
           }
           this._caculate()
           this.caculateRealMoney = Math.abs(this.money) - Math.abs(this.poundage).toFixed(2)
-          this.caculateBalance = Math.abs(this.canUse) - Math.abs(this.money).toFixed(2)
+          this.caculateBalance = Math.abs(this.remaining) - Math.abs(this.money).toFixed(2)
           if (this.withdrawalInfo !== '') {
             this.withdrawFlag = true
           }

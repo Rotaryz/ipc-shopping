@@ -49,19 +49,7 @@
         total: '0.00',
         count: '0.00',
         withdraw: false,
-        redPackList: [
-          // {activity_alliance: {name: 1, start_at: '2018'}, merchant_amount: '10.0'},
-          // {activity_alliance: {name: 1, start_at: '2018'}, merchant_amount: '10.0'},
-          // {activity_alliance: {name: 1, start_at: '2018'}, merchant_amount: '10.0'},
-          // {activity_alliance: {name: 1, start_at: '2018'}, merchant_amount: '10.0'},
-          // {activity_alliance: {name: 1, start_at: '2018'}, merchant_amount: '10.0'},
-          // {activity_alliance: {name: 1, start_at: '2018'}, merchant_amount: '10.0'},
-          // {activity_alliance: {name: 1, start_at: '2018'}, merchant_amount: '10.0'},
-          // {activity_alliance: {name: 1, start_at: '2018'}, merchant_amount: '10.0'},
-          // {activity_alliance: {name: 1, start_at: '2018'}, merchant_amount: '10.0'},
-          // {activity_alliance: {name: 1, start_at: '2018'}, merchant_amount: '10.0'},
-          // {activity_alliance: {name: 1, start_at: '2018'}, merchant_amount: '10.0'}
-        ],
+        redPackList: [],
         page: 1,
         limit: 10
       }
@@ -69,7 +57,7 @@
     components: {
       Bgnull
     },
-    mounted () {
+    onShow () {
       this._getInfo()
     },
     methods: {
