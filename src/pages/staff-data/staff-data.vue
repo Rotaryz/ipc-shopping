@@ -462,11 +462,13 @@
                 font-family: DINAlternate-Bold
                 color: $color-background-ff
                 font-size: $font-size-medium
+                height: $font-size-medium
               .icon
                 font-family: $font-family-light
                 margin-right: 2px
                 color: $color-background-ff
-                font-size: 9px
+                height: $font-size-small-ss
+                font-size: $font-size-small-ss
           .self-merchant-list
             &:nth-of-type(1)
               .user-box
@@ -676,11 +678,13 @@
               font-family: DINAlternate-Bold
               color: $color-background-ff
               font-size: $font-size-medium
+              height: $font-size-medium
             .icon
               font-family: $font-family-light
               color: $color-background-ff
               margin-right: 2px
-              font-size: 9px
+              height: $font-size-small-ss
+              font-size: $font-size-small-ss
 
   .data-null
     text-align: center

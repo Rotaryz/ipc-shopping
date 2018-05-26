@@ -306,6 +306,7 @@
                 signType,
                 paySign,
                 'success': function (res) {
+                  wx.setStorageSync('pay', 'success')
                   that.$router.go(-2)
                 },
                 'fail': function (res) {

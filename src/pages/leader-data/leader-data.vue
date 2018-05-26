@@ -448,11 +448,13 @@
               font-family: DINAlternate-Bold
               color: $color-background-ff
               font-size: $font-size-medium
+              height: $font-size-medium
             .icon
               font-family: $font-family-light
               margin-right: 2px
               color: $color-background-ff
-              font-size: 9px
+              height: $font-size-small-ss
+              font-size: $font-size-small-ss
 
   .all-merchant /* 店铺总榜 */
     padding: 0 12px
