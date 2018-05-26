@@ -73,13 +73,11 @@
         <button class="pass" @tap="accept" form-type="submit">通过</button>
       </div>
     </form>
-    <!--<confirm-msg :show.sync="show" :title.sync="title" v-on:confirm="confirm" v-on:cancel="cancel"></confirm-msg>-->
     <toast ref="toast"></toast>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  // import ConfirmMsg from 'components/confirm-msg/confirm-msg'
   import Coupon from 'components/coupon-item/coupon-item'
   import { baseURL, ERR_OK } from 'api/config'
   import Toast from '@/components/toast/toast'
@@ -88,12 +86,6 @@
   import * as wechat from 'common/js/wechat'
 
   const BTN = ['审核中', '待审核', '已审核', '已拒绝']
-  // shop_name: '国颐堂',
-  // shop_type: '美发',
-  // address: '广州市白云区黄石路国际单位黄石路国际单位国际单位2期',
-  // price: '10',
-  // count: 10,
-  // money: 1000
 
   export default {
     data () {
@@ -193,7 +185,6 @@
           this.couponInfo.appPath = res.path
           this.couponInfo.merchantId = res.merchant_id
         }
-        console.log(this.awaitList, '------------')
       },
       _rqCheckApply (data, loading) {
         api.uckCheckApply(data, loading)
@@ -238,22 +229,18 @@
       changeCoupon () {
         let data = this._formatReq(3)
         this._rqCheckApply(data)
-        // this.$refs.toast.show('更换优惠券')
       },
       refuse () {
         let data = this._formatReq(2)
         this._rqCheckApply(data)
-        // this.$refs.toast.show('已拒绝')
       },
       accept () {
         let data = this._formatReq(1)
         this._rqCheckApply(data)
-        // this.$refs.toast.show('已接受')
       },
       remind () {
         let data = this._formatReq(3)
         this._rqCheckApply(data)
-        // this.$refs.toast.show('已提醒')
       }
     },
     computed: {

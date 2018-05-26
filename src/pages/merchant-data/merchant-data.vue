@@ -755,6 +755,7 @@
           justify-content: center
           align-items: flex-end
           .icon
+            margin-right: 2px
             font-family: $font-family-regular
             color: #FFFE5C
             font-size: $font-size-medium
@@ -832,6 +833,7 @@
         font-family: $font-family-light
         font-size: $font-size-medium
         .icon
+          margin-right: 2px
           font-size: $font-size-small
         .money
           font-size: $font-size-medium-x
@@ -919,6 +921,7 @@
                 color: $color-background-ff
                 font-size: $font-size-medium
               .icon
+                margin-right: 2px
                 font-family: $font-family-light
                 color: $color-background-ff
                 font-size: 9px
@@ -955,6 +958,7 @@
         font-size: $font-size-medium
         .icon
           font-size: $font-size-small
+          margin-right: 2px
         .money
           font-size: $font-size-medium-x
           font-family: DINAlternate-Bold
@@ -1131,6 +1135,7 @@
               color: $color-background-ff
               font-size: $font-size-medium
             .icon
+              margin-right: 2px
               font-family: $font-family-light
               color: $color-background-ff
               font-size: 9px

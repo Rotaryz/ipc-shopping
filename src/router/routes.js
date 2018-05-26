@@ -1,5 +1,12 @@
 module.exports = [
   {
+    path: '/pages/home/home', // 首页
+    name: 'Home',
+    config: {
+      navigationBarTitleText: '异业联盟'
+    }
+  },
+  {
     path: '/pages/login/login', // login
     name: 'Login',
     config: {
@@ -9,13 +16,6 @@ module.exports = [
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#1A1D3D',
       disableScroll: true
-    }
-  },
-  {
-    path: '/pages/home/home', // 首页
-    name: 'Home',
-    config: {
-      navigationBarTitleText: '异业联盟'
     }
   },
   {

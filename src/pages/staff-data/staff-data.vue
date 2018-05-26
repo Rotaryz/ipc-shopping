@@ -457,6 +457,7 @@
                 font-size: $font-size-medium
               .icon
                 font-family: $font-family-light
+                margin-right: 2px
                 color: $color-background-ff
                 font-size: 9px
           .self-merchant-list
@@ -492,6 +493,7 @@
         font-size: $font-size-medium
         .icon
           font-size: $font-size-small
+          margin-right: 2px
         .money
           font-size: $font-size-medium-x
           font-family: DINAlternate-Bold
@@ -670,6 +672,7 @@
             .icon
               font-family: $font-family-light
               color: $color-background-ff
+              margin-right: 2px
               font-size: 9px
 
   .data-null

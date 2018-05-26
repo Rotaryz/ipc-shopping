@@ -23,9 +23,9 @@
     mounted () {
     },
     onLaunch () {
-      this._init()
     },
     onShow () {
+      this._init()
     },
     onHide () {
     },

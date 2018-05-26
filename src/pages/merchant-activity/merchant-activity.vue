@@ -413,6 +413,7 @@
         justify-content: center
         align-items: flex-end
         .icnon
+          margin-right: 2px
           font-family: $font-family-regular
           font-size: $font-size-medium
           color: #FFFE5C
@@ -488,6 +489,7 @@
               color: $color-background-ff
               align-items: flex-end
               .icon
+                margin-right: 2px
                 font-size: $font-size-small-ss
                 height: $font-size-small-ss
                 font-family: $font-family-light
