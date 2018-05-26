@@ -92,7 +92,7 @@
       </div>
       <div class="coupon-up" v-if="status === 2 || status === 4">
         <div class="rules-top">
-          <div class="text">优惠卷信息</div>
+          <div class="text">优惠券信息</div>
         </div>
         <div class="coupon-info">
           <coupon :useModel="1" :useType="0" :couponInfo="coupon"></coupon>
@@ -146,8 +146,8 @@
         image: baseURL.image,
         showRule: false,
         btnText: '审核中',
-        couponText: '添加优惠卷',
-        status: null, // 页面状态 （0为未报名,1为未添加优惠卷,2为未审核中,3为更换优惠卷,4为未审核成功,5为未审核失败,6为退款成功,7为退款失败,8为排队中）
+        couponText: '添加优惠券',
+        status: null, // 页面状态 （0为未报名,1为未添加优惠券,2为未审核中,3为更换优惠券,4为未审核成功,5为未审核失败,6为退款成功,7为退款失败,8为排队中）
         activityData: {},
         addNumber: 1,
         applyLock: false,
@@ -226,7 +226,7 @@
               this.applyId = res.data.alliance_merchant_apply.id
               if (parseInt(res.data.alliance_merchant_apply.promotion_id) === 0) {
                 this.status = 1
-                this.couponText = '添加优惠卷'
+                this.couponText = '添加优惠券'
               } else {
                 api.merCouponDetails(res.data.alliance_merchant_apply.promotion_id).then(res => {
                   console.log(res)
@@ -246,7 +246,7 @@
                   this.btnText = '报名成功'
                 } else if (res.data.alliance_merchant_apply.check_status * 1 === 3) {
                   this.status = 3
-                  this.couponText = '更换优惠卷'
+                  this.couponText = '更换优惠券'
                 } else {
                   if (res.data.alliance_merchant_apply.refund_status * 1 === 0) {
                     this.status = 5
