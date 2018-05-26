@@ -1,8 +1,7 @@
 <template>
   <div class="data-box">
     <div class="merchant-title">
-      <div class="merchant-title-tab" :class="staffBtn === 'self' ? 'active' : '' " @tap="clickStaffTab('self')">国颐堂榜
-      </div>
+      <div class="merchant-title-tab" :class="staffBtn === 'self' ? 'active' : '' " @tap="clickStaffTab('self')">{{shopName}}</div>
       <div class="merchant-title-tab" :class="staffBtn === 'all' ? 'active' : '' " @tap="clickStaffTab('all')">总榜</div>
     </div>
     <div class="self-staff" v-if="staffBtn === 'self'">
@@ -227,6 +226,7 @@
         selfStaffList: [], // 商店员工参数
         selfStaffPage: 1,
         isAllselfStaff: false,
+        shopName: null,
         barDetails: {
           sale_count: 0,
           self_verification: 0,
@@ -268,6 +268,12 @@
       wx.stopPullDownRefresh()
     },
     mounted() {
+      this.shopName = wx.getStorageSync('key')
+      if (!this.shopName) {
+        this.shopName = '我的店'
+      } else {
+        this.shopName = this.shopName + '榜'
+      }
       this._dataInit()
       let system = DEVICE_INFO.system
       this.ios = system.search('iOS') !== -1

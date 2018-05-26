@@ -1,13 +1,13 @@
 <template>
   <div class="data-box">
     <div class="data-tab">
-      <div class="tab-merchant " :class="bigBtn === 'merchant' ? 'active' : '' " @tap="clickTab('merchant')">商家版</div>
+      <div class="tab-merchant " :class="bigBtn === 'merchant' ? 'active' : '' " @tap="clickTab('merchant')">商家榜</div>
       <div class="tab-merchant" :class="bigBtn === 'staff' ? 'active' : '' " @tap="clickTab('staff')">员工榜</div>
     </div>
     <div class="tab-merchant-box" v-if="bigBtn === 'merchant'">
       <div class="merchant-title">
         <div class="merchant-title-tab" :class="merchantBtn === 'self' ? 'active' : '' "
-             @tap="clickMerchantTab('self')">国颐堂榜
+             @tap="clickMerchantTab('self')">我的店
         </div>
         <div class="merchant-title-tab" :class="merchantBtn === 'all' ? 'active' : '' " @tap="clickMerchantTab('all')">
           总榜
@@ -91,9 +91,7 @@
     </div>
     <div class="tab-staff-box" v-if="bigBtn === 'staff'">
       <div class="merchant-title">
-        <div class="merchant-title-tab" :class="staffBtn === 'self' ? 'active' : '' " @tap="clickStaffTab('self')">
-          国颐堂榜
-        </div>
+        <div class="merchant-title-tab" :class="staffBtn === 'self' ? 'active' : '' " @tap="clickStaffTab('self')">{{shopName}}</div>
         <div class="merchant-title-tab" :class="staffBtn === 'all' ? 'active' : '' " @tap="clickStaffTab('all')">总榜
         </div>
       </div>
@@ -348,6 +346,7 @@
         preScene: null,
         activeId: 1, // 活动Id
         allotMoney: null,
+        shopName: null,
         selfShopList: [], // 单店数据参数
         selfShopPage: 1,
         isAllSelfShop: false,
@@ -388,6 +387,12 @@
       }
     },
     mounted() {
+      this.shopName = wx.getStorageSync('key')
+      if (!this.shopName) {
+        this.shopName = '我的店'
+      } else {
+        this.shopName = this.shopName + '榜'
+      }
       console.log(this.allStaffList[0].avatar_url)
       this._dataInit()
       let system = DEVICE_INFO.system
