@@ -181,6 +181,7 @@
     ],
     yAxis: [
       {
+        min: 1,
         type: 'value',
         axisLine: {
           lineStyle: {
