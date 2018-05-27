@@ -12,8 +12,7 @@
       }
     },
     async onLoad(option) {
-      this.webviewUrl = `${baseURL.webview}/index.html#/activity?a=${option.a}&e=${option.e}&m=y`
-      this.$apply()
+      this.webviewUrl = `${baseURL.webview}/index.html#/activity?a=${option.a}&e=${option.e}&m=${option.m}`
     }
   }
 </script>
