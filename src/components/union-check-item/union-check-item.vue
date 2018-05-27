@@ -2,10 +2,15 @@
   <div class="check-status-bar-item">
     <article class="wrap" @tap="lookOverHandler(shopItem)">
       <section class="w-top">
-        <div class="logo" :style="shopImg"></div>
+        <div class="logo">
+          <img class="logo-pic" mode="aspectFill" :src="shopItem.shopImg"/>
+        </div>
         <article class="info">
           <div class="shop-name">{{shopItem.name}}</div>
-          <div class="location" :style="backgroundMapImg">{{shopItem.location}}</div>
+          <div class="location">
+            <img class="loc-pic" v-if="backgroundMapImg" :src="backgroundMapImg"/>
+            <div class="txt">{{shopItem.location}}</div>
+          </div>
           <section class="expense-box" v-if="shopItem.statusCode !== constObj.REFUSE">
             <div class="number">购买数量 {{shopItem.sales}}</div>
             <article class="money">
@@ -20,14 +25,14 @@
       </section>
       <section class="w-bottom">
         <div class="status-info">{{statusMsg}}</div>
-        <div class="arrow-right" :style="arrowRightImg"></div>
+        <img class="arrow-right" v-if="arrowRightImg" :src="arrowRightImg"/>
       </section>
     </article>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import { baseURL } from 'api/config'
+  import {baseURL} from 'api/config'
   import source from 'common/source'
 
   // const OBJ = {
@@ -59,18 +64,18 @@
         default: CHECK_CONST_OBJ
       }
     },
-    data () {
+    data() {
       return {
         imageUri: baseURL.image
       }
     },
     methods: {
-      lookOverHandler (shopItem) {
+      lookOverHandler(shopItem) {
         this.$emit('lookOverHandler', shopItem)
       }
     },
     computed: {
-      statusMsg () {
+      statusMsg() {
         switch (this.shopItem.statusCode) {
           case this.constObj.APPLYING :
             return `待添加优惠券`
@@ -84,15 +89,11 @@
             if (this.shopItem.refundStatus === 2) return `排队中`
         }
       },
-      shopImg () {
-        const img = this.shopItem.shopImg
-        return `background-image:url(${img})`
+      arrowRightImg() {
+        return source.imgArrowRightA4('img')
       },
-      arrowRightImg () {
-        return source.imgArrowRightA4()
-      },
-      backgroundMapImg () {
-        return source.imgMapIcon()
+      backgroundMapImg() {
+        return source.imgMapIcon('img')
       }
     }
   }
@@ -121,9 +122,9 @@
           width: 60px
           height: 60px
           border: 0.5px solid $color-cut-line-ed
-          background-position: center
-          background-repeat: no-repeat
-          background-size: cover
+          .logo-pic
+            height: 100%
+            width: 100%
         .info
           flex: 1
           height: 100%
@@ -143,11 +144,14 @@
             color: $color-text-a4
             line-height: $font-size-small
             margin-bottom: 14px
-            padding-left: 11px
-            background-size: 7.5px 10px
-            background-repeat: no-repeat
-            background-position: left bottom
-            no-wrap()
+            layout(row)
+            align-items: flex-end
+            .loc-pic
+              width: 7.5px
+              height: 10px
+            .txt
+              margin-left: 3.5px
+              no-wrap()
           .expense-box
             font-family: $font-family-light
             font-size: $font-size-small
@@ -167,7 +171,7 @@
                   display: inline-block
                   font-family: $font-family-light
                   font-size: $font-size-small-s
-                  height: $font-size-small-s
+                  height: $font-size-small
                   margin-right: 2px
                 .m-num
                   font-family: $font-family-light

@@ -6,7 +6,7 @@
           <div class="title">活动名称</div>
           <div class="content">
             <div class="c-input disable" v-if="!isNewModel" @tap="disableHandler">{{name}}</div>
-            <input class="c-input" v-if="isNewModel" type="text" id='activeName' placeholder="异业联盟活动" placeholder-class="content" maxlength="20" :value="name" @input="inputHandler">
+            <input class="c-input" v-if="isNewModel" type="text" id='activeName' placeholder="请输入" placeholder-class="content" maxlength="20" :value="name" @input="inputHandler">
           </div>
         </article>
         <article class="b-i-item">
@@ -39,7 +39,7 @@
           <div class="title">活动地址</div>
           <div class="content">
             <div class="c-input disable" v-if="!isNewModel" @tap="disableHandler">{{address}}</div>
-            <input class="c-input" v-if="isNewModel" type="text" id='activeAddress' placeholder="广州市白云区市桥商圈" placeholder-class="content" maxlength="20" :value="address" @input="inputHandler">
+            <input class="c-input" v-if="isNewModel" type="text" id='activeAddress' placeholder="请输入" placeholder-class="content" maxlength="20" :value="address" @input="inputHandler">
           </div>
         </article>
         <article class="b-i-item">
@@ -47,14 +47,14 @@
           <em class="money">¥</em>
           <div class="content c-price ">
             <div class="c-input disable" v-if="!isNewModel" @tap="disableHandler">{{price}}</div>
-            <input class="c-input" v-if="isNewModel" type="digit" id='activePrice' placeholder="100" placeholder-class="content" maxlength="7" :value="price" @input="inputHandler">
+            <input class="c-input" v-if="isNewModel" type="digit" id='activePrice' placeholder="0.00" placeholder-class="content" maxlength="7" :value="price" @input="inputHandler">
           </div>
         </article>
         <article class="b-i-item">
           <div class="title">卡券数量</div>
           <div class="content">
             <div class="c-input disable" v-if="!isNewModel" @tap="disableHandler">{{stock}}</div>
-            <input class="c-input" v-if="isNewModel" type="number" id='activeStock' placeholder="1000" placeholder-class="content" maxlength="7" :value="stock" @input="inputHandler">
+            <input class="c-input" v-if="isNewModel" type="number" id='activeStock' placeholder="0" placeholder-class="content" maxlength="7" :value="stock" @input="inputHandler">
           </div>
         </article>
       </section>
@@ -124,32 +124,34 @@
 
 <script type="text/ecmascript-6">
   import api from 'api'
-  import { ERR_OK } from 'api/config'
+  import {ERR_OK} from 'api/config'
   import * as wechat from 'common/js/wechat'
   import wx from 'wx'
   import util from 'common/js/format'
   import Toast from '@/components/toast/toast'
 
-  function awardNote (a, b) {
-    return `1. 商家以及员工，每销售一张卡券，得到${a}元的奖励。
-            2. 商家销售卡的用户，到其他门店使用一次，得到联盟力${b}分奖励。（可以分全部联盟商家报名该活动的报名金）
+  const lineBreak = `<br/>`
+
+  function awardNote(a, b) {
+    return `1. 商家以及员工，每销售一张卡券，得到${a}元的奖励。${lineBreak}
+            2. 商家销售卡的用户，到其他门店使用一次，得到联盟力${b}分奖励。（可以分全部联盟商家报名该活动的报名金）${lineBreak}
             3. 商家可以得到该活动全部商家的异业客户引流客户。`
   }
 
-  function claimNote (a) {
-    return `1. 用户购买异业联盟卡后，提供商品给用户。
-            2. 添加商家自己的固定数量的免费优惠券。
+  function claimNote(a) {
+    return `1. 用户购买异业联盟卡后，提供商品给用户。${lineBreak}
+            2. 添加商家自己的固定数量的免费优惠券。${lineBreak}
             3. 支持平台提供的${a}元代金券，小程序买单的使用。`
   }
 
-  function detailNote (a) {
-    return `1. 本活动仅在${a}内开展。
-            2. 该活动需要商家付费参加，如果报名没有通过，会立刻原路退款。
+  function detailNote(a) {
+    return `1. 本活动仅在${a}内开展。${lineBreak}
+            2. 该活动需要商家付费参加，如果报名没有通过，会立刻原路退款。${lineBreak}
             3. 本次活动的最终解释权归赞播所有。`
   }
 
   export default {
-    data () {
+    data() {
       return {
         model: 0,
         id: '',
@@ -157,29 +159,28 @@
         startDate: null,
         endDate: null,
         address: '',
-        price: 0,
-        stock: 0,
+        price: '',
+        stock: '',
         activePrizeList: [],
         activeInfo: {}
       }
     },
-    beforeMount () {
+    beforeMount() {
       let title = `新建`
       this.isNewModel && wx.setNavigationBarTitle({title})
       this._init()
     },
-    mounted () {
-      // console.log(util, Date.now())
+    mounted() {
     },
     methods: {
-      _init () {
+      _init() {
         this.model = this.$root.$mp.query.model * 1
-        this.name = `异业联盟活动`
+        // this.name = `异业联盟活动`
         this.startDate = this.todayStartDate
         this.endDate = this.endStartDate
-        this.address = `广州市白云区市桥商圈`
-        this.price = 100
-        this.stock = 1000
+        // this.address = `广州市白云区市桥商圈`
+        // this.price = 100
+        // this.stock = 1000
         this.activePrizeList = ['波尔多红酒', '10张10元代金券', '20张异业联盟券']
         this.activeInfo = {'item0': 50, 'item1': 10, 'item2': 10}
         if (!this.isNewModel) {
@@ -188,10 +189,10 @@
           this._rqGetActiveList(data)
         }
       },
-      disableHandler () {
+      disableHandler() {
         this.$refs.toast.show('不可修改')
       },
-      inputHandler (e) {
+      inputHandler(e) {
         let id = e.target.id
         let value = e.target.value
         switch (id) {
@@ -242,7 +243,7 @@
           }
         }
       },
-      _checkSaveInfo () {
+      _checkSaveInfo() {
         // 日期
         if (new Date(this.endDate) - new Date(this.startDate) <= 0) {
           this.$refs.toast.show('结束时间不能小于开始时间')
@@ -259,13 +260,13 @@
         }
         return true
       },
-      formSubmit (e) {
+      formSubmit(e) {
         if (!this._checkSaveInfo()) return
         let formId = e.mp.detail.formId
         let data = {'form_ids': [formId]}
         api.homeCollectFormId(data)
       },
-      saveHandler () {
+      saveHandler() {
         switch (this.model) {
           case 0 : {
             if (!this._checkSaveInfo()) return
@@ -279,7 +280,7 @@
           }
         }
       },
-      bindDateChange (e) {
+      bindDateChange(e) {
         const id = e.target.id
         const value = e.mp.detail.value
         switch (id) {
@@ -293,7 +294,7 @@
           }
         }
       },
-      _packData () {
+      _packData() {
         return {
           id: this.id,
           name: this.name,
@@ -308,7 +309,7 @@
           detail_note: detailNote(this.address)
         }
       },
-      _resolveReqData (json) {
+      _resolveReqData(json) {
         let res = json.data
         this.name = res.name
         this.startDate = res.start_at
@@ -320,7 +321,7 @@
         res.attach && (this.activeInfo = res.attach)
       },
       // 获取活动信息
-      _rqGetActiveList (data) {
+      _rqGetActiveList(data) {
         api.uctGetActive(data)
           .then(json => {
             if (json.error !== ERR_OK) {
@@ -334,7 +335,7 @@
           })
       },
       // 创建活动
-      _rqCreateActive (data) {
+      _rqCreateActive(data) {
         api.uctCreateActive(data)
           .then(json => {
             wechat.hideLoading()
@@ -349,7 +350,7 @@
           })
       },
       // 修改活动
-      _rqUpdateActive (data) {
+      _rqUpdateActive(data) {
         api.uctUpdateActive(data)
           .then(json => {
             wechat.hideLoading()
@@ -365,13 +366,13 @@
       }
     },
     computed: {
-      isNewModel () {
+      isNewModel() {
         return this.model === 0
       },
-      todayStartDate () {
+      todayStartDate() {
         return util.formatTimeYMD(util.now + 1000 * 60 * 60 * 24)
       },
-      endStartDate () {
+      endStartDate() {
         return util.formatTimeYMD(util.now + 1000 * 60 * 60 * 24 * 2)
       }
     },
@@ -393,6 +394,7 @@
     position: relative
     min-height: 100vh
     background-color: $color-background-f6
+    padding-bottom: 45px
     .u-c-form
       position: relative
       .u-c-section
@@ -400,7 +402,7 @@
         background-color: $color-background-ff
         margin-bottom: 10px
         &.active-info
-          margin-bottom: 45px
+          margin-bottom: 0px
         .b-i-item
           position: relative
           layout(row)
@@ -428,6 +430,7 @@
             width: 5px
             height: 21px
             line-height: 0
+            margin-right :3px
           .content
             flex: 1
             height: 100%

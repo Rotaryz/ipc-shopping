@@ -2,7 +2,7 @@
   <div class="employee">
     <div :class="emListStyle">
       <div class="em-list-await">
-        <div class="em-list-await-title">待处理申请</div>
+        <div class="em-list-await-title">商家信息</div>
         <div class="await-list-item">
           <div class="await-list-left">
             <div class="left-name">商家名称</div>

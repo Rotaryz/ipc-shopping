@@ -12,13 +12,15 @@
     </header>
     <section class="content">
       <article class="empty" v-if="isEmpty">
-        <div class="empty-pic" :style="emptyImg"/>
-        <div class="empty-txt">暂无活动</div>
+        <img class="empty-pic" :src="emptyImg" v-if="emptyImg"/>
+        <div class="empty-txt">暂无信息</div>
       </article>
       <article class="scroll" v-if="!isEmpty">
         <div class="ad-box" v-if="showAd">
           <div class="txt">{{adMsg}}</div>
-          <div class="close-icon" :style="closeIcon" @tap="closeAd"></div>
+          <div class="close-icon" @tap="closeAd">
+            <img :src="closeIcon" v-if="closeIcon"/>
+          </div>
         </div>
         <ul class="box">
           <li :class="['box-item',showAd?'show-ad':'']" v-for="(item, index) in checkInfoList" :key="index">
@@ -33,7 +35,7 @@
 <script type="text/ecmascript-6">
   import api from 'api'
   import * as wechat from 'common/js/wechat'
-  import { ERR_OK } from 'api/config'
+  import {ERR_OK} from 'api/config'
   import source from 'common/source'
   import wx from 'wx'
   import UnionCard from 'components/union-card-item/union-card-item'
@@ -42,7 +44,7 @@
   const LIMIT_DEF = 10
 
   export default {
-    data () {
+    data() {
       return {
         navList: ['申请中', '待审核', '已通过', '已拒绝'],
         tabFlag: 0,
@@ -55,10 +57,10 @@
         limit: LIMIT_DEF
       }
     },
-    onShow () {
+    onShow() {
       this._init()
     },
-    onPullDownRefresh () {
+    onPullDownRefresh() {
       this._resetConfig()
       let data = this._formatReq()
       data.paga = 1
@@ -71,11 +73,11 @@
           wx.stopPullDownRefresh()
         })
     },
-    onReachBottom () {
+    onReachBottom() {
       this.getMoreList()
     },
     methods: {
-      changeTab (flag) {
+      changeTab(flag) {
         if (this.tabFlag === flag) return
         this.tabFlag = flag
         this._resetConfig()
@@ -89,27 +91,24 @@
           })
         this._showAd()
       },
-      closeAd () {
+      closeAd() {
         this.showAd = false
       },
-      lookOverHandler (obj) {
-        console.log(this.checkInfoList)
+      lookOverHandler(obj) {
         const url = `/pages/audit/audit?checkId=${obj.id}&tabFlag=${this.tabFlag}`
         this.$router.push(url)
       },
-      _showAd (flag) {
+      _showAd(flag) {
         flag = this.tabFlag
         if (flag === 0 || flag === 1) {
           this.showAd = true
-          console.log(flag)
           flag === 0 && (this.adMsg = `商家已成功支付，但还未添加优惠券`)
           flag === 1 && (this.adMsg = `商家已成功支付，且已经添加优惠券`)
         } else {
           this.showAd = false
         }
       },
-      _init () {
-        console.log(this.$root.$mp.query.activeId, 'check-list')
+      _init() {
         if (!(this.currentActiveId * 1 === this.$root.$mp.query.activeId * 1)) {
           this.tabFlag = 0
           this._resetConfig()
@@ -123,7 +122,7 @@
             this._isAll(json)
           })
       },
-      _formatReq (flag) {
+      _formatReq(flag) {
         flag = this.tabFlag
         let data = {
           'check_status': 0,
@@ -154,7 +153,7 @@
         }
         return data
       },
-      _rqGetCheckList (data, loading) {
+      _rqGetCheckList(data, loading) {
         return new Promise(resolve => {
           api.uckGetCheckList(data, loading)
             .then(json => {
@@ -169,18 +168,18 @@
             })
         })
       },
-      _isAll (json) {
+      _isAll(json) {
         let total = json.meta.total
         this.isAll = (this.checkInfoList.length >= total)
         return this.isAll
       },
-      _resetConfig () {
+      _resetConfig() {
         this.isAll = false
         this.page = 1
         this.limit = LIMIT_DEF
       },
       // 格式化请求列表
-      _formatResData (json) {
+      _formatResData(json) {
         let arr = []
         let res = json.data
         res.map(item => {
@@ -198,7 +197,7 @@
         })
         return arr
       },
-      getMoreList () {
+      getMoreList() {
         if (this.isAll) return
         let data = this._formatReq()
         data.page++
@@ -211,14 +210,14 @@
       }
     },
     computed: {
-      isEmpty () {
+      isEmpty() {
         return this.checkInfoList.length <= 0
       },
-      emptyImg () {
-        return source.imgEmptyActive()
+      emptyImg() {
+        return source.imgEmptyInfo('img')
       },
-      closeIcon () {
-        return source.imgCloseIcon()
+      closeIcon() {
+        return source.imgCloseIcon('img')
       }
     },
     components: {
@@ -310,9 +309,15 @@
             height: 34px
             width: 34px
             padding: 0 15px
+            layout()
+            justify-content: center
+            align-items: center
             background-repeat: no-repeat
             background-position: right center
             background-size: 12px
+            .c-i-pic
+              height: 12px
+              width: 12px
         .box
           box-sizing: border-box
           .box-item

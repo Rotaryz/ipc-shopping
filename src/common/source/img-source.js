@@ -49,6 +49,9 @@ export default {
       case 'background': {
         return `background-image:url(${baseUrl}/aliance/icon-union_card@2x.png)` || ''
       }
+      case 'img': {
+        return `${baseUrl}/aliance/icon-union_card@2x.png` || ''
+      }
       default :
         return ''
     }
@@ -63,6 +66,9 @@ export default {
     switch (type) {
       case 'background': {
         return `background-image:url(${baseUrl}/common/${img})` || ''
+      }
+      case 'img': {
+        return `${baseUrl}/common/${img}` || ''
       }
       default :
         return ''
@@ -79,6 +85,27 @@ export default {
       case 'background': {
         return `background-image:url(${baseUrl}/common/${img})` || ''
       }
+      case 'img': {
+        return `${baseUrl}/common/${img}` || ''
+      }
+      default :
+        return ''
+    }
+  },
+  /**
+   * empty空页面图片
+   * @param type
+   * @returns {*}
+   */
+  imgEmptyInfo(type = 'background') {
+    const img = `pic-income_empty@2x.png`
+    switch (type) {
+      case 'background': {
+        return `background-image:url(${baseUrl}/common/${img})` || ''
+      }
+      case 'img': {
+        return `${baseUrl}/common/${img}` || ''
+      }
       default :
         return ''
     }
@@ -93,6 +120,9 @@ export default {
     switch (type) {
       case 'background': {
         return `background-image:url(${baseUrl}/common/${img})` || ''
+      }
+      case 'img': {
+        return `${baseUrl}/common/${img}` || ''
       }
       default :
         return ''
