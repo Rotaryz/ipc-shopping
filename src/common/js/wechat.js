@@ -54,3 +54,23 @@ export function setNavigationBarTitle(data) {
     wx.getLocation(data)
   })
 }
+
+/**
+ * 弹出提示框
+ */
+
+export function tipSuccess(title, duration = 500) {
+  wx.showToast({
+    title: title,
+    image: '/static/img/icon-global_success@2x.png',
+    mask: true,
+    duration: duration
+  })
+  if (duration > 0) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
+      }, duration)
+    })
+  }
+}

@@ -343,6 +343,7 @@
               this.$refs.toast.show(json.message)
               return ''
             }
+            wechat.tipSuccess('操作成功')
             this.$router.back()
           })
           .catch(err => {

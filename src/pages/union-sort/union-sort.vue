@@ -201,6 +201,7 @@
         this._toMpC({appId, path})
       },
       toSortBtn() {
+        if (this.couponList.length <= 1) return this.$refs.toast.show('不满足排序条件')
         this.isShowSave = true
         this.oldCouponList = util.objDeepCopy(this.couponList)
       },
@@ -211,11 +212,12 @@
             this.isShowSave = false
             break
           }
-          case 1: {
+          case 1: { // 保存
             let data = this._packData()
             this._rqSortList(data)
               .then(() => {
                 this.isShowSave = false
+                wechat.tipSuccess('操作成功')
               })
             break
           }

@@ -117,7 +117,6 @@
     },
     computed: {
       sortUpStyle() {
-        console.log(this.couponInfo.sortType)
         return (this.useType === this.constUseType.sort && this.couponInfo.sortType === this.constUseType.sortUp)
       },
       sortDownStyle() {
