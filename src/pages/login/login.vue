@@ -30,7 +30,6 @@
   import { mapActions, mapMutations } from 'vuex'
   import { ROLE } from 'common/js/contants'
 
-  console.info(baseURL.jumpVersion)
   export default {
     data () {
       return {
