@@ -19,7 +19,7 @@
         <div class="ad-box" v-if="showAd">
           <div class="txt">{{adMsg}}</div>
           <div class="close-icon" @tap="closeAd">
-            <img :src="closeIcon" v-if="closeIcon"/>
+            <img class="c-i-pic" :src="closeIcon" v-if="closeIcon"/>
           </div>
         </div>
         <ul class="box">
@@ -292,7 +292,6 @@
           right: 0
           height: 34px
           box-sizing: border-box
-          padding-right: 15px
           layout(row, block, no-wrap)
           justify-content: space-between
           align-items: center
@@ -311,7 +310,7 @@
             padding: 0 15px
             layout()
             justify-content: center
-            align-items: center
+            align-items: flex-end
             background-repeat: no-repeat
             background-position: right center
             background-size: 12px

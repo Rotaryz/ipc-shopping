@@ -1,8 +1,8 @@
 <template>
   <div class="union-sort">
     <article class="empty" v-if="isEmpty">
-      <div class="empty-pic" :style="emptyImg"/>
-      <div class="empty-txt">暂无活动</div>
+      <img class="empty-pic" :src="emptyImg" v-if="emptyImg"/>
+      <div class="empty-txt">暂无信息</div>
     </article>
     <ul class="content" v-if="!isEmpty">
       <li :class="['c-item',isShowSave?'show-sort':'']" v-for="(item,index) in couponList" :key="index">
@@ -30,15 +30,14 @@
   import util from 'common/js/util'
   import api from 'api'
   import * as wechat from 'common/js/wechat'
-  import { ERR_OK, baseURL } from 'api/config'
+  import {ERR_OK, baseURL} from 'api/config'
   import wx from 'wx'
   import source from 'common/source'
   import Toast from '@/components/toast/toast'
 
   const LIMIT_DEF = 20
-  // console.log(JSON.stringify(arr))
   export default {
-    data () {
+    data() {
       return {
         currentActiveId: null,
         couponList: [],
@@ -49,10 +48,10 @@
         limit: LIMIT_DEF
       }
     },
-    onShow () {
+    onShow() {
       this._init()
     },
-    onPullDownRefresh () {
+    onPullDownRefresh() {
       if (this.isShowSave) {
         wx.stopPullDownRefresh()
         return
@@ -71,7 +70,7 @@
         })
     },
     methods: {
-      _init () {
+      _init() {
         this.currentActiveId = this.$root.$mp.query.activeId
         this._resetConfig()
         let data = this._formatReq()
@@ -83,13 +82,13 @@
             this._isAll(json)
           })
       },
-      _adjustList () {
+      _adjustList() {
         if (this.couponList.length > 0) {
           this.couponList[0].sortType = 11
         }
       },
       // 获取审查列表优惠券
-      _rqGetCheckList (data, loading) {
+      _rqGetCheckList(data, loading) {
         return new Promise(resolve => {
           api.umgGetCheckList(data, loading)
             .then(json => {
@@ -104,20 +103,18 @@
             })
         })
       },
-      _isAll (json) {
+      _isAll(json) {
         let total = json.meta.total
         this.isAll = (this.couponList.length >= total)
         return this.isAll
       },
-      _resetConfig () {
+      _resetConfig() {
         this.isAll = false
         this.page = 1
         this.limit = LIMIT_DEF
       },
-      _formatReq () {
+      _formatReq() {
         let data = {
-          // 'check_status': 1,
-          // 'has_promotion': 1,
           id: this.currentActiveId,
           limit: this.limit,
           page: this.page
@@ -125,7 +122,7 @@
         return data
       },
       // 格式化请求列表
-      _formatResData (json) {
+      _formatResData(json) {
         let arr = []
         let res = json.data
         res.map(item => {
@@ -146,7 +143,7 @@
         })
         return arr
       },
-      _rqSortList (data, loading) {
+      _rqSortList(data, loading) {
         let self = this
         return new Promise(resolve => {
           api.umgSortList(data, loading)
@@ -163,28 +160,27 @@
             })
         })
       },
-      _packData () {
+      _packData() {
         let arr = []
         this.couponList.map(item => {
           arr.push({id: item.listId})
         })
-        console.log(arr, '=======排序===========')
         return {alliance_goods_array: arr}
       },
       // 跳C端预览
-      _toMpC (json) {
+      _toMpC(json) {
         wx.navigateToMiniProgram({
           appId: json.appId,
           path: json.path,
           extraData: {},
           envVersion: baseURL.jumpVersion,
-          success (res) {
+          success(res) {
             // 打开成功
-            console.log(res)
+            console.info(res)
           }
         })
       },
-      getMoreList () {
+      getMoreList() {
         if (this.isShowSave) return
         if (this.isAll) return
         let data = this._formatReq()
@@ -197,18 +193,18 @@
             this._isAll(json)
           })
       },
-      lookOverHandler (obj) {
+      lookOverHandler(obj) {
         const id = obj.id
         const appId = obj.appId
         const merchantId = obj.merchantId
         const path = `${obj.appPath}?type=1&id=${id}&currentMerchant=${merchantId}`
         this._toMpC({appId, path})
       },
-      toSortBtn () {
+      toSortBtn() {
         this.isShowSave = true
         this.oldCouponList = util.objDeepCopy(this.couponList)
       },
-      checkModelBtn (type) {
+      checkModelBtn(type) {
         switch (type) {
           case 0: { // 取消
             this.couponList = this.oldCouponList
@@ -225,7 +221,7 @@
           }
         }
       },
-      sortUpHandler (obj) {
+      sortUpHandler(obj) {
         if (this.couponList.length < 1) return
         let index = this.couponList.findIndex(val => val.id === obj.id)
         if (index === 0) return
@@ -237,7 +233,7 @@
         }
         this.couponList.splice(index - 1, 2, toUp, toDown)
       },
-      sortDownHandler () {
+      sortDownHandler() {
         if (this.couponList.length < 1) return
         let toUp = this.couponList[1]
         let toDown = this.couponList[0]
@@ -247,13 +243,13 @@
       }
     },
     computed: {
-      couponUseType () {
+      couponUseType() {
         return this.isShowSave ? 1 : 0
       },
-      emptyImg () {
-        return source.imgEmptyActive()
+      emptyImg() {
+        return source.imgEmptyInfo('img')
       },
-      isEmpty () {
+      isEmpty() {
         return this.couponList.length <= 0
       }
     },

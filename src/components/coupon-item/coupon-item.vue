@@ -2,7 +2,7 @@
   <div class="coupon-item">
     <!--商家模式-->
     <article class="wrap" v-if="useModel === constUseModel.shop">
-      <section class="logo-box" :style="backgroundLogoImg"></section>
+      <img class="logo-box" mode="aspectFill" :src="couponInfo.image_url" v-if="couponInfo.image_url"/>
       <section class="info-box">
         <div class="title">
           <div class="type">{{couponInfo.promotion_type_cn}}</div>
@@ -12,37 +12,40 @@
         <div class="date">有效期:{{couponInfo.end_at}}</div>
       </section>
       <section class="fun-box check-model" @tap="checkHandler(couponInfo)" v-if="useType === constUseType.check">
-        <div class="circle checked" :hidden="!isCheck" :style="backgroundCheckImg"></div>
+        <img class="circle checked" :hidden="!isCheck" :src="backgroundCheckImg" v-if="backgroundCheckImg"/>
         <div class="circle" :hidden="isCheck"></div>
       </section>
     </article>
     <!--盟主模式-->
     <article class="wrap" v-if="useModel === constUseModel.union">
-      <section class="logo-box" :style="backgroundLogoImg">
+      <section class="logo-box">
+        <img class="logo-box-pic" mode="aspectFill" :src="couponInfo.image_url" v-if="couponInfo.image_url">
         <div class="l-b-shop-name">{{couponInfo.shopName}}</div>
       </section>
-      <section class="info-box">
+      <section class="info-box" @tap="lookOverHandler(couponInfo)">
         <div class="title">
           <div class="type">{{couponInfo.type}}</div>
           <div class="name">{{couponInfo.name}}</div>
         </div>
         <div class="scope">{{couponInfo.scope}}</div>
-        <!--<div class="e-box"></div>-->
         <div class="date">{{couponInfo.useLife}}</div>
         <div class="look-over">
-          <div class="txt" :style="backgroundLookOverImg" @tap="lookOverHandler(couponInfo)">查看</div>
+          <div class="txt">查看</div>
+          <img class="pic" :src="backgroundLookOverImg" v-if="backgroundLookOverImg"/>
         </div>
       </section>
     </article>
-    <article class="union-sort" :style="backgroundSortDownImg" v-if="sortDownStyle"
-             @tap="sortDownHandler(couponInfo)"></article>
-    <article class="union-sort" :style="backgroundSortUpImg" v-if="sortUpStyle"
-             @tap="sortUpHandler(couponInfo)"></article>
+    <article class="union-sort" v-if="sortDownStyle" @tap="sortDownHandler(couponInfo)">
+      <img class="u-s-pic" :src="backgroundSortDownImg" v-if="backgroundSortDownImg"/>
+    </article>
+    <article class="union-sort" v-if="sortUpStyle" @tap="sortUpHandler(couponInfo)">
+      <img class="u-s-pic" :src="backgroundSortUpImg" v-if="backgroundSortUpImg"/>
+    </article>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import { baseURL } from 'api/config'
+  import {baseURL} from 'api/config'
   // import source from 'common/source'
 
   // 使用场景默认值
@@ -93,64 +96,51 @@
         default: DEFAULT_INFO
       }
     },
-    data () {
+    data() {
       return {
         imageUri: baseURL.image
       }
     },
     methods: {
-      checkHandler (couponInfo) {
+      checkHandler(couponInfo) {
         this.$emit('checkHandler', couponInfo)
       },
-      lookOverHandler (couponInfo) {
+      lookOverHandler(couponInfo) {
         this.$emit('lookOverHandler', couponInfo)
       },
-      sortDownHandler (couponInfo, sortType) {
+      sortDownHandler(couponInfo, sortType) {
         this.$emit('sortDownHandler', couponInfo, sortType)
       },
-      sortUpHandler (couponInfo, sortType) {
+      sortUpHandler(couponInfo, sortType) {
         this.$emit('sortUpHandler', couponInfo, sortType)
       }
     },
-    created () {
-      // console.log(this.useType, this.constUseType.normal)
-    },
-    // watch: {
-    //   // 监听isDialogVisible变更后对外发送事件通知，比如关闭弹窗时值变为false,通过$emit通知父组件的getDialogVisible，根据setDialogVisible方法去设置父组件的值
-    //   couponInfo(couponInfo) {
-    //     this.$emit('checkHandler', couponInfo)
-    //   }
-    // },
     computed: {
-      sortUpStyle () {
+      sortUpStyle() {
         console.log(this.couponInfo.sortType)
         return (this.useType === this.constUseType.sort && this.couponInfo.sortType === this.constUseType.sortUp)
       },
-      sortDownStyle () {
+      sortDownStyle() {
         return (this.useType === this.constUseType.sort && this.couponInfo.sortType === this.constUseType.sortDown)
       },
-      isNormal () {
+      isNormal() {
         return this.useType === this.constUseType.normal
       },
-      backgroundLogoImg () {
-        const img = this.couponInfo.image_url || `${this.imageUri}/defaults/ipc-shopping/common/icon-activity_select@2x.png`
-        return `background-image:url(${img})`
-      },
-      backgroundCheckImg () {
+      backgroundCheckImg() {
         const img = `icon-activity_select@2x.png`
-        return `background-image:url(${this.imageUri}/defaults/ipc-shopping/common/${img})`
+        return `${this.imageUri}/defaults/ipc-shopping/common/${img}`
       },
-      backgroundLookOverImg () {
+      backgroundLookOverImg() {
         const img = `icon-union_jt@2x.png`
-        return `background-image:url(${this.imageUri}/defaults/ipc-shopping/common/${img})`
+        return `${this.imageUri}/defaults/ipc-shopping/common/${img}`
       },
-      backgroundSortDownImg () {
+      backgroundSortDownImg() {
         const img = `icon-union_down1@2x.png`
-        return `background-image:url(${this.imageUri}/defaults/ipc-shopping/common/${img})`
+        return `${this.imageUri}/defaults/ipc-shopping/common/${img}`
       },
-      backgroundSortUpImg () {
+      backgroundSortUpImg() {
         const img = `icon-union_up1@2x.png`
-        return `background-image:url(${this.imageUri}/defaults/ipc-shopping/common/${img})`
+        return `${this.imageUri}/defaults/ipc-shopping/common/${img}`
       }
     }
   }
@@ -164,9 +154,12 @@
     position: relative
     height: 100px
     width: 46px
-    background-repeat: no-repeat
-    background-size: 16px
-    background-position: center
+    layout()
+    justify-content: center
+    align-items: center
+    .u-s-pic
+      height: 16px
+      width: 16px
 
   .coupon-item
     position: relative
@@ -188,12 +181,15 @@
         height: 70px
         width: 70px
         box-sizing: border-box
-        background-size: cover
-        background-repeat: no-repeat
-        background-position: center center
         border-radius: 2px
         border: 0.5px solid $color-cut-line-ed
         position: relative
+        .logo-box-pic
+          position: absolute
+          top: 0
+          left: 0
+          height: 100%
+          width: 100%
         .l-b-shop-name
           position: absolute
           bottom: 0
@@ -215,7 +211,6 @@
         justify-content: space-around
         .title
           layout(row, inline, no-wrap)
-          margin-bottom: 27.5px
           align-items: center
           .type
             font-family: $font-family-light
@@ -232,11 +227,15 @@
         .e-box
           height: 5px
         .scope
+          flex: 1
+          layout()
+          justify-content: flex-end
           font-family: $font-family-light
           color: $color-text-2d
           font-size: $font-size-small-s
           line-height: $font-size-small-s
           no-wrap()
+          padding-bottom: 5px
         .date
           font-family: $font-family-light
           color: $color-text-2d
@@ -249,15 +248,16 @@
           width: 46.5px
           layout(row)
           align-items: center
+          justify-content: center
           .txt
             display: inline-block
-            padding-right: 11px
+            padding-right: 2px
             font-family: $font-family-light
             font-size: $font-size-small-s
             color: $color-dot-4a
-            background-repeat: no-repeat
-            background-size: 9px
-            background-position: right center
+          .pic
+            width: 9px
+            height: 9px
       .fun-box
         height: 100%
         box-sizing: border-box
@@ -274,10 +274,9 @@
           border-radius: 50%
           border: 0.5px solid $color-text-a4
           &.checked
-            border-color: transparent
-            background-size: contain
-            background-repeat: no-repeat
-            background-position: center center
+            width: 20px
+            height: 20px
+            border: 0.5px solid transparent
       .sort-model
         width: 46px
         height: 100%

@@ -12,7 +12,7 @@
     </header>
     <section class="content">
       <article class="empty" v-if="isEmpty">
-        <div class="empty-pic" :style="emptyImg"/>
+        <img class="empty-pic" :src="emptyImg" v-if="emptyImg"/>
         <div class="empty-txt">暂无活动</div>
       </article>
       <article class="scroll" v-if="!isEmpty">
@@ -102,12 +102,6 @@
     },
     methods: {
       ...mapGetters(['role']),
-      // test () {
-      //   let token = ROLE.testToken
-      //   this.currentRole = ROLE.UNION_ID
-      //   wx.setStorageSync('userType', this.currentRole)
-      //   wx.setStorageSync('token', token)
-      // },
       // 初始化
       _init () {
         let role = this.role()
@@ -131,10 +125,10 @@
         return new Promise(resolve => {
           api.umgGetActiveList(data, loading)
             .then(json => {
-              wechat.hideLoading()
               if (json.error !== ERR_OK) {
                 return ''
               }
+              wechat.hideLoading()
               resolve(json)
             })
             .catch(err => {
@@ -185,20 +179,6 @@
           msg: '确定删除？'
         })
       },
-      // 请求活动上架
-      _rqActiveOnline (data, cb) {
-        api.umgActiveOnline(data)
-          .then(json => {
-            wechat.hideLoading()
-            if (json.error !== ERR_OK) {
-              return this.$refs.toast.show(json.message)
-            }
-            cb()
-          })
-          .catch(err => {
-            console.info(err)
-          })
-      },
       // 获取更多活动
       getMoreList () {
         if (this.isAll) return
@@ -209,25 +189,40 @@
             let list = this._formatResData(json)
             this.cardInfoList.push(...list)
             this._isAll(json)
-            console.log(this.cardInfoList.length)
           })
       },
       // 弹窗确认操作
       confirmHandler () {
         this.msgInfo.isShow = false
         let data = {activity_alliance_id: this.currentActiveId}
-        let self = this
         switch (this.model) {
           case 0 : {
-            this._rqActiveOnline(data, () => {
-              let index = self.cardInfoList.findIndex(self.currentActiveId)
-              self.cardInfoList.splice(index, 1)
-              self.currentActiveId = null
-            })
+            api.umgActiveOnline(data)
+              .then(json => {
+                wechat.hideLoading()
+                if (json.error !== ERR_OK) {
+                  return this.$refs.toast.show(json.message)
+                }
+                // let index = self.cardInfoList.findIndex(self.currentActiveId)
+                // self.cardInfoList.splice(index, 1)
+                // self.currentActiveId = null
+                // 切换tab栏
+                this.tabFlag = 1
+                this._resetConfig()
+                let data = this._formatReq()
+                this._rqGetActiveList(data)
+                  .then(json => {
+                    let list = this._formatResData(json)
+                    this.cardInfoList = list
+                    this._isAll(json)
+                  })
+              })
+              .catch(err => {
+                console.info(err)
+              })
             break
           }
           case 1: {
-            console.log(2)
             break
           }
         }
@@ -290,7 +285,6 @@
             let list = this._formatResData(json)
             this.cardInfoList = list
             this._isAll(json)
-            wx.stopPullDownRefresh()
           })
       },
       // 新建按钮
@@ -301,7 +295,7 @@
     },
     computed: {
       emptyImg () {
-        return source.imgEmptyActive()
+        return source.imgEmptyActive('img')
       },
       isEmpty () {
         return this.cardInfoList.length <= 0

@@ -1,6 +1,8 @@
 <template>
   <div class="circle-progress">
-    <section class="c-p-svg" :style="bgImg"></section>
+    <section class="c-p-svg">
+      <img class="c-p-svg-pic" mode="aspectFit" :src="bgImg" v-if="bgImg">
+    </section>
     <section class="info">
       <div class="number-box">
         <div class="number">{{activeInfo.percent}}</div>
@@ -64,7 +66,8 @@
         let pre = this.activeInfo.percent * 1
         let svg = SVG.makeSvg(pre)
         let base64 = util.base64encode(svg)
-        return `background-image:url(data:image/svg+xml;base64,${base64})`
+        // return `background-image:url(data:image/svg+xml;base64,${base64})`
+        return `data:image/svg+xml;base64,${base64}`
       }
     }
   }
@@ -82,9 +85,9 @@
     transform: rotate(-0.05deg)
     .c-p-svg
       height: 100%
-      background-size: cover
-      background-repeat: no-repeat
-      background-position: center center
+      .c-p-svg-pic
+        height: 100%
+        width: 100%
     .info
       position: absolute
       width: 100%
