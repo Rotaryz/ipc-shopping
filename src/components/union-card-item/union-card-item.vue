@@ -222,6 +222,7 @@
               .info-t-d
                 layout()
                 .title
+                  no-wrap()
                   font-family: $font-family-regular
                   font-size: $font-size-medium-x
                   line-height: $font-size-medium-x
@@ -257,7 +258,6 @@
           padding: 0 10px
           layout(row, block, no-wrap)
           align-items: center
-          overflow: hidden
           .title
             flex: 1
             font-family: $font-family-light

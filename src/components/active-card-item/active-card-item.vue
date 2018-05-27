@@ -1,22 +1,33 @@
 <template>
   <article class="active-card-item">
+    <!--商家活动管理-->
     <section class="wrap" v-if="useType === constUseType.shop">
-      <div class="box" :style="backgroundImg">
-        <article :class="['b-top',downStyle?'down-status':'']">
+      <div class="box">
+        <div class="box-bg">
+          <img class="box-bg-pic" mode="widthFix" v-if="imageUri" :src="imageUri + '/defaults/ipc-shopping/aliance/pic-activity_cardp@2x.png'"/>
+        </div>
+        <article :class="['b-top',downStyle?'down-status':'']" @tap="previewHandler(cardInfo)">
           <div class="b-top-box">
             <section class="icon">
-              <div class="icon-pic" :style="iconImg"></div>
+              <div class="icon-pic">
+                <div class="box-bg">
+                  <img class="box-bg-pic" mode="aspectFit" v-if="imageUri" :src="imageUri + '/defaults/ipc-shopping/aliance/pic-activity_cardp2@2x.png'"/>
+                </div>
+              </div>
             </section>
             <artilce class="info-box">
-              <section class="title">{{cardInfo.name}}</section>
-              <section class="date">{{cardInfo.end_at}}</section>
+              <div class="info-t-d">
+                <section class="title">{{cardInfo.name}}</section>
+                <section class="date">{{cardInfo.end_at}}</section>
+              </div>
               <section class="info">
                 <div class="i-item">销量 {{cardInfo.sale_count}}</div>
                 <div class="i-item">核销力 {{cardInfo.verification_power}}</div>
               </section>
             </artilce>
             <section class="look-over">
-              <span class="txt" :style="arrowImg" @tap="previewHandler(cardInfo)">预览</span>
+              <span class="txt">预览</span>
+              <img class="arrow-right" mode="aspectFit" v-if="imageUri" :src="arrowImg"/>
             </section>
           </div>
         </article>
@@ -49,26 +60,31 @@
         </article>
       </div>
     </section>
+    <!--员工活动管理-->
     <section class="wrap" v-if="useType === constUseType.staffModel">
-      <div class="box" :style="backgroundImg">
-        <article :class="['b-top',downStyle?'down-status':'']">
+      <div class="box">
+        <div class="box-bg">
+          <img class="box-bg-pic" mode="widthFix" v-if="imageUri" :src="imageUri + '/defaults/ipc-shopping/aliance/pic-activity_cardp@2x.png'"/>
+        </div>
+        <article :class="['b-top',downStyle?'down-status':'']" @tap="previewHandler(cardInfo)">
           <div class="b-top-box">
-            <section class="icon">
-              <div class="icon-pic" :style="iconImg"></div>
-            </section>
+            <div class="icon-pic">
+              <div class="box-bg">
+                <img class="box-bg-pic" mode="aspectFit" v-if="imageUri" :src="imageUri + '/defaults/ipc-shopping/aliance/pic-activity_cardp2@2x.png'"/>
+              </div>
+            </div>
             <artilce class="info-box">
-              <!--<section class="title">{{cardInfo.name}}</section>-->
-              <!--<section class="date">{{cardInfo.end_at}}</section>-->
-              <section class="title">{{cardInfo.name}}</section>
-              <section class="date">{{cardInfo.end_at}}</section>
+              <div class="info-t-d">
+                <section class="title">{{cardInfo.name}}</section>
+                <section class="date">{{cardInfo.end_at}}</section>
+              </div>
               <section class="info">
-                <!--<div class="i-item">销量 {{cardInfo.sale_count}}</div>-->
-                <!--<div class="i-item">核销力 {{cardInfo.verification_power}}</div>-->
                 <div class="i-item staff-item">可销售数量 {{cardInfo.store}}</div>
               </section>
             </artilce>
             <section class="look-over">
-              <span class="txt" :style="arrowImg" @tap="previewHandler(cardInfo)">预览</span>
+              <span class="txt">预览</span>
+              <img class="arrow-right" mode="aspectFit" v-if="imageUri" :src="arrowImg"/>
             </section>
           </div>
         </article>
@@ -83,22 +99,31 @@
         </article>
       </div>
     </section>
+    <!--商家活动分配-->
     <section class="wrap alloc-status" v-if="isAlloct">
-      <div class="box" :style="backgroundImg">
-        <article class="b-top">
+      <div class="box">
+        <div class="box-bg">
+          <img class="box-bg-pic" mode="widthFix" v-if="imageUri" :src="imageUri + '/defaults/ipc-shopping/aliance/bg-staff_card@2x.png'"/>
+        </div>
+        <article class="b-top" @tap="previewHandler(cardInfo)">
           <div class="b-top-box">
-            <section class="icon">
-              <div class="icon-pic" :style="iconImg"></div>
-            </section>
+            <div class="icon-pic alloc-status">
+              <div class="box-bg">
+                <img class="box-bg-pic" mode="aspectFit" v-if="imageUri" :src="imageUri + '/defaults/ipc-shopping/aliance/pic-activity_cardp2@2x.png'"/>
+              </div>
+            </div>
             <artilce class="info-box">
-              <section class="title">{{cardInfo.title}}</section>
-              <section class="date">{{cardInfo.endDate}}</section>
+              <div class="info-t-d">
+                <section class="title">{{cardInfo.title}}</section>
+                <section class="date">{{cardInfo.endDate}}</section>
+              </div>
               <section class="info">
                 <div class="i-item">可用库存 {{cardInfo.store}}</div>
               </section>
             </artilce>
             <section class="look-over">
-              <span class="txt" :style="arrowImg" @tap="previewHandler(cardInfo)">预览</span>
+              <span class="txt">预览</span>
+              <img class="arrow-right" mode="aspectFit" v-if="imageUri" :src="arrowImg"/>
             </section>
           </div>
         </article>
@@ -219,19 +244,8 @@
       isAlloct() {
         return this.useType === this.constUseType.shopAllot
       },
-      backgroundImg() {
-        return (
-          this.isAlloct ? `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/bg-staff_card@2x.png)` : `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/pic-activity_cardp@2x.png)`
-        )
-      },
-      iconImg() {
-        return `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/pic-activity_cardp2@2x.png)` || ''
-      },
       arrowImg() {
-        return source.imgArrowRight()
-      },
-      shopImg() {
-        return source.imgShopIcon()
+        return source.imgArrowRight('img')
       }
     }
   }
@@ -256,9 +270,11 @@
       .box
         layout()
         fill-box()
-        background-repeat: no-repeat
-        background-size: contain
-        background-position: center center
+        .box-bg
+          fill-box()
+          .box-bg-pic
+            height: 100%
+            width: 100%
         .b-top
           position: relative
           height: 0
@@ -281,48 +297,51 @@
               margin-right: 7px
               layout()
               justify-content: center
-              .icon-pic
+              .icon-pic, .alloc-status
                 width: 100%
                 height: 0
                 padding-top: 82.22222222222%
-                background-repeat: no-repeat
-                background-size: contain
-                background-position: center center
                 border-radius: 3px
-                overflow: hidden
+                position: relative
+                .box-bg
+                  fill-box()
+                  .box-bg-pic
+                    height: 100%
+                    width: 100%
             .look-over
               height: 100%
-              padding-right: 15px
+              padding-right: 12px
               flex: 1
-              layout()
-              justify-content: center
-              align-items: flex-end
+              layout(row)
+              height: 100%
+              justify-content: flex-end
+              align-items: center
               .txt
                 width: 20px
                 font-size: $font-size-small-s
                 line-height: $font-size-small-s
-                padding-right: 12px
-                background-size: 10px
-                background-position: right center
-                background-repeat: no-repeat
+                padding-right: 5px
+              .arrow-right
+                height: 12px
+                width: 12px
             .info-box
               width: 54%
               height: 100%
               layout()
               justify-content: space-around
               box-sizing: border-box
-              &.applying
-                justify-content: space-between
-                padding: 4.5px 0 6px
-              .title
-                no-wrap()
-                font-family: $font-family-regular
-                font-size: $font-size-medium-x
-                line-height: $font-size-medium-x
-              .date
-                color: rgba(255, 255, 255, 0.6)
-                font-size: $font-size-small-s
-                line-height: $font-size-small-s
+              .info-t-d
+                layout()
+                .title
+                  no-wrap()
+                  font-family: $font-family-regular
+                  font-size: $font-size-medium-x
+                  line-height: $font-size-medium-x
+                  padding-bottom: 6px
+                .date
+                  color: rgba(255, 255, 255, 0.6)
+                  font-size: $font-size-small-s
+                  line-height: $font-size-small-s
               .info
                 font-size: $font-size-small
                 line-height: $font-size-small
@@ -338,7 +357,7 @@
                   margin-right: 6px
                   &.staff-item
                     background-color: transparent
-                    padding :0
+                    padding: 0
                 .money
                   font-family: $font-family-bold
                   font-size: $font-size-large-xx
@@ -354,7 +373,7 @@
           padding: 0 10px
           layout(row, block, no-wrap)
           align-items: center
-          overflow: hidden
+          position: relative
           .title
             flex: 1
             font-family: $font-family-light
