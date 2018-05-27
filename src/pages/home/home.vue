@@ -467,54 +467,6 @@
     computed: {
       dotStyle() {
         return this.activeList.length <= 1 ? 'd-op' : ''
-      },
-      // leaderImg () {
-      //   return `background-image:url(${IMGURL}/defaults/ipc-shopping/home/icon-mhome_union@2x.png)`
-      // },
-      activeImg() {
-        switch (this.currentRole) {
-          case ROLE.UNION_ID: {
-            return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-mhome_activity@2x.png)` || ''
-          }
-          case ROLE.SHOP_ID: {
-            return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-shome_activity@2x.png)` || ''
-          }
-          case ROLE.STAFF_ID: {
-            return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-yhome_activity@2x.png)` || ''
-          }
-          default: {
-            return ''
-          }
-        }
-      },
-      employeeImg() {
-        switch (this.currentRole) {
-          case ROLE.UNION_ID: {
-            return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-mhome_staff@2x.png)` || ''
-          }
-          case ROLE.SHOP_ID: {
-            return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-shome_staff@2x.png)` || ''
-          }
-          default: {
-            return ''
-          }
-        }
-      },
-      incomeImg() {
-        switch (this.currentRole) {
-          case ROLE.UNION_ID: {
-            return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-mhome_income@2x.png)` || ''
-          }
-          case ROLE.SHOP_ID: {
-            return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-shome_income@2x.png)` || ''
-          }
-          case ROLE.STAFF_ID: {
-            return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-yhome_income@2x.png)` || ''
-          }
-          default: {
-            return ''
-          }
-        }
       }
     },
     components: {
