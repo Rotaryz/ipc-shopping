@@ -13,6 +13,9 @@ export default {
       case 'background': {
         return `background-image:url(${baseUrl}/home/icon-mhome_j@2x.png)` || ''
       }
+      case 'img': {
+        return `${baseUrl}/home/icon-mhome_j@2x.png` || ''
+      }
       default :
         return ''
     }

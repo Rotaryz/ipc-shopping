@@ -3,9 +3,12 @@
     <section class="progress-bar">
       <circle-progress :activeInfo="item"></circle-progress>
     </section>
-    <section class="top-bar" @tap="lookTotalHandler(item)">
+    <section class="top-bar">
       <div class="title">{{item.title}}</div>
-      <div v-if="item.isOnline" class="look-over" :style="arrowImg">查看统计</div>
+      <div v-if="item.isOnline" class="look-over" @tap="lookTotalHandler(item)">
+        <div class="txt">查看统计</div>
+        <img class="arrow-pic" :src="arrowImg" mode="aspectFit"/>
+      </div>
     </section>
     <section class="container">
       <div class="data-box">
@@ -36,7 +39,7 @@
     props: {
       item: Object
     },
-    data () {
+    data() {
       return {
         timer: null,
         saleCard: 0,
@@ -45,15 +48,15 @@
         otherCard: 0
       }
     },
-    beforeMount () {
+    beforeMount() {
     },
-    mounted () {
+    mounted() {
     },
     methods: {
-      lookTotalHandler (item) {
+      lookTotalHandler(item) {
         this.$emit('lookTotalHandler', item)
       },
-      _loading () {
+      _loading() {
         if (this.timer) return
         let saleCard = this.item.saleCard.number
         let currentCard = this.item.currentCard.number
@@ -80,8 +83,8 @@
       }
     },
     computed: {
-      arrowImg () {
-        return source.imgArrowRight()
+      arrowImg() {
+        return source.imgArrowRight('img')
       }
     },
     components: {
@@ -121,10 +124,16 @@
         font-family: $font-family-light
         font-size: $font-size-small
         color: $color-text-95
-        padding-right: 10px
-        background-size: 14px
-        background-position: 48px center
-        background-repeat: no-repeat
+        layout(row)
+        align-items :center
+        height: 100%
+        .arrow-pic
+          width: 12px
+          height: 12px
+          padding-right: 1.5px
+        .txt
+          position: relative
+
     .container
       layout(row)
       margin-top: 14.965986394557%

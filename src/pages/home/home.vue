@@ -20,22 +20,41 @@
     </header>
     <form @submit="formSubmit" report-submit='true'>
       <label class="tab-leader" v-if="currentRole===ROLE.UNION_ID" for="btn-form-id">
-        <nav class="t-l-nav" :style="'background-image:url('+IMGURL+'/defaults/ipc-shopping/home/icon-mhome_union@2x.png)'" @tap="toUnion">
-          <img class="t-l-nav-pic" v-if="imageUri" :src="imageUri + '/defaults/ipc-shopping/home/icon-mhome_union@2x.png'"/>联盟管理
+        <nav class="t-l-nav" @tap="toUnion">
+          <img class="t-l-nav-pic" mode="aspectFill" v-if="imageUri" :src="imageUri + '/defaults/ipc-shopping/home/icon-mhome_union@2x.png'"/>
+          <div class="txt">联盟管理</div>
         </nav>
-        <nav class="t-l-nav" :style="activeImg" @tap="toShop">活动管理</nav>
-        <nav class="t-l-nav" :style="employeeImg" @tap="toEmployee">员工管理</nav>
-        <nav class="t-l-nav" :style="incomeImg" @tap="toAsset">收入/提现</nav>
+        <nav class="t-l-nav" @tap="toShop">
+          <img class="t-l-nav-pic" mode="aspectFill" v-if="imageUri" :src="imageUri + '/defaults/ipc-shopping/home/icon-mhome_activity@2x.png'"/>
+          <div class="txt">活动管理</div>
+        </nav>
+        <nav class="t-l-nav" @tap="toEmployee">
+          <img class="t-l-nav-pic" mode="aspectFill" v-if="imageUri" :src="imageUri + '/defaults/ipc-shopping/home/icon-mhome_staff@2x.png'"/>
+          <div class="txt">员工管理</div>
+        </nav>
+        <nav class="t-l-nav" @tap="toAsset">
+          <img class="t-l-nav-pic" mode="aspectFill" v-if="imageUri" :src="imageUri + '/defaults/ipc-shopping/home/icon-mhome_income@2x.png'"/>
+          <div class="txt">收入/提现</div>
+        </nav>
       </label>
       <label class="tab-merchant" v-if="currentRole===ROLE.SHOP_ID" for="btn-form-id">
         <section class="t-m-ad" v-if="noticeList.length>0" @tap="watchActiveHandler">
           <div class="title">公告</div>
-          <div class="content">异业联盟卡活动正在等你报名正在等你…</div>
+          <div class="content">{{noticeList[0].name}}正在等你报名</div>
           <div class="watch-btn">查看</div>
         </section>
-        <nav class="t-l-nav" :style="activeImg" @tap="toShop">活动管理</nav>
-        <nav class="t-l-nav" :style="employeeImg" @tap="toEmployee">员工管理</nav>
-        <nav class="t-l-nav" :style="incomeImg" @tap="toAsset">收入/提现</nav>
+        <nav class="t-l-nav" @tap="toShop">
+          <img class="t-l-nav-pic" mode="aspectFill" v-if="imageUri" :src="imageUri + '/defaults/ipc-shopping/home/icon-shome_activity@2x.png'"/>
+          <div class="txt">活动管理</div>
+        </nav>
+        <nav class="t-l-nav" @tap="toEmployee">
+          <img class="t-l-nav-pic" mode="aspectFill" v-if="imageUri" :src="imageUri + '/defaults/ipc-shopping/home/icon-shome_staff@2x.png'"/>
+          <div class="txt">员工管理</div>
+        </nav>
+        <nav class="t-l-nav" @tap="toAsset">
+          <img class="t-l-nav-pic" mode="aspectFill" v-if="imageUri" :src="imageUri + '/defaults/ipc-shopping/home/icon-shome_income@2x.png'"/>
+          <div class="txt">收入/提现</div>
+        </nav>
       </label>
       <label class="tab-employee" v-if="currentRole===ROLE.STAFF_ID" for="btn-form-id">
         <section class="t-e-sales">
@@ -46,7 +65,7 @@
                 <li class="emp-item" v-for="(item,index) in employeeList" :key="index">
                   <article class="emp-item-box">
                     <section class="icon">
-                      <img class="icon-pic" v-if="item" :src="item.avatarUrl">
+                      <img class="icon-pic" v-if="item" :src="item.avatarUrl"/>
                     </section>
                     <section class="progress">
                       <div class="name-bar">
@@ -71,8 +90,14 @@
             </section>
           </article>
         </section>
-        <nav class="t-l-nav" :style="activeImg" @tap="toShop">活动管理</nav>
-        <nav class="t-l-nav" :style="incomeImg" @tap="toAsset">收入/提现</nav>
+        <nav class="t-l-nav" @tap="toShop">
+          <img class="t-l-nav-pic" mode="aspectFill" v-if="imageUri" :src="imageUri + '/defaults/ipc-shopping/home/icon-yhome_activity@2x.png'"/>
+          <div class="txt">活动管理</div>
+        </nav>
+        <nav class="t-l-nav" @tap="toAsset">
+          <img class="t-l-nav-pic" mode="aspectFill" v-if="imageUri" :src="imageUri + '/defaults/ipc-shopping/home/icon-yhome_income@2x.png'"/>
+          <div class="txt">收入/提现</div>
+        </nav>
       </label>
       <button id="btn-form-id" class="btn-form-id" form-type="submit"></button>
     </form>
@@ -83,9 +108,9 @@
 
 <script type="text/ecmascript-6">
   import api from 'api'
-  import { baseURL, ERR_OK } from 'api/config'
-  import { mapGetters } from 'vuex'
-  import { ROLE } from 'common/js/contants'
+  import {baseURL, ERR_OK} from 'api/config'
+  import {mapGetters} from 'vuex'
+  import {ROLE} from 'common/js/contants'
   import HSliderItem from 'components/hSlider-item/hSlider-item'
   import wx from 'wx'
   import * as wechat from 'common/js/wechat'
@@ -115,7 +140,7 @@
   }]
 
   export default {
-    data () {
+    data() {
       return {
         ROLE, // 角色定义常量值
         currentRole: null, // 当前角色
@@ -129,22 +154,22 @@
         status: 3 // 员工状态,
       }
     },
-    created () {
+    created() {
     },
-    onShow () {
+    onShow() {
       this._checkStatus()
     },
-    onHide () {
+    onHide() {
       this.status = 3
     },
-    beforeMount () {
+    beforeMount() {
     },
-    mounted () {
+    mounted() {
     },
     methods: {
       ...mapGetters(['role']),
       // 检查状态
-      _checkStatus () {
+      _checkStatus() {
         // 获取身份
         this.currentRole = this.role()
         // 登录
@@ -187,24 +212,24 @@
         }
       },
       // 上传form-id
-      formSubmit (e) {
+      formSubmit(e) {
         let formId = e.mp.detail.formId
         let data = {'form_ids': [formId]}
         api.homeCollectFormId(data)
       },
       // 从消息模板来的数据
-      _getFromMsgTpl () {
+      _getFromMsgTpl() {
         if (+this.$root.$mp.appOptions.scene === 1014) {
           let id = this.$root.$mp.query.id
           id && (this.currentActiveId = id)
         }
       },
       // 员工点确定后操作
-      staffConfirmHandler () {
+      staffConfirmHandler() {
         wx.setStorageSync('isOk', 'isOk') // 员工点击过确认
       },
       // 项目初始化
-      _init () {
+      _init() {
         let code = wx.getStorageSync('code')
         this.setNavTitle({wx_code: code})
         switch (this.currentRole) {
@@ -283,7 +308,7 @@
         }
       },
       // 保存标题
-      setNavTitle (data) {
+      setNavTitle(data) {
         this._rqGetGolbalData(data)
           .then(json => {
             let title = json.data.merchant.shop_name
@@ -293,7 +318,7 @@
           })
       },
       // 格式化活动信息
-      _formatInfoData (json) {
+      _formatInfoData(json) {
         let arr = []
         let res = json.data
         res.map(item => {
@@ -323,7 +348,7 @@
         return arr
       },
       // 请求员工销卡对比信息
-      _rqGetStaffSales (data) {
+      _rqGetStaffSales(data) {
         return new Promise(resolve => {
           api.homeGetStaffSale(data)
             .then(json => {
@@ -339,7 +364,7 @@
         })
       },
       // 获取全局数据
-      _rqGetGolbalData (data) {
+      _rqGetGolbalData(data) {
         return new Promise(resolve => {
           api.homeGetGlobalData(data)
             .then(json => {
@@ -355,7 +380,7 @@
         })
       },
       // 获取员工销卡比信息
-      _getStaffSale () {
+      _getStaffSale() {
         if (this.currentRole !== ROLE.STAFF_ID) return
         let data = {activity_alliance_id: this.currentActiveId}
         this._rqGetStaffSales(data)
@@ -365,7 +390,7 @@
           })
       },
       // 格式化员工销卡比信息
-      _formatStaffData (json) {
+      _formatStaffData(json) {
         let arr = []
         let res = json.data
         res.map(item => {
@@ -381,7 +406,7 @@
         return arr
       },
       // 查看统计
-      lookTotalHandler (obj) {
+      lookTotalHandler(obj) {
         let url = ''
         let id = obj.activeId
         switch (this.currentRole) {
@@ -401,12 +426,12 @@
         url && this.$router.push(url)
       },
       // 查看商家活动管理
-      watchActiveHandler () {
+      watchActiveHandler() {
         const url = `/pages/activity-manage/activity-manage`
         this.$router.push(url)
       },
       // swiper滑动块
-      swiperChange (e) {
+      swiperChange(e) {
         let index = e.mp.detail.current
         this.dotCurrent = index
         this.sliderCurrent = index
@@ -414,12 +439,12 @@
         this._getStaffSale()
       },
       // 去联盟管理
-      toUnion () {
+      toUnion() {
         const url = `/pages/union-manage/union-manage`
         this.$router.push(url)
       },
       // 去活动管理
-      toShop () {
+      toShop() {
         let url = ``
         if (this.currentRole === ROLE.STAFF_ID) {
           url = `/pages/staff-activity/staff-activity`
@@ -429,24 +454,24 @@
         this.$router.push(url)
       },
       // 去员工管理
-      toEmployee () {
+      toEmployee() {
         const url = `/pages/employee/employee`
         this.$router.push(url)
       },
       // 去收入、提现
-      toAsset () {
+      toAsset() {
         const url = `/pages/asset/asset`
         this.$router.push(url)
       }
     },
     computed: {
-      dotStyle () {
+      dotStyle() {
         return this.activeList.length <= 1 ? 'd-op' : ''
       },
       // leaderImg () {
       //   return `background-image:url(${IMGURL}/defaults/ipc-shopping/home/icon-mhome_union@2x.png)`
       // },
-      activeImg () {
+      activeImg() {
         switch (this.currentRole) {
           case ROLE.UNION_ID: {
             return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-mhome_activity@2x.png)` || ''
@@ -462,7 +487,7 @@
           }
         }
       },
-      employeeImg () {
+      employeeImg() {
         switch (this.currentRole) {
           case ROLE.UNION_ID: {
             return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-mhome_staff@2x.png)` || ''
@@ -475,7 +500,7 @@
           }
         }
       },
-      incomeImg () {
+      incomeImg() {
         switch (this.currentRole) {
           case ROLE.UNION_ID: {
             return `background-image:url(${this.imageUri}/defaults/ipc-shopping/home/icon-mhome_income@2x.png)` || ''
@@ -570,6 +595,7 @@
       layout(row)
       justify-content: space-between
       .t-l-nav
+        position: relative
         padding: 8.845% 0
         width: 47.826086%
         background-size: 100%
@@ -582,6 +608,12 @@
         border-radius: 3px
         &:nth-child(3), &:nth-child(4)
           margin-top: 4.133333%
+        .t-l-nav-pic
+          fill-box()
+          width: 100%
+          height: 100%
+        .txt
+          position: relative
 
     .tab-merchant
       position: relative
@@ -624,6 +656,7 @@
           text-align: right
           line-height: 21px
       .t-l-nav
+        position: relative
         padding: 10.43478260869% 0 20.579710144927%
         width: 31.304347826086%
         background-size: 100% 100%
@@ -634,6 +667,12 @@
         color: $color-background-ff
         text-align: center
         border-radius: 3px
+        .t-l-nav-pic
+          fill-box()
+          width: 100%
+          height: 100%
+        .txt
+          position: relative
 
     .tab-employee
       position: relative
@@ -748,6 +787,7 @@
               font-size: $font-size-small
               color: $color-text-95
       .t-l-nav
+        position: relative
         padding: 4.927536231884% 0
         width: 47.826086956521%
         background-size: 100%
@@ -758,4 +798,10 @@
         color: $color-background-ff
         text-align: center
         border-radius: 3px
+        .t-l-nav-pic
+          fill-box()
+          width: 100%
+          height: 100%
+        .txt
+          position: relative
 </style>

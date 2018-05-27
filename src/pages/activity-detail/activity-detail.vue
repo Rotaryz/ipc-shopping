@@ -1,12 +1,12 @@
 <template>
-  <web-view src="{{webviewUrl}}"></web-view>
+  <web-view :src="webviewUrl"></web-view>
 </template>
 
 <script type="text/ecmascript-6">
   import {baseURL} from 'api/config'
 
   export default {
-    data () {
+    data() {
       return {
         webviewUrl: ''
       }

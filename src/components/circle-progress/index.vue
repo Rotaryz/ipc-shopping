@@ -3,7 +3,7 @@
     <section class="c-p-svg" :style="bgImg"></section>
     <section class="info">
       <div class="number-box">
-        <div class="number">{{number}}</div>
+        <div class="number">{{activeInfo.percent}}</div>
         <div class="per">%</div>
       </div>
       <div class="txt">完成率</div>
@@ -20,26 +20,26 @@
     props: {
       activeInfo: Object
     },
-    data () {
+    data() {
       return {
         number: 0,
         timer: null
       }
     },
-    beforeCreate () {
+    beforeCreate() {
     },
-    created () {
+    created() {
     },
-    beforeMount () {
+    beforeMount() {
     },
-    mounted () {
+    mounted() {
       this._loading()
     },
-    beforeUpdate () {
+    beforeUpdate() {
       // this._loading()
     },
     methods: {
-      _loading () {
+      _loading() {
         if (this.timer) return
         if (this.number * 1 === 0) return
         if (this.activeInfo.percent !== this.number) {
@@ -60,7 +60,7 @@
       }
     },
     computed: {
-      bgImg () {
+      bgImg() {
         let pre = this.activeInfo.percent * 1
         let svg = SVG.makeSvg(pre)
         let base64 = util.base64encode(svg)
