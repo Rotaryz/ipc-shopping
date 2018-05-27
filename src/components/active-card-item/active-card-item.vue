@@ -68,11 +68,13 @@
         </div>
         <article :class="['b-top',downStyle?'down-status':'']" @tap="previewHandler(cardInfo)">
           <div class="b-top-box">
-            <div class="icon-pic">
-              <div class="box-bg">
-                <img class="box-bg-pic" mode="aspectFit" v-if="imageUri" :src="imageUri + '/defaults/ipc-shopping/aliance/pic-activity_cardp2@2x.png'"/>
+            <section class="icon">
+              <div class="icon-pic">
+                <div class="box-bg">
+                  <img class="box-bg-pic" mode="aspectFit" v-if="imageUri" :src="imageUri + '/defaults/ipc-shopping/aliance/pic-activity_cardp2@2x.png'"/>
+                </div>
               </div>
-            </div>
+            </section>
             <artilce class="info-box">
               <div class="info-t-d">
                 <section class="title">{{cardInfo.name}}</section>
@@ -107,11 +109,13 @@
         </div>
         <article class="b-top" @tap="previewHandler(cardInfo)">
           <div class="b-top-box">
-            <div class="icon-pic alloc-status">
-              <div class="box-bg">
-                <img class="box-bg-pic" mode="aspectFit" v-if="imageUri" :src="imageUri + '/defaults/ipc-shopping/aliance/pic-activity_cardp2@2x.png'"/>
+            <section class="icon">
+              <div class="icon-pic">
+                <div class="box-bg">
+                  <img class="box-bg-pic" mode="aspectFit" v-if="imageUri" :src="imageUri + '/defaults/ipc-shopping/aliance/pic-activity_cardp2@2x.png'"/>
+                </div>
               </div>
-            </div>
+            </section>
             <artilce class="info-box">
               <div class="info-t-d">
                 <section class="title">{{cardInfo.title}}</section>
@@ -297,7 +301,7 @@
               margin-right: 7px
               layout()
               justify-content: center
-              .icon-pic, .alloc-status
+              .icon-pic
                 width: 100%
                 height: 0
                 padding-top: 82.22222222222%
