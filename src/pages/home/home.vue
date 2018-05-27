@@ -202,7 +202,6 @@
               let isOk = wx.getStorageSync('isOk')
               this.status = status
               isOk && (this.status = 3)
-              wechat.hideLoading()
             })
             .catch(err => {
               console.info(err)
@@ -289,7 +288,6 @@
                 if (json.error !== ERR_OK) {
                   return false
                 }
-                wechat.hideLoading()
                 let list = this._formatInfoData(json)
                 if (list.length > 0) {
                   this.activeList = list
@@ -309,12 +307,19 @@
       },
       // 保存标题
       setNavTitle(data) {
-        this._rqGetGolbalData(data)
+        api.homeGetGlobalData(data)
           .then(json => {
+            if (json.error !== ERR_OK) {
+              return false
+            }
+            wechat.hideLoading()
             let title = json.data.merchant.shop_name
             title && wx.setStorageSync('shopName', title)
             this.currentRole === ROLE.STAFF_ID && (title = json.data.customer.nickname)
             wx.setNavigationBarTitle({title})
+          })
+          .catch(err => {
+            console.info(err)
           })
       },
       // 格式化活动信息
@@ -347,46 +352,21 @@
         })
         return arr
       },
-      // 请求员工销卡对比信息
-      _rqGetStaffSales(data) {
-        return new Promise(resolve => {
-          api.homeGetStaffSale(data)
-            .then(json => {
-              if (json.error !== ERR_OK) {
-                return false
-              }
-              wechat.hideLoading()
-              resolve(json)
-            })
-            .catch(err => {
-              console.info(err)
-            })
-        })
-      },
-      // 获取全局数据
-      _rqGetGolbalData(data) {
-        return new Promise(resolve => {
-          api.homeGetGlobalData(data)
-            .then(json => {
-              if (json.error !== ERR_OK) {
-                return false
-              }
-              wechat.hideLoading()
-              resolve(json)
-            })
-            .catch(err => {
-              console.info(err)
-            })
-        })
-      },
       // 获取员工销卡比信息
       _getStaffSale() {
         if (this.currentRole !== ROLE.STAFF_ID) return
         let data = {activity_alliance_id: this.currentActiveId}
-        this._rqGetStaffSales(data)
+        api.homeGetStaffSale(data)
           .then(json => {
+            if (json.error !== ERR_OK) {
+              return false
+            }
+            wechat.hideLoading()
             let list = this._formatStaffData(json)
             this.employeeList = list
+          })
+          .catch(err => {
+            console.info(err)
           })
       },
       // 格式化员工销卡比信息
