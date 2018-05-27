@@ -1,22 +1,32 @@
 <template>
   <article class="union-card-item">
     <section class="wrap">
-      <div class="box" :style="backgroundImg">
-        <article class="b-top">
+      <div class="box">
+        <div class="box-bg">
+          <img class="box-bg-pic" mode="widthFix" v-if="imageUri" :src="imageUri + '/defaults/ipc-shopping/aliance/pic-union_b@2x.png'"/>
+        </div>
+        <article class="b-top" @tap="previewHandler(cardInfo)">
           <div class="b-top-box">
             <section class="icon">
-              <div class="icon-pic" :style="iconImg"></div>
+              <div class="icon-pic">
+                <div class="box-bg">
+                  <img class="box-bg-pic" mode="aspectFit" v-if="imageUri" :src="imageUri + '/defaults/ipc-shopping/aliance/pic-union_b2@2x.png'"/>
+                </div>
+              </div>
             </section>
             <artilce class="info-box">
-              <section class="title">{{cardInfo.title}}</section>
-              <section class="date">{{cardInfo.endDate}}</section>
+              <div class="info-t-d">
+                <section class="title">{{cardInfo.title}}</section>
+                <section class="date">{{cardInfo.endDate}}</section>
+              </div>
               <section class="info">
                 <div class="i-item">销量 {{cardInfo.sales}}</div>
                 <div class="i-item">核销 {{cardInfo.chargeOff}}</div>
               </section>
             </artilce>
             <section class="look-over">
-              <span class="txt" :style="arrowImg" @tap="previewHandler(cardInfo)">预览</span>
+              <span class="txt">预览</span>
+              <img class="arrow-right" mode="aspectFit" v-if="imageUri" :src="arrowImg"/>
             </section>
           </div>
         </article>
@@ -42,7 +52,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import { baseURL } from 'api/config'
+  import {baseURL} from 'api/config'
   import source from 'common/source'
 
   // 状态常量默认值
@@ -97,75 +107,38 @@
         default: DEFAULT_USE_TYPE
       }
     },
-    data () {
+    data() {
       return {
         imageUri: baseURL.image,
         bgImgType: this.useType // 背景图片类型
       }
     },
-    beforeMount () {
-      // console.log(this.cardInfo)
-    },
-    mounted () {
-      // console.log(this.useType)
-    },
     methods: {
-      previewHandler (cardInfo) {
+      previewHandler(cardInfo) {
         this.$emit('previewHandler', cardInfo)
       },
-      editorHandler (cardInfo) {
+      editorHandler(cardInfo) {
         this.$emit('editorHandler', cardInfo)
       },
-      totalHandler (cardInfo) {
+      totalHandler(cardInfo) {
         this.$emit('totalHandler', cardInfo)
       },
-      deleteHandler (cardInfo) {
+      deleteHandler(cardInfo) {
         this.$emit('deleteHandler', cardInfo)
       },
-      checkHandler (cardInfo) {
+      checkHandler(cardInfo) {
         this.$emit('checkHandler', cardInfo)
       },
-      sortHandler (cardInfo) {
+      sortHandler(cardInfo) {
         this.$emit('sortHandler', cardInfo)
       },
-      upperHandler (cardInfo) {
+      upperHandler(cardInfo) {
         this.$emit('upperHandler', cardInfo)
       }
     },
     computed: {
-      backgroundImg () {
-        switch (this.bgImgType) {
-          case DEFAULT_USE_TYPE.unionApplying:
-          case DEFAULT_USE_TYPE.union: {
-            return `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/pic-union_b@2x.png)` || ''
-          }
-          case DEFAULT_USE_TYPE.shop: {
-            return `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/pic-activity_cardp@2x.png)` || ''
-          }
-          default: {
-            return ''
-          }
-        }
-      },
-      iconImg () {
-        switch (this.bgImgType) {
-          case DEFAULT_USE_TYPE.unionApplying:
-          case DEFAULT_USE_TYPE.union: {
-            return `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/pic-union_b2@2x.png)` || ''
-          }
-          case 1: {
-            return `background-image:url(${this.imageUri}/defaults/ipc-shopping/aliance/pic-activity_cardp2@2x.png)` || ''
-          }
-          default: {
-            return ''
-          }
-        }
-      },
-      arrowImg () {
-        return source.imgArrowRight()
-      },
-      shopImg () {
-        return source.imgShopIcon()
+      arrowImg() {
+        return source.imgArrowRight('img')
       }
     }
   }
@@ -188,9 +161,11 @@
       .box
         layout()
         fill-box()
-        background-repeat: no-repeat
-        background-size: contain
-        background-position: center center
+        .box-bg
+          fill-box()
+          .box-bg-pic
+            height: 100%
+            width: 100%
         .b-top
           position: relative
           height: 0
@@ -214,51 +189,53 @@
                 width: 100%
                 height: 0
                 padding-top: 82.22222222222%
-                background-repeat: no-repeat
-                background-size: contain
-                background-position: center center
                 border-radius: 3px
                 overflow: hidden
+                position: relative
+                .box-bg
+                  fill-box()
+                  .box-bg-pic
+                    height: 100%
+                    width: 100%
             .look-over
               height: 100%
-              padding-right: 15px
+              padding-right: 12px
               flex: 1
-              layout()
-              justify-content: center
-              align-items: flex-end
+              layout(row)
+              height: 100%
+              justify-content: flex-end
+              align-items: center
               .txt
                 width: 20px
                 font-size: $font-size-small-s
                 line-height: $font-size-small-s
-                padding-right: 12px
-                background-size: 10px
-                background-position: right center
-                background-repeat: no-repeat
+                padding-right: 5px
+              .arrow-right
+                height: 12px
+                width: 12px
             .info-box
               width: 54%
               height: 100%
               layout()
               justify-content: space-around
               box-sizing: border-box
-              &.applying
-                justify-content: space-between
-                padding: 4.5px 0 6px
-              .title
-                font-family: $font-family-regular
-                font-size: $font-size-medium-x
-                line-height: $font-size-medium-x
-              .date
-                color: rgba(255, 255, 255, 0.6)
-                font-size: $font-size-small-s
-                line-height: $font-size-small-s
+              .info-t-d
+                layout()
+                .title
+                  font-family: $font-family-regular
+                  font-size: $font-size-medium-x
+                  line-height: $font-size-medium-x
+                  padding-bottom: 6px
+                .date
+                  color: rgba(255, 255, 255, 0.6)
+                  font-size: $font-size-small-s
+                  line-height: $font-size-small-s
               .info
                 font-size: $font-size-small
                 line-height: $font-size-small
                 layout(row)
                 justify-content: flex-start
                 align-items: center
-                &.applying
-                  align-items: flex-end
                 .i-item
                   font-family: $font-family-light
                   font-size: $font-size-small
@@ -275,6 +252,7 @@
                     font-size: $font-size-small
                     line-height: $font-size-small
         .b-bottom
+          position: relative
           flex: 1
           padding: 0 10px
           layout(row, block, no-wrap)

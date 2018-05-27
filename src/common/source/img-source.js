@@ -1,4 +1,4 @@
-import { baseURL } from 'api/config'
+import {baseURL} from 'api/config'
 
 const baseUrl = `${baseURL.image}/defaults/ipc-shopping`
 
@@ -8,13 +8,14 @@ export default {
    * @param type 类型：默认背景图
    * @returns {*}
    */
-  imgArrowRight (type = 'background') {
+  imgArrowRight(type = 'background') {
+    let img = `icon-mhome_j@2x.png`
     switch (type) {
       case 'background': {
-        return `background-image:url(${baseUrl}/home/icon-mhome_j@2x.png)` || ''
+        return `background-image:url(${baseUrl}/home/${img})` || ''
       }
       case 'img': {
-        return `${baseUrl}/home/icon-mhome_j@2x.png` || ''
+        return `${baseUrl}/home/${img}` || ''
       }
       default :
         return ''
@@ -25,7 +26,7 @@ export default {
    * @param type
    * @returns {*}
    */
-  imgArrowRightA4 (type = 'background') {
+  imgArrowRightA4(type = 'background') {
     const img = `icon-union_jt2@2x.png`
     switch (type) {
       case 'background': {
@@ -43,7 +44,7 @@ export default {
    * @param type
    * @returns {*}
    */
-  imgShopIcon (type = 'background') {
+  imgShopIcon(type = 'background') {
     switch (type) {
       case 'background': {
         return `background-image:url(${baseUrl}/aliance/icon-union_card@2x.png)` || ''
@@ -57,7 +58,7 @@ export default {
    * @param type
    * @returns {*}
    */
-  imgMapIcon (type = 'background') {
+  imgMapIcon(type = 'background') {
     const img = `icon-union_map@2x.png`
     switch (type) {
       case 'background': {
@@ -72,7 +73,7 @@ export default {
    * @param type
    * @returns {*}
    */
-  imgEmptyActive (type = 'background') {
+  imgEmptyActive(type = 'background') {
     const img = `pic-union_empty@2x.png`
     switch (type) {
       case 'background': {
@@ -87,7 +88,7 @@ export default {
    * @param type
    * @returns {*}
    */
-  imgCloseIcon (type = 'background') {
+  imgCloseIcon(type = 'background') {
     const img = `icon-union_close@2x.png`
     switch (type) {
       case 'background': {
