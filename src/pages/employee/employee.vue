@@ -123,6 +123,7 @@
           } else if (key === 2) {
             this.awaitList.splice(this.dataIndex, 1)
           }
+          wechat.tipSuccess('操作成功')
         }).catch(err => {
           console.log(err)
         })
@@ -137,6 +138,7 @@
             return
           }
           this.acceptList.splice(this.dataIndex, 1)
+          wechat.tipSuccess('操作成功')
         }).catch(err => {
           console.log(err)
         })
