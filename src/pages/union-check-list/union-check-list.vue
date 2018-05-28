@@ -35,7 +35,7 @@
 <script type="text/ecmascript-6">
   import api from 'api'
   import * as wechat from 'common/js/wechat'
-  import {ERR_OK} from 'api/config'
+  import { ERR_OK } from 'api/config'
   import source from 'common/source'
   import wx from 'wx'
   import UnionCard from 'components/union-card-item/union-card-item'
@@ -44,7 +44,7 @@
   const LIMIT_DEF = 10
 
   export default {
-    data() {
+    data () {
       return {
         navList: ['申请中', '待审核', '已通过', '已拒绝'],
         tabFlag: 0,
@@ -57,10 +57,10 @@
         limit: LIMIT_DEF
       }
     },
-    onShow() {
+    onShow () {
       this._init()
     },
-    onPullDownRefresh() {
+    onPullDownRefresh () {
       this._resetConfig()
       let data = this._formatReq()
       data.paga = 1
@@ -73,11 +73,11 @@
           wx.stopPullDownRefresh()
         })
     },
-    onReachBottom() {
+    onReachBottom () {
       this.getMoreList()
     },
     methods: {
-      changeTab(flag) {
+      changeTab (flag) {
         if (this.tabFlag === flag) return
         this.tabFlag = flag
         this._resetConfig()
@@ -91,14 +91,14 @@
           })
         this._showAd()
       },
-      closeAd() {
+      closeAd () {
         this.showAd = false
       },
-      lookOverHandler(obj) {
+      lookOverHandler (obj) {
         const url = `/pages/audit/audit?checkId=${obj.id}&tabFlag=${this.tabFlag}`
         this.$router.push(url)
       },
-      _showAd(flag) {
+      _showAd (flag) {
         flag = this.tabFlag
         if (flag === 0 || flag === 1) {
           this.showAd = true
@@ -108,10 +108,34 @@
           this.showAd = false
         }
       },
-      _init() {
+      _init () {
         if (!(this.currentActiveId * 1 === this.$root.$mp.query.activeId * 1)) {
           this.tabFlag = 0
           this._resetConfig()
+        }
+        if (wx.getStorageSync('refuse') === 'success') {
+          this.tabFlag = 3
+          this._resetConfig()
+          wx.setStorageSync('refuse', 'faild')
+          wechat.tipSuccess('操作成功')
+        }
+        if (wx.getStorageSync('accept') === 'success') {
+          this.tabFlag = 2
+          this._resetConfig()
+          wx.setStorageSync('accept', 'faild')
+          wechat.tipSuccess('操作成功')
+        }
+        if (wx.getStorageSync('remind') === 'success') {
+          this.tabFlag = 0
+          this._resetConfig()
+          wx.setStorageSync('remind', 'faild')
+          wechat.tipSuccess('操作成功')
+        }
+        if (wx.getStorageSync('changeCoupon') === 'success') {
+          this.tabFlag = 1
+          this._resetConfig()
+          wx.setStorageSync('changeCoupon', 'faild')
+          wechat.tipSuccess('操作成功')
         }
         this.currentActiveId = this.$root.$mp.query.activeId
         let data = this._formatReq()
@@ -122,7 +146,7 @@
             this._isAll(json)
           })
       },
-      _formatReq(flag) {
+      _formatReq (flag) {
         flag = this.tabFlag
         let data = {
           'check_status': 0,
@@ -153,7 +177,7 @@
         }
         return data
       },
-      _rqGetCheckList(data, loading) {
+      _rqGetCheckList (data, loading) {
         return new Promise(resolve => {
           api.uckGetCheckList(data, loading)
             .then(json => {
@@ -168,18 +192,18 @@
             })
         })
       },
-      _isAll(json) {
+      _isAll (json) {
         let total = json.meta.total
         this.isAll = (this.checkInfoList.length >= total)
         return this.isAll
       },
-      _resetConfig() {
+      _resetConfig () {
         this.isAll = false
         this.page = 1
         this.limit = LIMIT_DEF
       },
       // 格式化请求列表
-      _formatResData(json) {
+      _formatResData (json) {
         let arr = []
         let res = json.data
         res.map(item => {
@@ -197,7 +221,7 @@
         })
         return arr
       },
-      getMoreList() {
+      getMoreList () {
         if (this.isAll) return
         let data = this._formatReq()
         data.page++
@@ -210,13 +234,13 @@
       }
     },
     computed: {
-      isEmpty() {
+      isEmpty () {
         return this.checkInfoList.length <= 0
       },
-      emptyImg() {
+      emptyImg () {
         return source.imgEmptyInfo('img')
       },
-      closeIcon() {
+      closeIcon () {
         return source.imgCloseIcon('img')
       }
     },

@@ -16,7 +16,7 @@
         <div class="empty-txt">暂无活动</div>
       </article>
       <article class="scroll" v-if="!isEmpty">
-        <ul class="box">
+        <ul :class="['box',tabFlag === 0?'box-mar-b45':'']">
           <li class="box-item" v-for="(item, index) in cardInfoList" :key="index">
             <union-card
               :useType="0"
@@ -373,7 +373,8 @@
         height: 100%
         .box
           box-sizing: border-box
-          padding-bottom: 45px
+          &.box-mar-b45
+            padding-bottom: 45px
           .box-item
             padding: 10px 15px
             &:last-child
