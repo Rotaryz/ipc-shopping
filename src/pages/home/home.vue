@@ -40,7 +40,7 @@
       <label class="tab-merchant" v-if="currentRole===ROLE.SHOP_ID" for="btn-form-id">
         <section class="t-m-ad" v-if="noticeList.length>0" @tap="watchActiveHandler">
           <div class="title">公告</div>
-          <div class="content">{{noticeList[0].name}}正在等你报名</div>
+          <div class="content">{{noticeList[noticeList.length-1].name}}正在等你报名</div>
           <div class="watch-btn">查看</div>
         </section>
         <nav class="t-l-nav" @tap="toShop">
