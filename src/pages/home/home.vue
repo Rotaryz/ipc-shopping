@@ -601,10 +601,12 @@
         color: $color-background-ff
         text-align: center
         border-radius: 3px
+        overflow: hidden
         .t-l-nav-pic
           fill-box()
           width: 100%
           height: 100%
+          border-radius: 3px
         .txt
           position: relative
 
@@ -732,10 +734,12 @@
         color: $color-background-ff
         text-align: center
         border-radius: 3px
+        overflow: hidden
         .t-l-nav-pic
           fill-box()
           width: 100%
           height: 100%
+          border-radius: 3px
         .txt
           position: relative
 </style>
