@@ -160,6 +160,7 @@
     methods: {
       ...mapGetters(['role']),
       _getFromMsgTpl () {
+        console.log(this.$root.$mp.appOptions)
         if (this.$root.$mp.appOptions.scene === 1014) {
           let token = this.$root.$mp.query.token
           let entryRole = this.$root.$mp.query.entryRole
@@ -167,6 +168,9 @@
           token && wx.setStorageSync('userType', token)
           entryRole && wx.setStorageSync('token', entryRole)
           merchantId && wx.setStorageSync('merchantId', merchantId)
+          console.log(token, 't')
+          console.log(entryRole, 'r')
+          console.log(merchantId, 'm')
         }
       },
       _init () {

@@ -70,16 +70,16 @@
 
 <script type="text/ecmascript-6">
   import api from 'api'
-  import {baseURL, ERR_OK} from 'api/config'
+  import { baseURL, ERR_OK } from 'api/config'
   import ActiveCard from 'components/active-card-item/active-card-item'
   import * as wechat from 'common/js/wechat'
-  import {mapGetters} from 'vuex'
+  import { mapGetters } from 'vuex'
   import wx from 'wx'
   import Toast from '@/components/toast/toast'
 
   const LIMIT_DEF = 10
   export default {
-    data() {
+    data () {
       return {
         image: baseURL.image,
         tabFlag: 0,
@@ -101,7 +101,8 @@
         curId: 1
       }
     },
-    onShow() {
+    onShow () {
+      this._getFromMsgTpl()
       if (wx.getStorageSync('pay') === 'success') {
         this.tabFlag = 0
         wx.setStorageSync('pay', 'no')
@@ -117,7 +118,7 @@
       this._rqGetNewActiveList()
       this._rqManageGetNewActiveList()
     },
-    onPullDownRefresh() {
+    onPullDownRefresh () {
       if (this.tabFlag === 0) {
         this.ActiveData.page = 1
         this.isAllActive = false
@@ -129,7 +130,7 @@
       }
       wx.stopPullDownRefresh()
     },
-    onReachBottom() {
+    onReachBottom () {
       if (this.tabFlag === 0) {
         if (this.isAllActive) return
         this._rqManageGetActiveList()
@@ -140,15 +141,25 @@
     },
     methods: {
       ...mapGetters(['role']),
-      _init() {
+      _getFromMsgTpl () {
+        if (this.$root.$mp.appOptions.scene === 1014) {
+          let token = this.$root.$mp.query.token
+          let entryRole = this.$root.$mp.query.entryRole
+          let merchantId = this.$root.$mp.query.merchantId
+          token && wx.setStorageSync('userType', token)
+          entryRole && wx.setStorageSync('token', entryRole)
+          merchantId && wx.setStorageSync('merchantId', merchantId)
+        }
+      },
+      _init () {
         let role = this.role()
         this.currentRole = role
       },
-      changeTab(flag) {
+      changeTab (flag) {
         this.tabFlag = flag
       },
       // 获得活动池的活动
-      _rqGetNewActiveList() {
+      _rqGetNewActiveList () {
         api.merPondActiveList(this.PondPage, this.PondLimt).then(res => {
           if (res.error === ERR_OK) {
             this.pondList = res.data
@@ -161,7 +172,7 @@
         })
       },
       // 获得活动池的活动
-      _rqGetActiveList() {
+      _rqGetActiveList () {
         api.merPondActiveList(this.PondPage, this.PondLimt).then(res => {
           if (res.error === ERR_OK) {
             this.pondList.push(...res.data)
@@ -174,7 +185,7 @@
         })
       },
       // 第一次获得管理列表的数据
-      _rqManageGetNewActiveList(loading) {
+      _rqManageGetNewActiveList (loading) {
         api.merManageActiveList(this.ActiveData, loading).then(res => {
           if (res.error === ERR_OK) {
             this.activeList = this._formatRqData(res)
@@ -187,7 +198,7 @@
         })
       },
       // 检查是管理列表的数据
-      _rqManageGetActiveList() {
+      _rqManageGetActiveList () {
         api.merManageActiveList(this.ActiveData).then(res => {
           if (res.error === ERR_OK) {
             this.activeList.push(...this._formatRqData(res))
@@ -199,24 +210,24 @@
           wechat.hideLoading()
         })
       },
-      jumpApply(cardInfo) {
+      jumpApply (cardInfo) {
         const url = `/pages/merchant-activity/merchant-activity?id=${cardInfo.id}`
         this.$router.push(url)
       },
-      jumpAllot(cardInfo) {
+      jumpAllot (cardInfo) {
         const url = `/pages/allocation-card/allocation-card?id=${cardInfo.id}`
         this.$router.push(url)
       },
-      jumpPreview(cardInfo) {
+      jumpPreview (cardInfo) {
         const url = `/pages/activity-detail/activity-detail?activityId=${cardInfo.id}`
         this.$router.push(url)
       },
-      jumpData(cardInfo) {
+      jumpData (cardInfo) {
         const url = `/pages/merchant-data/merchant-data?id=${cardInfo.id}`
         this.$router.push(url)
       },
       // 格式化服务器数据
-      _formatRqData(res) {
+      _formatRqData (res) {
         if (res.data && res.data.length === 0) return []
         let arr = []
         res.data.map(item => {
@@ -275,27 +286,27 @@
         return arr
       },
       // 检查是否已经查询完毕
-      _isAllActive(res) {
+      _isAllActive (res) {
         if (this.activeList.length >= res.meta.total * 1) {
           this.isAllActive = true
         }
       },
       // 检查是否已经查询完毕
-      _isAllPond(res) {
+      _isAllPond (res) {
         if (this.pondList.length >= res.meta.total * 1) {
           this.isAllPond = true
         }
       },
-      subtract() {
+      subtract () {
         if (parseInt(this.upNumber) <= 1) {
           return
         }
         this.upNumber--
       },
-      add() {
+      add () {
         this.upNumber++
       },
-      sumbit() {
+      sumbit () {
         if (!this.upNumber) return
         if (this.upNumber < 1) {
           return this.$refs.toast.show('数量不小于1')
@@ -337,13 +348,13 @@
           // 调起支付
         })
       },
-      resetBuy(cardInfo) {
+      resetBuy (cardInfo) {
         this.modelCon = !this.modelCon
         this.resetName = cardInfo.name
         this.resetMoney = cardInfo.apply_price
         this.curId = cardInfo.id
       },
-      colseModel() {
+      colseModel () {
         this.modelCon = !this.modelCon
       }
     },
@@ -383,7 +394,7 @@
       height: $nav-height
       line-height: $nav-height
       transition: 0.3 all
-      color: rgba(255,255,255,0.4)
+      color: rgba(255, 255, 255, 0.4)
       flex: 1
       text-align: center
       &.hit
