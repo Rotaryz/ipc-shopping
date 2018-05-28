@@ -413,7 +413,7 @@
       },
       // 查看商家活动管理
       watchActiveHandler () {
-        const url = `/pages/activity-manage/activity-manage`
+        const url = `/pages/activity-manage/activity-manage?tabFlag=yes`
         this.$router.push(url)
       },
       // swiper滑动块
