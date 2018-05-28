@@ -396,6 +396,7 @@
     min-height: 100vh
     background-color: $color-background-f6
     padding-bottom: 45px
+    background-color :$color-background-f6
     .u-c-form
       position: relative
       .u-c-section

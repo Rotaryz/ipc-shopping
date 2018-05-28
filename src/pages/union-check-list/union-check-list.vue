@@ -259,6 +259,7 @@
   .union-check-list
     position: relative
     height: 100vh
+    background-color :$color-background-f6
     .tab
       position: fixed
       top: 0

@@ -22,7 +22,7 @@ export default {
       navigationBarTitleText: '',
       navigationBarTextStyle: 'white',
       backgroundColorTop: '#1A1D3D',
-      backgroundColorBottom: '1A1D3D'
+      backgroundColorBottom: '#1A1D3D'
     }
   }
 }

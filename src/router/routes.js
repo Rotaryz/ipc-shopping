@@ -32,13 +32,16 @@ module.exports = [
       navigationBarTitleText: '联盟管理',
       backgroundColor: '#1A1D3D',
       backgroundTextStyle: 'light',
-      enablePullDownRefresh: true
+      enablePullDownRefresh: true,
+      backgroundColorBottom: '#F6F7FA'
     }
   },
   {
     path: '/pages/union-create-active/union-create-active', // 联盟新建编辑活动
     name: 'UnionCA', // 名字不能超过<17
-    config: {}
+    config: {
+      backgroundColorBottom: '#FFFFFF'
+    }
   },
   {
     path: '/pages/union-check-list/union-check-list', // 联盟审核列表
@@ -47,14 +50,16 @@ module.exports = [
       navigationBarTitleText: '审核列表',
       backgroundColor: '#1A1D3D',
       backgroundTextStyle: 'light',
-      enablePullDownRefresh: true
+      enablePullDownRefresh: true,
+      backgroundColorBottom: '#F6F7FA'
     }
   },
   {
     path: '/pages/union-sort/union-sort', // 联盟-排序
     name: 'UnionSort',
     config: {
-      navigationBarTitleText: '排序'
+      navigationBarTitleText: '排序',
+      backgroundColorBottom: '#F6F7FA'
     }
   },
   {
@@ -65,7 +70,8 @@ module.exports = [
       onReachBottomDistance: 50,
       backgroundTextStyle: 'light',
       backgroundColor: '#1A1D3D',
-      enablePullDownRefresh: true
+      enablePullDownRefresh: true,
+      backgroundColorBottom: '#F6F7FA'
     }
   },
   {
@@ -73,7 +79,8 @@ module.exports = [
     name: 'CodeAdd',
     config: {
       navigationBarTitleText: '员工管理',
-      disableScroll: true
+      disableScroll: true,
+      backgroundColorBottom: '#F6F7FA'
     }
   },
   {
@@ -81,7 +88,8 @@ module.exports = [
     name: 'Asset',
     config: {
       navigationBarTitleText: '收入',
-      disableScroll: true
+      disableScroll: true,
+      backgroundColorBottom: '#F6F7FA'
     }
   },
   {
@@ -90,7 +98,8 @@ module.exports = [
     config: {
       navigationBarTitleText: '提现',
       disableScroll: true,
-      backgroundColor: '#F6F7FA'
+      backgroundColor: '#F6F7FA',
+      backgroundColorBottom: '#F6F7FA'
     }
   },
   {
@@ -99,7 +108,8 @@ module.exports = [
     config: {
       navigationBarTitleText: '提现',
       disableScroll: true,
-      backgroundColor: '#F6F7FA'
+      backgroundColor: '#F6F7FA',
+      backgroundColorBottom: '#F6F7FA'
     }
   },
   {
@@ -108,7 +118,8 @@ module.exports = [
     config: {
       navigationBarTitleText: '绑定银行卡',
       disableScroll: true,
-      backgroundColor: '#F6F7FA'
+      backgroundColor: '#F6F7FA',
+      backgroundColorBottom: '#F6F7FA'
     }
   },
   {
@@ -168,7 +179,8 @@ module.exports = [
       navigationBarTextStyle: 'white',
       backgroundTextStyle: 'light',
       backgroundColor: '#1A1D3D',
-      enablePullDownRefresh: true
+      enablePullDownRefresh: true,
+      backgroundColorBottom: '#F6F7FA'
     }
   },
   {
@@ -179,7 +191,8 @@ module.exports = [
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTextStyle: 'white',
       backgroundColor: '#1A1D3D',
-      backgroundTextStyle: 'light'
+      backgroundTextStyle: 'light',
+      backgroundColorBottom: '#F6F7FA'
     }
   },
   {
@@ -192,7 +205,9 @@ module.exports = [
   {
     path: '/pages/audit/audit', // 盟主-审核-详情
     name: 'Audit',
-    config: {}
+    config: {
+      backgroundColorBottom: '#F6F7FA'
+    }
   },
   {
     path: '/pages/upload-coupon/upload-coupon', // 上传优惠卷
@@ -203,7 +218,8 @@ module.exports = [
       navigationBarTextStyle: 'white',
       backgroundTextStyle: 'light',
       backgroundColor: '#1A1D3D',
-      enablePullDownRefresh: true
+      enablePullDownRefresh: true,
+      backgroundColorBottom: '#F6F7FA'
     }
   },
   {
@@ -214,8 +230,9 @@ module.exports = [
       navigationBarBackgroundColor: '#1A1D3D',
       navigationBarTextStyle: 'white',
       backgroundTextStyle: 'light',
-      backgroundColor: '#f6f7fa',
-      enablePullDownRefresh: true
+      backgroundColor: '#F6F7FA',
+      enablePullDownRefresh: true,
+      backgroundColorBottom: '#F6F7FA'
     }
   },
   {
@@ -233,7 +250,8 @@ module.exports = [
     config: {
       navigationBarTitleText: '分配销卡数',
       navigationBarBackgroundColor: '#1A1D3D',
-      navigationBarTextStyle: 'white'
+      navigationBarTextStyle: 'white',
+      backgroundColorBottom: '#F6F7FA'
     }
   },
   {
@@ -243,7 +261,8 @@ module.exports = [
       navigationBarTitleText: '活动预览',
       backgroundColor: '#f9f9f9',
       navigationBarBackgroundColor: '#1A1D3D',
-      navigationBarTextStyle: 'white'
+      navigationBarTextStyle: 'white',
+      backgroundColorBottom: '#F6F7FA'
     }
   },
   {
@@ -253,7 +272,8 @@ module.exports = [
       navigationBarTitleText: '活动详情',
       backgroundColor: '#f9f9f9',
       navigationBarBackgroundColor: '#1A1D3D',
-      navigationBarTextStyle: 'white'
+      navigationBarTextStyle: 'white',
+      backgroundColorBottom: '#F6F7FA'
     }
   }
 ]

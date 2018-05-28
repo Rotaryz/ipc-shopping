@@ -305,7 +305,7 @@
 
   .employee
     background-color: $color-background-f6
-    height: 100vh
+    min-height: 100vh
     overflow-y: auto
 
   .em-list
