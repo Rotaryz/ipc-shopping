@@ -51,7 +51,7 @@
           </div>
         </div>
         <div class="ecbra-bottom">向左图表滑动查看更多数据</div>
-        <div class="ec-box">
+        <div class="ec-box" v-if="showBra">
           <ec-canvas class="canvas" id="mychart-dom-bar" canvas-id="mychart-bar" :ec="ecBra"></ec-canvas>
         </div>
       </div>
@@ -252,7 +252,8 @@
           }
         ], // 商店总榜总榜数据参数
         allStaffTwoList: [],
-        fristAllStaff: false
+        fristAllStaff: false,
+        showBra: false
       }
     },
     onPullDownRefresh() {
@@ -270,7 +271,11 @@
       wx.stopPullDownRefresh()
     },
     onShow() {
+      this.showBra = false
       this._getBar()
+      setTimeout(() => {
+        this.showBra = true
+      }, 500)
       this.shopName = wx.getStorageSync('shopName')
       console.log(this.shopName)
       if (!this.shopName) {
