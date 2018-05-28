@@ -119,24 +119,30 @@
         }
         if (this.bankFlag) {
           api.empAddBank(data).then(res => {
+            wechat.hideLoading()
             if (res.error !== ERR_OK) {
               this.$refs.toast.show(res.message)
-              wechat.hideLoading()
               return
             }
-            this.$router.go(-1)
+            this.$refs.toast.show('保存成功')
+            setTimeout(() => {
+              this.$router.go(-1)
+            }, 2000)
           }).catch(err => {
             console.log(err)
           })
         } else {
           data.id = this.id
           api.empEditBank(data).then(res => {
+            wechat.hideLoading()
             if (res.error !== ERR_OK) {
               this.$refs.toast.show(res.message)
-              wechat.hideLoading()
               return
             }
-            this.$router.go(-1)
+            this.$refs.toast.show('保存成功')
+            setTimeout(() => {
+              this.$router.go(-1)
+            }, 2000)
           }).catch(err => {
             console.log(err)
           })
