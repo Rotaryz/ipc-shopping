@@ -79,7 +79,7 @@
 
 <script type="text/ecmascript-6">
   import Coupon from 'components/coupon-item/coupon-item'
-  import { baseURL, ERR_OK } from 'api/config'
+  import {baseURL, ERR_OK} from 'api/config'
   import Toast from '@/components/toast/toast'
   import wx from 'wx'
   import api from 'api'
@@ -88,7 +88,7 @@
   const BTN = ['审核中', '待审核', '已审核', '已拒绝']
 
   export default {
-    data () {
+    data() {
       return {
         imageUrl: baseURL.image,
         awaitList: {
@@ -117,30 +117,35 @@
         currentActiveId: null
       }
     },
-    onShow () {
+    onLoad() {
+    },
+    onShow() {
       this._init()
     },
-    created () {
+    created() {
     },
-    beforeMount () {
+    beforeMount() {
     },
-    mounted () {
+    mounted() {
     },
-    beforeUpdate () {
+    beforeUpdate() {
     },
     methods: {
-      _init () {
-        this.currentActiveId = this.$root.$mp.query.checkId
-        this.btnSta = this.$root.$mp.query.tabFlag * 1
-        wx.setNavigationBarTitle({title: BTN[this.btnSta]})
-        this._rqGetDetail({id: this.currentActiveId})
+      _init() {
+        let query = this.$root.$mp.query
+        this.currentActiveId = query.checkId
+        this.btnSta = query.tabFlag * 1
+        if (this.currentActiveId && this.btnSta >= 0) {
+          wx.setNavigationBarTitle({title: BTN[this.btnSta]})
+          this._rqGetDetail({id: this.currentActiveId})
+        }
       },
-      formSubmit (e) {
+      formSubmit(e) {
         let formId = e.mp.detail.formId
         let data = {'form_ids': [formId]}
         api.homeCollectFormId(data)
       },
-      _rqGetDetail (data, loading) {
+      _rqGetDetail(data, loading) {
         api.uckGetCheckDetail(data, loading)
           .then(json => {
             wechat.hideLoading()
@@ -154,7 +159,7 @@
             console.info(err)
           })
       },
-      _renderData (json) {
+      _renderData(json) {
         let res = json.data
         this.awaitList.shop_name = res.merchant_data.shop_name
         this.awaitList.shop_type = res.merchant_data.industry
@@ -175,7 +180,7 @@
           this.couponInfo.merchantId = res.merchant_id
         }
       },
-      _rqCheckApply (data, loading) {
+      _rqCheckApply(data, loading) {
         api.uckCheckApply(data, loading)
           .then(json => {
             wechat.hideLoading()
@@ -189,32 +194,32 @@
             console.info(err)
           })
       },
-      _formatReq (flag) {
+      _formatReq(flag) {
         // 1通过 2拒绝 3替换 4提醒
         return {check_status: flag, apply_id: this.currentActiveId}
       },
       // 跳C端预览
-      _toMpC (json) {
+      _toMpC(json) {
         wx.navigateToMiniProgram({
           appId: json.appId,
           path: json.path,
           extraData: {},
           envVersion: baseURL.jumpVersion,
-          success (res) {
+          success(res) {
             // 打开成功
             console.log(res)
           }
         })
       },
       // 查看跳C端
-      lookOverHandler (obj) {
+      lookOverHandler(obj) {
         const id = obj.id
         const appId = obj.appId
         const merchantId = obj.merchantId
         const path = `${obj.appPath}?type=1&id=${id}&currentMerchant=${merchantId}`
         this._toMpC({appId, path})
       },
-      changeCoupon () { // 提醒更换优惠券
+      changeCoupon() { // 提醒更换优惠券
         let data = this._formatReq(3)
         api.uckCheckApply(data)
           .then(json => {
@@ -231,7 +236,7 @@
           })
       },
       // 拒绝
-      refuse () {
+      refuse() {
         let data = this._formatReq(2)
         api.uckCheckApply(data)
           .then(json => {
@@ -248,7 +253,7 @@
           })
       },
       // 通过
-      accept () {
+      accept() {
         let data = this._formatReq(1)
         api.uckCheckApply(data)
           .then(json => {
@@ -264,7 +269,7 @@
             console.info(err)
           })
       },
-      remind () {
+      remind() {
         let data = this._formatReq(3) // 提醒添加优惠券
         api.uckCheckApply(data)
           .then(json => {
@@ -282,7 +287,7 @@
       }
     },
     computed: {
-      emListStyle () {
+      emListStyle() {
         return this.btnSta === 2 ? 'em-list em-list-2' : 'em-list'
       }
     },
