@@ -103,7 +103,7 @@
             <!--<div class="c-item" v-for="(item,index) in activeInfoList[1]" :key="index">{{item}}</div>-->
             <div class="c-item">1. 用户购买异业联盟卡后，提供商品给用户。</div>
             <div class="c-item">2. 添加商家自己的固定数量的免费优惠券。</div>
-            <div class="c-item">3. 支持平台提供的<input class="c-input-info" id='activeInfo2' type="number" :value="activeInfo.item2" maxlength="4" placeholder="10" placeholder-class="content" @input="inputHandler"/>元的奖励。元代金券，小程序买单的使用。</div>
+            <div class="c-item">3. 支持平台提供的<input class="c-input-info" id='activeInfo2' type="number" :value="activeInfo.item2" maxlength="4" placeholder="10" placeholder-class="content" @input="inputHandler"/>元代金券，小程序买单的使用。</div>
           </dd>
         </article>
         <article class="a-i-item">
