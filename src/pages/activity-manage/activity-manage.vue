@@ -106,6 +106,9 @@
         this.tabFlag = 0
         wx.setStorageSync('pay', 'no')
       }
+      if (this.$root.$mp.query.tabFlag === 'yes') {
+        this.tabFlag = 2
+      }
       this._init()
       this.ActiveData.page = 1
       this.isAllActive = false
@@ -380,11 +383,13 @@
       height: $nav-height
       line-height: $nav-height
       transition: 0.3 all
+      color: rgba(255,255,255,0.4)
       flex: 1
       text-align: center
       &.hit
         color: $color-background-ff
-        cut-off-rule-bottom(40%, 40%, $color-assist-34, 2px)
+        font-size: $font-size-medium-x
+        cut-off-rule-bottom(40%, 40%, $color-background-ff, 2px)
 
   .manage-list
     padding: 0 15px
