@@ -357,7 +357,7 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable.styl"
   @import "../../common/stylus/mixin.styl"
-  $nav-height = 40px // 导航栏高度
+  $nav-height = 45px // 导航栏高度
 
   .manage-con
     padding-top: $nav-height
@@ -389,7 +389,7 @@
       &.hit
         color: $color-background-ff
         font-size: $font-size-medium-x
-        cut-off-rule-bottom(40%, 40%, $color-background-ff, 2px)
+        cut-off-rule-bottom-ff(40%, 40%, $color-background-ff, 2px)
 
   .manage-list
     padding: 0 15px
