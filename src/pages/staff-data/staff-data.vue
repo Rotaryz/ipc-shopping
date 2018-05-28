@@ -168,7 +168,7 @@
         },
         axisLine: {
           lineStyle: {
-            color: '#ffffff'
+            color: 'rgba(255,255,255,0.16)'
           }
         },
         axisLabel: {
@@ -185,7 +185,7 @@
         type: 'value',
         axisLine: {
           lineStyle: {
-            color: '#999'
+            color: 'rgba(255,255,255,0.16)'
           }
         },
         axisLabel: {
@@ -193,7 +193,8 @@
           fontSize: 10
         },
         splitLine: {
-          show: false
+          show: false,
+          color: 'rgba(255,255,255,0.16)'
         }
       }
     ],
@@ -386,12 +387,13 @@
       text-align: center
       font-family: $font-family-light
       font-size: $font-size-medium
-      color: $color-text-95
+      color: rgba(255,255,255,0.4)
       padding-bottom: 10px
       position: relative
     .active
       color: $color-background-ff
-      cut-off-rule-bottom(60px, 60px, $color-assist-34, 2px)
+      cut-off-rule-bottom(60px, 60px, $color-background-ff, 2px)
+      font-size: $font-size-medium-x
 
   .self-staff /* 店铺员工 */
     padding: 0 12px

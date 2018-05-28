@@ -284,7 +284,7 @@
         },
         axisLine: {
           lineStyle: {
-            color: '#ffffff'
+            color: 'rgba(255,255,255,0.16)'
           }
         },
         axisLabel: {
@@ -301,7 +301,7 @@
         type: 'value',
         axisLine: {
           lineStyle: {
-            color: '#999'
+            color: 'rgba(255,255,255,0.16)'
           }
         },
         axisLabel: {
@@ -309,7 +309,8 @@
           fontSize: 10
         },
         splitLine: {
-          show: false
+          show: false,
+          color: 'rgba(255,255,255,0.16)'
         }
       }
     ],
@@ -647,7 +648,7 @@
     .tab-merchant
       font-family: $font-family-light
       font-size: $font-size-medium
-      color: $color-text-95
+      color: rgba(255,255,255,0.4)
       text-align: center
       height: 27px
       line-height: 27px
@@ -662,16 +663,17 @@
     margin-bottom: 12px
     .merchant-title-tab
       no-wrap()
-      width: 120px
+      width: 125px
       text-align: center
       font-family: $font-family-light
       font-size: $font-size-medium
-      color: $color-text-95
+      color: rgba(255,255,255,0.4)
       padding-bottom: 10px
       position: relative
     .active
       color: $color-background-ff
-      cut-off-rule-bottom(45px, 45px, $color-assist-34, 2px)
+      font-size: $font-size-medium-x
+      cut-off-rule-bottom(45px, 45px, $color-background-ff, 2px)
 
   .self-merchant /* 个人店铺 */
     padding: 0 12px

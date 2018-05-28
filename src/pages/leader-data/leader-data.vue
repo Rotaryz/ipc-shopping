@@ -309,12 +309,13 @@
       text-align: center
       font-family: $font-family-light
       font-size: $font-size-medium
-      color: $color-text-95
+      color: rgba(255,255,255,0.4)
       padding-bottom: 10px
       position: relative
     .active
       color: $color-background-ff
-      cut-off-rule-bottom(60px, 60px, $color-assist-34, 2px)
+      cut-off-rule-bottom(60px, 60px, $color-background-ff, 2px)
+      font-size: $font-size-medium-x
 
   .all-staff /* 员工总榜 */
     padding: 0 12px
