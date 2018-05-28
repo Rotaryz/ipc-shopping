@@ -102,7 +102,6 @@
       }
     },
     onShow () {
-      this._getFromMsgTpl()
       if (wx.getStorageSync('pay') === 'success') {
         this.tabFlag = 0
         wx.setStorageSync('pay', 'no')
@@ -141,16 +140,6 @@
     },
     methods: {
       ...mapGetters(['role']),
-      _getFromMsgTpl () {
-        if (this.$root.$mp.appOptions.scene === 1014) {
-          let token = this.$root.$mp.query.token
-          let entryRole = this.$root.$mp.query.entryRole
-          let merchantId = this.$root.$mp.query.merchantId
-          token && wx.setStorageSync('userType', token)
-          entryRole && wx.setStorageSync('token', entryRole)
-          merchantId && wx.setStorageSync('merchantId', merchantId)
-        }
-      },
       _init () {
         let role = this.role()
         this.currentRole = role

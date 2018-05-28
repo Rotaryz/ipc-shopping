@@ -149,7 +149,6 @@
       }
     },
     onShow () {
-      this._getFromMsgTpl()
       this.addNumber = 1
       this.activeId = this.$root.$mp.query.id
       this._rqManageDetails(this.activeId)
@@ -159,19 +158,6 @@
     },
     methods: {
       ...mapGetters(['role']),
-      _getFromMsgTpl () {
-        console.log(this.$root.$mp.appOptions)
-        if (this.$root.$mp.appOptions.scene === 1014) {
-          let token = this.$root.$mp.query.token
-          let entryRole = this.$root.$mp.query.entryRole
-          let merchantId = this.$root.$mp.query.merchantId
-          token && wx.setStorageSync('token', token)
-          entryRole && wx.setStorageSync('userType', entryRole)
-          merchantId && wx.setStorageSync('merchantId', merchantId)
-          console.log(token, 't')
-          console.log(entryRole, 'r')
-          console.log(merchantId, 'm')
-        }
       },
       _init () {
         let role = this.role()

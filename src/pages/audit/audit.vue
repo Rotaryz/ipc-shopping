@@ -118,7 +118,6 @@
       }
     },
     onShow () {
-      this._getFromMsgTpl()
       this._init()
     },
     created () {
@@ -130,16 +129,6 @@
     beforeUpdate () {
     },
     methods: {
-      _getFromMsgTpl () {
-        if (this.$root.$mp.appOptions.scene === 1014) {
-          let token = this.$root.$mp.query.token
-          let entryRole = this.$root.$mp.query.entryRole
-          let merchantId = this.$root.$mp.query.merchantId
-          token && wx.setStorageSync('userType', token)
-          entryRole && wx.setStorageSync('token', entryRole)
-          merchantId && wx.setStorageSync('merchantId', merchantId)
-        }
-      },
       _init () {
         this.currentActiveId = this.$root.$mp.query.checkId
         this.btnSta = this.$root.$mp.query.tabFlag * 1

@@ -97,6 +97,7 @@
         // 模板消息
         if (this.scene === 1014) {
           let url = this.$root.$mp.query.url
+          console.log(url, '++++++++-----------')
           this.$router.replace(url)
         }
         // 打印版本号

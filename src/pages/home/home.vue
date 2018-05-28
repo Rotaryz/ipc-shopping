@@ -219,12 +219,12 @@
         api.homeCollectFormId(data)
       },
       // 从消息模板来的数据
-      _getFromMsgTpl () {
-        if (+this.$root.$mp.appOptions.scene === 1014) {
-          let id = this.$root.$mp.query.id
-          id && (this.currentActiveId = id)
-        }
-      },
+      // _getFromMsgTpl () {
+      //   if (+this.$root.$mp.appOptions.scene === 1014) {
+      //     let id = this.$root.$mp.query.id
+      //     id && (this.currentActiveId = id)
+      //   }
+      // },
       // 员工点确定后操作
       staffConfirmHandler () {
         wx.setStorageSync('isOk', 'isOk') // 员工点击过确认
@@ -245,7 +245,6 @@
                 if (list.length > 0) {
                   this.activeList = list
                   this.currentActiveId = this.activeList[this.dotCurrent].activeId
-                  this._getFromMsgTpl()
                 }
               })
               .catch(err => {
@@ -264,7 +263,6 @@
                 if (list.length > 0) {
                   this.activeList = list
                   this.currentActiveId = this.activeList[this.dotCurrent].activeId
-                  this._getFromMsgTpl()
                 }
               })
               .catch(err => {
@@ -294,7 +292,6 @@
                 if (list.length > 0) {
                   this.activeList = list
                   this.currentActiveId = this.activeList[this.dotCurrent].activeId
-                  this._getFromMsgTpl()
                   this._getStaffSale()
                 }
               })
