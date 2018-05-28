@@ -1,14 +1,19 @@
 <template>
   <article class="union-check-list">
     <header class="tab">
-      <nav
-        v-for="(item,index) in navList"
-        :key="index"
-        :class="['t-item',tabFlag === index ? 'hit':'']"
-        @tap.stop="changeTab(index)"
-      >
-        {{item}}
-      </nav>
+      <article class="tab-box">
+        <nav
+          v-for="(item,index) in navList"
+          :key="index"
+          :class="['t-item',tabFlag === index ? 'hit':'']"
+          @tap.stop="changeTab(index)"
+        >
+          {{item}}
+        </nav>
+        <div class="line-wrapper" :style="'transform:translate3d('+ 100*tabFlag + '%, 0, 0)'">
+          <div class="line"></div>
+        </div>
+      </article>
     </header>
     <section class="content">
       <article class="empty" v-if="isEmpty">
@@ -266,24 +271,43 @@
       left: 0
       right: 0
       height: $nav-height
-      padding: 0 26px
       box-sizing: border-box
-      layout(row)
-      justify-content: space-between
-      align-items: center
       background-color: $color-main-1a
-      font-family: $font-family-light
-      font-size: $font-size-medium
-      color: $color-text-95
       z-index: 9
-      .t-item
+      .tab-box
         position: relative
-        height: $nav-height
-        line-height: $nav-height
-        transition: 0.3 all
-        &.hit
-          color: $color-background-ff
-          cut-off-rule-bottom(6px, 6px, $color-assist-34, 2px)
+        margin: 0 26px
+        layout(row)
+        justify-content: space-between
+        align-items: center
+        font-family: $font-family-light
+        font-size: $font-size-medium
+        color: $color-text-95
+        .t-item
+          position: relative
+          height: $nav-height
+          line-height: $nav-height
+          transition: 0.3 all
+          color: rgba(255, 255, 255, 0.4)
+          flex: 1
+          text-align: center
+          &.hit
+            color: $color-background-ff
+            font-size: $font-size-medium-x
+        .line-wrapper
+          position: absolute
+          left: 0
+          bottom: 2px
+          display: flex
+          justify-content: center
+          width: 25%
+          height: 2px
+          transition: all .3s
+          transform: translate3d(200%, 0, 0)
+          .line
+            width: 30px
+            height: 2px
+            background: $color-background-ff
     .content
       height: 100%
       padding-top: $nav-height
