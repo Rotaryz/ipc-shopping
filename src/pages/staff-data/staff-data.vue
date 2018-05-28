@@ -210,7 +210,7 @@
           }
         },
         barWidth: '15',
-        data: []
+        data: [0]
       }
     ]
   }
@@ -270,6 +270,7 @@
       wx.stopPullDownRefresh()
     },
     onShow() {
+      this._getBar()
       this.shopName = wx.getStorageSync('shopName')
       console.log(this.shopName)
       if (!this.shopName) {
@@ -285,7 +286,6 @@
       }
       this.activeId = this.$root.$mp.query.id
       this._getSelfStaff()
-      this._getBar()
     },
     methods: {
       ...mapGetters(['role']),

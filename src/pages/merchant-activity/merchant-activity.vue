@@ -214,19 +214,21 @@
               this.showRule = true
             } else {
               this.applyId = res.data.alliance_merchant_apply.id
-              if (parseInt(res.data.alliance_merchant_apply.promotion_id) === 0) {
+              if (res.data.alliance_merchant_apply.promotion_id * 1 === 0 && res.data.alliance_merchant_apply.check_status * 1 !== 2) {
                 this.status = 1
                 this.couponText = '添加优惠券'
               } else {
-                api.merCouponDetails(res.data.alliance_merchant_apply.promotion_id).then(res => {
-                  this.coupon = {
-                    image_url: res.data.promotion_image_data[0].image_url,
-                    promotion_type_cn: res.data.promotion_type_cn,
-                    title: res.data.title,
-                    end_at: res.data.end_at,
-                    id: res.data.id
-                  }
-                })
+                if (res.data.alliance_merchant_apply.check_status * 1 !== 2) {
+                  api.merCouponDetails(res.data.alliance_merchant_apply.promotion_id).then(res => {
+                    this.coupon = {
+                      image_url: res.data.promotion_image_data[0].image_url,
+                      promotion_type_cn: res.data.promotion_type_cn,
+                      title: res.data.title,
+                      end_at: res.data.end_at,
+                      id: res.data.id
+                    }
+                  })
+                }
                 if (res.data.alliance_merchant_apply.check_status * 1 === 0) {
                   this.status = 2
                   this.btnText = '审核中'
@@ -334,24 +336,28 @@
           // 报名申请退款
           api.merRefund(this.applyId).then(res => {
             if (res.error === ERR_OK) {
-              this.$refs.toast.show('申请退款成功')
-              this.$router.back(1)
+              wechat.tipSuccess('操作成功')
+              setTimeout(() => {
+                this.$router.back(1)
+              }, 1000)
             } else {
               this.$refs.toast.show(res.message)
+              wechat.hideLoading()
             }
-            wechat.hideLoading()
             this.showTitle = false
           })
         } else {
           // 报名申请排队
           api.merQueueUp(this.applyId).then(res => {
             if (res.error === ERR_OK) {
-              this.$refs.toast.show('申请申请排队')
-              this.$router.back(1)
+              wechat.tipSuccess('操作成功')
+              setTimeout(() => {
+                this.$router.back(1)
+              }, 1000)
             } else {
               this.$refs.toast.show(res.message)
+              wechat.hideLoading()
             }
-            wechat.hideLoading()
             this.showTitle = false
           })
         }

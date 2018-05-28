@@ -135,8 +135,8 @@
             this.info.title = res.data.activity_alliance.name
             this.info.id = res.data.activity_alliance_id
             this.info.endDate = res.data.activity_alliance.end_at
-            this.info.store = res.data.alliance_merchant_report.stock
-            this.store = res.data.alliance_merchant_report.stock
+            this.info.store = res.data.alliance_merchant_report.allot_stock
+            this.store = res.data.alliance_merchant_report.allot_stock
             this.getAllocation()
           } else {
             this.$refs.toast.show(res.message)
@@ -144,17 +144,17 @@
         })
       },
       getAllocation () {
-        this.store = this.info.store
+        // this.store = this.info.store
         api.merAllotList(this.dataId).then(res => {
           if (res.error === ERR_OK) {
             this.merchantList = res.data.merchant
-            for (var i = 0; i < res.data.merchant.length; i++) {
-              this.info.store = this.info.store - res.data.merchant[i].stock
-            }
+            // for (var i = 0; i < res.data.merchant.length; i++) {
+            //   this.info.store = this.info.store - res.data.merchant[i].stock
+            // }
             this.staffList = res.data.employees
-            for (var s = 0; s < res.data.employees.length; s++) {
-              this.info.store = this.info.store - res.data.employees[s].stock
-            }
+            // for (var s = 0; s < res.data.employees.length; s++) {
+            //   this.info.store = this.info.store - res.data.employees[s].stock
+            // }
           } else {
             this.$refs.toast.show(res.message)
           }
@@ -201,6 +201,10 @@
       sumbit () {
         if (this.upNumber * 1 + this.blockStore > this.bigStore) {
           this.$refs.toast.show('数量超过范围')
+          return
+        }
+        if (this.upNumber * 1 + this.blockStore * 1 === this.preNumber * 1) {
+          this.$refs.toast.show('请先修改分配')
           return
         }
         let number = this.upNumber * 1 - this.preNumber + this.blockStore
