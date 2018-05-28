@@ -24,9 +24,9 @@
     mounted() {
     },
     onLaunch() {
-      this._saveCode()
     },
     onShow() {
+      this._saveCode()
       this._exchangeInfo()
       this._checkStatus()
     },
