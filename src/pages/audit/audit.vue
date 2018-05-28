@@ -194,7 +194,6 @@
               this.$refs.toast.show(json.message)
               return
             }
-            wechat.tipSuccess('操作成功')
             this.$router.back()
           })
           .catch(err => {
@@ -226,21 +225,71 @@
         const path = `${obj.appPath}?type=1&id=${id}&currentMerchant=${merchantId}`
         this._toMpC({appId, path})
       },
-      changeCoupon () {
+      changeCoupon () { // 提醒更换优惠券
         let data = this._formatReq(3)
-        this._rqCheckApply(data)
+        api.uckCheckApply(data)
+          .then(json => {
+            wechat.hideLoading()
+            if (json.error !== ERR_OK) {
+              this.$refs.toast.show(json.message)
+              return
+            }
+            wx.setStorageSync('changeCoupon', 'success')
+            this.$router.back()
+          })
+          .catch(err => {
+            console.info(err)
+          })
       },
+      // 拒绝
       refuse () {
         let data = this._formatReq(2)
-        this._rqCheckApply(data)
+        api.uckCheckApply(data)
+          .then(json => {
+            wechat.hideLoading()
+            if (json.error !== ERR_OK) {
+              this.$refs.toast.show(json.message)
+              return
+            }
+            wx.setStorageSync('refuse', 'success')
+            this.$router.back()
+          })
+          .catch(err => {
+            console.info(err)
+          })
       },
+      // 通过
       accept () {
         let data = this._formatReq(1)
-        this._rqCheckApply(data)
+        api.uckCheckApply(data)
+          .then(json => {
+            wechat.hideLoading()
+            if (json.error !== ERR_OK) {
+              this.$refs.toast.show(json.message)
+              return
+            }
+            wx.setStorageSync('accept', 'success')
+            this.$router.back()
+          })
+          .catch(err => {
+            console.info(err)
+          })
       },
       remind () {
-        let data = this._formatReq(3)
-        this._rqCheckApply(data)
+        let data = this._formatReq(3) // 提醒添加优惠券
+        api.uckCheckApply(data)
+          .then(json => {
+            wechat.hideLoading()
+            if (json.error !== ERR_OK) {
+              this.$refs.toast.show(json.message)
+              return
+            }
+            wx.setStorageSync('remind', 'success')
+            this.$router.back()
+          })
+          .catch(err => {
+            console.info(err)
+          })
       }
     },
     computed: {

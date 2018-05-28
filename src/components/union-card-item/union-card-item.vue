@@ -52,7 +52,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {baseURL} from 'api/config'
+  import { baseURL } from 'api/config'
   import source from 'common/source'
 
   // 状态常量默认值
@@ -107,37 +107,37 @@
         default: DEFAULT_USE_TYPE
       }
     },
-    data() {
+    data () {
       return {
         imageUri: baseURL.image,
         bgImgType: this.useType // 背景图片类型
       }
     },
     methods: {
-      previewHandler(cardInfo) {
+      previewHandler (cardInfo) {
         this.$emit('previewHandler', cardInfo)
       },
-      editorHandler(cardInfo) {
+      editorHandler (cardInfo) {
         this.$emit('editorHandler', cardInfo)
       },
-      totalHandler(cardInfo) {
+      totalHandler (cardInfo) {
         this.$emit('totalHandler', cardInfo)
       },
-      deleteHandler(cardInfo) {
+      deleteHandler (cardInfo) {
         this.$emit('deleteHandler', cardInfo)
       },
-      checkHandler(cardInfo) {
+      checkHandler (cardInfo) {
         this.$emit('checkHandler', cardInfo)
       },
-      sortHandler(cardInfo) {
+      sortHandler (cardInfo) {
         this.$emit('sortHandler', cardInfo)
       },
-      upperHandler(cardInfo) {
+      upperHandler (cardInfo) {
         this.$emit('upperHandler', cardInfo)
       }
     },
     computed: {
-      arrowImg() {
+      arrowImg () {
         return source.imgArrowRight('img')
       }
     }
@@ -153,7 +153,6 @@
     background-color: $color-background-ff
     box-shadow: 1px 8px 21px 0 rgba(179, 187, 218, 0.23)
     border-radius: 3px
-    overflow: hidden
     .wrap
       position: relative
       height: 0
@@ -255,7 +254,8 @@
         .b-bottom
           position: relative
           flex: 1
-          padding: 0 10px
+          padding-right: 10px
+          padding-left: 10px
           layout(row, block, no-wrap)
           align-items: center
           .title

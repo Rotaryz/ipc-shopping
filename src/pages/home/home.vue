@@ -108,9 +108,9 @@
 
 <script type="text/ecmascript-6">
   import api from 'api'
-  import {baseURL, ERR_OK} from 'api/config'
-  import {mapGetters} from 'vuex'
-  import {ROLE} from 'common/js/contants'
+  import { baseURL, ERR_OK } from 'api/config'
+  import { mapGetters } from 'vuex'
+  import { ROLE } from 'common/js/contants'
   import HSliderItem from 'components/hSlider-item/hSlider-item'
   import wx from 'wx'
   import * as wechat from 'common/js/wechat'
@@ -140,7 +140,7 @@
   }]
 
   export default {
-    data() {
+    data () {
       return {
         ROLE, // 角色定义常量值
         currentRole: null, // 当前角色
@@ -154,22 +154,22 @@
         status: 3 // 员工状态,
       }
     },
-    created() {
+    created () {
     },
-    onShow() {
+    onShow () {
       this._checkStatus()
     },
-    onHide() {
+    onHide () {
       this.status = 3
     },
-    beforeMount() {
+    beforeMount () {
     },
-    mounted() {
+    mounted () {
     },
     methods: {
       ...mapGetters(['role']),
       // 检查状态
-      _checkStatus() {
+      _checkStatus () {
         // 获取身份
         this.currentRole = this.role()
         // 登录
@@ -180,10 +180,12 @@
                 return
               }
               let status = json.data.status * 1
+              console.log(status)
               switch (status) {
                 // 审核中，已拒绝
                 case 0:
                 case 2: {
+                  wechat.hideLoading()
                   break
                 }
                 // 已通过
@@ -211,24 +213,24 @@
         }
       },
       // 上传form-id
-      formSubmit(e) {
+      formSubmit (e) {
         let formId = e.mp.detail.formId
         let data = {'form_ids': [formId]}
         api.homeCollectFormId(data)
       },
       // 从消息模板来的数据
-      _getFromMsgTpl() {
+      _getFromMsgTpl () {
         if (+this.$root.$mp.appOptions.scene === 1014) {
           let id = this.$root.$mp.query.id
           id && (this.currentActiveId = id)
         }
       },
       // 员工点确定后操作
-      staffConfirmHandler() {
+      staffConfirmHandler () {
         wx.setStorageSync('isOk', 'isOk') // 员工点击过确认
       },
       // 项目初始化
-      _init() {
+      _init () {
         let code = wx.getStorageSync('code')
         this.setNavTitle({wx_code: code})
         switch (this.currentRole) {
@@ -306,7 +308,7 @@
         }
       },
       // 保存标题
-      setNavTitle(data) {
+      setNavTitle (data) {
         api.homeGetGlobalData(data)
           .then(json => {
             if (json.error !== ERR_OK) {
@@ -323,7 +325,7 @@
           })
       },
       // 格式化活动信息
-      _formatInfoData(json) {
+      _formatInfoData (json) {
         let arr = []
         let res = json.data
         res.map(item => {
@@ -353,8 +355,12 @@
         return arr
       },
       // 获取员工销卡比信息
-      _getStaffSale() {
+      _getStaffSale () {
         if (this.currentRole !== ROLE.STAFF_ID) return
+        // 判断是否显示提示
+        let isOk = wx.getStorageSync('isOk')
+        isOk && (this.status = 3)
+        // 请求员工数据
         let data = {activity_alliance_id: this.currentActiveId}
         api.homeGetStaffSale(data)
           .then(json => {
@@ -370,7 +376,7 @@
           })
       },
       // 格式化员工销卡比信息
-      _formatStaffData(json) {
+      _formatStaffData (json) {
         let arr = []
         let res = json.data
         res.map(item => {
@@ -386,7 +392,7 @@
         return arr
       },
       // 查看统计
-      lookTotalHandler(obj) {
+      lookTotalHandler (obj) {
         let url = ''
         let id = obj.activeId
         switch (this.currentRole) {
@@ -406,12 +412,12 @@
         url && this.$router.push(url)
       },
       // 查看商家活动管理
-      watchActiveHandler() {
-        const url = `/pages/activity-manage/activity-manage`
+      watchActiveHandler () {
+        const url = `/pages/activity-manage/activity-manage?tabFlag=yes`
         this.$router.push(url)
       },
       // swiper滑动块
-      swiperChange(e) {
+      swiperChange (e) {
         let index = e.mp.detail.current
         this.dotCurrent = index
         this.sliderCurrent = index
@@ -419,12 +425,12 @@
         this._getStaffSale()
       },
       // 去联盟管理
-      toUnion() {
+      toUnion () {
         const url = `/pages/union-manage/union-manage`
         this.$router.push(url)
       },
       // 去活动管理
-      toShop() {
+      toShop () {
         let url = ``
         if (this.currentRole === ROLE.STAFF_ID) {
           url = `/pages/staff-activity/staff-activity`
@@ -434,18 +440,18 @@
         this.$router.push(url)
       },
       // 去员工管理
-      toEmployee() {
+      toEmployee () {
         const url = `/pages/employee/employee`
         this.$router.push(url)
       },
       // 去收入、提现
-      toAsset() {
+      toAsset () {
         const url = `/pages/asset/asset`
         this.$router.push(url)
       }
     },
     computed: {
-      dotStyle() {
+      dotStyle () {
         return this.activeList.length <= 1 ? 'd-op' : ''
       }
     },
@@ -533,17 +539,19 @@
         background-size: 100%
         background-position: center center
         background-repeat: no-repeat
-        font-family: $font-family-regular
+        font-family: $font-family-meddle
         font-size: $font-size-medium-x
         color: $color-background-ff
         text-align: center
         border-radius: 3px
+        overflow: hidden
         &:nth-child(3), &:nth-child(4)
           margin-top: 4.133333%
         .t-l-nav-pic
           fill-box()
           width: 100%
           height: 100%
+          border-radius: 3px
         .txt
           position: relative
 
@@ -599,10 +607,12 @@
         color: $color-background-ff
         text-align: center
         border-radius: 3px
+        overflow: hidden
         .t-l-nav-pic
           fill-box()
           width: 100%
           height: 100%
+          border-radius: 3px
         .txt
           position: relative
 
@@ -730,10 +740,12 @@
         color: $color-background-ff
         text-align: center
         border-radius: 3px
+        overflow: hidden
         .t-l-nav-pic
           fill-box()
           width: 100%
           height: 100%
+          border-radius: 3px
         .txt
           position: relative
 </style>
