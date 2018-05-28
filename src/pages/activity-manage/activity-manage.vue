@@ -52,7 +52,7 @@
           <div class="top-title">
             <div class="left">总价</div>
             <div class="right all-right">
-              <text>{{resetMoney * upNumber}}</text>
+              <text class="text">{{resetMoney * upNumber}}</text>
               <text class="money">元</text>
             </div>
           </div>
@@ -456,6 +456,9 @@
               font-size: $font-size-small-s
           .all-right
             color: #3460EC
+            .text
+              font-size: $font-size-medium-x
+              font-family: $font-family-meddle
         .add-number
           height: 45px
           border-radius: 3px

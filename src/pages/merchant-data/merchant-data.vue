@@ -390,7 +390,6 @@
     },
     onShow() {
       this.shopName = wx.getStorageSync('shopName')
-      console.log(this.shopName)
       if (!this.shopName) {
         this.shopName = '我的店'
       } else {
