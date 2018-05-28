@@ -158,7 +158,6 @@
     },
     methods: {
       ...mapGetters(['role']),
-      },
       _init () {
         let role = this.role()
         this.currentRole = role

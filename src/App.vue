@@ -99,6 +99,7 @@
           let url = this.$root.$mp.query.url
           console.log(url, '++++++++-----------')
           this.$router.replace(url)
+          return
         }
         // 打印版本号
         console.info(baseURL.jumpVersion)
