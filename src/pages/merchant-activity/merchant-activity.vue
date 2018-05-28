@@ -165,8 +165,8 @@
           let token = this.$root.$mp.query.token
           let entryRole = this.$root.$mp.query.entryRole
           let merchantId = this.$root.$mp.query.merchantId
-          token && wx.setStorageSync('userType', token)
-          entryRole && wx.setStorageSync('token', entryRole)
+          token && wx.setStorageSync('token', token)
+          entryRole && wx.setStorageSync('userType', entryRole)
           merchantId && wx.setStorageSync('merchantId', merchantId)
           console.log(token, 't')
           console.log(entryRole, 'r')
