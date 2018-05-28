@@ -63,7 +63,7 @@
             <!--<div class="text">1. 商家以及员工，每销售一张卡券，得到50元的奖励。</div>-->
             <!--<div class="text">2. 商家销售卡的用户，到其他门店使用一次，得到联盟力10分奖励。（可以分全部联盟商家报名该活 动的报名金）</div>-->
             <!--<div class="text">3. 商家可以得到该活动全部商家的异业客户引流客户。</div>-->
-            <div class="text">{{activityData.award_note}}</div>
+            <div class="text" v-html="activityData.award_note"></div>
           </div>
           <div class="rules-one rules-line">
             <div class="title">活动要求</div>
@@ -71,7 +71,7 @@
             <!--<div class="text">1. 用户购买异业联盟卡后，提供商品给用户。</div>-->
             <!--<div class="text">2. 添加商家自己的固定数量的免费优惠券。</div>-->
             <!--<div class="text">3. 支持平台提供的10元代金券，小程序买单的使用。</div>-->
-            <div class="text">{{activityData.claim_note}}</div>
+            <div class="text" v-html="activityData.claim_note"></div>
           </div>
           <div class="rules-one">
             <div class="title">活动明细</div>
@@ -79,7 +79,7 @@
             <!--<div class="text">1. 本活动仅在XX商圈内开展。</div>-->
             <!--<div class="text">2. 该活动需要商家付费参加，如果报名没有通过， 会立刻原路退款。</div>-->
             <!--<div class="text">3. 本次活动的最终解释权归赞播所有。</div>-->
-            <div class="text">{{activityData.detail_note}}</div>
+            <div class="text" v-html="activityData.detail_note"></div>
           </div>
         </div>
       </div>
@@ -214,6 +214,9 @@
         api.merManageDetails(id).then(res => {
           if (res.error === ERR_OK) {
             this.activityData = res.data
+            wx.setNavigationBarTitle({
+              title: res.data.name
+            })
             if (res.data.alliance_merchant_apply.length === 0) {
               this.status = 0
               this.showRule = true
