@@ -220,10 +220,8 @@
       // 切换至上架tab栏
       _switchToUp () {
         this.tabFlag = 1
-        console.log(1111)
         this._resetConfig()
         let data = this._formatReq()
-        console.log(2222)
         this._rqGetActiveList(data)
           .then(json => {
             let list = this._formatResData(json)

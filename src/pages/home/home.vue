@@ -180,10 +180,12 @@
                 return
               }
               let status = json.data.status * 1
+              console.log(status)
               switch (status) {
                 // 审核中，已拒绝
                 case 0:
                 case 2: {
+                  wechat.hideLoading()
                   break
                 }
                 // 已通过
@@ -355,6 +357,10 @@
       // 获取员工销卡比信息
       _getStaffSale () {
         if (this.currentRole !== ROLE.STAFF_ID) return
+        // 判断是否显示提示
+        let isOk = wx.getStorageSync('isOk')
+        isOk && (this.status = 3)
+        // 请求员工数据
         let data = {activity_alliance_id: this.currentActiveId}
         api.homeGetStaffSale(data)
           .then(json => {
