@@ -297,7 +297,7 @@
     ],
     yAxis: [
       {
-        min: 1,
+        max: 5,
         type: 'value',
         axisLine: {
           lineStyle: {
@@ -387,14 +387,14 @@
         fristAllStaff: false
       }
     },
-    mounted() {
-      this.shopName = wx.getStorageSync('key')
+    onShow() {
+      this.shopName = wx.getStorageSync('shopName')
+      console.log(this.shopName)
       if (!this.shopName) {
         this.shopName = '我的店'
       } else {
         this.shopName = this.shopName + '榜'
       }
-      console.log(this.allStaffList[0].avatar_url)
       this._dataInit()
       let system = DEVICE_INFO.system
       this.ios = system.search('iOS') !== -1
@@ -405,6 +405,8 @@
       this._getSelfShop()
       this._getAllotMoney()
       this._getSelfShopAll()
+      this._getBar()
+      this._getCake()
     },
     onPullDownRefresh() {
       if (this.shopsSene === 0 && this.preScene === 0) {
@@ -440,6 +442,8 @@
         this.currentRole = role
       },
       _dataInit() {
+        this.ecBra.options.xAxis[0].data = []
+        this.ecBra.options.series[0].data = []
         this.bigBtn = 'merchant'
         this.merchantBtn = 'self'
         this.staffBtn = 'self'
@@ -462,7 +466,6 @@
           this.preScene = 1
           if (this.fristselfStaff) return
           this._getSelfStaff()
-          this._getBar()
           this.fristselfStaff = true
         } else {
           this.preScene = 0
@@ -474,7 +477,6 @@
           this.shopsSene = 1
           if (this.fristAllShop) return
           this._getAllfShop()
-          this._getCake()
           this.fristAllShop = true
         } else {
           this.shopsSene = 0
@@ -494,7 +496,6 @@
       // 商家单店数据
       _getSelfShop() {
         api.dataSelfShop(this.activeId, this.selfShopPage).then(res => {
-          console.log(res, '商家单店数据```````````')
           if (res.error === ERR_OK) {
             this.selfShopList.push(...res.data)
             wechat.hideLoading()
@@ -537,7 +538,6 @@
       // 商家总榜数据
       _getAllfShop() {
         api.dataAllShop(this.activeId, this.allfShopPage).then(res => {
-          console.log(res, '````````商家总榜数据')
           if (res.error === ERR_OK) {
             this.allShopList.push(...res.data)
             wechat.hideLoading()
@@ -595,12 +595,9 @@
       _getBar() {
         api.dataBar(this.activeId).then(res => {
           if (res.error === ERR_OK) {
-            console.log(this.ecBra.options.xAxis[0].data, '11111111111`````````````')
             this.ecBra.options.xAxis[0].data = res.data.shop_names
             this.ecBra.options.series[0].data = res.data.verification_counts
             this.barDetails = res.data.detail
-            console.log(this.ecBra.options.xAxis[0].data, '22222222')
-            console.log(this.ecBra.options.series[0].data, '22222222')
           } else {
             this.$refs.toast.show(res.message)
           }
@@ -613,9 +610,6 @@
           if (res.error === ERR_OK) {
             this.allStaffList = res.data.slice(0, 3)
             this.allStaffTwoList = res.data.slice(3)
-            console.log('商家员工总榜数据``````````````````')
-            console.log(this.allStaffList, 'allStaffList`````````````')
-            console.log(this.allStaffTwoList, 'allStaffTwoList222222222')
           } else {
             this.$refs.toast.show(res.message)
           }
@@ -668,7 +662,7 @@
     margin-bottom: 12px
     .merchant-title-tab
       no-wrap()
-      width: 100px
+      width: 120px
       text-align: center
       font-family: $font-family-light
       font-size: $font-size-medium
@@ -677,7 +671,7 @@
       position: relative
     .active
       color: $color-background-ff
-      cut-off-rule-bottom(35px, 35px, $color-assist-34, 2px)
+      cut-off-rule-bottom(45px, 45px, $color-assist-34, 2px)
 
   .self-merchant /* 个人店铺 */
     padding: 0 12px
@@ -896,6 +890,7 @@
               &:nth-of-type(2)
                 font-size: $font-size-small
                 no-wrap()
+                font-family: $font-family-light
               &:last-child
                 text-align: right
                 position: relative
@@ -926,12 +921,11 @@
                 font-family: DINAlternate-Bold
                 color: $color-background-ff
                 font-size: $font-size-medium
-                height: $font-size-medium
               .icon
                 margin-right: 2px
                 font-family: $font-family-light
                 color: $color-background-ff
-                height: $font-size-small-ss
+                line-height: 35px
                 font-size: $font-size-small-ss
           .self-merchant-list
             &:nth-of-type(1)
@@ -1112,6 +1106,7 @@
             &:nth-of-type(2)
               font-size: $font-size-small
               no-wrap()
+              font-family: $font-family-light
             &:last-child
               text-align: right
               position: relative
@@ -1142,11 +1137,10 @@
               font-family: DINAlternate-Bold
               color: $color-background-ff
               font-size: $font-size-medium
-              height: $font-size-medium
             .icon
               margin-right: 2px
+              line-height: 35px
               font-family: $font-family-light
-              height: $font-size-small-ss
               font-size: $font-size-small-ss
 
   .data-null

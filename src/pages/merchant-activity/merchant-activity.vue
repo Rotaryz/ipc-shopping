@@ -164,7 +164,6 @@
       this._getFromMsgTpl()
       this.addNumber = 1
       this.activeId = this.$root.$mp.query.id
-      console.log(this.activeId, '```````````````')
       this._rqManageDetails(this.activeId)
     },
     beforeMount () {
@@ -173,7 +172,6 @@
     methods: {
       ...mapGetters(['role']),
       _getFromMsgTpl () {
-        console.log(this.$root.$mp.appOptions.scene, '`````````````scene')
         if (this.$root.$mp.appOptions.scene === 1014) {
           let token = this.$root.$mp.query.token
           let entryRole = this.$root.$mp.query.entryRole
@@ -181,7 +179,6 @@
           token && wx.setStorageSync('userType', token)
           entryRole && wx.setStorageSync('token', entryRole)
           merchantId && wx.setStorageSync('merchantId', merchantId)
-          console.log(token, '`````````````token')
         }
       },
       _init () {
@@ -190,7 +187,6 @@
       },
       _getAllotMoney () {
         api.dataAllotMoney(this.activeId).then(res => {
-          console.log(res)
           if (res.error === ERR_OK) {
             this.allotMoney = res.data.share_money
           } else {
@@ -216,7 +212,6 @@
       _rqManageDetails (id) {
         this.showRule = false
         api.merManageDetails(id).then(res => {
-          console.log(res.data)
           if (res.error === ERR_OK) {
             this.activityData = res.data
             if (res.data.alliance_merchant_apply.length === 0) {
@@ -229,7 +224,6 @@
                 this.couponText = '添加优惠券'
               } else {
                 api.merCouponDetails(res.data.alliance_merchant_apply.promotion_id).then(res => {
-                  console.log(res)
                   this.coupon = {
                     image_url: res.data.promotion_image_data[0].image_url,
                     promotion_type_cn: res.data.promotion_type_cn,
@@ -261,7 +255,6 @@
                     this.btnText = '排队中'
                   }
                 }
-                console.log(this.status, '当前页面的状态')
               }
             }
           } else {
@@ -295,7 +288,6 @@
           let that = this
           // 调起支付
           api.merApplyPay(this.addNumber, this.activityData.id, code).then(res => {
-            console.log(res.data)
             if (res.error === ERR_OK) {
               let orderId = res.data.order_id
               const {timestamp, nonceStr, signType, paySign} = res.data.pay_info
@@ -311,9 +303,7 @@
                 },
                 'fail': function (res) {
                   // 支付失败关闭订单
-                  console.log(res, '支付失败关闭订单``````')
                   api.merCloseOrder(orderId).then(res => {
-                    console.log(res)
                   })
                   wechat.hideLoading()
                 }
@@ -330,7 +320,6 @@
         let selectId = this.coupon.id
         let url = `/pages/upload-coupon/upload-coupon?activityId=${activityId}&selectId=${selectId}`
         this.$router.push(url)
-        console.log(url)
       },
       applyRefund () {
         this.showTitle = true
@@ -349,7 +338,6 @@
         if (this.modelNumber === 1) {
           // 报名申请退款
           api.merRefund(this.applyId).then(res => {
-            console.log(res, '报名申请退款`````')
             if (res.error === ERR_OK) {
               this.$refs.toast.show('申请退款成功')
               this.$router.back(1)
@@ -362,7 +350,6 @@
         } else {
           // 报名申请排队
           api.merQueueUp(this.applyId).then(res => {
-            console.log(res, '报名申请排队`````')
             if (res.error === ERR_OK) {
               this.$refs.toast.show('申请申请排队')
               this.$router.back(1)

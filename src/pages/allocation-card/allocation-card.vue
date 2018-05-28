@@ -132,7 +132,6 @@
       getAllotDetals () {
         api.merAllotDetail(this.dataId.activity_alliance_id).then(res => {
           if (res.error === ERR_OK) {
-            console.log(res)
             this.info.title = res.data.activity_alliance.name
             this.info.id = res.data.activity_alliance_id
             this.info.endDate = res.data.activity_alliance.end_at
@@ -160,12 +159,9 @@
             this.$refs.toast.show(res.message)
           }
           wechat.hideLoading()
-          console.log(res)
         })
       },
       showBox (item, index) {
-        console.log(item, '`````````````')
-        console.log(index, '`````````````')
         this.sumbitType = index
         let number
         if (this.sumbitType === 'shop') {
@@ -214,9 +210,7 @@
         } else {
           this.upShopId = 0
         }
-        console.log(this.dataId.activity_alliance_id, this.upCustomerId, number, this.upShopId, '````````````````````')
         api.merAllotStock(this.dataId.activity_alliance_id, this.upCustomerId, number, this.upShopId).then(res => {
-          console.log(res)
           if (res.error === ERR_OK) {
             this.$refs.toast.show('分配成功')
             this.getAllotDetals()
@@ -228,9 +222,7 @@
         })
       },
       jumpPreview (cardInfo) {
-        console.log(cardInfo.id)
         const url = `/pages/activity-detail/activity-detail?activityId=${cardInfo.id}`
-        console.log(url)
         this.$router.push(url)
       }
     },

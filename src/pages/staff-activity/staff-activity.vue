@@ -114,12 +114,10 @@
         }
       },
       jumpCode(cardInfo) {
-        console.log(cardInfo)
         const url = `/pages/staff-code/staff-code?id=${cardInfo.id}`
         this.$router.push(url)
       },
       jumpPreview(cardInfo) {
-        console.log(cardInfo)
         const url = `/pages/activity-detail/activity-detail?activityId=${cardInfo.id}`
         this.$router.push(url)
       },

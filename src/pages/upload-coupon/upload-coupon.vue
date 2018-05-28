@@ -116,7 +116,6 @@
         })
       },
       clickSelect (obj) {
-        console.log(123456, obj)
         this.btnColor = 1
         let index = this.couponList.findIndex(val => val.id === obj.id)
         if (this.preIdx === index) return

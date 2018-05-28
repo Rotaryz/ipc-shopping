@@ -182,9 +182,9 @@
     },
     onPullDownRefresh() {
       if (this.staffScene === 2) {
-        this.selfStaffPage = 1
-        this.selfStaffList = []
-        this.isAllselfStaff = false
+        this.allfShopPage = 1
+        this.allShopList = []
+        this.isAllShop = false
         this._getSelfStaff()
         this._getBar()
       } else {
@@ -194,7 +194,7 @@
       }
       wx.stopPullDownRefresh()
     },
-    mounted() {
+    onShow() {
       this._dataInit()
       this.activeId = this.$root.$mp.query.id
       this._getAllfShop()
@@ -208,9 +208,9 @@
       },
       _dataInit() {
         this.bigBtn = 'merchant'
-        this.selfStaffPage = 1
-        this.selfStaffList = []
-        this.isAllselfStaff = false
+        this.allfShopPage = 1
+        this.allShopList = []
+        this.isAllShop = false
         this.fristAllStaff = false
       },
       clickTab(value) {
@@ -418,6 +418,7 @@
             &:nth-of-type(2)
               font-size: $font-size-small
               no-wrap()
+              font-family: $font-family-light
             &:last-child
               text-align: right
               position: relative
@@ -448,12 +449,11 @@
               font-family: DINAlternate-Bold
               color: $color-background-ff
               font-size: $font-size-medium
-              height: $font-size-medium
             .icon
               font-family: $font-family-light
               margin-right: 2px
               color: $color-background-ff
-              height: $font-size-small-ss
+              line-height: 35px
               font-size: $font-size-small-ss
 
   .all-merchant /* 店铺总榜 */

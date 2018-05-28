@@ -268,8 +268,9 @@
       }
       wx.stopPullDownRefresh()
     },
-    mounted() {
-      this.shopName = wx.getStorageSync('key')
+    onShow() {
+      this.shopName = wx.getStorageSync('shopName')
+      console.log(this.shopName)
       if (!this.shopName) {
         this.shopName = '我的店'
       } else {
@@ -432,6 +433,7 @@
               &:nth-of-type(2)
                 font-size: $font-size-small
                 no-wrap()
+                font-family: $font-family-light
               &:last-child
                 text-align: right
                 position: relative
@@ -462,12 +464,11 @@
                 font-family: DINAlternate-Bold
                 color: $color-background-ff
                 font-size: $font-size-medium
-                height: $font-size-medium
               .icon
                 font-family: $font-family-light
                 margin-right: 2px
                 color: $color-background-ff
-                height: $font-size-small-ss
+                line-height: 35px
                 font-size: $font-size-small-ss
           .self-merchant-list
             &:nth-of-type(1)
@@ -678,12 +679,11 @@
               font-family: DINAlternate-Bold
               color: $color-background-ff
               font-size: $font-size-medium
-              height: $font-size-medium
             .icon
               font-family: $font-family-light
               color: $color-background-ff
               margin-right: 2px
-              height: $font-size-small-ss
+              line-height: 35px
               font-size: $font-size-small-ss
 
   .data-null

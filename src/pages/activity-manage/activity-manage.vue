@@ -197,27 +197,19 @@
         })
       },
       jumpApply(cardInfo) {
-        console.log(cardInfo.id)
         const url = `/pages/merchant-activity/merchant-activity?id=${cardInfo.id}`
-        console.log(url)
         this.$router.push(url)
       },
       jumpAllot(cardInfo) {
-        console.log(cardInfo.id)
         const url = `/pages/allocation-card/allocation-card?id=${cardInfo.id}`
-        console.log(url)
         this.$router.push(url)
       },
       jumpPreview(cardInfo) {
-        console.log(cardInfo.id)
         const url = `/pages/activity-detail/activity-detail?activityId=${cardInfo.id}`
-        console.log(url)
         this.$router.push(url)
       },
       jumpData(cardInfo) {
-        console.log(cardInfo.id)
         const url = `/pages/merchant-data/merchant-data?id=${cardInfo.id}`
-        console.log(url)
         this.$router.push(url)
       },
       // 格式化服务器数据
@@ -301,7 +293,6 @@
         this.upNumber++
       },
       sumbit() {
-        // console.log(wx.requestPayment)
         if (!this.upNumber) return
         if (this.upNumber < 1) {
           return this.$refs.toast.show('数量不小于1')
@@ -315,7 +306,6 @@
         wechat.login().then(res => {
           let code = res.code
           api.merApplyPay(this.upNumber, this.curId, code).then(res => {
-            console.log(res.data)
             if (res.error === ERR_OK) {
               let orderId = res.data.order_id
               const {timestamp, nonceStr, signType, paySign} = res.data.pay_info
@@ -328,15 +318,10 @@
                 'success': function (res) {
                   that.$refs.toast.show('复购成功')
                   that.modelCon = false
-                  console.log(that.modelCon, '```````````2222````````')
-                  console.log(res, '```````````2222````````')
-                  console.log(that, '```````````33````````')
                 },
                 'fail': function (res) {
                   // 支付失败关闭订单
-                  console.log(res, '支付失败关闭订单``````')
                   api.merCloseOrder(orderId).then(res => {
-                    console.log(res)
                   })
                   wechat.hideLoading()
                 }
@@ -350,7 +335,6 @@
         })
       },
       resetBuy(cardInfo) {
-        console.log(cardInfo)
         this.modelCon = !this.modelCon
         this.resetName = cardInfo.name
         this.resetMoney = cardInfo.apply_price
