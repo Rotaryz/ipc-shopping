@@ -369,7 +369,7 @@
       },
       // 商家员工总榜数据
       _getAllfStaff (loading) {
-        api.dataAllStaff(this.activeId, this.allfStaffPage, loading).then(res => {
+        api.dataAllStaff(this.activeId, loading).then(res => {
           if (res.error === ERR_OK) {
             this.allStaffList = res.data.slice(0, 3)
             this.allStaffTwoList = res.data.slice(3)
