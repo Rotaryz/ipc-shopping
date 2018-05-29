@@ -31,7 +31,7 @@
         date: ''
       }
     },
-    mounted () {
+    onShow () {
       this.date = this.$root.$mp.query.data
     },
     methods: {
