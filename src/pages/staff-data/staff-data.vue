@@ -68,48 +68,48 @@
             <div class="rank-two-hard">
               <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_second@2x.png'" v-if="image"
                    class="hard-img-crown">
-              <img v-if="allStaffList.length" :src="allStaffList[1].avatar_url"  class="hard-img">
+              <img v-if="allStaffList.length" :src="allStaffList[1].avatar_url" class="hard-img">
             </div>
             <div class="rank-two-text">
               <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_second2@2x.png'" v-if="image"
                    class="img">
-              <div class="name"  v-if="allStaffList.length" >{{allStaffList[1].nickname}}</div>
+              <div class="name" v-if="allStaffList.length">{{allStaffList[1].nickname}}</div>
             </div>
             <div class="rank-two-bottom">
               <div class="left-text">总收益</div>
-              <div class="right-text"  v-if="allStaffList.length" >{{allStaffList[1].commission}}</div>
+              <div class="right-text" v-if="allStaffList.length">{{allStaffList[1].commission}}</div>
             </div>
           </div>
           <div class="rank-box rank-two rank-one">
             <div class="rank-two-hard">
               <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_first@2x.png'" v-if="image"
                    class="hard-img-crown">
-              <img  v-if="allStaffList.length" :src="allStaffList[0].avatar_url" class="hard-img">
+              <img v-if="allStaffList.length" :src="allStaffList[0].avatar_url" class="hard-img">
             </div>
             <div class="rank-two-text">
               <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_first1@2x.png'" v-if="image"
                    class="img">
-              <div class="name first-name"  v-if="allStaffList.length" >{{allStaffList[0].nickname}}</div>
+              <div class="name first-name" v-if="allStaffList.length">{{allStaffList[0].nickname}}</div>
             </div>
             <div class="rank-two-bottom">
               <div class="left-text">总收益</div>
-              <div class="right-text"  v-if="allStaffList.length" >{{allStaffList[0].commission}}</div>
+              <div class="right-text" v-if="allStaffList.length">{{allStaffList[0].commission}}</div>
             </div>
           </div>
           <div class="rank-box rank-two">
             <div class="rank-two-hard">
               <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_third@2x.png'" v-if="image"
                    class="hard-img-crown">
-              <img  v-if="allStaffList.length" :src="allStaffList[2].avatar_url" class="hard-img">
+              <img v-if="allStaffList.length" :src="allStaffList[2].avatar_url" class="hard-img">
             </div>
             <div class="rank-two-text">
               <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_third3@2x.png'" v-if="image"
                    class="img">
-              <div class="name thr-name"  v-if="allStaffList.length" >{{allStaffList[2].nickname}}</div>
+              <div class="name thr-name" v-if="allStaffList.length">{{allStaffList[2].nickname}}</div>
             </div>
             <div class="rank-two-bottom">
               <div class="left-text">总收益</div>
-              <div class="right-text"  v-if="allStaffList.length" >{{allStaffList[2].commission}}</div>
+              <div class="right-text" v-if="allStaffList.length">{{allStaffList[2].commission}}</div>
             </div>
           </div>
         </div>
@@ -134,9 +134,9 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {baseURL, DEVICE_INFO, ERR_OK} from 'api/config'
+  import { baseURL, DEVICE_INFO, ERR_OK } from 'api/config'
   import * as wechat from 'common/js/wechat'
-  import {mapGetters} from 'vuex'
+  import { mapGetters } from 'vuex'
   import api from 'api'
   import wx from 'wx'
 
@@ -218,7 +218,7 @@
     ]
   }
   export default {
-    data() {
+    data () {
       return {
         ecBra: {
           // 传 options
@@ -260,27 +260,26 @@
         tabFlag: 0
       }
     },
-    onPullDownRefresh() {
+    onPullDownRefresh () {
       if (this.staffScene === 2) {
         this.selfStaffPage = 1
         this.isAllselfStaff = false
         this._getNewSelfStaff(false)
-        this._getBar()
+        this._getBar(false)
       } else {
         this.allStaffList = []
         this.allStaffTwoList = []
-        this._getAllfStaff()
+        this._getAllfStaff(false)
       }
       wx.stopPullDownRefresh()
     },
-    onShow() {
+    onShow () {
       this.showBra = false
       this._getBar()
       setTimeout(() => {
         this.showBra = true
       }, 500)
       this.shopName = wx.getStorageSync('shopName')
-      console.log(this.shopName)
       if (!this.shopName) {
         this.shopName = '我的店'
       } else {
@@ -297,18 +296,18 @@
     },
     methods: {
       ...mapGetters(['role']),
-      _init() {
+      _init () {
         let role = this.role()
         this.currentRole = role
       },
-      _dataInit() {
+      _dataInit () {
         this.selfStaffPage = 1
         this.selfStaffList = []
         this.isAllselfStaff = false
         this.fristAllStaff = false
         this.staffBtn = 'self'
       },
-      clickStaffTab(value) {
+      clickStaffTab (value) {
         this.staffBtn = value
         if (this.staffBtn === 'all') {
           this.staffScene = 3
@@ -322,7 +321,7 @@
         }
       },
       // 商家单店员工数据
-      _getSelfStaff() {
+      _getSelfStaff () {
         api.dataSelfStaff(this.activeId, this.selfStaffPage).then(res => {
           if (res.error === ERR_OK) {
             this.selfStaffList.push(...res.data)
@@ -335,7 +334,7 @@
         })
       },
       // 商家单店员工数据
-      _getNewSelfStaff(loading) {
+      _getNewSelfStaff (loading) {
         api.dataSelfStaff(this.activeId, this.selfStaffPage, loading).then(res => {
           if (res.error === ERR_OK) {
             this.selfStaffList.push = res.data
@@ -347,17 +346,17 @@
           wechat.hideLoading()
         })
       },
-      scrollSelfStaff() {
+      scrollSelfStaff () {
         if (this.isAllselfStaff) return
         this._getSelfStaff()
       },
-      _isAllSelfStaff(res) {
+      _isAllSelfStaff (res) {
         if (this.selfStaffList.length >= res.meta.total * 1) {
           this.isAllselfStaff = true
         }
       },
-      _getBar() {
-        api.dataBar(this.activeId).then(res => {
+      _getBar (loading) {
+        api.dataBar(this.activeId, loading).then(res => {
           if (res.error === ERR_OK) {
             this.ecBra.options.xAxis[0].data = res.data.shop_names
             this.ecBra.options.series[0].data = res.data.verification_counts
@@ -369,8 +368,8 @@
         })
       },
       // 商家员工总榜数据
-      _getAllfStaff() {
-        api.dataAllStaff(this.activeId, this.allfStaffPage).then(res => {
+      _getAllfStaff (loading) {
+        api.dataAllStaff(this.activeId, this.allfStaffPage, loading).then(res => {
           if (res.error === ERR_OK) {
             this.allStaffList = res.data.slice(0, 3)
             this.allStaffTwoList = res.data.slice(3)
@@ -412,7 +411,7 @@
       text-align: center
       font-family: $font-family-light
       font-size: $font-size-medium
-      color: rgba(255,255,255,0.4)
+      color: rgba(255, 255, 255, 0.4)
       padding-bottom: 10px
       position: relative
     .active
