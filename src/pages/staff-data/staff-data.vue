@@ -53,7 +53,7 @@
             <div class="number">{{barDetails.other_verification}}</div>
           </div>
         </div>
-        <div class="ecbra-bottom">向左图表滑动查看更多数据</div>
+        <div class="ecbra-bottom">向左滑动图表查看更多数据</div>
         <div class="ec-box" v-if="showBra">
           <ec-canvas class="canvas" id="mychart-dom-bar" canvas-id="mychart-bar" :ec="ecBra"></ec-canvas>
         </div>
