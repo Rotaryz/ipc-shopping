@@ -46,26 +46,26 @@ export default {
    * @param data
    * @returns {Promise.<*>}
    */
-  dataAllShop(activity_alliance_id = 1, page) {
+  dataAllShop(activity_alliance_id = 1, page, loading = true) {
     const url = `/api/alliances/data/merchant-report`
     let data = {
       activity_alliance_id,
       page
     }
-    return request.get(url, data, true)
+    return request.get(url, data, loading)
   },
   /**
    * 商家数据-员工榜-店榜
    * @param data
    * @returns {Promise.<*>}
    */
-  dataSelfStaff(activity_alliance_id = 1, page) {
+  dataSelfStaff(activity_alliance_id = 1, page, loading = true) {
     const url = `/api/alliances/data/employee-merchant-report`
     let data = {
       activity_alliance_id,
       page
     }
-    return request.get(url, data, true)
+    return request.get(url, data, loading)
   },
   /**
    * 商家数据-员工榜-总榜

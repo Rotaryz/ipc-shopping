@@ -188,9 +188,8 @@
     onPullDownRefresh() {
       if (this.staffScene === 2) {
         this.allfShopPage = 1
-        this.allShopList = []
         this.isAllShop = false
-        this._getNewAllfShop()
+        this._getNewAllfShop(false)
         this._getCake()
       } else {
         this.allStaffList = []
@@ -246,8 +245,8 @@
         })
       },
       // 商家总榜数据
-      _getNewAllfShop() {
-        api.dataAllShop(this.activeId, this.allfShopPage).then(res => {
+      _getNewAllfShop(loading) {
+        api.dataAllShop(this.activeId, this.allfShopPage, loading).then(res => {
           if (res.error === ERR_OK) {
             this.allShopList = res.data
             this._isAllALLShop(res)
