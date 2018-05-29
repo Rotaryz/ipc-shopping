@@ -409,7 +409,7 @@
         this.ecBra.options.xAxis[0].axisLabel.rotate = 0
       }
       this.activeId = this.$root.$mp.query.id
-      this._getSelfShop()
+      this._getNewSelfShop()
       this._getAllotMoney()
       this._getSelfShopAll()
       this._getBar()
@@ -418,27 +418,22 @@
     onPullDownRefresh() {
       if (this.shopsSene === 0 && this.preScene === 0) {
         this.selfShopPage = 1
-        this.selfShopList = []
         this.isAllSelfShop = false
-        this._getSelfShop()
-        this._getAllotMoney()
-        this._getSelfShopAll()
+        this._getNewSelfShop(false)
+        this._getAllotMoney(false)
+        this._getSelfShopAll(false)
       } else if (this.shopsSene === 1 && this.preScene === 0) {
         this.allfShopPage = 1
-        this.allShopList = []
         this.isAllShop = false
-        this._getAllfShop()
-        this._getCake()
+        this._getNewAllfShop(false)
+        this._getCake(false)
       } else if (this.staffScene === 2 && this.preScene === 1) {
         this.selfStaffPage = 1
-        this.selfStaffList = []
         this.isAllselfStaff = false
-        this._getSelfStaff()
-        this._getBar()
+        this._getNewSelfStaff(false)
+        this._getBar(false)
       } else if (this.staffScene === 3 && this.preScene === 1) {
-        this.allStaffList = []
-        this.allStaffTwoList = []
-        this._getAllfStaff()
+        this._getAllfStaff(false)
       }
       wx.stopPullDownRefresh()
     },
@@ -517,8 +512,20 @@
           }
         })
       },
-      _getSelfShopAll() {
-        api.dataSelfShopAllData(this.activeId).then(res => {
+      _getNewSelfShop(loading) {
+        api.dataSelfShop(this.activeId, this.selfShopPage, loading).then(res => {
+          if (res.error === ERR_OK) {
+            this.selfShopList.push = res.data
+            wechat.hideLoading()
+            this._isAllSelfShop(res)
+            this.selfShopPage++
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+        })
+      },
+      _getSelfShopAll(loading) {
+        api.dataSelfShopAllData(this.activeId, loading).then(res => {
           if (res.error === ERR_OK) {
             this.selfListAll = res.data
           } else {
@@ -536,8 +543,8 @@
           this.isAllSelfShop = true
         }
       },
-      _getAllotMoney() {
-        api.dataAllotMoney(this.activeId).then(res => {
+      _getAllotMoney(loading) {
+        api.dataAllotMoney(this.activeId, loading).then(res => {
           if (res.error === ERR_OK) {
             this.allotMoney = res.data.share_money
           } else {
@@ -560,6 +567,19 @@
           wechat.hideLoading()
         })
       },
+      _getNewAllfShop(loading) {
+        api.dataAllShop(this.activeId, this.allfShopPage, loading).then(res => {
+          if (res.error === ERR_OK) {
+            this.allShopList = res.data
+            wechat.hideLoading()
+            this._isAllALLShop(res)
+            this.allfShopPage++
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+          wechat.hideLoading()
+        })
+      },
       scrollAllShop() {
         if (this.isAllShop) return
         this._getAllfShop()
@@ -569,8 +589,8 @@
           this.isAllShop = true
         }
       },
-      _getCake() {
-        api.dataCake(this.activeId).then(res => {
+      _getCake(loading) {
+        api.dataCake(this.activeId, loading).then(res => {
           if (res.error === ERR_OK) {
             this.isOffline = res.data.is_offline
             this.ec.options.series.data = res.data.detail
@@ -594,6 +614,19 @@
           wechat.hideLoading()
         })
       },
+      _getNewSelfStaff(loading) {
+        api.dataSelfStaff(this.activeId, this.selfStaffPage, loading).then(res => {
+          if (res.error === ERR_OK) {
+            this.selfStaffList = res.data
+            wechat.hideLoading()
+            this._isAllSelfStaff(res)
+            this.selfStaffPage++
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+          wechat.hideLoading()
+        })
+      },
       scrollSelfStaff() {
         if (this.isAllselfStaff) return
         this._getAllfShop()
@@ -603,8 +636,8 @@
           this.isAllselfStaff = true
         }
       },
-      _getBar() {
-        api.dataBar(this.activeId).then(res => {
+      _getBar(loading) {
+        api.dataBar(this.activeId, loading).then(res => {
           if (res.error === ERR_OK) {
             this.ecBra.options.xAxis[0].data = res.data.shop_names
             this.ecBra.options.series[0].data = res.data.verification_counts
@@ -616,8 +649,8 @@
         })
       },
       // 商家员工总榜数据
-      _getAllfStaff() {
-        api.dataAllStaff(this.activeId, this.allfStaffPage).then(res => {
+      _getAllfStaff(loading) {
+        api.dataAllStaff(this.activeId, loading).then(res => {
           if (res.error === ERR_OK) {
             this.allStaffList = res.data.slice(0, 3)
             this.allStaffTwoList = res.data.slice(3)
