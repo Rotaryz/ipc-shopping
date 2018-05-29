@@ -92,7 +92,7 @@
           <dd class="content">
             <!--<div class="c-item" v-for="(item,index) in activeInfoList[0]" :key="index">{{item}}</div>-->
             <div class="c-item">1. 商家以及员工，每销售一张卡券，得到<input class="c-input-info" id='activeInfo0' type="number" :value="activeInfo.item0" maxlength="4" placeholder="50" placeholder-class="content" @input="inputHandler"/>元的奖励。</div>
-            <div class="c-item">2. 商家销售卡的用户，到其他门店使用一次，得到联盟力<input class="c-input-info" id='activeInfo1' type="number" :value="activeInfo.item1 " maxlength="4" placeholder="10" placeholder-class="content" @input="inputHandler"/>元的奖励。分奖励。（可以分全部联盟商家报名该活动的报名金）</div>
+            <div class="c-item">2. 商家销售卡的用户，到其他门店使用一次，得到联盟力<input class="c-input-info" id='activeInfo1' type="number" :value="activeInfo.item1 " maxlength="4" placeholder="10" placeholder-class="content" @input="inputHandler"/>元的奖励。（可以分全部联盟商家报名该活动的报名金）</div>
             <div class="c-item">3. 商家可以得到该活动全部商家的异业客户引流客户。</div>
           </dd>
         </article>
