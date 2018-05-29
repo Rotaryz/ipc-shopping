@@ -194,7 +194,7 @@
       } else {
         this.allStaffList = []
         this.allStaffTwoList = []
-        this._getAllfStaff()
+        this._getAllfStaff(false)
       }
       wx.stopPullDownRefresh()
     },
@@ -288,8 +288,8 @@
         })
       },
       // 商家员工总榜数据
-      _getAllfStaff() {
-        api.dataAllStaff(this.activeId, this.allfStaffPage).then(res => {
+      _getAllfStaff(loading) {
+        api.dataAllStaff(this.activeId, loading).then(res => {
           if (res.error === ERR_OK) {
             this.allStaffList = res.data.slice(0, 3)
             this.allStaffTwoList = res.data.slice(3)
