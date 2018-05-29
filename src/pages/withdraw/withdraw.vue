@@ -20,8 +20,7 @@
         <div class="title">提现金额</div>
         <div class="input-box">
           <div class="txt">¥</div>
-          <input type="digit" class="moneyInput" v-on:blur="moneyChange"
-                 v-model="money"/>
+          <input type="digit" class="moneyInput" @input="moneyChange" v-model="money" :value="money"/>
         </div>
         <div class="foot" v-if="!withdrawFlag">
           <div class="left">提现到微信钱包</div>
@@ -37,7 +36,7 @@
       <div class="withdraw-txt">微信按提现金额0.1%收取手续费，最低1元，最高10元。</div>
     </div>
     <base-modal title="确认信息" ref="baseModal" @confirm="confirm">
-      <div class="content" >
+      <div class="content">
         <div class="modal-wrapper" slot="content">
           <div class="item-wrapper border-bottom-1px">
             <div class="left">到账金额：</div>
@@ -93,7 +92,7 @@
       this.getInfo()
     },
     methods: {
-      getInfo() {
+      getInfo () {
         this.money = ''
         this._getWithdraw()
         wechat.hideLoading()
@@ -116,7 +115,7 @@
             this.bankFlag = true
           }
         }).catch(err => {
-          console.log(err)
+          console.info(err)
         })
       },
       setBank () {
@@ -127,15 +126,20 @@
         })
       },
       moneyChange (e) {
-        if (this.money * 1 > this.canUse * 1) {
-          this.money = this.remaining * 1
+        let value = e.target.value
+        let re = /([0-9]+\.[0-9]{2})[0-9]*/
+        value = value.replace(re, '$1')
+        if (isNaN(value * 1)) {
+          return this.money
         }
+        this.money = value
+        return value
       },
       allIn () {
         this.money = this.remaining * 1
       },
-      confirm() {
-        let data = {money: this.money}
+      confirm () {
+        let data = {money: this.money * 1}
         api.empSetWithdraw(data).then(res => {
           if (res.error !== ERR_OK) {
             this.$refs.toast.show(res.message)
@@ -147,7 +151,7 @@
             query: {data: res.message}
           })
         }).catch(err => {
-          console.log(err)
+          console.info(err)
         })
         // let res = {message: '1234'}
         // this.$router.push({
@@ -156,7 +160,17 @@
         //   query: {data: res.message}
         // })
       },
+      // 提现操作
       withDrawMoney () {
+        // 价格输入是否正确判断
+        let re = /([0-9]+\.[0-9])[0-9]*|^([1-9][0-9]*)$/
+        if (isNaN(this.money * 1)) {
+          this.$refs.toast.show('请输入正确的价格')
+          return false
+        } else if (!re.test('' + this.money)) {
+          this.$refs.toast.show('请输入正确的价格')
+          return false
+        }
         if (!this.checkMoney() || this.withdrawalInfo === '') {
           return
         }
@@ -182,10 +196,10 @@
       }
     },
     watch: {
-      caculateRealMoney() {
+      caculateRealMoney () {
         return Math.abs(this.money) - Math.abs(this.poundage).toFixed(2)
       },
-      money: function (val) {
+      money (val) {
         let reg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/
         if (val !== '' && val * 1 >= 1 && reg.test(this.money)) {
           if (val * 1 > this.remaining * 1) {

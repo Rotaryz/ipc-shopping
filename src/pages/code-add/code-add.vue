@@ -24,11 +24,8 @@
     },
     mounted () {
       this.getInfo()
-      console.log(this.$route.query.key)
-      console.log(`--${this.compName}--mounted`)
     },
     beforeUpdate () {
-      console.log(`--${this.compName}--beforeUpdate`)
     },
     methods: {
       getInfo () {
@@ -37,23 +34,17 @@
       async _empAddCode () {
         let data = {}
         api.empAddCode(data).then(res => {
-          console.log(res)
           this.maxImg = res.data.url
           this.shopName = res.data.shop_name
         }).catch(e => {
-          console.log(e)
+          console.info(e)
         })
         // this.maxImg = 'https://img.jerryf.cn/static_files/mina_qrcodes/forever/2018/05/14/16/1526287427cO5RXk8E.png'
         wechat.hideLoading()
       }
     },
-    computed: {
-      ss () {
-        console.log('...')
-      }
-    },
-    components: {
-    }
+    computed: {},
+    components: {}
   }
 </script>
 
