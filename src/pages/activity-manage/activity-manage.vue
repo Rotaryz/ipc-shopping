@@ -1,8 +1,13 @@
 <template>
   <div class="manage-con">
     <header class="tab">
-      <div :class="['t-item',tabFlag === 0 ? 'hit':'']" @tap.stop="changeTab(0)">活动管理</div>
-      <div :class="['t-item',tabFlag === 2 ? 'hit':'']" @tap.stop="changeTab(2)">活动池</div>
+      <article class="tab-box">
+        <div :class="['t-item',tabFlag === 0 ? 'hit':'']" @tap.stop="changeTab(0)">活动管理</div>
+        <div :class="['t-item',tabFlag === 2 ? 'hit':'']" @tap.stop="changeTab(2)">活动池</div>
+        <div class="line-wrapper" :style="'transform:translate3d('+ 50*tabFlag + '%, 0, 0)'">
+          <div class="line"></div>
+        </div>
+      </article>
     </header>
     <div class="manage-list" v-if="tabFlag === 0">
       <div class="list-data" v-if="activeList.length !== 0">
@@ -369,27 +374,45 @@
     left: 0
     right: 0
     height: $nav-height
-    padding: 0 40px
-    z-index: 3
-    layout(row)
-    justify-content: space-between
-    align-items: center
+    box-sizing: border-box
     background-color: $color-main-1a
-    font-family: $font-family-light
-    font-size: $font-size-medium
-    color: $color-text-95
-    .t-item
+    z-index: 9
+    .tab-box
       position: relative
-      height: $nav-height
-      line-height: $nav-height
-      transition: 0.3 all
-      color: rgba(255, 255, 255, 0.4)
-      flex: 1
-      text-align: center
-      &.hit
-        color: $color-background-ff
-        font-size: $font-size-medium-x
-        cut-off-rule-bottom-ff(40%, 40%, $color-background-ff, 2px)
+      margin: 0 40px
+      layout(row)
+      justify-content: space-between
+      align-items: center
+      font-family: $font-family-light
+      font-size: $font-size-medium
+      color: $color-text-95
+      .t-item
+        position: relative
+        height: $nav-height
+        line-height: $nav-height
+        transition: 0.3 all
+        color: rgba(255, 255, 255, 0.4)
+        flex: 1
+        text-align: center
+        &.hit
+          color: $color-background-ff
+          font-size: $font-size-medium-x
+      .line-wrapper
+        position: absolute
+        left: 0
+        bottom: 2px
+        display: flex
+        justify-content: center
+        width: 50%
+        height: 2px
+        transition: all .3s
+        transform: translate3d(200%, 0, 0)
+        .line
+          width: 30px
+          height: 2px
+          background: $color-background-ff
+
+
 
   .manage-list
     padding: 0 15px

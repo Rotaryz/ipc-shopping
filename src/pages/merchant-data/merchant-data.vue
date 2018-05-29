@@ -12,6 +12,9 @@
         <div class="merchant-title-tab" :class="merchantBtn === 'all' ? 'active' : '' " @tap="clickMerchantTab('all')">
           总榜
         </div>
+        <div class="line-wrapper" :style="'transform:translate3d('+ 100*tabFlag + '%, 0, 0)'">
+          <div class="line"></div>
+        </div>
       </div>
       <div class="self-merchant" v-if="merchantBtn === 'self'">
         <div class="self-top">
@@ -92,7 +95,9 @@
     <div class="tab-staff-box" v-if="bigBtn === 'staff'">
       <div class="merchant-title">
         <div class="merchant-title-tab" :class="staffBtn === 'self' ? 'active' : '' " @tap="clickStaffTab('self')">{{shopName}}</div>
-        <div class="merchant-title-tab" :class="staffBtn === 'all' ? 'active' : '' " @tap="clickStaffTab('all')">总榜
+        <div class="merchant-title-tab" :class="staffBtn === 'all' ? 'active' : '' " @tap="clickStaffTab('all')">总榜</div>
+        <div class="line-wrapper" :style="'transform:translate3d('+ 100*staffFlag + '%, 0, 0)'">
+          <div class="line"></div>
         </div>
       </div>
       <div class="self-staff" v-if="staffBtn === 'self'">
@@ -385,7 +390,9 @@
           }
         ], // 商店总榜总榜数据参数
         allStaffTwoList: [],
-        fristAllStaff: false
+        fristAllStaff: false,
+        tabFlag: 0,
+        staffFlag: 0
       }
     },
     onShow() {
@@ -475,22 +482,26 @@
         this.merchantBtn = value
         if (this.merchantBtn === 'all') {
           this.shopsSene = 1
+          this.tabFlag = 1
           if (this.fristAllShop) return
           this._getAllfShop()
           this.fristAllShop = true
         } else {
           this.shopsSene = 0
+          this.tabFlag = 0
         }
       },
       clickStaffTab(value) {
         this.staffBtn = value
         if (this.staffBtn === 'all') {
           this.staffScene = 3
+          this.staffFlag = 1
           if (this.fristAllStaff) return
           this._getAllfStaff()
           this.fristAllStaff = true
         } else {
           this.staffScene = 2
+          this.staffFlag = 0
         }
       },
       // 商家单店数据
@@ -659,7 +670,9 @@
   .merchant-title
     layout(row)
     justify-content: center
-    margin-bottom: 12px
+    position: relative
+    width: 250px
+    margin: 0 auto 12px
     .merchant-title-tab
       no-wrap()
       width: 125px
@@ -672,7 +685,20 @@
     .active
       color: $color-background-ff
       font-size: $font-size-medium-x
-      cut-off-rule-bottom(45px, 45px, $color-background-ff, 2px)
+    .line-wrapper
+      position: absolute
+      left: 0
+      bottom: 2px
+      display: flex
+      justify-content: center
+      width: 50%
+      height: 2px
+      transition: all .3s
+      transform: translate3d(0, 0, 0)
+      .line
+        width: 30px
+        height: 2px
+        background: $color-background-ff
 
   .self-merchant /* 个人店铺 */
     padding: 0 12px

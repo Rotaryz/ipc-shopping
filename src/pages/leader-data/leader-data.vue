@@ -4,6 +4,9 @@
       <div class="merchant-title-tab" :class="bigBtn === 'merchant' ? 'active' : '' " @tap="clickTab('merchant')">商家总榜
       </div>
       <div class="merchant-title-tab" :class="bigBtn === 'staff' ? 'active' : '' " @tap="clickTab('staff')">员工总榜</div>
+      <div class="line-wrapper" :style="'transform:translate3d('+ 100*tabFlag + '%, 0, 0)'">
+        <div class="line"></div>
+      </div>
     </div>
     <div class="all-merchant" v-if="bigBtn === 'merchant'">
       <div class="all-top">
@@ -177,7 +180,8 @@
           }
         ], // 商店总榜总榜数据参数
         allStaffTwoList: [],
-        fristAllStaff: false
+        fristAllStaff: false,
+        tabFlag: 0
       }
     },
     onPullDownRefresh() {
@@ -212,16 +216,19 @@
         this.allShopList = []
         this.isAllShop = false
         this.fristAllStaff = false
+        this.isOffline = false
       },
       clickTab(value) {
         this.bigBtn = value
         if (this.bigBtn === 'staff') {
           this.staffScene = 3
+          this.tabFlag = 1
           if (this.fristAllStaff) return
           this._getAllfStaff()
           this.fristAllStaff = true
         } else {
           this.staffScene = 2
+          this.tabFlag = 0
         }
       },
       // 商家总榜数据
@@ -302,7 +309,9 @@
   .merchant-title
     layout(row)
     justify-content: center
-    margin-bottom: 12px
+    position: relative
+    width: 300px
+    margin: 0 auto 12px
     .merchant-title-tab
       no-wrap()
       width: 150px
@@ -314,8 +323,21 @@
       position: relative
     .active
       color: $color-background-ff
-      cut-off-rule-bottom(60px, 60px, $color-background-ff, 2px)
       font-size: $font-size-medium-x
+    .line-wrapper
+      position: absolute
+      left: 0
+      bottom: 2px
+      display: flex
+      justify-content: center
+      width: 50%
+      height: 2px
+      transition: all .3s
+      transform: translate3d(0, 0, 0)
+      .line
+        width: 30px
+        height: 2px
+        background: $color-background-ff
 
   .all-staff /* 员工总榜 */
     padding: 0 12px
