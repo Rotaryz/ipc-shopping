@@ -263,9 +263,8 @@
     onPullDownRefresh() {
       if (this.staffScene === 2) {
         this.selfStaffPage = 1
-        this.selfStaffList = []
         this.isAllselfStaff = false
-        this._getNewSelfStaff()
+        this._getNewSelfStaff(false)
         this._getBar()
       } else {
         this.allStaffList = []
@@ -336,8 +335,8 @@
         })
       },
       // 商家单店员工数据
-      _getNewSelfStaff() {
-        api.dataSelfStaff(this.activeId, this.selfStaffPage).then(res => {
+      _getNewSelfStaff(loading) {
+        api.dataSelfStaff(this.activeId, this.selfStaffPage, loading).then(res => {
           if (res.error === ERR_OK) {
             this.selfStaffList.push = res.data
             this._isAllSelfStaff(res)
