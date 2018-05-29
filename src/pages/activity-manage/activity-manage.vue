@@ -117,6 +117,7 @@
       this._init()
       this.ActiveData.page = 1
       this.isAllActive = false
+      this.modelCon = false
       this.PondPage = 1
       this.isAllPond = false
       this._rqGetNewActiveList()
