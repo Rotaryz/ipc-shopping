@@ -190,10 +190,8 @@
         this.allfShopPage = 1
         this.isAllShop = false
         this._getNewAllfShop(false)
-        this._getCake()
+        this._getCake(false)
       } else {
-        this.allStaffList = []
-        this.allStaffTwoList = []
         this._getAllfStaff(false)
       }
       wx.stopPullDownRefresh()
@@ -266,8 +264,8 @@
           this.isAllShop = true
         }
       },
-      _getCake() {
-        api.dataCake(this.activeId).then(res => {
+      _getCake(loading) {
+        api.dataCake(this.activeId, loading).then(res => {
           if (res.error === ERR_OK) {
             this.ec.options.series.data = res.data.detail
             this.isOffline = res.data.is_offline
