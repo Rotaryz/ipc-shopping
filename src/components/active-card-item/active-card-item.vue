@@ -51,7 +51,7 @@
         </article>
         <article class="b-bottom" v-if="cardInfo.status === constStatus.down">
           <div class="title">{{cardInfo.statusStr}}</div>
-          <div class="btn delete" @tap="deleteHandler(cardInfo)">删除</div>
+          <!--<div class="btn delete" @tap="deleteHandler(cardInfo)">删除</div>-->
           <div class="btn last" @tap="totalHandler(cardInfo)">统计</div>
         </article>
         <article class="b-bottom" v-if="cardInfo.status === constStatus.apply">
