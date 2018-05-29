@@ -23,7 +23,7 @@
                   <div class="number">{{index + 1}}</div>
                   <img class="img" :src="item.avatar_url" v-if="image">
                 </div>
-                <div class="self-staff-list-box">{{item.nickname}}</div>
+                <div class="self-staff-list-box user-name">{{item.nickname}}</div>
                 <div class="self-staff-list-box">{{item.sale_count}}</div>
                 <div class="self-staff-list-box money-box">
                   <div class="icon">¥</div>
@@ -119,7 +119,7 @@
               <div class="number">{{index + 4}}</div>
               <img class="img" :src="item.avatar_url" v-if="item">
             </div>
-            <div class="self-staff-list-box">{{item.nickname}}</div>
+            <div class="self-staff-list-box user-name">{{item.nickname}}</div>
             <div class="self-staff-list-box">{{item.sale_count}}</div>
             <div class="self-staff-list-box money-box">
               <div class="icon">¥</div>
@@ -498,6 +498,9 @@
                 border-radius: 50%
                 display: block
                 border: 0.5px solid $color-cut-line-ff16
+            .user-name
+              no-wrap()
+              padding-right: 5px
             .money-box
               align-items: flex-end
               justify-content: flex-end
@@ -525,6 +528,9 @@
               .user-box
                 .number
                   color: #C9826B
+            .user-name
+              no-wrap()
+              padding-right: 5px
     .data-bra
       background: $color-assist-27
       box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.15)
@@ -649,15 +655,18 @@
             layout(row)
             align-items: center
             justify-content: center
+            height: $font-size-medium-x
             .left-text
               font-family: $font-family-light
               font-size: $font-size-small-s
               color: $color-text-95
               margin-right: 5px
+              line-height: 1
             .right-text
               font-family: DINAlternate-Bold
               font-size: $font-size-medium-x
               color: $color-background-ff
+              line-height: 1
         .rank-one
           padding-top: 45.5px
           .rank-two-hard
