@@ -264,7 +264,7 @@
   .union-check-list
     position: relative
     height: 100vh
-    background-color :$color-background-f6
+    background-color: $color-background-f6
     .tab
       position: fixed
       top: 0
@@ -292,6 +292,7 @@
           flex: 1
           text-align: center
           &.hit
+            font-family: $font-family-regular
             color: $color-background-ff
             font-size: $font-size-medium-x
         .line-wrapper

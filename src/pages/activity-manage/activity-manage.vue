@@ -395,6 +395,7 @@
         flex: 1
         text-align: center
         &.hit
+          font-family: $font-family-regular
           color: $color-background-ff
           font-size: $font-size-medium-x
       .line-wrapper
