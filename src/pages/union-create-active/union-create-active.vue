@@ -344,7 +344,9 @@
               return ''
             }
             wechat.tipSuccess('操作成功')
-            this.$router.back()
+            setTimeout(() => {
+              this.$router.back(1)
+            }, 1000)
           })
           .catch(err => {
             console.info(err)
@@ -359,7 +361,10 @@
               this.$refs.toast.show(json.message)
               return ''
             }
-            this.$router.back()
+            wechat.tipSuccess('操作成功')
+            setTimeout(() => {
+              this.$router.back(1)
+            }, 1000)
           })
           .catch(err => {
             console.info(err)

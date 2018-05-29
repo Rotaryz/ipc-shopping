@@ -80,7 +80,7 @@
             this.withdraw = true
           }
         }).catch(err => {
-          console.log(err)
+          console.info(err)
         })
       },
       _getAssetList() {
@@ -91,9 +91,8 @@
         api.empAssetList(data).then(res => {
           if (res.error !== ERR_OK) return
           this.redPackList = res.data
-          console.log(res)
         }).catch(err => {
-          console.log(err)
+          console.info(err)
         })
       },
       withdrawFun () {

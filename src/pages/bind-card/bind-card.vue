@@ -124,10 +124,10 @@
               this.$refs.toast.show(res.message)
               return
             }
-            this.$refs.toast.show('保存成功')
+            wechat.tipSuccess('操作成功')
             setTimeout(() => {
               this.$router.go(-1)
-            }, 2000)
+            }, 1000)
           }).catch(err => {
             console.log(err)
           })
@@ -139,10 +139,10 @@
               this.$refs.toast.show(res.message)
               return
             }
-            this.$refs.toast.show('保存成功')
+            wechat.tipSuccess('操作成功')
             setTimeout(() => {
               this.$router.go(-1)
-            }, 2000)
+            }, 1000)
           }).catch(err => {
             console.log(err)
           })

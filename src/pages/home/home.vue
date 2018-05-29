@@ -180,7 +180,6 @@
                 return
               }
               let status = json.data.status * 1
-              console.log(status)
               switch (status) {
                 // 审核中，已拒绝
                 case 0:

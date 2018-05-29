@@ -69,7 +69,6 @@
     },
     // 分页
     onReachBottom () {
-      console.log('上拉刷新....')
     },
     // 下拉加载
     onPullDownRefresh () {
@@ -98,7 +97,7 @@
           if (res.error !== ERR_OK) return
           this.awaitList = res.data
         }).catch(err => {
-          console.log(err)
+          console.info(err)
         })
       },
       _getAccept () { // 获取接受的员工
@@ -107,7 +106,7 @@
           if (res.error !== ERR_OK) return
           this.acceptList = res.data
         }).catch(err => {
-          console.log(err)
+          console.info(err)
         })
       },
       _AuditEmployee (key) { // 审核员工 1为通过，2为拒绝
@@ -125,7 +124,7 @@
           }
           wechat.tipSuccess('操作成功')
         }).catch(err => {
-          console.log(err)
+          console.info(err)
         })
         wechat.hideLoading()
       },
@@ -140,7 +139,7 @@
           this.acceptList.splice(this.dataIndex, 1)
           wechat.tipSuccess('操作成功')
         }).catch(err => {
-          console.log(err)
+          console.info(err)
         })
         wechat.hideLoading()
       },
