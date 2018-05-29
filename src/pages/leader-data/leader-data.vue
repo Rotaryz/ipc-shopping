@@ -323,6 +323,7 @@
       position: relative
     .active
       color: $color-background-ff
+      font-family: $font-family-regular
       font-size: $font-size-medium-x
     .line-wrapper
       position: absolute

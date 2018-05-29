@@ -407,7 +407,7 @@
         width: 50%
         height: 2px
         transition: all .3s
-        transform: translate3d(200%, 0, 0)
+        transform: translate3d(0%, 0, 0)
         .line
           width: 30px
           height: 2px
