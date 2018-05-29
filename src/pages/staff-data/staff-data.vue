@@ -265,7 +265,7 @@
         this.selfStaffPage = 1
         this.selfStaffList = []
         this.isAllselfStaff = false
-        this._getSelfStaff()
+        this._getNewSelfStaff()
         this._getBar()
       } else {
         this.allStaffList = []
@@ -294,7 +294,7 @@
         this.ecBra.options.xAxis[0].axisLabel.rotate = 0
       }
       this.activeId = this.$root.$mp.query.id
-      this._getSelfStaff()
+      this._getNewSelfStaff()
     },
     methods: {
       ...mapGetters(['role']),
@@ -335,9 +335,22 @@
           wechat.hideLoading()
         })
       },
+      // 商家单店员工数据
+      _getNewSelfStaff() {
+        api.dataSelfStaff(this.activeId, this.selfStaffPage).then(res => {
+          if (res.error === ERR_OK) {
+            this.selfStaffList.push = res.data
+            this._isAllSelfStaff(res)
+            this.selfStaffPage++
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+          wechat.hideLoading()
+        })
+      },
       scrollSelfStaff() {
         if (this.isAllselfStaff) return
-        this._getAllfShop()
+        this._getSelfStaff()
       },
       _isAllSelfStaff(res) {
         if (this.selfStaffList.length >= res.meta.total * 1) {

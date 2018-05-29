@@ -181,7 +181,8 @@
         ], // 商店总榜总榜数据参数
         allStaffTwoList: [],
         fristAllStaff: false,
-        tabFlag: 0
+        tabFlag: 0,
+        staffScene: 2
       }
     },
     onPullDownRefresh() {
@@ -189,8 +190,8 @@
         this.allfShopPage = 1
         this.allShopList = []
         this.isAllShop = false
-        this._getSelfStaff()
-        this._getBar()
+        this._getNewAllfShop()
+        this._getCake()
       } else {
         this.allStaffList = []
         this.allStaffTwoList = []
@@ -201,7 +202,7 @@
     onShow() {
       this._dataInit()
       this.activeId = this.$root.$mp.query.id
-      this._getAllfShop()
+      this._getNewAllfShop()
       this._getCake()
     },
     methods: {
@@ -236,6 +237,19 @@
         api.dataAllShop(this.activeId, this.allfShopPage).then(res => {
           if (res.error === ERR_OK) {
             this.allShopList.push(...res.data)
+            this._isAllALLShop(res)
+            this.allfShopPage++
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+          wechat.hideLoading()
+        })
+      },
+      // 商家总榜数据
+      _getNewAllfShop() {
+        api.dataAllShop(this.activeId, this.allfShopPage).then(res => {
+          if (res.error === ERR_OK) {
+            this.allShopList = res.data
             this._isAllALLShop(res)
             this.allfShopPage++
           } else {
