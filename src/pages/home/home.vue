@@ -737,6 +737,8 @@
                         font-size: $font-size-small
                         color: $color-background-ff
                         text-indent: 1px
+                        flex: 1
+                        no-wrap()
                       .sales
                         display: inline-block
                         font-family: $font-family-din
