@@ -450,7 +450,6 @@
         this.merchantBtn = 'self'
         this.staffBtn = 'self'
         this.selfShopPage = 1
-        this.selfShopList = []
         this.isAllSelfShop = false
         this.allfShopPage = 1
         this.allShopList = []
@@ -517,7 +516,8 @@
       _getNewSelfShop(loading) {
         api.dataSelfShop(this.activeId, this.selfShopPage, loading).then(res => {
           if (res.error === ERR_OK) {
-            this.selfShopList.push = res.data
+            this.selfShopList = res.data
+            console.log(this.selfShopList)
             wechat.hideLoading()
             this._isAllSelfShop(res)
             this.selfShopPage++
