@@ -461,6 +461,8 @@
         this.fristselfStaff = false
         this.fristAllShop = false
         this.fristAllStaff = false
+        this.tabFlag = 0
+        this.staffFlag = 0
       },
       clickTab(value) {
         this.bigBtn = value

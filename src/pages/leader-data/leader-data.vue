@@ -215,6 +215,7 @@
         this.isAllShop = false
         this.fristAllStaff = false
         this.isOffline = false
+        this.tabFlag = 0
       },
       clickTab(value) {
         this.bigBtn = value
@@ -409,7 +410,7 @@
               color: #FFD708
           .rank-two-bottom
             layout(row)
-            align-items: center
+            align-items: flex-end
             justify-content: center
             height: $font-size-medium-x
             .left-text
