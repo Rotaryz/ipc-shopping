@@ -338,7 +338,7 @@
       _getNewSelfStaff (loading) {
         api.dataSelfStaff(this.activeId, this.selfStaffPage, loading).then(res => {
           if (res.error === ERR_OK) {
-            this.selfStaffList.push = res.data
+            this.selfStaffList = res.data
             this._isAllSelfStaff(res)
             this.selfStaffPage++
           } else {
