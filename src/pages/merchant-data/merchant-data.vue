@@ -94,8 +94,11 @@
     </div>
     <div class="tab-staff-box" v-if="bigBtn === 'staff'">
       <div class="merchant-title">
-        <div class="merchant-title-tab" :class="staffBtn === 'self' ? 'active' : '' " @tap="clickStaffTab('self')">{{shopName}}</div>
-        <div class="merchant-title-tab" :class="staffBtn === 'all' ? 'active' : '' " @tap="clickStaffTab('all')">总榜</div>
+        <div class="merchant-title-tab" :class="staffBtn === 'self' ? 'active' : '' " @tap="clickStaffTab('self')">
+          {{shopName}}
+        </div>
+        <div class="merchant-title-tab" :class="staffBtn === 'all' ? 'active' : '' " @tap="clickStaffTab('all')">总榜
+        </div>
         <div class="line-wrapper" :style="'transform:translate3d('+ 100*staffFlag + '%, 0, 0)'">
           <div class="line"></div>
         </div>
@@ -161,48 +164,48 @@
               <div class="rank-two-hard">
                 <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_second@2x.png'" v-if="image"
                      class="hard-img-crown">
-                <img v-if="allStaffList.length" :src="allStaffList[1].avatar_url"  class="hard-img">
+                <img v-if="allStaffList.length" :src="allStaffList[1].avatar_url" class="hard-img">
               </div>
               <div class="rank-two-text">
                 <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_second2@2x.png'" v-if="image"
                      class="img">
-                <div class="name"  v-if="allStaffList.length" >{{allStaffList[1].nickname}}</div>
+                <div class="name" v-if="allStaffList.length">{{allStaffList[1].nickname}}</div>
               </div>
               <div class="rank-two-bottom">
                 <div class="left-text">总收益</div>
-                <div class="right-text"  v-if="allStaffList.length" >{{allStaffList[1].commission}}</div>
+                <div class="right-text" v-if="allStaffList.length">{{allStaffList[1].commission}}</div>
               </div>
             </div>
             <div class="rank-box rank-two rank-one">
               <div class="rank-two-hard">
                 <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_first@2x.png'" v-if="image"
                      class="hard-img-crown">
-                <img  v-if="allStaffList.length" :src="allStaffList[0].avatar_url" class="hard-img">
+                <img v-if="allStaffList.length" :src="allStaffList[0].avatar_url" class="hard-img">
               </div>
               <div class="rank-two-text">
                 <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_first1@2x.png'" v-if="image"
                      class="img">
-                <div class="name first-name"  v-if="allStaffList.length" >{{allStaffList[0].nickname}}</div>
+                <div class="name first-name" v-if="allStaffList.length">{{allStaffList[0].nickname}}</div>
               </div>
               <div class="rank-two-bottom">
                 <div class="left-text">总收益</div>
-                <div class="right-text"  v-if="allStaffList.length" >{{allStaffList[0].commission}}</div>
+                <div class="right-text" v-if="allStaffList.length">{{allStaffList[0].commission}}</div>
               </div>
             </div>
             <div class="rank-box rank-two">
               <div class="rank-two-hard">
                 <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_third@2x.png'" v-if="image"
                      class="hard-img-crown">
-                <img  v-if="allStaffList.length" :src="allStaffList[2].avatar_url" class="hard-img">
+                <img v-if="allStaffList.length" :src="allStaffList[2].avatar_url" class="hard-img">
               </div>
               <div class="rank-two-text">
                 <img :src="image + '/defaults/ipc-shopping/activitydata/icon-activity_third3@2x.png'" v-if="image"
                      class="img">
-                <div class="name thr-name"  v-if="allStaffList.length" >{{allStaffList[2].nickname}}</div>
+                <div class="name thr-name" v-if="allStaffList.length">{{allStaffList[2].nickname}}</div>
               </div>
               <div class="rank-two-bottom">
                 <div class="left-text">总收益</div>
-                <div class="right-text"  v-if="allStaffList.length" >{{allStaffList[2].commission}}</div>
+                <div class="right-text" v-if="allStaffList.length">{{allStaffList[2].commission}}</div>
               </div>
             </div>
           </div>
@@ -237,7 +240,6 @@
   import Toast from '@/components/toast/toast'
 
   const options = {
-    // color: ['#8941AF', '#A740AE', '#AE4077', '#B16544', '#B44343', '#5EAD83', '#40A1AE', '#4778C0', '#2843C3', '#57876E', '#128787', '#728AEC', '#1B6FBD', '#8941AF', '#A740AE', '#AE4077', '#B16544', '#B44343', '#5EAD83', '#40A1AE', '#4778C0', '#2843C3', '#57876E', '#128787', '#728AEC', '#1B6FBD'],
     color: ['#6D42E6', '#4778C0', '#47AFC0', '#40A1AE', '#8941AF', '#4644DF'],
     series: [{
       label: {
@@ -250,10 +252,10 @@
       center: ['50%', '50%'],
       radius: ['25%', '60%'],
       data: [
-      //   {
-      //   value: 55,
-      //   name: '锋味粉-55'
-      // }
+        // {
+        // value: 55,
+        // name: '锋味粉-55'
+        // }
       ],
       itemStyle: {
         emphasis: {
@@ -269,9 +271,9 @@
     dataZoom: [{
       type: 'inside',
       throttle: '30',
-      minValueSpan: 5,
-      start: 0,
-      end: 32,
+      maxValueSpan: 3,
+      start: 30,
+      end: 70,
       zoomLock: true
     }],
     grid: {
@@ -517,7 +519,6 @@
         api.dataSelfShop(this.activeId, this.selfShopPage, loading).then(res => {
           if (res.error === ERR_OK) {
             this.selfShopList = res.data
-            console.log(this.selfShopList)
             wechat.hideLoading()
             this._isAllSelfShop(res)
             this.selfShopPage++
@@ -595,7 +596,7 @@
         api.dataCake(this.activeId, loading).then(res => {
           if (res.error === ERR_OK) {
             this.isOffline = res.data.is_offline
-            this.ec.options.series.data = res.data.detail
+            this.ec.options.series[0].data = res.data.detail
           } else {
             this.$refs.toast.show(res.message)
           }
@@ -641,6 +642,10 @@
       _getBar(loading) {
         api.dataBar(this.activeId, loading).then(res => {
           if (res.error === ERR_OK) {
+            // for (var i = 0; i < 15; i++) {
+            //   this.ecBra.options.xAxis[0].data.push(...res.data.shop_names)
+            //   this.ecBra.options.series[0].data.push(...res.data.verification_counts)
+            // }
             this.ecBra.options.xAxis[0].data = res.data.shop_names
             this.ecBra.options.series[0].data = res.data.verification_counts
             this.barDetails = res.data.detail
@@ -693,7 +698,7 @@
     .tab-merchant
       font-family: $font-family-light
       font-size: $font-size-medium
-      color: rgba(255,255,255,0.4)
+      color: rgba(255, 255, 255, 0.4)
       text-align: center
       height: 27px
       line-height: 27px
@@ -714,7 +719,7 @@
       text-align: center
       font-family: $font-family-light
       font-size: $font-size-medium
-      color: rgba(255,255,255,0.4)
+      color: rgba(255, 255, 255, 0.4)
       padding-bottom: 10px
       position: relative
     .active
