@@ -124,7 +124,6 @@
   import wx from 'wx'
 
   const options = {
-    // color: ['#8941AF', '#A740AE', '#AE4077', '#B16544', '#B44343', '#5EAD83', '#40A1AE', '#4778C0', '#2843C3', '#57876E', '#128787', '#728AEC', '#1B6FBD', '#8941AF', '#A740AE', '#AE4077', '#B16544', '#B44343', '#5EAD83', '#40A1AE', '#4778C0', '#2843C3', '#57876E', '#128787', '#728AEC', '#1B6FBD'],
     color: ['#6D42E6', '#4778C0', '#47AFC0', '#40A1AE', '#8941AF', '#4644DF'],
     series: [{
       label: {
@@ -190,6 +189,7 @@
         this.allfShopPage = 1
         this.isAllShop = false
         this._getNewAllfShop(false)
+        this._getAllotMoney(false)
         this._getCake(false)
       } else {
         this._getAllfStaff(false)
@@ -200,6 +200,7 @@
       this._dataInit()
       this.activeId = this.$root.$mp.query.id
       this._getNewAllfShop()
+      this._getAllotMoney()
       this._getCake()
     },
     methods: {
@@ -268,7 +269,7 @@
       _getCake(loading) {
         api.dataCake(this.activeId, loading).then(res => {
           if (res.error === ERR_OK) {
-            this.ec.options.series.data = res.data.detail
+            this.ec.options.series[0].data = res.data.detail
             this.isOffline = res.data.is_offline
           } else {
             this.$refs.toast.show(res.message)
@@ -276,8 +277,8 @@
           wechat.hideLoading()
         })
       },
-      _getAllotMoney() {
-        api.dataAllotMoney(this.activeId).then(res => {
+      _getAllotMoney(loading) {
+        api.dataAllotMoney(this.activeId, loading).then(res => {
           if (res.error === ERR_OK) {
             this.allotMoney = res.data.share_money
           } else {
