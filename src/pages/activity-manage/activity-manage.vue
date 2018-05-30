@@ -107,6 +107,7 @@
       }
     },
     onShow () {
+      wechat.pageScrollTo()
       if (wx.getStorageSync('pay') === 'success') {
         this.tabFlag = 0
         wx.setStorageSync('pay', 'no')

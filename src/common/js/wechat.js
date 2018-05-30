@@ -1,32 +1,32 @@
 import wx from './wx'
 
-export function login () {
+export function login() {
   return new Promise((resolve, reject) => {
-    wx.login({ success: resolve, fail: reject })
+    wx.login({success: resolve, fail: reject})
   })
 }
 
-export function getUserInfo () {
+export function getUserInfo() {
   return new Promise((resolve, reject) => {
-    wx.getUserInfo({ success: resolve, fail: reject })
+    wx.getUserInfo({success: resolve, fail: reject})
   })
 }
 
-export function setStorage (key, value) {
+export function setStorage(key, value) {
   return new Promise((resolve, reject) => {
-    wx.setStorage({ key: key, data: value, success: resolve, fail: reject })
+    wx.setStorage({key: key, data: value, success: resolve, fail: reject})
   })
 }
 
-export function getStorage (key) {
+export function getStorage(key) {
   return new Promise((resolve, reject) => {
-    wx.getStorage({ key: key, success: resolve, fail: reject })
+    wx.getStorage({key: key, success: resolve, fail: reject})
   })
 }
 
-export function getLocation (type) {
+export function getLocation(type) {
   return new Promise((resolve, reject) => {
-    wx.getLocation({ type: type, success: resolve, fail: reject })
+    wx.getLocation({type: type, success: resolve, fail: reject})
   })
 }
 
@@ -48,6 +48,7 @@ export function hideLoading() {
     wx.hideNavigationBarLoading()
   }
 }
+
 export function setNavigationBarTitle(data) {
   console.log(data)
   return new Promise((resolve, reject) => {
@@ -73,4 +74,16 @@ export function tipSuccess(title, duration = 500) {
       }, duration)
     })
   }
+}
+
+/**
+ * 微信页面滚动
+ * @param scrollTop
+ * @param duration
+ */
+export function pageScrollTo(scrollTop = 0, duration = 0) {
+  wx.pageScrollTo({
+    scrollTop,
+    duration
+  })
 }

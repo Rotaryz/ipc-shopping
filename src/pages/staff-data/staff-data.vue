@@ -306,6 +306,7 @@
         this.isAllselfStaff = false
         this.fristAllStaff = false
         this.staffBtn = 'self'
+        this.tabFlag = 0
       },
       clickStaffTab (value) {
         this.staffBtn = value
@@ -651,7 +652,7 @@
               color: #FFD708
           .rank-two-bottom
             layout(row)
-            align-items: center
+            align-items: flex-end
             justify-content: center
             height: $font-size-medium-x
             .left-text
