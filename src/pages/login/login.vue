@@ -17,7 +17,7 @@
       </article>
     </section>
     <toast ref="toast"></toast>
-    <navigator url="/pages/test/test" class="test-btn">测试专用</navigator>
+    <!--<navigator url="/pages/test/test" class="test-btn">测试专用</navigator>-->
   </div>
 </template>
 

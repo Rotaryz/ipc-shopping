@@ -207,7 +207,7 @@
           envVersion: baseURL.jumpVersion,
           success(res) {
             // 打开成功
-            console.log(res)
+            console.info(res)
           }
         })
       },

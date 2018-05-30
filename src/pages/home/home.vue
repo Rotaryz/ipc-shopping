@@ -491,7 +491,6 @@
       },
       // 判断是否获取了所有数据
       _isAll (json) {
-        console.log(json)
         if (!json.meta) return
         let total = json.meta.total
         total && (this.isAll = (this.employeeList.length >= total))

@@ -517,7 +517,6 @@
         api.dataSelfShop(this.activeId, this.selfShopPage, loading).then(res => {
           if (res.error === ERR_OK) {
             this.selfShopList = res.data
-            console.log(this.selfShopList)
             wechat.hideLoading()
             this._isAllSelfShop(res)
             this.selfShopPage++

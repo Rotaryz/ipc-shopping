@@ -10,21 +10,19 @@ module.exports = [
     path: '/pages/login/login', // login
     name: 'Login',
     config: {
-      // navigationBarBackgroundColor: '#FFFFFF',
-      // navigationBarTextStyle: 'black'
       navigationBarTitleText: '登录',
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#1A1D3D',
       disableScroll: true
     }
   },
-  {
-    path: '/pages/test/test', // test
-    name: 'Test',
-    config: {
-      navigationBarTitleText: 'test'
-    }
-  },
+  // {
+  //   path: '/pages/test/test', // test
+  //   name: 'Test',
+  //   config: {
+  //     navigationBarTitleText: 'test'
+  //   }
+  // },
   {
     path: '/pages/union-manage/union-manage', // 联盟管理
     name: 'UnionManage',
