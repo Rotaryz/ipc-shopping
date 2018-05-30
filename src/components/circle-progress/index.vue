@@ -5,7 +5,7 @@
     </section>
     <section class="info">
       <div class="number-box">
-        <div class="number">{{activeInfo.percent}}</div>
+        <div class="number">{{showNumber}}</div>
         <div class="per">%</div>
       </div>
       <div class="txt">完成率</div>
@@ -22,28 +22,27 @@
     props: {
       activeInfo: Object
     },
-    data() {
+    data () {
       return {
         number: 0,
         timer: null
       }
     },
-    beforeCreate() {
+    beforeCreate () {
     },
-    created() {
+    created () {
     },
-    beforeMount() {
+    beforeMount () {
     },
-    mounted() {
+    mounted () {
       this._loading()
     },
-    beforeUpdate() {
+    beforeUpdate () {
       // this._loading()
     },
     methods: {
-      _loading() {
+      _loading () {
         if (this.timer) return
-        if (this.number * 1 === 0) return
         if (this.activeInfo.percent !== this.number) {
           const percent = this.activeInfo.percent
           let milliSecond = 1500
@@ -62,12 +61,20 @@
       }
     },
     computed: {
-      bgImg() {
+      bgImg () {
         let pre = this.activeInfo.percent * 1
         let svg = SVG.makeSvg(pre)
         let base64 = util.base64encode(svg)
         // return `background-image:url(data:image/svg+xml;base64,${base64})`
         return `data:image/svg+xml;base64,${base64}`
+      },
+      showNumber () {
+        let number = this.number.toFixed(1)
+        let re = number.split('.')
+        if (re[1] === '0') {
+          number = re[0]
+        }
+        return number
       }
     }
   }

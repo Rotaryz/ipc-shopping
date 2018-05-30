@@ -6,7 +6,7 @@
           <section class="bg-box">
           </section>
           <swiper class="home-swiper" @change="swiperChange" :current="sliderCurrent">
-            <block v-for="(item, index) in activeList" :key="index">
+            <block v-for="(item, index) in activeList" :key="item.activeId">
               <swiper-item class="home-swiper-item">
                 <h-slider-item :item="item" @lookTotalHandler="lookTotalHandler"></h-slider-item>
               </swiper-item>
@@ -120,6 +120,7 @@
   const ACTIVE_DEF = [{
     title: '异业联盟卡',
     percent: 0,
+    activeId: -1,
     isOnline: false,
     saleCard: {
       title: '售卡数',
