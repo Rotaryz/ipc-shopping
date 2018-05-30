@@ -49,7 +49,7 @@
             return
           }
           const percent = this.activeInfo.percent
-          let milliSecond = 1500
+          let milliSecond = 500
           let start = Date.now()
           let pre = 1 / percent
           let space = pre * milliSecond

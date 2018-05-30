@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 export default {
-  makeSvg(percent = 0, milliSecond = 1500) {
+  makeSvg(percent = 0, milliSecond = 500) {
     percent = percent >= 100 ? 102 : percent
     const pre = percent / 100 * 280
     if (percent === 0) {
