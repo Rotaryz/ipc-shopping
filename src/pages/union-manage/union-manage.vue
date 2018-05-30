@@ -85,6 +85,7 @@
     },
     onShow () {
       this._init()
+      wechat.pageScrollTo()
     },
     beforeMount () {
     },
@@ -295,6 +296,7 @@
             this.cardInfoList = list
             this._isAll(json)
           })
+        wechat.pageScrollTo()
       },
       // 新建按钮
       toCreateActive () {

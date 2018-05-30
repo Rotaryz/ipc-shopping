@@ -188,10 +188,7 @@
         .arrow-right
           width: 12px
           height: 12px
-          background-size: 100% 100%
           margin-right: 15px
-          background-repeat: no-repeat
-          background-position: center
         .status-info
           flex: 1
 </style>

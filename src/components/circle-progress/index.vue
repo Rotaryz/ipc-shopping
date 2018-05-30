@@ -44,6 +44,10 @@
       _loading () {
         if (this.timer) return
         if (this.activeInfo.percent !== this.number) {
+          if (this.activeInfo.percent < 1) {
+            this.number = this.activeInfo.percent
+            return
+          }
           const percent = this.activeInfo.percent
           let milliSecond = 1500
           let start = Date.now()
