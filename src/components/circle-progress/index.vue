@@ -5,7 +5,7 @@
     </section>
     <section class="info">
       <div class="number-box">
-        <div class="number">{{showNumber}}</div>
+        <div class="number">{{number}}</div>
         <div class="per">%</div>
       </div>
       <div class="txt">完成率</div>
@@ -35,13 +35,22 @@
     beforeMount () {
     },
     mounted () {
-      this._loading()
+      // this._loading()
+      this.$on('bridge', (val) => {
+        this._loading(val)
+      })
     },
     beforeUpdate () {
-      // this._loading()
+    },
+    onLoad () {
+    },
+    onShow () {
+    },
+    onHide () {
     },
     methods: {
-      _loading () {
+      _loading (val) {
+        console.log(val)
         if (this.timer) return
         if (this.activeInfo.percent !== this.number) {
           if (this.activeInfo.percent < 1) {
@@ -56,8 +65,8 @@
           this.timer = setInterval(() => {
             let now = Date.now()
             this.number++
-            if (now - start >= milliSecond && this.number > percent) {
-              this.number = Math.min(this.number, percent)
+            if (now - start >= milliSecond && this.number >= percent) {
+              this.number = percent
               this.timer && clearInterval(this.timer)
             }
           }, space)
@@ -71,15 +80,16 @@
         let base64 = util.base64encode(svg)
         // return `background-image:url(data:image/svg+xml;base64,${base64})`
         return `data:image/svg+xml;base64,${base64}`
-      },
-      showNumber () {
-        let number = this.number.toFixed(1)
-        let re = number.split('.')
-        if (re[1] === '0') {
-          number = re[0]
-        }
-        return number
       }
+      // showNumber () {
+      //   // let number = this.number.toFixed(1)
+      //   let number = this.number.toFixed(1)
+      //   let re = number.split('.')
+      //   if (re[1] === '0') {
+      //     number = re[0]
+      //   }
+      //   return number
+      // }
     }
   }
 </script>

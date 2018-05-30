@@ -1,7 +1,7 @@
 <template>
   <div class="home-slider-item">
     <section class="progress-bar">
-      <circle-progress :activeInfo="item"></circle-progress>
+      <circle-progress :activeInfo.sync="item"></circle-progress>
     </section>
     <section class="top-bar">
       <div class="title">{{item.title}}</div>
@@ -39,7 +39,7 @@
     props: {
       item: Object
     },
-    data() {
+    data () {
       return {
         timer: null,
         saleCard: 0,
@@ -48,15 +48,19 @@
         otherCard: 0
       }
     },
-    beforeMount() {
+    beforeMount () {
     },
-    mounted() {
+    mounted () {
+      this.$on('bridge', (val) => {
+        this._loading(val)
+      })
     },
     methods: {
-      lookTotalHandler(item) {
+      lookTotalHandler (item) {
         this.$emit('lookTotalHandler', item)
       },
-      _loading() {
+      _loading (val) {
+        console.log(val)
         if (this.timer) return
         let saleCard = this.item.saleCard.number
         let currentCard = this.item.currentCard.number
@@ -83,7 +87,7 @@
       }
     },
     computed: {
-      arrowImg() {
+      arrowImg () {
         return source.imgArrowRight('img')
       }
     },
@@ -125,7 +129,7 @@
         font-size: $font-size-small
         color: $color-text-95
         layout(row)
-        align-items :center
+        align-items: center
         height: 100%
         .arrow-pic
           width: 12px

@@ -8,7 +8,7 @@
           <swiper class="home-swiper" @change="swiperChange" :current="sliderCurrent">
             <block v-for="(item, index) in activeList" :key="item.activeId">
               <swiper-item class="home-swiper-item">
-                <h-slider-item :item="item" @lookTotalHandler="lookTotalHandler"></h-slider-item>
+                <h-slider-item :item.sync="item" ref="slider" @lookTotalHandler="lookTotalHandler"></h-slider-item>
               </swiper-item>
             </block>
           </swiper>
@@ -165,6 +165,7 @@
     },
     onShow () {
       this._checkStatus()
+      this.bridge(1)
     },
     onHide () {
       this.status = 3
@@ -174,6 +175,9 @@
     mounted () {
     },
     methods: {
+      bridge (val) {
+        console.log(val, 'p')
+      },
       ...mapGetters(['role']),
       // 检查状态
       _checkStatus () {
@@ -251,7 +255,7 @@
                 wechat.hideLoading()
                 let list = this._formatInfoData(json)
                 if (list.length > 0) {
-                  this.activeList = list
+                  this.activeList = [...list]
                   this.currentActiveId = this.activeList[this.dotCurrent].activeId
                   this._getFromMsgTpl()
                 }
@@ -270,7 +274,7 @@
                 wechat.hideLoading()
                 let list = this._formatInfoData(json)
                 if (list.length > 0) {
-                  this.activeList = list
+                  this.activeList = [...list]
                   this.currentActiveId = this.activeList[this.dotCurrent].activeId
                   this._getFromMsgTpl()
                 }
@@ -300,7 +304,7 @@
                 }
                 let list = this._formatInfoData(json)
                 if (list.length > 0) {
-                  this.activeList = list
+                  this.activeList = [...list]
                   this.currentActiveId = this.activeList[this.dotCurrent].activeId
                   this._getFromMsgTpl()
                   this._getStaffSale()
