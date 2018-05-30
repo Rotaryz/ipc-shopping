@@ -180,7 +180,8 @@ module.exports = [
       backgroundTextStyle: 'light',
       backgroundColor: '#1A1D3D',
       enablePullDownRefresh: true,
-      backgroundColorBottom: '#F6F7FA'
+      backgroundColorBottom: '#F6F7FA',
+      onReachBottomDistance: 50
     }
   },
   {

@@ -152,6 +152,7 @@
       this.addNumber = 1
       this.activeId = this.$root.$mp.query.id
       this._rqManageDetails(this.activeId)
+      this._getAllotMoney()
     },
     beforeMount () {
       this._init()
@@ -164,6 +165,7 @@
       },
       _getAllotMoney () {
         api.dataAllotMoney(this.activeId).then(res => {
+          console.log(res, '````````````````````````````````')
           if (res.error === ERR_OK) {
             this.allotMoney = res.data.share_money
           } else {
