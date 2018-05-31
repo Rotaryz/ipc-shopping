@@ -78,8 +78,8 @@
                     </section>
                     <section class="number">
                       <div class="n-title">销卡</div>
-                      <div>{{item.percentage}}</div>
-                      <div>%</div>
+                      <div class="n-num">{{item.percentage}}</div>
+                      <div class="n-unit">%</div>
                     </section>
                   </article>
                 </li>
@@ -735,7 +735,7 @@
                   .progress
                     position: relative
                     flex: 1
-                    padding: 0 24px 0 15px
+                    padding: 0 15px
                     layout()
                     justify-content: space-between
                     .name-bar
@@ -764,19 +764,21 @@
                       .p-pro
                         width: 0%
                         height: 100%
-                        background-image: linear-gradient(-90deg, $color-assist-2a 0%, $color-assist-33 100%)
+                        background-image: linear-gradient(-90deg, $color-assist-33 0%, $color-assist-2a 100%)
                         border-radius: 100px
                         transition: 0.3s all
                   .number
                     position: relative
+                    width: 65px
                     layout(row, block, no-wrap)
                     align-items: center
+                    justify-content: flex-end
                     font-family: $font-family-light
                     font-size: $font-size-small-s
                     color: $color-background-ff
-                    div:last-child
+                    .n-unit
                       font-size: $font-size-small-ss
-                    div:nth-child(2)
+                    .n-num
                       font-family: $font-family-din
                       font-size: $font-size-large
             .staff-empty
