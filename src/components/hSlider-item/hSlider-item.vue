@@ -44,39 +44,35 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import source from 'common/source'
   // import CircleProgress from 'components/circle-progress'
+  import source from 'common/source'
   import util from './base64'
   import SVG from './c-progress'
 
   export default {
     props: {
       item: Object
-      // number: {
-      //   default: 0,
-      //   type: Number
-      // }
     },
-    data() {
+    data () {
       return {
-        timer: null,
         saleCard: 0,
         currentCard: 0,
         income: 0,
         otherCard: 0,
+        timer: null,
         number: 0
       }
     },
-    beforeMount() {
+    beforeMount () {
     },
-    mounted() {
+    mounted () {
       this.run()
     },
-    beforeUpdate() {
+    beforeUpdate () {
       this.run()
     },
     methods: {
-      lookTotalHandler(item) {
+      lookTotalHandler (item) {
         this.$emit('lookTotalHandler', item)
       },
       // _loading() {
@@ -104,7 +100,7 @@
       //     }
       //   }, space)
       // }
-      run() {
+      run () {
         console.log(this.timer, this.item.activeId)
         if (this.timer) return
         if (this.item.percent !== this.number) {
@@ -112,6 +108,7 @@
             this.number = this.item.percent
             return
           }
+          console.log(this.number)
           const percent = this.item.percent
           let milliSecond = 500
           let start = Date.now()
@@ -129,17 +126,17 @@
       }
     },
     computed: {
-      arrowImg() {
+      arrowImg () {
         return source.imgArrowRight('img')
       },
-      bgImg() {
+      bgImg () {
         let pre = this.item.percent * 1
         let svg = SVG.makeSvg(pre)
         let base64 = util.base64encode(svg)
         // return `background-image:url(data:image/svg+xml;base64,${base64})`
         return `data:image/svg+xml;base64,${base64}`
       },
-      showNumber() {
+      showNumber () {
         // let number = this.number.toFixed(1)
         let number = this.number.toFixed(1)
         let re = number.split('.')

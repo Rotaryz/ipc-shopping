@@ -108,9 +108,9 @@
 
 <script type="text/ecmascript-6">
   import api from 'api'
-  import {baseURL, ERR_OK} from 'api/config'
-  import {mapGetters} from 'vuex'
-  import {ROLE} from 'common/js/contants'
+  import { baseURL, ERR_OK } from 'api/config'
+  import { mapGetters } from 'vuex'
+  import { ROLE } from 'common/js/contants'
   import HSliderItem from 'components/hSlider-item/hSlider-item'
   import wx from 'wx'
   import * as wechat from 'common/js/wechat'
@@ -143,7 +143,7 @@
   const LIMIT_DEF = 10
 
   export default {
-    data() {
+    data () {
       return {
         ROLE, // 角色定义常量值
         currentRole: null, // 当前角色
@@ -158,40 +158,26 @@
         isAll: false, // 员工销卡比查询是否结束
         page: 1, // 员工销卡比查询分页页码
         limit: LIMIT_DEF, // 员工销卡比查询每页的数量
-        sTop: 0, // 员工销卡比滚动条
-        number: 0
+        sTop: 0 // 员工销卡比滚动条
       }
     },
-    created() {
+    created () {
     },
-    onShow() {
+    onShow () {
       this._checkStatus()
-      // this.number = 0
-      // setTimeout(() => {
-      //   this.run()
-      // }, 1500)
-      // if (wx.getStorageSync('test')) {
-      //   setTimeout(() => {
-      //     this.activeList[0].percent = 88.8
-      //   }, 1500)
-      //   wx.removeStorageSync('test')
-      // }
     },
-    onHide() {
+    onHide () {
       this.status = 3
-      // wx.setStorageSync('test', 'yes')
+      this.activeList = ACTIVE_DEF
     },
-    beforeMount() {
+    beforeMount () {
     },
-    mounted() {
+    mounted () {
     },
     methods: {
       ...mapGetters(['role']),
-      run() {
-        // 组件跑
-      },
       // 检查状态
-      _checkStatus() {
+      _checkStatus () {
         // 获取身份
         this.currentRole = this.role()
         // 登录
@@ -234,13 +220,13 @@
         }
       },
       // 上传form-id
-      formSubmit(e) {
+      formSubmit (e) {
         let formId = e.mp.detail.formId
         let data = {'form_ids': [formId]}
         api.homeCollectFormId(data)
       },
       // 从消息模板来的数据
-      _getFromMsgTpl() {
+      _getFromMsgTpl () {
         let id = this.$root.$mp.query.id
         if (id) {
           let index = this.activeList.findIndex(val => id * 1 === val.activeId * 1)
@@ -249,11 +235,11 @@
         }
       },
       // 员工点确定后操作
-      staffConfirmHandler() {
+      staffConfirmHandler () {
         wx.setStorageSync('isOk', 'isOk') // 员工点击过确认
       },
       // 项目初始化
-      _init() {
+      _init () {
         let code = wx.getStorageSync('code')
         this.setNavTitle({wx_code: code})
         switch (this.currentRole) {
@@ -331,7 +317,7 @@
         }
       },
       // 保存标题
-      setNavTitle(data) {
+      setNavTitle (data) {
         api.homeGetGlobalData(data)
           .then(json => {
             if (json.error !== ERR_OK) {
@@ -348,7 +334,7 @@
           })
       },
       // 格式化活动信息
-      _formatInfoData(json) {
+      _formatInfoData (json) {
         let arr = []
         let res = json.data
         res.map(item => {
@@ -378,7 +364,7 @@
         return arr
       },
       // 获取员工销卡比信息
-      _getStaffSale() {
+      _getStaffSale () {
         if (this.currentRole !== ROLE.STAFF_ID) return
         // 判断是否显示提示
         let isOk = wx.getStorageSync('isOk')
@@ -408,7 +394,7 @@
           })
       },
       // 格式化员工销卡比信息
-      _formatStaffData(json) {
+      _formatStaffData (json) {
         let arr = []
         let res = json.data
         res.map(item => {
@@ -424,7 +410,7 @@
         return arr
       },
       // 查看统计
-      lookTotalHandler(obj) {
+      lookTotalHandler (obj) {
         let url = ''
         let id = obj.activeId
         switch (this.currentRole) {
@@ -444,12 +430,12 @@
         url && this.$router.push(url)
       },
       // 查看商家活动管理
-      watchActiveHandler() {
+      watchActiveHandler () {
         const url = `/pages/activity-manage/activity-manage?tabFlag=yes`
         this.$router.push(url)
       },
       // swiper滑动块
-      swiperChange(e) {
+      swiperChange (e) {
         let index = e.mp.detail.current
         this.dotCurrent = index
         this.sliderCurrent = index
@@ -457,12 +443,12 @@
         this._getStaffSale()
       },
       // 去联盟管理
-      toUnion() {
+      toUnion () {
         const url = `/pages/union-manage/union-manage`
         this.$router.push(url)
       },
       // 去活动管理
-      toShop() {
+      toShop () {
         let url = ``
         if (this.currentRole === ROLE.STAFF_ID) {
           url = `/pages/staff-activity/staff-activity`
@@ -472,17 +458,17 @@
         this.$router.push(url)
       },
       // 去员工管理
-      toEmployee() {
+      toEmployee () {
         const url = `/pages/employee/employee`
         this.$router.push(url)
       },
       // 去收入、提现
-      toAsset() {
+      toAsset () {
         const url = `/pages/asset/asset`
         this.$router.push(url)
       },
       // 获取跟多员工销卡对比
-      getMoreStaffSales() {
+      getMoreStaffSales () {
         if (this.isAll) return
         this.page++
         let data = {
@@ -505,7 +491,7 @@
           })
       },
       // 判断是否获取了所有数据
-      _isAll(json) {
+      _isAll (json) {
         if (!json.meta) return
         let total = json.meta.total
         total && (this.isAll = (this.employeeList.length >= total))
@@ -513,7 +499,7 @@
       }
     },
     computed: {
-      dotStyle() {
+      dotStyle () {
         return this.activeList.length <= 1 ? 'd-op' : ''
       }
     },
