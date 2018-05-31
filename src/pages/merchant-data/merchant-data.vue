@@ -272,8 +272,8 @@
       type: 'inside',
       throttle: '30',
       maxValueSpan: 3,
-      start: 30,
-      end: 70,
+      start: 0,
+      end: 30,
       zoomLock: true
     }],
     grid: {
@@ -642,12 +642,17 @@
       _getBar(loading) {
         api.dataBar(this.activeId, loading).then(res => {
           if (res.error === ERR_OK) {
-            // for (var i = 0; i < 15; i++) {
-            //   this.ecBra.options.xAxis[0].data.push(...res.data.shop_names)
-            //   this.ecBra.options.series[0].data.push(...res.data.verification_counts)
-            // }
             this.ecBra.options.xAxis[0].data = res.data.shop_names
             this.ecBra.options.series[0].data = res.data.verification_counts
+            if (this.ecBra.options.xAxis[0].data.length < 5) {
+              this.ecBra.options.dataZoom[0].end = 52
+            } else if (this.ecBra.options.xAxis[0].data.length < 10) {
+              this.ecBra.options.dataZoom[0].end = 30
+            } else if (this.ecBra.options.xAxis[0].data.length < 20) {
+              this.ecBra.options.dataZoom[0].end = 22
+            } else {
+              this.ecBra.options.dataZoom[0].end = 10
+            }
             this.barDetails = res.data.detail
           } else {
             this.$refs.toast.show(res.message)

@@ -153,7 +153,7 @@
       throttle: '30',
       minValueSpan: 5,
       start: 0,
-      end: 32,
+      end: 30,
       zoomLock: true
     }],
     grid: {
@@ -361,6 +361,15 @@
           if (res.error === ERR_OK) {
             this.ecBra.options.xAxis[0].data = res.data.shop_names
             this.ecBra.options.series[0].data = res.data.verification_counts
+            if (this.ecBra.options.xAxis[0].data.length < 5) {
+              this.ecBra.options.dataZoom[0].end = 52
+            } else if (this.ecBra.options.xAxis[0].data.length < 10) {
+              this.ecBra.options.dataZoom[0].end = 30
+            } else if (this.ecBra.options.xAxis[0].data.length < 20) {
+              this.ecBra.options.dataZoom[0].end = 22
+            } else {
+              this.ecBra.options.dataZoom[0].end = 10
+            }
             this.barDetails = res.data.detail
           } else {
             this.$refs.toast.show(res.message)
