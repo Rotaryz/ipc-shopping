@@ -60,7 +60,6 @@
   import Toast from '@/components/toast/toast'
   import UnionCard from 'components/union-card-item/union-card-item'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
-  // import { ROLE } from '../../common/js/contants'
 
   const LIMIT_DEF = 10
 

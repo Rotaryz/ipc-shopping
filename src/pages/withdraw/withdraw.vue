@@ -108,8 +108,7 @@
           this.canWithdrawal = res.data.can_withdrawal
           let info = res.data.withdrawal_info
           if (info.bank) {
-            // let tmp = info.withdrawal_card.substring(info.withdrawal_card.length - 4, info.withdrawal_card.length)
-            this.bankCard = info.withdrawal_card // ` ${info.bank} 尾号 ${tmp}`
+            this.bankCard = info.withdrawal_card
             this.bankCardIcon = info.image_url
             this.withdrawalInfo = info
             this.bankFlag = true
@@ -153,12 +152,6 @@
         }).catch(err => {
           console.info(err)
         })
-        // let res = {message: '1234'}
-        // this.$router.push({
-        //   name: 'WithdrawResult',
-        //   path: '/pages/withdrawal-result/withdrawal-result',
-        //   query: {data: res.message}
-        // })
       },
       // 提现操作
       withDrawMoney () {

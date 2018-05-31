@@ -167,8 +167,7 @@
       addEmployee () {
         this.$router.push({
           name: 'CodeAdd',
-          path: '/pages/code-add/code-add',
-          query: {key: 123}
+          path: '/pages/code-add/code-add'
         })
       },
       confirm () {
