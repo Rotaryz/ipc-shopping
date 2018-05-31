@@ -97,7 +97,7 @@
         </article>
         <article class="b-bottom" v-if="cardInfo.statusCode === constStatus.staffDown">
           <div class="title">{{cardInfo.statusStr}}</div>
-          <div class="btn last" @tap="changeHandler(cardInfo)">统计</div>
+          <div class="btn last" @tap="addHandData(cardInfo)">统计</div>
         </article>
       </div>
     </section>
@@ -137,7 +137,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {baseURL} from 'api/config'
+  import { baseURL } from 'api/config'
   import source from 'common/source'
 
   // 状态常量默认值
@@ -195,60 +195,54 @@
         default: DEFAULT_USE_TYPE
       }
     },
-    data() {
+    data () {
       return {
         imageUri: baseURL.image
       }
     },
-    beforeMount() {
-      // console.log(this.cardInfo)
-    },
-    mounted() {
-      // console.log(this.useType)
-    },
     methods: {
-      previewHandler(cardInfo) {
+      previewHandler (cardInfo) {
         this.$emit('previewHandler', cardInfo)
       },
-      editorHandler(cardInfo) {
+      editorHandler (cardInfo) {
         this.$emit('editorHandler', cardInfo)
       },
-      totalHandler(cardInfo) {
+      totalHandler (cardInfo) {
         this.$emit('totalHandler', cardInfo)
       },
-      deleteHandler(cardInfo) {
+      deleteHandler (cardInfo) {
         this.$emit('deleteHandler', cardInfo)
       },
-      changeHandler(cardInfo) {
+      changeHandler (cardInfo) {
         this.$emit('changeHandler', cardInfo)
       },
-      lookHandler(cardInfo) {
+      lookHandler (cardInfo) {
         this.$emit('lookHandler', cardInfo)
       },
-      buyHandler(cardInfo) {
+      buyHandler (cardInfo) {
         this.$emit('buyHandler', cardInfo)
       },
-      allocHandler(cardInfo) {
+      allocHandler (cardInfo) {
         this.$emit('allocHandler', cardInfo)
       },
-      applyHandler(cardInfo) {
+      applyHandler (cardInfo) {
         this.$emit('applyHandler', cardInfo)
       },
-      addHandCode(cardInfo) {
+      addHandCode (cardInfo) {
         this.$emit('addHandCode', cardInfo)
       },
-      addHandData(cardInfo) {
+      addHandData (cardInfo) {
         this.$emit('addHandData', cardInfo)
       }
     },
     computed: {
-      downStyle() {
+      downStyle () {
         return this.cardInfo.statusCode === this.constStatus.down
       },
-      isAlloct() {
+      isAlloct () {
         return this.useType === this.constUseType.shopAllot
       },
-      arrowImg() {
+      arrowImg () {
         return source.imgArrowRight('img')
       }
     }

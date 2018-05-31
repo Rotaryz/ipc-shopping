@@ -168,7 +168,11 @@
     },
     onHide () {
       this.status = 3
-      this.activeList = ACTIVE_DEF
+      let arr = []
+      this.activeList.map(() => {
+        arr.push(...ACTIVE_DEF)
+      })
+      this.activeList = arr
     },
     beforeMount () {
     },
@@ -398,13 +402,18 @@
         let arr = []
         let res = json.data
         res.map(item => {
+          let number = (item.percentage * 100).toFixed(1)
+          let re = number.split('.')
+          if (re[1] === '0') {
+            number = re[0]
+          }
           arr.push({
             customerId: item.customer_id,
             avatarUrl: item.customer.avatar_url,
             nickName: item.customer.nickname,
             saleCount: item.sale_count,
             initStock: item.init_stock,
-            percentage: item.percentage
+            percentage: number
           })
         })
         return arr

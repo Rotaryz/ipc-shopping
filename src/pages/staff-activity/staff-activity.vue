@@ -16,16 +16,16 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {baseURL, ERR_OK} from 'api/config'
+  import { baseURL, ERR_OK } from 'api/config'
   import ActiveCard from 'components/active-card-item/active-card-item'
-  import {mapGetters} from 'vuex'
+  import { mapGetters } from 'vuex'
   import api from 'api'
   import * as wechat from 'common/js/wechat'
   import Toast from '@/components/toast/toast'
   import wx from 'wx'
 
   export default {
-    data() {
+    data () {
       return {
         image: baseURL.image,
         staffList: [],
@@ -36,30 +36,30 @@
         }
       }
     },
-    mounted() {
+    mounted () {
       this.pageList.page = 1
       this._getNewStaff(this.pageList)
     },
-    beforeMount() {
+    beforeMount () {
       this._init()
     },
-    onPullDownRefresh() {
+    onPullDownRefresh () {
       this.isAllActive = false
       this.pageList.page = 1
       this._getNewStaff(this.pageList, false)
       wx.stopPullDownRefresh()
     },
-    onReachBottom() {
+    onReachBottom () {
       if (this.isAllActive) return
       this._getStaff(this.pageList)
     },
     methods: {
       ...mapGetters(['role']),
-      _init() {
+      _init () {
         let role = this.role()
         this.currentRole = role
       },
-      _getNewStaff(data, loading) {
+      _getNewStaff (data, loading) {
         api.merStaffList(data, loading).then(res => {
           if (res.error === ERR_OK) {
             this.staffList = this._formatRqData(res)
@@ -71,7 +71,7 @@
           wechat.hideLoading()
         })
       },
-      _getStaff(data) {
+      _getStaff (data) {
         api.merStaffList(data).then(res => {
           if (res.error === ERR_OK) {
             this.staffList.push(...this._formatRqData(res))
@@ -84,7 +84,7 @@
         })
       },
       // 格式化服务器数据
-      _formatRqData(res) {
+      _formatRqData (res) {
         if (res.data && res.data.length === 0) return []
         let arr = []
         res.data.map(item => {
@@ -108,20 +108,20 @@
         return arr
       },
       // 检查是否已经查询完毕
-      _isAllActive(res) {
+      _isAllActive (res) {
         if (this.staffList.length >= res.meta.total * 1) {
           this.isAllActive = true
         }
       },
-      jumpCode(cardInfo) {
+      jumpCode (cardInfo) {
         const url = `/pages/staff-code/staff-code?id=${cardInfo.id}`
         this.$router.push(url)
       },
-      jumpPreview(cardInfo) {
+      jumpPreview (cardInfo) {
         const url = `/pages/activity-detail/activity-detail?activityId=${cardInfo.id}`
         this.$router.push(url)
       },
-      jumpData(cardInfo) {
+      jumpData (cardInfo) {
         const url = `/pages/staff-data/staff-data?id=${cardInfo.id}`
         this.$router.push(url)
       }
