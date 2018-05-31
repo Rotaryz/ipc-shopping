@@ -135,7 +135,6 @@
         return `data:image/svg+xml;base64,${base64}`
       },
       showNumber () {
-        // let number = this.number.toFixed(1)
         let number = this.number.toFixed(1)
         let re = number.split('.')
         if (re[1] === '0') {

@@ -256,7 +256,7 @@
                 wechat.hideLoading()
                 let list = this._formatInfoData(json)
                 if (list.length > 0) {
-                  this.activeList = [...list]
+                  this.activeList = list
                   this.currentActiveId = this.activeList[this.dotCurrent].activeId
                   this._getFromMsgTpl()
                 }
@@ -275,7 +275,7 @@
                 wechat.hideLoading()
                 let list = this._formatInfoData(json)
                 if (list.length > 0) {
-                  this.activeList = [...list]
+                  this.activeList = list
                   this.currentActiveId = this.activeList[this.dotCurrent].activeId
                   this._getFromMsgTpl()
                 }
@@ -305,7 +305,7 @@
                 }
                 let list = this._formatInfoData(json)
                 if (list.length > 0) {
-                  this.activeList = [...list]
+                  this.activeList = list
                   this.currentActiveId = this.activeList[this.dotCurrent].activeId
                   this._getFromMsgTpl()
                   this._getStaffSale()
