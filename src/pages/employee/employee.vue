@@ -205,7 +205,7 @@
     background-color: $color-background-f6
 
   .em-list
-    padding-bottom: 90 rpx
+    padding-bottom: 45px
     .em-list-await
       padding-left: 15px
       background-color: $color-background-ff

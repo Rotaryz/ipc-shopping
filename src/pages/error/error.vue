@@ -26,7 +26,6 @@
     beforeMount () {
       if (this.$root.$mp.query.key) {
         let key = this.$root.$mp.query.key
-        console.log(key, typeof key)
         this.key = key * 1 === 404 ? 0 : 1
       }
       wx.setNavigationBarTitle({title: CODE[this.key]})

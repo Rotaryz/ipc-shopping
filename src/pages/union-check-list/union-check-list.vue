@@ -64,6 +64,8 @@
     },
     onShow () {
       this._init()
+      this._showAd()
+      wechat.pageScrollTo()
     },
     onPullDownRefresh () {
       this._resetConfig()
@@ -95,6 +97,7 @@
             wx.stopPullDownRefresh()
           })
         this._showAd()
+        wechat.pageScrollTo()
       },
       closeAd () {
         this.showAd = false
@@ -120,14 +123,12 @@
         }
         if (wx.getStorageSync('refuse') === 'success') {
           this.tabFlag = 3
-          this.showAd = false
           this._resetConfig()
           wx.setStorageSync('refuse', 'faild')
           wechat.tipSuccess('操作成功')
         }
         if (wx.getStorageSync('accept') === 'success') {
           this.tabFlag = 2
-          this.showAd = false
           this._resetConfig()
           wx.setStorageSync('accept', 'faild')
           wechat.tipSuccess('操作成功')

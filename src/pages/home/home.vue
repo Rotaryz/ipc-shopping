@@ -6,9 +6,9 @@
           <section class="bg-box">
           </section>
           <swiper class="home-swiper" @change="swiperChange" :current="sliderCurrent">
-            <block v-for="(item, index) in activeList" :key="index">
+            <block v-for="(item, index) in activeList" :key="item.activeId">
               <swiper-item class="home-swiper-item">
-                <h-slider-item :item="item" @lookTotalHandler="lookTotalHandler"></h-slider-item>
+                <h-slider-item :item.sync="item" @lookTotalHandler="lookTotalHandler"></h-slider-item>
               </swiper-item>
             </block>
           </swiper>
@@ -120,6 +120,7 @@
   const ACTIVE_DEF = [{
     title: '异业联盟卡',
     percent: 0,
+    activeId: -1,
     isOnline: false,
     saleCard: {
       title: '售卡数',
@@ -157,7 +158,7 @@
         isAll: false, // 员工销卡比查询是否结束
         page: 1, // 员工销卡比查询分页页码
         limit: LIMIT_DEF, // 员工销卡比查询每页的数量
-        sTop: 0
+        sTop: 0 // 员工销卡比滚动条
       }
     },
     created () {
@@ -167,6 +168,7 @@
     },
     onHide () {
       this.status = 3
+      this.activeList = ACTIVE_DEF
     },
     beforeMount () {
     },
@@ -250,7 +252,7 @@
                 wechat.hideLoading()
                 let list = this._formatInfoData(json)
                 if (list.length > 0) {
-                  this.activeList = list
+                  this.activeList = [...list]
                   this.currentActiveId = this.activeList[this.dotCurrent].activeId
                   this._getFromMsgTpl()
                 }
@@ -269,7 +271,7 @@
                 wechat.hideLoading()
                 let list = this._formatInfoData(json)
                 if (list.length > 0) {
-                  this.activeList = list
+                  this.activeList = [...list]
                   this.currentActiveId = this.activeList[this.dotCurrent].activeId
                   this._getFromMsgTpl()
                 }
@@ -299,7 +301,7 @@
                 }
                 let list = this._formatInfoData(json)
                 if (list.length > 0) {
-                  this.activeList = list
+                  this.activeList = [...list]
                   this.currentActiveId = this.activeList[this.dotCurrent].activeId
                   this._getFromMsgTpl()
                   this._getStaffSale()
@@ -490,7 +492,6 @@
       },
       // 判断是否获取了所有数据
       _isAll (json) {
-        console.log(json)
         if (!json.meta) return
         let total = json.meta.total
         total && (this.isAll = (this.employeeList.length >= total))

@@ -165,7 +165,6 @@
       },
       _getAllotMoney () {
         api.dataAllotMoney(this.activeId).then(res => {
-          console.log(res, '````````````````````````````````')
           if (res.error === ERR_OK) {
             this.allotMoney = res.data.share_money
           } else {

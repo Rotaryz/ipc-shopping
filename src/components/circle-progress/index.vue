@@ -5,7 +5,7 @@
     </section>
     <section class="info">
       <div class="number-box">
-        <div class="number">{{activeInfo.percent}}</div>
+        <div class="number">{{showNumber}}</div>
         <div class="per">%</div>
       </div>
       <div class="txt">完成率</div>
@@ -20,12 +20,16 @@
 
   export default {
     props: {
-      activeInfo: Object
+      activeInfo: Object,
+      number: {
+        type: Number,
+        default: 0
+      }
     },
     data() {
       return {
-        number: 0,
         timer: null
+        // number: 0
       }
     },
     beforeCreate() {
@@ -38,23 +42,27 @@
       this._loading()
     },
     beforeUpdate() {
-      // this._loading()
+      this._loading()
     },
     methods: {
       _loading() {
+        console.log(this.timer, this.activeInfo.activeId)
         if (this.timer) return
-        if (this.number * 1 === 0) return
         if (this.activeInfo.percent !== this.number) {
+          // if (this.activeInfo.percent < 1) {
+          //   this.number = this.activeInfo.percent
+          //   return
+          // }
           const percent = this.activeInfo.percent
-          let milliSecond = 1500
+          let milliSecond = 500
           let start = Date.now()
           let pre = 1 / percent
           let space = pre * milliSecond
           this.timer = setInterval(() => {
             let now = Date.now()
             this.number++
-            if (now - start >= milliSecond && this.number > percent) {
-              this.number = Math.min(this.number, percent)
+            if (now - start >= milliSecond && this.number >= percent) {
+              this.number = percent
               this.timer && clearInterval(this.timer)
             }
           }, space)
@@ -68,6 +76,15 @@
         let base64 = util.base64encode(svg)
         // return `background-image:url(data:image/svg+xml;base64,${base64})`
         return `data:image/svg+xml;base64,${base64}`
+      },
+      showNumber() {
+        // let number = this.number.toFixed(1)
+        let number = this.number.toFixed(1)
+        let re = number.split('.')
+        if (re[1] === '0') {
+          number = re[0]
+        }
+        return number
       }
     }
   }

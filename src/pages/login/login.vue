@@ -24,14 +24,14 @@
 <script type="text/ecmascript-6">
   import Toast from 'components/toast/toast'
   import api from 'api'
-  import {ERR_OK} from 'api/config'
+  import { ERR_OK } from 'api/config'
   import * as wechat from 'common/js/wechat'
   import wx from 'wx'
-  import {mapActions, mapMutations} from 'vuex'
-  import {ROLE} from 'common/js/contants'
+  import { mapActions, mapMutations } from 'vuex'
+  import { ROLE } from 'common/js/contants'
 
   export default {
-    data() {
+    data () {
       return {
         authorizationCount: 1,
         entryRole: ROLE.STAFF_ID,
@@ -40,7 +40,7 @@
         add: null // 是否添加员工
       }
     },
-    onShow() {
+    onShow () {
       this.add = this.$route.query.add
       this._getCode()
     },
@@ -48,7 +48,7 @@
       ...mapActions(['saveRole']),
       ...mapMutations({saveRoleSync: 'ROLE_TYPE'}),
       // 微信获取用户信息btn
-      wxGetUserInfo(event) {
+      wxGetUserInfo (event) {
         const e = event.mp
         if (e.detail.errMsg !== 'getUserInfo:ok') {
           return
@@ -64,7 +64,7 @@
         }
       },
       // 获取临时登录凭证code
-      _getCode() {
+      _getCode () {
         return new Promise(resolve => {
           wechat.login()
             .then(res => {
@@ -77,7 +77,7 @@
         })
       },
       // 获取token
-      _getToken() {
+      _getToken () {
         const code = wx.getStorageSync('code')
         const data = {
           code,
@@ -124,7 +124,7 @@
           })
       },
       // 页面路由
-      _navTo() {
+      _navTo () {
         wx.setStorageSync('userType', ROLE.STAFF_ID)
         this.saveRoleSync(ROLE.STAFF_ID)
         const url = `/pages/home/home`

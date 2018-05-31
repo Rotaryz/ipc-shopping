@@ -399,9 +399,6 @@
             .shop-icon
               width: 17.5px
               height: 12.5px
-              background-size: contain
-              background-position: center center
-              background-repeat: no-repeat
               margin-right 4px
             .shop-name
               font-family: $font-family-regular
