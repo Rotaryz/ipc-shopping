@@ -101,14 +101,12 @@
       //   }, space)
       // }
       run () {
-        console.log(this.timer, this.item.activeId)
         if (this.timer) return
         if (this.item.percent !== this.number) {
           if (this.item.percent < 1) {
             this.number = this.item.percent
             return
           }
-          console.log(this.number)
           const percent = this.item.percent
           let milliSecond = 500
           let start = Date.now()
