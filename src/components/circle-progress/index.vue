@@ -5,7 +5,7 @@
     </section>
     <section class="info">
       <div class="number-box">
-        <div class="number">{{number}}</div>
+        <div class="number">{{showNumber}}</div>
         <div class="per">%</div>
       </div>
       <div class="txt">完成率</div>
@@ -20,43 +20,39 @@
 
   export default {
     props: {
-      activeInfo: Object
-    },
-    data () {
-      return {
-        number: 0,
-        timer: null
+      activeInfo: Object,
+      number: {
+        type: Number,
+        default: 0
       }
     },
-    beforeCreate () {
+    data() {
+      return {
+        timer: null
+        // number: 0
+      }
     },
-    created () {
+    beforeCreate() {
     },
-    beforeMount () {
+    created() {
     },
-    mounted () {
-      // this._loading()
-      this.$on('bridge', (val) => {
-        this._loading(val)
-      })
+    beforeMount() {
     },
-    beforeUpdate () {
+    mounted() {
+      this._loading()
     },
-    onLoad () {
-    },
-    onShow () {
-    },
-    onHide () {
+    beforeUpdate() {
+      this._loading()
     },
     methods: {
-      _loading (val) {
-        console.log(val)
+      _loading() {
+        console.log(this.timer, this.activeInfo.activeId)
         if (this.timer) return
         if (this.activeInfo.percent !== this.number) {
-          if (this.activeInfo.percent < 1) {
-            this.number = this.activeInfo.percent
-            return
-          }
+          // if (this.activeInfo.percent < 1) {
+          //   this.number = this.activeInfo.percent
+          //   return
+          // }
           const percent = this.activeInfo.percent
           let milliSecond = 500
           let start = Date.now()
@@ -74,22 +70,22 @@
       }
     },
     computed: {
-      bgImg () {
+      bgImg() {
         let pre = this.activeInfo.percent * 1
         let svg = SVG.makeSvg(pre)
         let base64 = util.base64encode(svg)
         // return `background-image:url(data:image/svg+xml;base64,${base64})`
         return `data:image/svg+xml;base64,${base64}`
+      },
+      showNumber() {
+        // let number = this.number.toFixed(1)
+        let number = this.number.toFixed(1)
+        let re = number.split('.')
+        if (re[1] === '0') {
+          number = re[0]
+        }
+        return number
       }
-      // showNumber () {
-      //   // let number = this.number.toFixed(1)
-      //   let number = this.number.toFixed(1)
-      //   let re = number.split('.')
-      //   if (re[1] === '0') {
-      //     number = re[0]
-      //   }
-      //   return number
-      // }
     }
   }
 </script>
