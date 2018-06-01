@@ -3,16 +3,16 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {baseURL} from 'api/config'
+  import { baseURL } from 'api/config'
 
   export default {
-    data() {
+    data () {
       return {
-        webviewUrl: ''
+        webviewUrl: `${baseURL.webview}/index.html#/activity`
       }
     },
-    onLoad(option) {
-      this.webviewUrl = `${baseURL.webview}/index.html#/activity?a=${option.a}&e=${option.e}&m=${option.m}`
+    onLoad () {
+      // this.webviewUrl = `${baseURL.webview}/index.html#/activity?a=${option.a}&e=${option.e}&m=${option.m}`
     }
   }
 </script>

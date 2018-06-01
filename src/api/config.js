@@ -10,13 +10,6 @@ const DEV = {
   api: 'https://dev.jike-backend-api.jerryf.cn' + version,
   jumpVersion: 'develop'
 }
-// const DEV = {
-//   image: 'https://img.jkweixin.net',
-//   login: 'https://jwt.jkweixin.net',
-//   webview: 'https://h5.jkweixin.net',
-//   api: 'https://backend-api.jkweixin.net' + version,
-//   jumpVersion: 'trial'
-// }
 
 const TEST = {
   image: 'https://img.jkweixin.net',

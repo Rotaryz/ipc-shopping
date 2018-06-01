@@ -41,6 +41,7 @@
       }
     },
     onShow () {
+      wechat.hideLoading()
       this.add = this.$route.query.add
       this._getCode()
     },
