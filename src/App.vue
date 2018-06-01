@@ -90,6 +90,7 @@
         }
         // 是否申请进入
         if (this.add * 1 === 1) {
+          wx.removeStorageSync('token')
           let url = `/pages/login/login?add=${this.add}`
           this.$router.replace(url)
           return

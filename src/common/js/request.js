@@ -56,6 +56,7 @@ function checkStatus(response) {
 // 处理token-out
 function _tokenOutHandler() {
   let entryRole = wx.getStorageSync('userType')
+  wx.removeStorageSync('token')
   switch (entryRole) {
     case ROLE.STAFF_ID : {
       let url = `/pages/login/login`
